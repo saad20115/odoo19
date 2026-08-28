@@ -326,30 +326,21 @@
 
                                 <!-- Group 3: 3- إجراء 155 وتاريخ النظام 📋 -->
                                 <div class="col-md-4 col-12">
-                                    <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
-                                        3- إجراء 155 وتاريخ النظام 📋
+                                    <h6 class="fw-bold text-primary mb-3 border-bottom pb-2 d-flex justify-content-between align-items-center">
+                                        <span>3- إجراء 155 وتاريخ النظام 📋</span>
+                                        <button name="action_issue_completion_certificate" string="اصدار الشهادة" type="object" class="btn btn-sm btn-success text-white fw-bold shadow-sm"/>
                                     </h6>
                                     <div class="mb-3">
                                         <label for="receipt_155_status" string="إجراء 155" class="fw-bold text-dark mb-1 d-block"/>
-                                        <div class="d-flex align-items-center flex-wrap gap-2">
-                                            <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
-                                            <div invisible="receipt_155_status != 'yes'" class="d-inline-flex align-items-center me-2">
-                                                <span class="text-muted small me-1 fw-bold">التاريخ:</span>
-                                                <field name="receipt_155_procedure_date" class="oe_inline fw-bold text-dark"/>
-                                            </div>
-                                        </div>
+                                        <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
                                     </div>
-                                    <div invisible="receipt_155_status != 'yes'" class="mb-3">
-                                        <label for="receipt_155_system_date" string="تاريخ الإجراء على النظام" class="fw-bold text-muted small d-block"/>
+                                    <div class="mb-3" invisible="receipt_155_status != 'yes'">
+                                        <label for="receipt_155_procedure_date" string="تاريخ الإجراء" class="fw-bold text-dark mb-1 d-block"/>
+                                        <field name="receipt_155_procedure_date" class="w-100 fw-bold text-dark"/>
+                                    </div>
+                                    <div class="mb-3" invisible="receipt_155_status != 'yes'">
+                                        <label for="receipt_155_system_date" string="تاريخ الإجراء على النظام" class="fw-bold text-dark mb-1 d-block"/>
                                         <field name="receipt_155_system_date" readonly="1" class="w-100"/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="receipt_155_number" string="رقم نموذج استلام 155" class="fw-bold text-dark mb-1 d-block"/>
-                                        <field name="receipt_155_number" placeholder="مثال: REC-155-9041" class="w-100"/>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="stage_4_user_ids" string="المسؤولون عن الإغلاق والتوثيق" class="fw-bold text-dark mb-1 d-block"/>
-                                        <field name="stage_4_user_ids" widget="many2many_avatar_user" readonly="1" class="w-100"/>
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +363,7 @@
                         <!-- Level 3: Button (اصدار الشهادة) -->
                         <div class="p-3 bg-light border rounded-3 text-center my-3 shadow-sm w-100">
                             <p class="text-muted mb-2 small fw-bold">عند الضغط على الزر أدناه يتم إصدار وتنزيل ملف PDF بشهادة الإنجاز الرسمية وتحديث حالة أمر العمل وتحويله مباشرة لمرحلة الفوترة والتحصيل.</p>
-                            <button name="action_issue_completion_certificate" string="اصدار الشهادة" type="object" class="btn btn-success btn-lg shadow-sm px-4 fw-bold"/>
+                            <button name="action_issue_completion_certificate" string="اصدار الشهادة" type="object" class="btn btn-success btn-lg shadow-sm px-5 py-2 fw-bold text-white fs-5"/>
                         </div>
                     </div>
 
