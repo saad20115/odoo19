@@ -63,9 +63,9 @@
                     </div>
 
                     <!-- 1. مرحلة الإسناد Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
-                    <div class="my-3 p-3 bg-light rounded-3 border shadow-sm w-100" style="display: block !important;">
-                        <!-- Row 1: Title (Start/Top) and Badge + Buttons (Opposite Side/Middle) -->
-                        <div class="d-flex align-items-center justify-content-between w-100 mb-2">
+                    <div class="row w-100 g-0 my-3 p-3 bg-light rounded-3 border shadow-sm">
+                        <!-- Row 1: col-12 -->
+                        <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
                                 1. مرحلة الإسناد
                             </h4>
@@ -75,15 +75,13 @@
                                 <button name="action_toggle_stage_1_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_1_details"/>
                             </div>
                         </div>
-                        <!-- Row 2: Parallel Summary on Second Row when folded -->
-                        <div invisible="show_stage_1_details" class="w-100 pt-2 border-top" style="display: block !important; clear: both !important;">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap text-muted small w-100 gap-3">
-                                <div><span class="text-secondary">المشروع:</span> <field name="project_id" class="fw-bold text-dark me-1"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">المقاول:</span> <field name="contractor_id" class="fw-bold text-dark me-1"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">تاريخ الإسناد:</span> <field name="assignment_date" class="fw-bold text-dark me-1"/></div>
-                            </div>
+                        <!-- Row 2: col-12 -->
+                        <div invisible="show_stage_1_details" class="col-12 pt-2 border-top d-flex align-items-center justify-content-between flex-wrap text-muted small gap-3">
+                            <div><span class="text-secondary">المشروع:</span> <field name="project_id" class="fw-bold text-dark me-1"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">المقاول:</span> <field name="contractor_id" class="fw-bold text-dark me-1"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">تاريخ الإسناد:</span> <field name="assignment_date" class="fw-bold text-dark me-1"/></div>
                         </div>
                     </div>
                     <group invisible="not show_stage_1_details">
@@ -121,9 +119,9 @@
                     <hr class="my-4"/>
 
                     <!-- 2. مرحلة الكشفية والتصاريح Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
-                    <div class="my-3 p-3 bg-light rounded-3 border shadow-sm w-100" style="display: block !important;">
-                        <!-- Row 1: Title (Start/Top) and Badge + Buttons (Opposite Side/Middle) -->
-                        <div class="d-flex align-items-center justify-content-between w-100 mb-2">
+                    <div class="row w-100 g-0 my-3 p-3 bg-light rounded-3 border shadow-sm">
+                        <!-- Row 1: col-12 -->
+                        <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
                                 2. مرحلة الكشفية والتصاريح 🔍📜
                             </h4>
@@ -133,17 +131,15 @@
                                 <button name="action_toggle_stage_2_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_2_details"/>
                             </div>
                         </div>
-                        <!-- Row 2: Parallel Summary on Second Row when folded -->
-                        <div invisible="show_stage_2_details" class="w-100 pt-2 border-top" style="display: block !important; clear: both !important;">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap text-muted small w-100 gap-3">
-                                <div><span class="text-secondary">حالة التصريح:</span> <field name="permit_status_id" class="fw-bold text-dark me-1"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">رقم التصريح:</span> <field name="permit_number" class="fw-bold text-dark me-1" placeholder="غير محدد"/></div>
-                                <span class="text-muted">|</span>
-                                <div class="d-inline-flex align-items-center">
-                                    <span class="text-secondary me-1">تنبيه التصريح:</span>
-                                    <field name="permit_alert_status" widget="badge" decoration-muted="permit_alert_status == 'not_issued'" decoration-success="permit_alert_status == 'normal'" decoration-warning="permit_alert_status == 'warning'" decoration-danger="permit_alert_status == 'expired'"/>
-                                </div>
+                        <!-- Row 2: col-12 -->
+                        <div invisible="show_stage_2_details" class="col-12 pt-2 border-top d-flex align-items-center justify-content-between flex-wrap text-muted small gap-3">
+                            <div><span class="text-secondary">حالة التصريح:</span> <field name="permit_status_id" class="fw-bold text-dark me-1"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">رقم التصريح:</span> <field name="permit_number" class="fw-bold text-dark me-1" placeholder="غير محدد"/></div>
+                            <span class="text-muted">|</span>
+                            <div class="d-inline-flex align-items-center">
+                                <span class="text-secondary me-1">تنبيه التصريح:</span>
+                                <field name="permit_alert_status" widget="badge" decoration-muted="permit_alert_status == 'not_issued'" decoration-success="permit_alert_status == 'normal'" decoration-warning="permit_alert_status == 'warning'" decoration-danger="permit_alert_status == 'expired'"/>
                             </div>
                         </div>
                     </div>
@@ -170,9 +166,9 @@
                     <hr class="my-4"/>
 
                     <!-- 3. مرحلة التنفيذ Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
-                    <div class="my-3 p-3 bg-light rounded-3 border shadow-sm w-100" style="display: block !important;">
-                        <!-- Row 1: Title (Start/Top) and Badge + Buttons (Opposite Side/Middle) -->
-                        <div class="d-flex align-items-center justify-content-between w-100 mb-2">
+                    <div class="row w-100 g-0 my-3 p-3 bg-light rounded-3 border shadow-sm">
+                        <!-- Row 1: col-12 -->
+                        <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
                                 3. مرحلة التنفيذ ⚙️🛠️
                             </h4>
@@ -182,19 +178,17 @@
                                 <button name="action_toggle_stage_3_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_3_details"/>
                             </div>
                         </div>
-                        <!-- Row 2: Parallel Summary on Second Row when folded -->
-                        <div invisible="show_stage_3_details" class="w-100 pt-2 border-top" style="display: block !important; clear: both !important;">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap text-muted small w-100 gap-3">
-                                <div><span class="text-secondary">حالة التنفيذ:</span> <field name="execution_status" widget="badge" decoration-muted="execution_status == 'not_started'" decoration-info="execution_status == 'in_progress'" decoration-success="execution_status == 'completed'"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">نسبة الإنجاز:</span> <field name="execution_progress" widget="progressbar"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">تاريخ البرنامج:</span> <field name="programming_date" class="fw-bold text-dark me-1" placeholder="غير محدد"/></div>
-                                <span class="text-muted">|</span>
-                                <div class="d-inline-flex align-items-center">
-                                    <span class="text-secondary me-1">تنبيه البرنامج:</span>
-                                    <field name="programming_alert_status" widget="badge" force_save="1" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status in ('scheduled', 'executed')" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
-                                </div>
+                        <!-- Row 2: col-12 -->
+                        <div invisible="show_stage_3_details" class="col-12 pt-2 border-top d-flex align-items-center justify-content-between flex-wrap text-muted small gap-3">
+                            <div><span class="text-secondary">حالة التنفيذ:</span> <field name="execution_status" widget="badge" decoration-muted="execution_status == 'not_started'" decoration-info="execution_status == 'in_progress'" decoration-success="execution_status == 'completed'"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">نسبة الإنجاز:</span> <field name="execution_progress" widget="progressbar"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">تاريخ البرنامج:</span> <field name="programming_date" class="fw-bold text-dark me-1" placeholder="غير محدد"/></div>
+                            <span class="text-muted">|</span>
+                            <div class="d-inline-flex align-items-center">
+                                <span class="text-secondary me-1">تنبيه البرنامج:</span>
+                                <field name="programming_alert_status" widget="badge" force_save="1" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status in ('scheduled', 'executed')" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
                             </div>
                         </div>
                     </div>
@@ -232,9 +226,9 @@
                     <hr class="my-4"/>
 
                     <!-- 4. مرحلة الإغلاق والتوثيق Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
-                    <div class="my-3 p-3 bg-light rounded-3 border shadow-sm w-100" style="display: block !important;">
-                        <!-- Row 1: Title (Start/Top) and Badge + Buttons (Opposite Side/Middle) -->
-                        <div class="d-flex align-items-center justify-content-between w-100 mb-2">
+                    <div class="row w-100 g-0 my-3 p-3 bg-light rounded-3 border shadow-sm">
+                        <!-- Row 1: col-12 -->
+                        <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
                                 4. مرحلة الإغلاق والتوثيق (استلام 155 وشهادة الإنجاز) 📋📁
                             </h4>
@@ -244,13 +238,11 @@
                                 <button name="action_toggle_stage_4_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_4_details"/>
                             </div>
                         </div>
-                        <!-- Row 2: Parallel Summary on Second Row when folded -->
-                        <div invisible="show_stage_4_details" class="w-100 pt-2 border-top" style="display: block !important; clear: both !important;">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap text-muted small w-100 gap-3">
-                                <div><span class="text-secondary">نموذج 155:</span> <field name="receipt_155_number" class="fw-bold text-dark me-1"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">شهادة الإنجاز:</span> <field name="completion_certificate_no" class="fw-bold text-dark"/></div>
-                            </div>
+                        <!-- Row 2: col-12 -->
+                        <div invisible="show_stage_4_details" class="col-12 pt-2 border-top d-flex align-items-center justify-content-between flex-wrap text-muted small gap-3">
+                            <div><span class="text-secondary">نموذج 155:</span> <field name="receipt_155_number" class="fw-bold text-dark me-1"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">شهادة الإنجاز:</span> <field name="completion_certificate_no" class="fw-bold text-dark"/></div>
                         </div>
                     </div>
                     <group name="closing_docs_section" invisible="not show_stage_4_details">
@@ -271,9 +263,9 @@
                     <hr class="my-4"/>
 
                     <!-- 5. مرحلة الفوترة والتحصيل Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
-                    <div class="my-3 p-3 bg-light rounded-3 border shadow-sm w-100" style="display: block !important;">
-                        <!-- Row 1: Title (Start/Top) and Badge + Buttons (Opposite Side/Middle) -->
-                        <div class="d-flex align-items-center justify-content-between w-100 mb-2">
+                    <div class="row w-100 g-0 my-3 p-3 bg-light rounded-3 border shadow-sm">
+                        <!-- Row 1: col-12 -->
+                        <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
                                 5. مرحلة الفوترة والتحصيل 💰🧾
                             </h4>
@@ -283,17 +275,15 @@
                                 <button name="action_toggle_stage_5_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_5_details"/>
                             </div>
                         </div>
-                        <!-- Row 2: Parallel Summary on Second Row when folded -->
-                        <div invisible="show_stage_5_details" class="w-100 pt-2 border-top" style="display: block !important; clear: both !important;">
-                            <div class="d-flex align-items-center justify-content-between flex-wrap text-muted small w-100 gap-3">
-                                <div><span class="text-secondary">الفاتورة:</span> <field name="invoice_number" class="fw-bold text-dark me-1"/></div>
-                                <span class="text-muted">|</span>
-                                <div><span class="text-secondary">المبلغ:</span> <field name="invoice_amount" class="fw-bold text-dark me-1"/></div>
-                                <span class="text-muted">|</span>
-                                <div class="d-inline-flex align-items-center">
-                                    <span class="text-secondary me-1">حالة التحصيل:</span>
-                                    <field name="payment_status" widget="badge"/>
-                                </div>
+                        <!-- Row 2: col-12 -->
+                        <div invisible="show_stage_5_details" class="col-12 pt-2 border-top d-flex align-items-center justify-content-between flex-wrap text-muted small gap-3">
+                            <div><span class="text-secondary">الفاتورة:</span> <field name="invoice_number" class="fw-bold text-dark me-1"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">المبلغ:</span> <field name="invoice_amount" class="fw-bold text-dark me-1"/></div>
+                            <span class="text-muted">|</span>
+                            <div class="d-inline-flex align-items-center">
+                                <span class="text-secondary me-1">حالة التحصيل:</span>
+                                <field name="payment_status" widget="badge"/>
                             </div>
                         </div>
                     </div>
