@@ -213,49 +213,31 @@
                             </group>
                         </group>
 
-                        <group string="استلام الأصول والشهادات 📄" col="1" class="w-100 mt-2">
-                            <div class="row w-100 g-3 align-items-center py-2 border-bottom">
-                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
-                                    1- استلام الأصول (إجراء 207):
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
-                                </div>
-                                <div class="col-md-5 col-6">
-                                    <div invisible="asset_receipt_207 != 'yes'" class="d-flex align-items-center">
-                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 207:</span>
-                                        <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
-                                    </div>
+                        <group string="استلام الأصول والشهادات 📄">
+                            <label for="asset_receipt_207" string="1- استلام الأصول (إجراء 207)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
+                                <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="asset_receipt_207 != 'yes'" class="d-inline-flex align-items-center ms-4">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 207:</span>
+                                    <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
                                 </div>
                             </div>
 
-                            <div class="row w-100 g-3 align-items-center py-2 border-bottom">
-                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
-                                    2- استلام الأصول (إجراء 201):
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
-                                </div>
-                                <div class="col-md-5 col-6">
-                                    <div invisible="asset_receipt_201 != 'yes'" class="d-flex align-items-center">
-                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 201:</span>
-                                        <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
-                                    </div>
+                            <label for="asset_receipt_201" string="2- استلام الأصول (إجراء 201)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
+                                <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="asset_receipt_201 != 'yes'" class="d-inline-flex align-items-center ms-4">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 201:</span>
+                                    <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
                                 </div>
                             </div>
 
-                            <div class="row w-100 g-3 align-items-center py-2">
-                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
-                                    3- شهادة الإتمام؟:
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
-                                </div>
-                                <div class="col-md-5 col-6">
-                                    <div invisible="completion_certificate_status != 'yes'" class="d-flex align-items-center">
-                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء شهادة الإتمام:</span>
-                                        <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
-                                    </div>
+                            <label for="completion_certificate_status" string="3- شهادة الإتمام؟" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
+                                <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="completion_certificate_status != 'yes'" class="d-inline-flex align-items-center ms-4">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء شهادة الإتمام:</span>
+                                    <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
                                 </div>
                             </div>
                         </group>
@@ -317,26 +299,18 @@
                         </group>
 
                         <!-- 4 & 5- إجراء 155 وتاريخ الإجراء على النظام -->
-                        <group string="4 &amp; 5- إجراء 155 وتاريخ الإجراء على النظام 📋" col="1" class="w-100 mt-2">
-                            <div class="row w-100 g-3 align-items-center py-2 border-bottom">
-                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
-                                    إجراء 155:
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
-                                </div>
-                                <div class="col-md-5 col-6">
-                                    <div invisible="receipt_155_status != 'yes'" class="d-flex align-items-center">
-                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ الإجراء 155:</span>
-                                        <field name="receipt_155_procedure_date" class="oe_inline fw-bold text-dark"/>
-                                    </div>
+                        <group string="4 &amp; 5- إجراء 155 وتاريخ الإجراء على النظام 📋">
+                            <label for="receipt_155_status" string="إجراء 155" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
+                                <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="receipt_155_status != 'yes'" class="d-inline-flex align-items-center ms-4">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ الإجراء 155:</span>
+                                    <field name="receipt_155_procedure_date" class="oe_inline fw-bold text-dark"/>
                                 </div>
                             </div>
-                            <group class="mt-2">
-                                <field name="receipt_155_system_date" readonly="1" invisible="receipt_155_status != 'yes'"/>
-                                <field name="receipt_155_number" placeholder="مثال: REC-155-9041"/>
-                                <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
-                            </group>
+                            <field name="receipt_155_system_date" readonly="1" invisible="receipt_155_status != 'yes'"/>
+                            <field name="receipt_155_number" placeholder="مثال: REC-155-9041"/>
+                            <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
                         </group>
 
                         <!-- 6- اصدار شهادة الانجاز والفوترة -->
