@@ -213,34 +213,55 @@
                             </group>
                         </group>
 
-                        <group string="استلام الأصول والشهادات 📄">
-                            <label for="asset_receipt_207" string="1- استلام الأصول (إجراء 207)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
-                                <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="asset_receipt_207 != 'yes'" class="d-inline-flex align-items-center ms-4">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 207:</span>
-                                    <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
+                        <!-- استلام الأصول والشهادات 📄 (3 العناصر على مستوى واحد) -->
+                        <div class="card my-3 shadow-sm border rounded-3 p-3 bg-light">
+                            <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                استلام الأصول والشهادات 📄
+                            </h5>
+                            <div class="row w-100 g-3 align-items-start m-0">
+                                <!-- 1- استلام الأصول (إجراء 207) -->
+                                <div class="col-md-4 col-12 border-end">
+                                    <div class="fw-bold text-dark mb-2 me-1">
+                                        1- استلام الأصول (إجراء 207):
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap gap-2 me-1">
+                                        <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
+                                        <div invisible="asset_receipt_207 != 'yes'" class="d-inline-flex align-items-center me-2">
+                                            <span class="text-muted small me-1 fw-bold">التاريخ:</span>
+                                            <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <label for="asset_receipt_201" string="2- استلام الأصول (إجراء 201)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
-                                <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="asset_receipt_201 != 'yes'" class="d-inline-flex align-items-center ms-4">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 201:</span>
-                                    <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
+                                <!-- 2- استلام الأصول (إجراء 201) -->
+                                <div class="col-md-4 col-12 border-end">
+                                    <div class="fw-bold text-dark mb-2 me-1">
+                                        2- استلام الأصول (إجراء 201):
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap gap-2 me-1">
+                                        <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
+                                        <div invisible="asset_receipt_201 != 'yes'" class="d-inline-flex align-items-center me-2">
+                                            <span class="text-muted small me-1 fw-bold">التاريخ:</span>
+                                            <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <label for="completion_certificate_status" string="3- شهادة الإتمام؟" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
-                                <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="completion_certificate_status != 'yes'" class="d-inline-flex align-items-center ms-4">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء شهادة الإتمام:</span>
-                                    <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
+                                <!-- 3- شهادة الإتمام؟ -->
+                                <div class="col-md-4 col-12">
+                                    <div class="fw-bold text-dark mb-2 me-1">
+                                        3- شهادة الإتمام؟:
+                                    </div>
+                                    <div class="d-flex align-items-center flex-wrap gap-2 me-1">
+                                        <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
+                                        <div invisible="completion_certificate_status != 'yes'" class="d-inline-flex align-items-center me-2">
+                                            <span class="text-muted small me-1 fw-bold">التاريخ:</span>
+                                            <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </group>
+                        </div>
 
                         <group string="تاريخ البرنامج والتنبيهات 📅" class="mt-2">
                             <field name="programming_date"/>
