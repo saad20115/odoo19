@@ -294,50 +294,86 @@
                             <div><span class="text-secondary">شهادة الإنجاز:</span> <field name="completion_certificate_status" class="fw-bold text-dark"/></div>
                         </div>
                     </div>
-                    <group name="closing_section_main" invisible="not show_stage_4_details">
-                        <!-- 1- بيانات ومرفقات التنفيذ -->
-                        <group string="1- بيانات ومرفقات التنفيذ ⚙️">
-                            <field name="execution_notes" placeholder="سجل كامل تفاصيل وبيانات التنفيذ المكتملة هنا..."/>
-                            <field name="execution_attachment_ids" widget="many2many_binary" string="مرفقات التنفيذ"/>
-                        </group>
+                    <div invisible="not show_stage_4_details">
+                        <!-- Level 1: 3 Groups on the same horizontal level (3 Columns) -->
+                        <div class="card my-3 shadow-sm border rounded-3 p-3 bg-light">
+                            <div class="row w-100 g-3 align-items-start m-0">
+                                <!-- Group 1: 1- بيانات التنفيذ ⚙️ -->
+                                <div class="col-md-4 col-12 border-end">
+                                    <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                        1- بيانات التنفيذ ⚙️
+                                    </h6>
+                                    <div class="mb-3">
+                                        <label for="execution_notes" string="بيانات التنفيذ" class="fw-bold text-dark mb-1 d-block"/>
+                                        <field name="execution_notes" placeholder="سجل كامل تفاصيل وبيانات التنفيذ المكتملة هنا..." class="w-100"/>
+                                    </div>
+                                </div>
 
-                        <!-- 2 & 3- بيانات وتاريخ المقايسة -->
-                        <group string="2 &amp; 3- بيانات وتاريخ المقايسة 📜">
-                            <field name="boq_amendment" placeholder="سجل تفاصيل تعديل المقايسة..."/>
-                            <field name="boq_date"/>
-                        </group>
+                                <!-- Group 2: 2- بيانات وتاريخ المقايسة 📜 -->
+                                <div class="col-md-4 col-12 border-end">
+                                    <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                        2- بيانات وتاريخ المقايسة 📜
+                                    </h6>
+                                    <div class="mb-3">
+                                        <label for="boq_amendment" string="تعديل المقايسة" class="fw-bold text-dark mb-1 d-block"/>
+                                        <field name="boq_amendment" placeholder="سجل تفاصيل تعديل المقايسة..." class="w-100"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="boq_date" string="تاريخ المقايسة" class="fw-bold text-dark mb-1 d-block"/>
+                                        <field name="boq_date" class="w-100"/>
+                                    </div>
+                                </div>
 
-                        <!-- 4 & 5- إجراء 155 وتاريخ الإجراء على النظام -->
-                        <group string="4 &amp; 5- إجراء 155 وتاريخ النظام 📋">
-                            <label for="receipt_155_status" string="إجراء 155" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-3">
-                                <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="receipt_155_status != 'yes'" class="d-inline-flex align-items-center ms-4">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ الإجراء 155:</span>
-                                    <field name="receipt_155_procedure_date" class="oe_inline fw-bold text-dark"/>
+                                <!-- Group 3: 3- إجراء 155 وتاريخ النظام 📋 -->
+                                <div class="col-md-4 col-12">
+                                    <h6 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                        3- إجراء 155 وتاريخ النظام 📋
+                                    </h6>
+                                    <div class="mb-3">
+                                        <label for="receipt_155_status" string="إجراء 155" class="fw-bold text-dark mb-1 d-block"/>
+                                        <div class="d-flex align-items-center flex-wrap gap-2">
+                                            <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
+                                            <div invisible="receipt_155_status != 'yes'" class="d-inline-flex align-items-center me-2">
+                                                <span class="text-muted small me-1 fw-bold">التاريخ:</span>
+                                                <field name="receipt_155_procedure_date" class="oe_inline fw-bold text-dark"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div invisible="receipt_155_status != 'yes'" class="mb-3">
+                                        <label for="receipt_155_system_date" string="تاريخ الإجراء على النظام" class="fw-bold text-muted small d-block"/>
+                                        <field name="receipt_155_system_date" readonly="1" class="w-100"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="receipt_155_number" string="رقم نموذج استلام 155" class="fw-bold text-dark mb-1 d-block"/>
+                                        <field name="receipt_155_number" placeholder="مثال: REC-155-9041" class="w-100"/>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="stage_4_user_ids" string="المسؤولون عن الإغلاق والتوثيق" class="fw-bold text-dark mb-1 d-block"/>
+                                        <field name="stage_4_user_ids" widget="many2many_avatar_user" readonly="1" class="w-100"/>
+                                    </div>
                                 </div>
                             </div>
-                            <field name="receipt_155_system_date" readonly="1" invisible="receipt_155_status != 'yes'"/>
-                            <field name="receipt_155_number" placeholder="مثال: REC-155-9041"/>
-                            <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
-                        </group>
+                        </div>
 
-                        <!-- 3 (تابع)- جدول المرفقات المتعددة -->
-                        <group string="3 (تابع)- جدول المرفقات المتعددة 📁">
+                        <!-- Level 2: Full Width Attachment Table (مرفقات التنفيذ) -->
+                        <div class="card my-3 shadow-sm border rounded-3 p-3 bg-light w-100">
+                            <h5 class="fw-bold text-primary mb-3 border-bottom pb-2">
+                                مرفقات التنفيذ 📁
+                            </h5>
                             <field name="closing_document_ids" nolabel="1" class="w-100">
                                 <tree editable="bottom">
-                                    <field name="name" placeholder="مثال: صور التوثيق / مخطط الخدمة"/>
-                                    <field name="file" filename="file_name" widget="binary"/>
+                                    <field name="name" string="اسم المرفق" placeholder="مثال: صور التوثيق / مخطط الخدمة"/>
+                                    <field name="file" string="المرفق" filename="file_name" widget="binary"/>
                                     <field name="file_name" column_invisible="True"/>
                                 </tree>
                             </field>
-                        </group>
-                    </group>
+                        </div>
 
-                    <!-- 6- إصدار شهادة الإنجاز والتحويل للفوترة -->
-                    <div invisible="not show_stage_4_details" class="p-3 bg-light border rounded-3 text-center my-3 shadow-sm w-100">
-                        <p class="text-muted mb-2 small fw-bold">عند الضغط على الزر أدناه يتم إصدار وتنزيل ملف PDF بشهادة الإنجاز الرسمية وتحديث حالة أمر العمل وتحويله مباشرة لمرحلة الفوترة والتحصيل.</p>
-                        <button name="action_issue_completion_certificate" string="إصدار شهادة الإنجاز وتحويل للفوترة 📄🏆" type="object" class="btn btn-success btn-lg shadow-sm px-4 fw-bold"/>
+                        <!-- Level 3: Button (اصدار الشهادة) -->
+                        <div class="p-3 bg-light border rounded-3 text-center my-3 shadow-sm w-100">
+                            <p class="text-muted mb-2 small fw-bold">عند الضغط على الزر أدناه يتم إصدار وتنزيل ملف PDF بشهادة الإنجاز الرسمية وتحديث حالة أمر العمل وتحويله مباشرة لمرحلة الفوترة والتحصيل.</p>
+                            <button name="action_issue_completion_certificate" string="اصدار الشهادة" type="object" class="btn btn-success btn-lg shadow-sm px-4 fw-bold"/>
+                        </div>
                     </div>
 
                     <hr class="my-4"/>
