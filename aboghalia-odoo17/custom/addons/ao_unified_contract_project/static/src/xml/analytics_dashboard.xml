@@ -1,0 +1,634 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <!-- ====================================================================== -->
+    <!-- 1. EXECUTIVE ANALYTICS DASHBOARD TEMPLATE                              -->
+    <!-- ====================================================================== -->
+    <t t-name="ao_unified_contract_project.AnalyticsDashboardTemplate">
+        <div class="o_action o_analytics_dashboard_container p-3" style="width: 100%; height: 100%; overflow-y: auto; background: #f8fafc; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;">
+            
+            <!-- Dashboard Executive Title & Header Controls -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom bg-white p-3 rounded-3 shadow-sm flex-wrap gap-2">
+                <div>
+                    <h4 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                        <span class="fs-3">📊📈</span>
+                        <span>لوحة المؤشرات والتحليلات البيانية الشاملة</span>
+                    </h4>
+                    <p class="text-muted small m-0 mt-1">تحليل لحظي شامل ومباشر لمؤشرات أداء أوامر العمل، المشاريع، والنفقات</p>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-primary btn-sm fw-bold px-3 py-2 rounded-pill shadow-sm" t-on-click="refreshDashboard">
+                        🔄 تحديث البيانات الحية
+                    </button>
+                </div>
+            </div>
+
+            <!-- Interactive Real-Time Filter Bar -->
+            <div class="bg-white p-3 rounded-3 shadow-sm mb-4 border">
+                <div class="row g-3 align-items-center">
+                    <!-- Search Input -->
+                    <div class="col-md-3 col-12">
+                        <label class="form-label small fw-bold text-muted mb-1">🔍 البحث التفاعلي السريع:</label>
+                        <input type="text" class="form-control form-control-sm shadow-none" placeholder="ابحث برقم أمر العمل، المشروع، أو المقاول..." t-model="state.searchQuery" t-on-input="onFilterChange"/>
+                    </div>
+                    <!-- Project Filter -->
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold text-muted mb-1">🏗️ تصفية بالمشروع:</label>
+                        <select class="form-select form-select-sm shadow-none" t-model="state.selectedProjectId" t-on-change="onFilterChange">
+                            <option value="">جميع المشاريع (<t t-esc="projects.length"/>)</option>
+                            <t t-foreach="projects" t-as="p" t-key="p.id">
+                                <option t-att-value="p.id"><t t-esc="p.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                    <!-- Contractor Filter -->
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold text-muted mb-1">👷 تصفية بالمقاول:</label>
+                        <select class="form-select form-select-sm shadow-none" t-model="state.selectedContractorId" t-on-change="onFilterChange">
+                            <option value="">جميع المقاولين المعتمدين (<t t-esc="contractors.length"/>)</option>
+                            <t t-foreach="contractors" t-as="c" t-key="c.id">
+                                <option t-att-value="c.id"><t t-esc="c.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                    <!-- Stage Filter -->
+                    <div class="col-md-3 col-12">
+                        <label class="form-label small fw-bold text-muted mb-1">🎯 تصفية بالمرحلة:</label>
+                        <select class="form-select form-select-sm shadow-none" t-model="state.selectedStageId" t-on-change="onFilterChange">
+                            <option value="">جميع مراحل العمل الخمس</option>
+                            <t t-foreach="stages" t-as="s" t-key="s.id">
+                                <option t-att-value="s.id"><t t-esc="s.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Top Executive 6 KPI Stat Cards -->
+            <div class="row g-3 mb-4">
+                <!-- KPI 1 -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white border-start border-4 border-primary h-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">المشاريع المسجلة</small>
+                                <h3 class="fw-bold text-primary m-0"><t t-esc="metrics.totalProjects"/></h3>
+                            </div>
+                            <div class="fs-1 text-primary opacity-50">🏗️</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white border-start border-4 border-info h-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">أوامر العمل</small>
+                                <h3 class="fw-bold text-info m-0"><t t-esc="metrics.totalWorkOrders"/></h3>
+                            </div>
+                            <div class="fs-1 text-info opacity-50">⚡</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white border-start border-4 border-success h-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">متوسط الإنجاز الميداني</small>
+                                <h3 class="fw-bold text-success m-0"><t t-esc="metrics.avgProgress"/>%</h3>
+                            </div>
+                            <div class="fs-1 text-success opacity-50">📈</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white border-start border-4 border-danger h-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">المتأخرات والإنذارات</small>
+                                <h3 class="fw-bold text-danger m-0"><t t-esc="metrics.lateCount"/></h3>
+                            </div>
+                            <div class="fs-1 text-danger opacity-50">⚠️</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 5 -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white border-start border-4 border-warning h-100">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">إجمالي المبالغ التقديرية</small>
+                                <h4 class="fw-bold text-dark m-0"><t t-esc="formatMoney(metrics.totalAmount)"/></h4>
+                            </div>
+                            <div class="fs-1 text-warning opacity-50">💰</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI 6 -->
+                <div class="col-xl-2 col-md-4 col-sm-6">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white border-start border-4 border-teal h-100" style="border-left-color: #0d9488 !important;">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <small class="text-muted fw-bold d-block mb-1">المبالغ المحصلة والمفلترة</small>
+                                <h4 class="fw-bold text-teal m-0" style="color: #0d9488;"><t t-esc="formatMoney(metrics.paidAmount)"/></h4>
+                            </div>
+                            <div class="fs-1 text-teal opacity-50" style="color: #0d9488;">💵</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts Grid -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between">
+                            <span>🎯 توزيع أوامر العمل حسب المراحل الرئيسية الخمس</span>
+                            <span class="badge bg-light text-dark">نسبة مئوية</span>
+                        </h6>
+                        <div style="height: 280px; position: relative;">
+                            <canvas t-ref="stageChartCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between">
+                            <span>📊 متوسط نسب الإنجاز الميداني لكل مشروع</span>
+                            <span class="badge bg-success">هدف 100%</span>
+                        </h6>
+                        <div style="height: 280px; position: relative;">
+                            <canvas t-ref="progressChartCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between">
+                            <span>💰 التحليل المالي للمستخلصات والفوترة</span>
+                            <span class="badge bg-info">بالريال السعودي</span>
+                        </h6>
+                        <div style="height: 280px; position: relative;">
+                            <canvas t-ref="financialChartCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm rounded-3 border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom d-flex align-items-center justify-content-between">
+                            <span>⚠️ مؤشرات المخاطر وحالات سلامة التصاريح</span>
+                            <span class="badge bg-warning text-dark">مؤشر أمان</span>
+                        </h6>
+                        <div style="height: 280px; position: relative;">
+                            <canvas t-ref="permitChartCanvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Detailed Analytical Data Table with Pagination -->
+            <div class="card p-3 shadow-sm rounded-3 border-0 bg-white">
+                <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom flex-wrap gap-2">
+                    <h6 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                        <span>📋 السجل التحليلي التفاعلي لأوامر العمل</span>
+                    </h6>
+                    <span class="badge bg-primary px-3 py-2 rounded-pill fs-6">
+                        إجمالي النتائج المطابقة: <t t-esc="filteredWorkOrders.length"/>
+                    </span>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 13.5px;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>رقم أمر العمل</th>
+                                <th>المشروع</th>
+                                <th>المقاول المنفذ</th>
+                                <th>المرحلة الحالية</th>
+                                <th class="text-center">حالة التصريح</th>
+                                <th style="width: 160px;">معدل الإنجاز</th>
+                                <th class="text-end">القيمة التقديرية</th>
+                                <th class="text-center">الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="paginatedWorkOrders" t-as="wo" t-key="wo.id">
+                                <tr>
+                                    <td><strong class="text-primary">أمر عمل #<t t-esc="wo.number"/></strong></td>
+                                    <td><span class="fw-semibold text-dark"><t t-esc="wo.projectName"/></span></td>
+                                    <td><span class="text-secondary"><t t-esc="wo.contractorName"/></span></td>
+                                    <td>
+                                        <span class="badge px-2 py-1 text-white" t-attf-style="background-color: #{wo.pinColor};">
+                                            <t t-esc="wo.stageName"/>
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-attf-class="badge #{wo.permit_alert_status === 'expired' ? 'bg-danger' : (wo.permit_alert_status === 'warning' ? 'bg-warning text-dark' : 'bg-success')}">
+                                            <t t-esc="wo.permit_alert_status === 'expired' ? 'منتهي' : (wo.permit_alert_status === 'warning' ? 'تنبيه' : 'ساري/سليم')"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-2">
+                                            <span class="fw-bold small text-muted" style="min-width: 40px;"><t t-esc="wo.progress"/>%</span>
+                                            <div class="progress flex-grow-1" style="height: 6px;">
+                                                <div class="progress-bar" role="progressbar" t-attf-style="width: #{wo.progress}%; background-color: #{wo.pinColor};"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-end fw-bold text-dark"><t t-esc="formatMoney(wo.amount_before_tax)"/></td>
+                                    <td class="text-center">
+                                        <button class="btn btn-sm btn-outline-primary py-0 px-2 fw-bold" style="font-size: 11.5px;" t-on-click="() => this.openWorkOrderForm(wo.id)">
+                                            فتح ↗️
+                                        </button>
+                                    </td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Bar -->
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top flex-wrap gap-2">
+                    <small class="text-muted fw-bold">
+                        عرض <t t-esc="(state.currentPage - 1) * state.pageSize + 1"/> - <t t-esc="Math.min(state.currentPage * state.pageSize, filteredWorkOrders.length)"/> من أصل <t t-esc="filteredWorkOrders.length"/> أمر عمل
+                    </small>
+                    <div class="d-flex align-items-center gap-1">
+                        <button class="btn btn-sm btn-outline-secondary px-3 py-1 fw-bold" t-att-disabled="state.currentPage === 1" t-on-click="prevPage">
+                            السابق ◀
+                        </button>
+                        <span class="px-2 small fw-bold text-dark">
+                            صفحة <t t-esc="state.currentPage"/> من <t t-esc="totalPages"/>
+                        </span>
+                        <button class="btn btn-sm btn-outline-secondary px-3 py-1 fw-bold" t-att-disabled="state.currentPage >= totalPages" t-on-click="nextPage">
+                            التالي ▶
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+
+    <!-- ====================================================================== -->
+    <!-- 2. WORK ORDERS ANALYTICAL DASHBOARD TEMPLATE                           -->
+    <!-- ====================================================================== -->
+    <t t-name="ao_unified_contract_project.WorkOrdersDashboardTemplate">
+        <div class="o_action o_analytics_dashboard_container p-3" style="width: 100%; height: 100%; overflow-y: auto; background: #f8fafc;">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom bg-white p-3 rounded-3 shadow-sm flex-wrap gap-2">
+                <div>
+                    <h4 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                        <span class="fs-3">📊</span>
+                        <span>تحليلات ومؤشرات أداء أوامر العمل الميدانية</span>
+                    </h4>
+                    <p class="text-muted small m-0 mt-1">تحليل تفصيلي لمراحل الإسناد والتصاريح والتنفيذ والإغلاق والفوترة</p>
+                </div>
+                <button class="btn btn-outline-primary btn-sm fw-bold px-3 py-2 rounded-pill shadow-sm" t-on-click="refreshDashboard">🔄 تحديث حيي</button>
+            </div>
+
+            <!-- Filters -->
+            <div class="bg-white p-3 rounded-3 shadow-sm mb-4 border">
+                <div class="row g-3">
+                    <div class="col-md-3 col-12">
+                        <label class="form-label small fw-bold text-muted mb-1">🔍 البحث:</label>
+                        <input type="text" class="form-control form-control-sm shadow-none" placeholder="أمر عمل..." t-model="state.searchQuery" t-on-input="onFilterChange"/>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold text-muted mb-1">🏗️ المشروع:</label>
+                        <select class="form-select form-select-sm shadow-none" t-model="state.selectedProjectId" t-on-change="onFilterChange">
+                            <option value="">جميع المشاريع</option>
+                            <t t-foreach="projects" t-as="p" t-key="p.id">
+                                <option t-att-value="p.id"><t t-esc="p.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-6">
+                        <label class="form-label small fw-bold text-muted mb-1">👷 المقاول المعتمد:</label>
+                        <select class="form-select form-select-sm shadow-none" t-model="state.selectedContractorId" t-on-change="onFilterChange">
+                            <option value="">جميع المقاولين المعتمدين</option>
+                            <t t-foreach="contractors" t-as="c" t-key="c.id">
+                                <option t-att-value="c.id"><t t-esc="c.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                    <div class="col-md-3 col-12">
+                        <label class="form-label small fw-bold text-muted mb-1">🎯 المرحلة الحالية:</label>
+                        <select class="form-select form-select-sm shadow-none" t-model="state.selectedStageId" t-on-change="onFilterChange">
+                            <option value="">جميع المراحل الخمس</option>
+                            <t t-foreach="stages" t-as="s" t-key="s.id">
+                                <option t-att-value="s.id"><t t-esc="s.name"/></option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- KPIs -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-primary h-100">
+                        <small class="text-muted fw-bold d-block mb-1">إجمالي أوامر العمل</small>
+                        <h3 class="fw-bold text-primary m-0"><t t-esc="metrics.totalWorkOrders"/></h3>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-info h-100">
+                        <small class="text-muted fw-bold d-block mb-1">معدل الإنجاز الميداني</small>
+                        <h3 class="fw-bold text-info m-0"><t t-esc="metrics.avgProgress"/>%</h3>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-danger h-100">
+                        <small class="text-muted fw-bold d-block mb-1">التصاريح المنتهية والمتأخرة</small>
+                        <h3 class="fw-bold text-danger m-0"><t t-esc="metrics.lateCount"/></h3>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-success h-100">
+                        <small class="text-muted fw-bold d-block mb-1">القيمة الإجمالية لأوامر العمل</small>
+                        <h4 class="fw-bold text-success m-0"><t t-esc="formatMoney(metrics.totalAmount)"/></h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">🎯 توزيع المراحل الخمس لأوامر العمل</h6>
+                        <div style="height: 280px;"><canvas t-ref="stageChartCanvas"></canvas></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">⚠️ مؤشر سلامة ومخاطر التصاريح</h6>
+                        <div style="height: 280px;"><canvas t-ref="permitChartCanvas"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table with Pagination -->
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">📋 سجل أوامر العمل المفصل</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 13.5px;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>رقم أمر العمل</th><th>المشروع</th><th>المقاول</th><th>المرحلة</th><th>التصريح</th><th>الإنجاز</th><th>القيمة</th><th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="paginatedWorkOrders" t-as="wo" t-key="wo.id">
+                                <tr>
+                                    <td><strong class="text-primary">#<t t-esc="wo.number"/></strong></td>
+                                    <td><t t-esc="wo.projectName"/></td>
+                                    <td><t t-esc="wo.contractorName"/></td>
+                                    <td><span class="badge px-2 py-1 text-white" t-attf-style="background-color: #{wo.pinColor};"><t t-esc="wo.stageName"/></span></td>
+                                    <td>
+                                        <span t-attf-class="badge #{wo.permit_alert_status === 'expired' ? 'bg-danger' : (wo.permit_alert_status === 'warning' ? 'bg-warning text-dark' : 'bg-success')}">
+                                            <t t-esc="wo.permit_alert_status === 'expired' ? 'منتهي' : (wo.permit_alert_status === 'warning' ? 'تنبيه' : 'ساري')"/>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <span class="small fw-bold"><t t-esc="wo.progress"/>%</span>
+                                            <div class="progress flex-grow-1" style="height: 6px;">
+                                                <div class="progress-bar" t-attf-style="width: #{wo.progress}%; background-color: #{wo.pinColor};"></div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="fw-bold"><t t-esc="formatMoney(wo.amount_before_tax)"/></td>
+                                    <td><button class="btn btn-sm btn-outline-primary py-0" t-on-click="() => this.openWorkOrderForm(wo.id)">فتح ↗️</button></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Bar -->
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top flex-wrap gap-2">
+                    <small class="text-muted fw-bold">
+                        عرض <t t-esc="(state.currentPage - 1) * state.pageSize + 1"/> - <t t-esc="Math.min(state.currentPage * state.pageSize, filteredWorkOrders.length)"/> من أصل <t t-esc="filteredWorkOrders.length"/> أمر عمل
+                    </small>
+                    <div class="d-flex align-items-center gap-1">
+                        <button class="btn btn-sm btn-outline-secondary px-3 py-1 fw-bold" t-att-disabled="state.currentPage === 1" t-on-click="prevPage">
+                            السابق ◀
+                        </button>
+                        <span class="px-2 small fw-bold text-dark">
+                            صفحة <t t-esc="state.currentPage"/> من <t t-esc="totalPages"/>
+                        </span>
+                        <button class="btn btn-sm btn-outline-secondary px-3 py-1 fw-bold" t-att-disabled="state.currentPage >= totalPages" t-on-click="nextPage">
+                            التالي ▶
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </t>
+
+    <!-- ====================================================================== -->
+    <!-- 3. PROJECTS ANALYTICAL DASHBOARD TEMPLATE                              -->
+    <!-- ====================================================================== -->
+    <t t-name="ao_unified_contract_project.ProjectsDashboardTemplate">
+        <div class="o_action o_analytics_dashboard_container p-3" style="width: 100%; height: 100%; overflow-y: auto; background: #f8fafc;">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom bg-white p-3 rounded-3 shadow-sm flex-wrap gap-2">
+                <div>
+                    <h4 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                        <span class="fs-3">📈</span>
+                        <span>تحليلات ومؤشرات أداء المشاريع التجميعية</span>
+                    </h4>
+                    <p class="text-muted small m-0 mt-1">نطاق كامل لتحليل المشاريع المسجلة وأثقال أوامر العمل والمقاولين</p>
+                </div>
+                <button class="btn btn-outline-primary btn-sm fw-bold px-3 py-2 rounded-pill shadow-sm" t-on-click="refreshDashboard">🔄 تحديث حيي</button>
+            </div>
+
+            <!-- KPIs -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-primary h-100">
+                        <small class="text-muted fw-bold d-block mb-1">إجمالي المشاريع</small>
+                        <h3 class="fw-bold text-primary m-0"><t t-esc="metrics.totalProjects"/></h3>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-info h-100">
+                        <small class="text-muted fw-bold d-block mb-1">إجمالي أوامر العمل بالمشاريع</small>
+                        <h3 class="fw-bold text-info m-0"><t t-esc="metrics.totalWorkOrders"/></h3>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-warning h-100">
+                        <small class="text-muted fw-bold d-block mb-1">متوسط أوامر العمل لكل مشروع</small>
+                        <h3 class="fw-bold text-warning m-0"><t t-esc="metrics.avgWOsPerProject"/></h3>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-success h-100">
+                        <small class="text-muted fw-bold d-block mb-1">الميزانية التقديرية الإجمالية</small>
+                        <h4 class="fw-bold text-success m-0"><t t-esc="formatMoney(metrics.totalAmount)"/></h4>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">📊 توزيع أوامر العمل التجميعية لكل مشروع</h6>
+                        <div style="height: 280px;"><canvas t-ref="projectWOChartCanvas"></canvas></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">👷 توزيع أحمال العمل على المقاولين المعتمدين</h6>
+                        <div style="height: 280px;"><canvas t-ref="contractorLoadChartCanvas"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Projects Data Table -->
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">📋 سجل المشاريع المعتمدة</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 13.5px;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>اسم المشروع</th><th>الكود</th><th>عدد أوامر العمل</th><th>الحالة</th><th>الإجراء</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="projects" t-as="proj" t-key="proj.id">
+                                <tr>
+                                    <td><strong class="text-dark"><t t-esc="proj.name"/></strong></td>
+                                    <td><span class="badge bg-light text-dark border"><t t-esc="proj.code || 'N/A'"/></span></td>
+                                    <td><span class="badge bg-info"><t t-esc="proj.work_order_count || 0"/> أمر عمل</span></td>
+                                    <td><span class="badge bg-success">نشط / جاري</span></td>
+                                    <td><button class="btn btn-sm btn-outline-primary py-0" t-on-click="() => this.openProjectForm(proj.id)">فتح المشروع ↗️</button></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- ====================================================================== -->
+    <!-- 4. INVOICES & COLLECTION ANALYTICAL DASHBOARD TEMPLATE                 -->
+    <!-- ====================================================================== -->
+    <t t-name="ao_unified_contract_project.InvoicesDashboardTemplate">
+        <div class="o_action o_analytics_dashboard_container p-3" style="width: 100%; height: 100%; overflow-y: auto; background: #f8fafc;">
+            <!-- Header -->
+            <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom bg-white p-3 rounded-3 shadow-sm flex-wrap gap-2">
+                <div>
+                    <h4 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                        <span class="fs-3">🧾</span>
+                        <span>تحليلات وتدفقات الفواتير والتحصيل المالي</span>
+                    </h4>
+                    <p class="text-muted small m-0 mt-1">تحليل مالي شامل للمستخلصات المفلترة والتحصيل النقدي والمبالغ المعلقة</p>
+                </div>
+                <button class="btn btn-outline-primary btn-sm fw-bold px-3 py-2 rounded-pill shadow-sm" t-on-click="refreshDashboard">🔄 تحديث حيي</button>
+            </div>
+
+            <!-- KPIs -->
+            <div class="row g-3 mb-4">
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-warning h-100">
+                        <small class="text-muted fw-bold d-block mb-1">إجمالي الفواتير والمستخلصات</small>
+                        <h4 class="fw-bold text-warning m-0"><t t-esc="formatMoney(metrics.totalAmount)"/></h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-success h-100">
+                        <small class="text-muted fw-bold d-block mb-1">إجمالي المبالغ المحصلة نقدياً</small>
+                        <h4 class="fw-bold text-success m-0"><t t-esc="formatMoney(metrics.paidAmount)"/></h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-danger h-100">
+                        <small class="text-muted fw-bold d-block mb-1">المبالغ المعلقة جاري تحصيلها</small>
+                        <h4 class="fw-bold text-danger m-0"><t t-esc="formatMoney(metrics.pendingAmount)"/></h4>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="card p-3 shadow-sm border-0 bg-white border-start border-4 border-info h-100">
+                        <small class="text-muted fw-bold d-block mb-1">نسبة التحصيل النقدي الفعلية</small>
+                        <h3 class="fw-bold text-info m-0"><t t-esc="metrics.collectionRate"/>%</h3>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="row g-4 mb-4">
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">💰 المقارنة المالية: المبالغ الكلية مقابل المحصلة</h6>
+                        <div style="height: 280px;"><canvas t-ref="invoiceFinancialChartCanvas"></canvas></div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-12">
+                    <div class="card p-3 shadow-sm border-0 bg-white h-100">
+                        <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">📊 نسب التحصيل النقدي حسب المقاول المنفذ</h6>
+                        <div style="height: 280px;"><canvas t-ref="contractorPaidChartCanvas"></canvas></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Invoices Data Table with Pagination -->
+            <div class="card p-3 shadow-sm border-0 bg-white">
+                <h6 class="fw-bold text-dark mb-3 pb-2 border-bottom">📋 سجل المستخلصات والفواتير المالية</h6>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0" style="font-size: 13.5px;">
+                        <thead class="table-light">
+                            <tr>
+                                <th>رقم أمر العمل</th><th>المشروع</th><th>المقاول</th><th>حالة التحصيل</th><th>المبلغ الإجمالي</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="paginatedWorkOrders" t-as="wo" t-key="wo.id">
+                                <tr>
+                                    <td><strong class="text-primary">#<t t-esc="wo.number"/></strong></td>
+                                    <td><t t-esc="wo.projectName"/></td>
+                                    <td><t t-esc="wo.contractorName"/></td>
+                                    <td>
+                                        <span t-attf-class="badge #{wo.stage_5_status === 'paid' ? 'bg-success' : 'bg-warning text-dark'}">
+                                            <t t-esc="wo.stage_5_status === 'paid' ? 'تم التحصيل 🟢' : 'معلق / جاري التحصيل ⏳'"/>
+                                        </span>
+                                    </td>
+                                    <td class="fw-bold text-dark"><t t-esc="formatMoney(wo.amount_total || wo.amount_before_tax)"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination Bar -->
+                <div class="d-flex justify-content-between align-items-center mt-3 pt-2 border-top flex-wrap gap-2">
+                    <small class="text-muted fw-bold">
+                        عرض <t t-esc="(state.currentPage - 1) * state.pageSize + 1"/> - <t t-esc="Math.min(state.currentPage * state.pageSize, filteredWorkOrders.length)"/> من أصل <t t-esc="filteredWorkOrders.length"/> مستخلص
+                    </small>
+                    <div class="d-flex align-items-center gap-1">
+                        <button class="btn btn-sm btn-outline-secondary px-3 py-1 fw-bold" t-att-disabled="state.currentPage === 1" t-on-click="prevPage">
+                            السابق ◀
+                        </button>
+                        <span class="px-2 small fw-bold text-dark">
+                            صفحة <t t-esc="state.currentPage"/> من <t t-esc="totalPages"/>
+                        </span>
+                        <button class="btn btn-sm btn-outline-secondary px-3 py-1 fw-bold" t-att-disabled="state.currentPage >= totalPages" t-on-click="nextPage">
+                            التالي ▶
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>

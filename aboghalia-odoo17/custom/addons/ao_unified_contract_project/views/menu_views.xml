@@ -22,19 +22,57 @@
               action="action_unified_contract_work_orders"
               sequence="2"/>
 
-    <!-- 3. الإشعارات -->
+    <!-- 3. خريطة أوامر العمل التفاعلية 🗺️📍 -->
+    <menuitem id="menu_unified_contract_work_order_map"
+              name="خريطة أوامر العمل 🗺️"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_work_order_map_backend"
+              sequence="3"/>
+
+    <!-- 4. الفواتير والتحصيل -->
+    <menuitem id="menu_unified_contract_invoices"
+              name="الفواتير والتحصيل"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_invoices"
+              sequence="4"/>
+
+    <!-- 4. الإشعارات -->
     <menuitem id="menu_unified_contract_notifications"
               name="الإشعارات"
               parent="menu_unified_contract_project_root"
               action="action_unified_contract_notification"
-              sequence="3"/>
+              sequence="4"/>
 
-    <!-- 4. التقارير -->
+    <!-- 5. التقارير والمؤشرات -->
     <menuitem id="menu_unified_contract_reports"
               name="التقارير"
               parent="menu_unified_contract_project_root"
-              action="action_unified_contract_work_orders"
-              sequence="4"/>
+              action="action_unified_contract_analytics_dashboard"
+              sequence="5"/>
+
+    <menuitem id="menu_unified_contract_report_analytics_dashboard"
+              name="لوحة المؤشرات والتحليلات الشاملة 📊📈"
+              parent="menu_unified_contract_reports"
+              action="action_unified_contract_analytics_dashboard"
+              sequence="0"/>
+
+    <menuitem id="menu_unified_contract_report_work_orders"
+              name="تحليلات ومؤشرات أوامر العمل 📊"
+              parent="menu_unified_contract_reports"
+              action="action_unified_contract_work_orders_dashboard"
+              sequence="1"/>
+
+    <menuitem id="menu_unified_contract_report_projects"
+              name="تحليلات ومؤشرات المشاريع 📈"
+              parent="menu_unified_contract_reports"
+              action="action_unified_contract_projects_dashboard"
+              sequence="2"/>
+
+    <menuitem id="menu_unified_contract_report_invoices"
+              name="تحليلات وتدفقات الفواتير والتحصيل 🧾"
+              parent="menu_unified_contract_reports"
+              action="action_unified_contract_invoices_dashboard"
+              sequence="3"/>
 
     <!-- 5. التهيئة والإعدادات -->
     <menuitem id="menu_unified_contract_config"
@@ -42,6 +80,13 @@
               parent="menu_unified_contract_project_root"
               sequence="5"
               groups="group_unified_contract_manager"/>
+
+    <!-- الإعدادات العامة ⚙️ -->
+    <menuitem id="menu_unified_contract_settings_general"
+              name="الإعدادات العامة ⚙️"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_config_settings"
+              sequence="0"/>
 
     <!-- مراحل المشاريع -->
     <menuitem id="menu_unified_contract_stages"

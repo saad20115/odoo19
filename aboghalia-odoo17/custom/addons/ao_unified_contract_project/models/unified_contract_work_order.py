@@ -31,6 +31,7 @@ class UnifiedContractWorkOrder(models.Model):
         tracking=True
     )
     work_order_number = fields.Char(
+        index=True,
         string='رقم أمر العمل',
         required=True,
         copy=False,
@@ -39,6 +40,7 @@ class UnifiedContractWorkOrder(models.Model):
     )
     project_id = fields.Many2one(
         'unified.contract.project',
+        index=True,
         string='مشروع العقد الموحد',
         required=True,
         ondelete='cascade',
@@ -46,6 +48,7 @@ class UnifiedContractWorkOrder(models.Model):
     )
     contractor_id = fields.Many2one(
         'res.partner',
+        index=True,
         string='المقاول المُنَفِذ',
         domain="[('id', 'in', project_contractor_ids)]",
         tracking=True,
@@ -58,6 +61,7 @@ class UnifiedContractWorkOrder(models.Model):
     )
     team_id = fields.Many2one(
         'unified.contract.team',
+        index=True,
         string='فريق العمل المسؤول عن المرحلة',
         compute='_compute_team_id',
         store=True,
@@ -157,10 +161,17 @@ class UnifiedContractWorkOrder(models.Model):
     ], string='حالة مرحلة الإغلاق', compute='_compute_stage_statuses', store=True)
 
     stage_5_status = fields.Selection([
-        ('completed', '✔️ مكتملة'),
+        ('completed', '✔️ محصل ومكتمل'),
+        ('paid', '✅ محصل'),
+        ('active', '⚙️ نشط وقيد التنفيذ'),
+        ('uploaded', '🚀 تم الرفع على الساب'),
+        ('issued', '📄 تم إصدار الفاتورة'),
+        ('referred', '📤 محال للمالية'),
+        ('correction_requested', '📝 طلب تصحيح / تعديل'),
+        ('late', '⚠️ متأخر'),
         ('in_progress', '⚙️ قيد المعالجة الحالية'),
         ('not_started', '✖️ لم تبدأ بعد'),
-    ], string='حالة مرحلة الفوترة', compute='_compute_stage_statuses', store=True)
+    ], string='حالة مرحلة الفوترة والتحصيل', compute='_compute_stage_statuses', store=True)
 
     # Fold & Details Toggle Booleans for all 5 Stages
     show_stage_1_details = fields.Boolean(
@@ -194,6 +205,31 @@ class UnifiedContractWorkOrder(models.Model):
         readonly=False
     )
 
+    # Stage Edit Unlock Booleans
+    stage_1_unlocked_for_edit = fields.Boolean(string='إتاحة تعديل مرحلة الإسناد المكتملة', default=False)
+    stage_2_unlocked_for_edit = fields.Boolean(string='إتاحة تعديل مرحلة التصاريح المكتملة', default=False)
+    stage_3_unlocked_for_edit = fields.Boolean(string='إتاحة تعديل مرحلة التنفيذ المكتملة', default=False)
+    stage_4_unlocked_for_edit = fields.Boolean(string='إتاحة تعديل مرحلة الإغلاق المكتملة', default=False)
+    stage_5_unlocked_for_edit = fields.Boolean(string='إتاحة تعديل مرحلة الفوترة المكتملة', default=False)
+
+    is_stage_1_readonly = fields.Boolean(string='مرحلة الإسناد للقراءة فقط', compute='_compute_stage_readonly_flags')
+    is_stage_2_readonly = fields.Boolean(string='مرحلة التصاريح للقراءة فقط', compute='_compute_stage_readonly_flags')
+    is_stage_3_readonly = fields.Boolean(string='مرحلة التنفيذ للقراءة فقط', compute='_compute_stage_readonly_flags')
+    is_stage_4_readonly = fields.Boolean(string='مرحلة الإغلاق للقراءة فقط', compute='_compute_stage_readonly_flags')
+    is_stage_5_readonly = fields.Boolean(string='مرحلة الفوترة للقراءة فقط', compute='_compute_stage_readonly_flags')
+
+    @api.depends('stage_id', 'stage_1_status', 'stage_2_status', 'stage_3_status', 'stage_4_status', 'stage_5_status',
+                 'stage_1_unlocked_for_edit', 'stage_2_unlocked_for_edit', 'stage_3_unlocked_for_edit', 'stage_4_unlocked_for_edit', 'stage_5_unlocked_for_edit', 'state')
+    def _compute_stage_readonly_flags(self):
+        for rec in self:
+            seq = rec.stage_id.sequence if rec.stage_id else 1
+            is_done = rec.state in ('done', 'cancel')
+            rec.is_stage_1_readonly = (is_done or seq > 1 or rec.stage_1_status == 'completed') and not rec.stage_1_unlocked_for_edit
+            rec.is_stage_2_readonly = (is_done or seq > 2 or rec.stage_2_status == 'completed') and not rec.stage_2_unlocked_for_edit
+            rec.is_stage_3_readonly = (is_done or seq > 3 or rec.stage_3_status == 'completed') and not rec.stage_3_unlocked_for_edit
+            rec.is_stage_4_readonly = (is_done or seq > 4 or rec.stage_4_status == 'completed') and not rec.stage_4_unlocked_for_edit
+            rec.is_stage_5_readonly = (is_done or seq > 5 or rec.stage_5_status == 'completed') and not rec.stage_5_unlocked_for_edit
+
     # Legacy alias for backward compatibility
     show_assignment_details = fields.Boolean(
         related='show_stage_1_details',
@@ -213,25 +249,92 @@ class UnifiedContractWorkOrder(models.Model):
             rec.show_stage_4_details = (rec.stage_4_status != 'completed')
             rec.show_stage_5_details = (rec.stage_5_status != 'completed')
 
+    def _get_stage_edit_warning_action(self, stage_number, stage_name):
+        self.ensure_one()
+        wizard = self.env['unified.contract.stage.edit.warning.wizard'].sudo().create({
+            'work_order_id': self.id,
+            'stage_number': stage_number,
+            'stage_name': stage_name,
+        })
+        view_id = self.env.ref('ao_unified_contract_project.view_unified_contract_stage_edit_warning_wizard_form').id
+        return {
+            'name': _('تنبيه - المرحلة مكتملة ⚠️'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'unified.contract.stage.edit.warning.wizard',
+            'res_id': wizard.id,
+            'view_mode': 'form',
+            'views': [(view_id, 'form')],
+            'target': 'new',
+        }
+
     def action_toggle_stage_1_details(self):
         for rec in self:
+            is_completed = (rec.stage_1_status == 'completed' or (rec.stage_id and rec.stage_id.sequence > 1))
+            if is_completed and not rec.show_stage_1_details and not rec.stage_1_unlocked_for_edit:
+                if not rec.can_edit_assignment and not self.env.is_admin():
+                    raise UserError(_('عذراً! ليس لديك صلاحية تعديل بيانات مرحلة الإسناد.'))
+                return rec._get_stage_edit_warning_action(1, 'الإسناد')
             rec.show_stage_1_details = not rec.show_stage_1_details
 
     def action_toggle_stage_2_details(self):
         for rec in self:
+            is_completed = (rec.stage_2_status == 'completed' or (rec.stage_id and rec.stage_id.sequence > 2))
+            if is_completed and not rec.show_stage_2_details and not rec.stage_2_unlocked_for_edit:
+                return rec._get_stage_edit_warning_action(2, 'الكشفية والتصاريح')
             rec.show_stage_2_details = not rec.show_stage_2_details
 
     def action_toggle_stage_3_details(self):
         for rec in self:
+            is_completed = (rec.stage_3_status == 'completed' or (rec.stage_id and rec.stage_id.sequence > 3))
+            if is_completed and not rec.show_stage_3_details and not rec.stage_3_unlocked_for_edit:
+                return rec._get_stage_edit_warning_action(3, 'التنفيذ والتشغيل')
             rec.show_stage_3_details = not rec.show_stage_3_details
 
     def action_toggle_stage_4_details(self):
         for rec in self:
+            is_completed = (rec.stage_4_status == 'completed' or (rec.stage_id and rec.stage_id.sequence > 4))
+            if is_completed and not rec.stage_4_unlocked_for_edit:
+                return rec._get_stage_edit_warning_action(4, 'الإغلاق والتوثيق')
             rec.show_stage_4_details = not rec.show_stage_4_details
 
     def action_toggle_stage_5_details(self):
         for rec in self:
+            is_completed = (rec.stage_5_status == 'completed' or (rec.stage_id and rec.stage_id.sequence > 5))
+            if is_completed and not rec.show_stage_5_details and not rec.stage_5_unlocked_for_edit:
+                return rec._get_stage_edit_warning_action(5, 'الفوترة والتحصيل')
             rec.show_stage_5_details = not rec.show_stage_5_details
+
+    def action_confirm_stage_1_edits(self):
+        for rec in self:
+            rec.stage_1_unlocked_for_edit = False
+            rec._compute_overall_progress()
+            rec.message_post(body=_('✅ تم حفظ وتأكيد بيانات مرحلة الإسناد المكتملة بعد التعديل بواسطة <b>%s</b>.') % self.env.user.name)
+
+    def action_confirm_stage_2_edits(self):
+        for rec in self:
+            rec.stage_2_unlocked_for_edit = False
+            rec._compute_overall_progress()
+            rec.message_post(body=_('✅ تم حفظ وتأكيد بيانات مرحلة الكشفية والتصاريح المكتملة بعد التعديل بواسطة <b>%s</b>.') % self.env.user.name)
+
+    def action_confirm_stage_3_edits(self):
+        for rec in self:
+            rec.stage_3_unlocked_for_edit = False
+            rec._compute_overall_progress()
+            rec.message_post(body=_('✅ تم حفظ وتأكيد بيانات مرحلة التنفيذ والتشغيل المكتملة بعد التعديل بواسطة <b>%s</b>.') % self.env.user.name)
+
+    def action_confirm_stage_4_edits(self):
+        for rec in self:
+            vals_to_write = {'stage_4_unlocked_for_edit': False}
+            if rec.receipt_155_status != 'yes':
+                vals_to_write['completion_certificate_status'] = 'no'
+            rec.write(vals_to_write)
+            rec.message_post(body=_('✅ تم حفظ وتأكيد بيانات مرحلة الإغلاق والتوثيق بعد التعديل والتحقق من الشروط بواسطة <b>%s</b>.') % self.env.user.name)
+
+    def action_confirm_stage_5_edits(self):
+        for rec in self:
+            rec.stage_5_unlocked_for_edit = False
+            rec._compute_overall_progress()
+            rec.message_post(body=_('✅ تم حفظ وتأكيد بيانات مرحلة الفوترة والتحصيل المكتملة بعد التعديل بواسطة <b>%s</b>.') % self.env.user.name)
 
     def action_toggle_assignment_details(self):
         return self.action_toggle_stage_1_details()
@@ -253,33 +356,39 @@ class UnifiedContractWorkOrder(models.Model):
     # 1. Assignment Phase Fields (مرحلة الإسناد)
     region_id = fields.Many2one(
         'unified.contract.region',
+        index=True,
         string='المنطقة',
         tracking=True
     )
     district_id = fields.Many2one(
         'unified.contract.district',
+        index=True,
         string='الموقع / الحي',
         domain="[('region_id', '=', region_id)]",
         tracking=True
     )
     station_id = fields.Many2one(
         'unified.contract.station',
+        index=True,
         string='رقم / اسم المحطة',
         domain="[('district_id', '=', district_id)]",
         tracking=True
     )
     department_id = fields.Many2one(
         'unified.contract.department',
+        index=True,
         string='القسم / الإدارة',
         tracking=True
     )
     work_order_type_id = fields.Many2one(
         'unified.contract.work.order.type',
+        index=True,
         string='نوع أمر العمل',
         tracking=True
     )
     work_order_category_id = fields.Many2one(
         'unified.contract.work.order.category',
+        index=True,
         string='تصنيف أمر العمل',
         tracking=True
     )
@@ -291,7 +400,7 @@ class UnifiedContractWorkOrder(models.Model):
     elapsed_days = fields.Integer(
         string='المدة المنقضية (أيام)',
         compute='_compute_elapsed_days',
-        store=False,
+        store=True,
         help='عدد الأيام المنقضية تلقائياً بين تاريخ الإسناد والتاريخ الحالي'
     )
     estimated_amount = fields.Float(
@@ -402,6 +511,7 @@ class UnifiedContractWorkOrder(models.Model):
         string='تفاصيل وبيان العوائق'
     )
     permit_number = fields.Char(
+        index=True,
         string='رقم التصريح',
         tracking=True,
         help='رقم تصريح العمل الرسمي'
@@ -487,6 +597,7 @@ class UnifiedContractWorkOrder(models.Model):
     )
     stage_id = fields.Many2one(
         'unified.contract.work.order.stage',
+        index=True,
         string='مرحلة أمر العمل',
         default=lambda self: self._default_stage_id(),
         group_expand='_read_group_stage_ids',
@@ -515,7 +626,7 @@ class UnifiedContractWorkOrder(models.Model):
         ('late', 'متأخر عن الجدول الزمنـي'),
         ('done', 'منتهي / مكتمل'),
         ('cancel', 'ملغـى'),
-    ], string='حالة أمر العمل', default='draft', compute='_compute_state_automatically', store=True, readonly=False, tracking=True)
+    ], string='حالة أمر العمل', default='draft', compute='_compute_state_automatically', store=True, readonly=False, tracking=True, index=True)
 
     progress = fields.Float(
         string='نسبة الإنجاز (%)',
@@ -526,6 +637,7 @@ class UnifiedContractWorkOrder(models.Model):
     )
     company_id = fields.Many2one(
         'res.company',
+        index=True,
         string='الشركة',
         related='project_id.company_id',
         store=True,
@@ -646,6 +758,71 @@ class UnifiedContractWorkOrder(models.Model):
                 ])
                 notifications.write({'is_read': True})
 
+    @api.onchange('receipt_155_status', 'receipt_155_procedure_date')
+    def _onchange_receipt_155_status_set_dates(self):
+        if self.receipt_155_status == 'yes':
+            if not self.receipt_155_procedure_date:
+                self.receipt_155_procedure_date = fields.Date.context_today(self)
+            self.receipt_155_system_date = fields.Date.context_today(self)
+        else:
+            self.receipt_155_system_date = False
+
+        # Reset completion certificate status to 'no' when procedure 155 is updated until certificate button is clicked
+        self.completion_certificate_status = 'no'
+
+        if self.stage_id and self.stage_id.sequence >= 5:
+            stage_4 = self.env['unified.contract.work.order.stage'].search([('sequence', '=', 4)], limit=1)
+            if not stage_4:
+                stage_4 = self.env['unified.contract.work.order.stage'].search([('name', 'ilike', 'إغلاق')], limit=1)
+            if stage_4:
+                self.stage_4_unlocked_for_edit = True
+                self.show_stage_4_details = True
+                self.stage_id = stage_4.id
+        self._compute_stage_statuses()
+        self._compute_overall_progress()
+
+    def action_issue_completion_certificate(self):
+        self.ensure_one()
+        if self.receipt_155_status != 'yes':
+            raise ValidationError(_('عذراً! لا يمكن إصدار أو إعادة إصدار شهادة الإنجاز إلا بعد الموافقة على إجراء 155 (تحديد حالة إجراء 155: نعم).'))
+        if not self.receipt_155_procedure_date:
+            raise ValidationError(_('عذراً! يرجى إدخال تاريخ إجراء 155 أولاً قبل إصدار أو إعادة إصدار الشهادة.'))
+
+        # Generate unique certificate number if not already present
+        if not self.certificate_unique_number:
+            year_str = fields.Date.context_today(self).strftime('%Y')
+            wo_num = self.work_order_number or str(self.id)
+            self.certificate_unique_number = f"CERT-{year_str}-{wo_num}"
+            self.certificate_issue_number = 1
+        else:
+            # Increment issue count on re-issuance/update
+            self.certificate_issue_number = (self.certificate_issue_number or 1) + 1
+
+        self.certificate_issue_date = fields.Datetime.now()
+        if not self.completion_certificate_no:
+            self.completion_certificate_no = self.certificate_unique_number
+
+        self.with_context(skip_certificate_reset=True).write({
+            'completion_certificate_status': 'yes',
+            'completion_certificate_date': fields.Date.context_today(self),
+            'programming_alert_status': 'executed'
+        })
+
+        # Advance work order stage to Stage 5 ("مرحلة الفوترة والتحصيل")
+        stage_5 = self.env['unified.contract.work.order.stage'].search([('sequence', '=', 5)], limit=1)
+        if not stage_5:
+            stage_5 = self.env['unified.contract.work.order.stage'].search([('name', 'ilike', 'فوترة')], limit=1)
+
+        if stage_5:
+            self.with_context(skip_execution_check=True, skip_closure_check=True).write({'stage_id': stage_5.id})
+
+        self.message_post(body=_('📜 تم إصدار وطباعة شهادة الإنجاز الرسمية (رقم الشهادة: <b>%s</b> | الإصدار رقم: <b>#%s</b>) بواسطة <b>%s</b>.') % (self.certificate_unique_number, self.certificate_issue_number, self.env.user.name))
+
+        return self.env.ref('ao_unified_contract_project.action_report_completion_certificate').report_action(self)
+
+    def _sync_coordinates_and_maps_url(self, vals=None):
+        pass
+
     asset_details = fields.Text(
         string='الأصول والمعدات المستخدمة',
         help='سجل تفاصيل الأصول والمعدات الفنية المسندة لأمر العمل'
@@ -720,39 +897,67 @@ class UnifiedContractWorkOrder(models.Model):
         string='تاريخ شهادة الإنجاز',
         tracking=True
     )
+    certificate_unique_number = fields.Char(
+        string='رقم الشهادة المميز',
+        copy=False,
+        readonly=True,
+        tracking=True,
+        help='الرقم المميز المعتمد والفريد لشهادة الإنجاز الرسمية'
+    )
+    certificate_issue_number = fields.Integer(
+        string='رقم إصدار الشهادة',
+        default=1,
+        copy=False,
+        readonly=True,
+        tracking=True,
+        help='رقم النسخة أو الإصدار المعتمد للشهادة ينعكس ويتزايد أوتوماتيكياً عند إعادة الإصدار'
+    )
+    certificate_issue_date = fields.Datetime(
+        string='تاريخ ووقت توثيق الشهادة',
+        copy=False,
+        readonly=True,
+        tracking=True
+    )
     closing_attachment_ids = fields.Many2many(
         'ir.attachment',
         string='مرفقات ومستندات الإغلاق',
         help='مستندات استلام 155 وشهادات الإنجاز والمرفقات الفنية'
     )
 
-    @api.onchange('receipt_155_status')
-    def _onchange_receipt_155_status_set_dates(self):
-        if self.receipt_155_status == 'yes':
-            if not self.receipt_155_procedure_date:
-                self.receipt_155_procedure_date = fields.Date.context_today(self)
-            self.receipt_155_system_date = fields.Date.context_today(self)
-
-    def action_issue_completion_certificate(self):
-        self.ensure_one()
-        # Update completion certificate status and date
-        self.write({
-            'completion_certificate_status': 'yes',
-            'completion_certificate_date': fields.Date.context_today(self),
-            'programming_alert_status': 'executed'
-        })
-
-        # Advance work order stage to Stage 5 ("مرحلة الفوترة والتحصيل")
-        stage_5 = self.env['unified.contract.work.order.stage'].search([('sequence', '=', 5)], limit=1)
-        if not stage_5:
-            stage_5 = self.env['unified.contract.work.order.stage'].search([('name', 'ilike', 'فوترة')], limit=1)
-
-        if stage_5:
-            self.with_context(skip_execution_check=True).write({'stage_id': stage_5.id})
-
-        return self.env.ref('ao_unified_contract_project.action_report_completion_certificate').report_action(self)
-
     # 5. Invoicing & Collection Phase Fields (الفوترة والتحصيل)
+    extract_service_number = fields.Char(
+        string='رقم المستخلص - رقم الخدمة',
+        index=True,
+        tracking=True,
+        help='رقم المستخلص أو رقم الخدمة (يقبل أرقام ونصوص وفريد لا يتكرر)'
+    )
+    amount_before_tax = fields.Float(
+        string='القيمة قبل الضريبة',
+        digits=(16, 2),
+        tracking=True,
+        help='إدخال يدوي للقيمة قبل الضريبة (يقبل الكسور)'
+    )
+    tax_amount = fields.Float(
+        string='مبلغ الضريبة (15%)',
+        compute='_compute_tax_and_total_amount',
+        store=True,
+        digits=(16, 2),
+        help='مبلغ ضريبة القيمة المضافة 15% محسبوب تلقائياً'
+    )
+    amount_total = fields.Float(
+        string='القيمة شامل الضريبة',
+        compute='_compute_tax_and_total_amount',
+        store=True,
+        digits=(16, 2),
+        help='القيمة الإجمالية شاملة الضريبة محسبة تلقائياً'
+    )
+    invoice_id = fields.Many2one(
+        'unified.contract.invoice',
+        string='طلب الفاتورة لدى المالية',
+        readonly=True,
+        copy=False,
+        help='طلب الفاتورة الصادر والتابع للإدارة المالية'
+    )
     invoice_number = fields.Char(
         string='رقم الفاتورة الصادرة',
         tracking=True
@@ -767,13 +972,95 @@ class UnifiedContractWorkOrder(models.Model):
         ('paid', 'تم التحصيل بالكامل'),
     ], string='حالة التحصيل', default='unpaid', tracking=True)
 
-    @api.depends('stage_id', 'date_deadline')
+    can_refer_to_finance = fields.Boolean(
+        string='إمكانية الإحالة للمالية',
+        compute='_compute_can_refer_to_finance',
+        store=False,
+        help='تحدد ما إذا كان زر الإحالة للمالية متاحاً للمستخدم (المرة الأولى، أو طلب تصحيح، أو بعد حذف الطلب)'
+    )
+
+    @api.depends('invoice_id', 'invoice_id.state')
+    def _compute_can_refer_to_finance(self):
+        for rec in self:
+            if not rec.invoice_id:
+                rec.can_refer_to_finance = True
+            elif rec.invoice_id.state in ('correction_requested', 'cancel'):
+                rec.can_refer_to_finance = True
+            else:
+                rec.can_refer_to_finance = False
+
+    @api.depends('amount_before_tax')
+    def _compute_tax_and_total_amount(self):
+        for rec in self:
+            amt = rec.amount_before_tax or 0.0
+            rec.tax_amount = round(amt * 0.15, 2)
+            rec.amount_total = round(amt * 1.15, 2)
+
+    def action_refer_to_finance(self):
+        self.ensure_one()
+        if not self.extract_service_number:
+            raise ValidationError(_('عذراً! يرجى إدخال رقم المستخلص - رقم الخدمة أولاً قبل الإحالة للمالية.'))
+        if not self.amount_before_tax or self.amount_before_tax <= 0:
+            raise ValidationError(_('عذراً! يرجى إدخال القيمة قبل الضريبة أولاً قبل الإحالة للمالية.'))
+
+        # Check existing invoice request for this work order
+        existing_inv = self.env['unified.contract.invoice'].search([('work_order_id', '=', self.id)], limit=1)
+        if existing_inv and existing_inv.state not in ('correction_requested', 'cancel'):
+            state_label = dict(existing_inv._fields['state'].selection).get(existing_inv.state, existing_inv.state)
+            raise ValidationError(_(
+                'عذراً! تم إحالة هذا المستخلص إلى المالية مسبقاً (طلب رقم: %s، حالة الطلب الحالية: %s).\n'
+                'لا يمكن إعادة الإحالة إلا في حال تم طلب تصحيح من المالية أو إلغاء/حذف الطلب السابق لضمان عدم تكرار الفواتير.'
+            ) % (existing_inv.name, state_label))
+
+        # Unique constraint validation across ALL work orders for extract_service_number
+        existing_num = self.env['unified.contract.invoice'].search([
+            ('extract_service_number', '=', self.extract_service_number),
+            ('work_order_id', '!=', self.id)
+        ], limit=1)
+        if existing_num:
+            raise ValidationError(_('عذراً! رقم المستخلص - رقم الخدمة (%s) مستخدم مسبقاً في طلب الفاتورة رقم (%s) ولا يمكن تكراره!') % (self.extract_service_number, existing_num.name))
+
+        inv = existing_inv or self.invoice_id
+        wo_num = self.work_order_number or self.name
+        if inv:
+            inv.write({
+                'name': wo_num,
+                'extract_service_number': self.extract_service_number,
+                'amount_before_tax': self.amount_before_tax,
+                'state': 'draft'
+            })
+            msg = f"🔄 تم إعادة إحالة المستخلص رقم <b>{self.extract_service_number}</b> إلى الإدارة المالية بعد التعديل والتصحيح (طلب رقم: <b>{inv.name}</b>)."
+        else:
+            inv = self.env['unified.contract.invoice'].create({
+                'name': wo_num,
+                'work_order_id': self.id,
+                'extract_service_number': self.extract_service_number,
+                'amount_before_tax': self.amount_before_tax,
+                'state': 'draft'
+            })
+            self.invoice_id = inv.id
+            msg = f"📤 تم إحالة المستخلص رقم <b>{self.extract_service_number}</b> إلى الإدارة المالية بنجاح (طلب رقم: <b>{inv.name}</b>)."
+
+        self.message_post(body=msg)
+
+        return {
+            'name': _('طلب الفاتورة لدى المالية 🧾'),
+            'type': 'ir.actions.act_window',
+            'res_model': 'unified.contract.invoice',
+            'res_id': inv.id,
+            'view_mode': 'form',
+            'target': 'current',
+        }
+
+    @api.depends('stage_id', 'date_deadline', 'payment_status', 'stage_5_status', 'invoice_id.state')
     def _compute_state_automatically(self):
         today = fields.Date.context_today(self)
         for rec in self:
-            if rec.state in ('done', 'cancel', 'on_hold'):
+            if rec.state in ('cancel', 'on_hold'):
                 continue
-            if rec.date_deadline and rec.date_deadline < today:
+            if rec.payment_status == 'paid' or rec.stage_5_status == 'paid' or (rec.invoice_id and rec.invoice_id.state == 'paid') or (rec.stage_id and rec.stage_id.sequence >= 6):
+                rec.state = 'done'
+            elif rec.date_deadline and rec.date_deadline < today:
                 rec.state = 'late'
             else:
                 if rec.is_first_stage:
@@ -781,11 +1068,42 @@ class UnifiedContractWorkOrder(models.Model):
                 else:
                     rec.state = 'in_progress'
 
-    @api.depends('stage_id', 'state', 'execution_progress', 'is_execution_skipped')
+    @api.depends('stage_id', 'state', 'execution_progress', 'is_execution_skipped', 'receipt_155_status', 'completion_certificate_status', 'invoice_id', 'invoice_id.state', 'invoice_id.invoice_number', 'payment_status')
     def _compute_stage_statuses(self):
         for rec in self:
             current_seq = rec.stage_id.sequence if rec.stage_id else 1
-            is_done = rec.state == 'done'
+            inv = rec.invoice_id
+            inv_state = inv.state if inv else False
+
+            # Stage 5: Invoicing & Collection (Must strictly reflect invoice state!)
+            if inv:
+                if inv_state == 'paid':
+                    rec.stage_5_status = 'paid'
+                elif inv_state == 'late':
+                    rec.stage_5_status = 'late'
+                elif inv_state == 'correction_requested':
+                    rec.stage_5_status = 'correction_requested'
+                elif inv_state == 'uploaded':
+                    rec.stage_5_status = 'uploaded'
+                elif inv_state == 'draft':
+                    if inv.invoice_number:
+                        rec.stage_5_status = 'issued'
+                    else:
+                        rec.stage_5_status = 'referred'
+                elif inv_state == 'cancel':
+                    rec.stage_5_status = 'in_progress'
+                else:
+                    rec.stage_5_status = 'in_progress'
+            elif rec.payment_status == 'paid':
+                rec.stage_5_status = 'paid'
+            elif current_seq >= 5 and rec.stage_4_status == 'completed':
+                rec.stage_5_status = 'in_progress'
+            else:
+                rec.stage_5_status = 'not_started'
+
+            # Overall Work Order is fully completed/done when paid
+            is_paid = (rec.stage_5_status == 'paid' or rec.payment_status == 'paid' or inv_state == 'paid')
+            is_done = is_paid
 
             # Stage 1: Assignment
             if is_done or current_seq > 1:
@@ -813,21 +1131,14 @@ class UnifiedContractWorkOrder(models.Model):
             else:
                 rec.stage_3_status = 'not_started'
 
-            # Stage 4: Closing
-            if is_done or current_seq > 4:
+            # Stage 4: Closing (Requires BOTH Procedure 155 = 'yes' AND Completion Certificate = 'yes')
+            stage_4_fulfilled = (rec.receipt_155_status == 'yes' and rec.completion_certificate_status == 'yes')
+            if is_done or (stage_4_fulfilled and current_seq >= 4):
                 rec.stage_4_status = 'completed'
-            elif current_seq == 4:
+            elif current_seq >= 4:
                 rec.stage_4_status = 'in_progress'
             else:
                 rec.stage_4_status = 'not_started'
-
-            # Stage 5: Invoicing
-            if is_done:
-                rec.stage_5_status = 'completed'
-            elif current_seq == 5:
-                rec.stage_5_status = 'in_progress'
-            else:
-                rec.stage_5_status = 'not_started'
 
     @api.depends('stage_id', 'project_id')
     def _compute_can_edit_assignment(self):
@@ -920,22 +1231,11 @@ class UnifiedContractWorkOrder(models.Model):
                 if rec.execution_end_date < rec.execution_start_date:
                     raise ValidationError(_('عذراً! يجب أن يكون تاريخ الانتهاء أكبر من أو يساوي تاريخ بداية التنفيذ.'))
 
-    @api.onchange('execution_start_date', 'execution_end_date')
-    def _onchange_execution_dates_check(self):
-        if self.execution_start_date and self.execution_end_date:
-            if self.execution_end_date < self.execution_start_date:
-                return {
-                    'warning': {
-                        'title': _('تنبيه - تاريخ غير صالح'),
-                        'message': _('عذراً! يجب أن يكون تاريخ الانتهاء أكبر من أو يساوي تاريخ بداية التنفيذ.')
-                    }
-                }
-
-    @api.depends('stage_id', 'stage_id.sequence', 'stage_id.stage_progress', 'execution_progress', 'state')
+    @api.depends('stage_id', 'stage_id.sequence', 'stage_id.stage_progress', 'execution_progress', 'receipt_155_status', 'completion_certificate_status', 'state', 'stage_5_status', 'payment_status', 'invoice_id.state')
     def _compute_overall_progress(self):
         all_stages = self.env['unified.contract.work.order.stage'].search([], order='sequence asc, id asc')
         for rec in self:
-            if rec.state == 'done':
+            if rec.state == 'done' or rec.stage_5_status == 'paid' or rec.payment_status == 'paid' or (rec.invoice_id and rec.invoice_id.state == 'paid'):
                 rec.progress = 100.0
                 continue
             if not rec.stage_id or not all_stages:
@@ -950,16 +1250,90 @@ class UnifiedContractWorkOrder(models.Model):
                 (rec.stage_id.name and 'تنفيذ' in rec.stage_id.name) or 
                 (rec.stage_id.sequence == 3)
             )
+            is_closure_stage = bool(
+                (rec.stage_id.name and 'إغلاق' in rec.stage_id.name and 'نهائي' not in rec.stage_id.name) or
+                (rec.stage_id.sequence == 4)
+            )
             
             if is_execution_stage:
                 current_target = rec.stage_id.stage_progress
                 stage_weight = max(current_target - base_progress, 0.0)
                 exec_pct = max(min(rec.execution_progress or 0.0, 100.0), 0.0)
                 rec.progress = round(base_progress + (exec_pct / 100.0) * stage_weight, 2)
+            elif is_closure_stage:
+                current_target = rec.stage_id.stage_progress
+                stage_weight = max(current_target - base_progress, 0.0)
+                closure_pct = 0.0
+                if rec.receipt_155_status == 'yes':
+                    closure_pct += 50.0
+                if rec.completion_certificate_status == 'yes':
+                    closure_pct += 50.0
+                rec.progress = round(base_progress + (closure_pct / 100.0) * stage_weight, 2)
             else:
                 rec.progress = round(base_progress, 2)
 
-    @api.onchange('execution_progress', 'stage_id')
+    def _check_work_order_number_config(self):
+        alert_config = self.env['unified.contract.alert.setting'].sudo().get_config()
+        numeric_only = alert_config.wo_number_numeric_only
+        enforce_unique = alert_config.wo_number_unique
+        required_length = alert_config.wo_number_length or 0
+
+        val_list = [str(r.work_order_number).strip() for r in self if r.work_order_number]
+        for rec in self:
+            if not rec.work_order_number:
+                continue
+            val = str(rec.work_order_number).strip()
+            
+            if numeric_only and not val.isdigit():
+                raise ValidationError(_('عذراً! حسب إعدادات إدارة التنبيهات، يجب أن يتكون رقم أمر العمل من أرقام فقط.'))
+                
+            if required_length > 0 and len(val) != required_length:
+                raise ValidationError(_('عذراً! حسب إعدادات إدارة التنبيهات، يجب أن يتكون رقم أمر العمل من (%s) رقم/خانة بالضبط. (الطول المدخل: %s خانة).') % (required_length, len(val)))
+                
+        if enforce_unique and val_list:
+            duplicates = self.search([
+                ('work_order_number', 'in', val_list),
+                ('id', 'not in', self.ids)
+            ])
+            if duplicates:
+                dup_map = {d.work_order_number: (d.work_order_number or d.name or '') for d in duplicates}
+                for rec in self:
+                    val = str(rec.work_order_number).strip() if rec.work_order_number else False
+                    if val and val in dup_map:
+                        raise ValidationError(_('عذراً! رقم أمر العمل (%s) مستخدم مسبقاً في أمر العمل رقم (%s). إعدادات إدارة التنبيهات تشترط عدم التكرار.') % (val, dup_map[val]))
+
+    @api.constrains('permit_number')
+    def _check_permit_number_config(self):
+        alert_config = self.env['unified.contract.alert.setting'].sudo().get_config()
+        numeric_only = alert_config.permit_number_numeric_only
+        enforce_unique = alert_config.permit_number_unique
+        required_length = alert_config.permit_number_length or 0
+
+        val_list = [str(r.permit_number).strip() for r in self if r.permit_number]
+        for rec in self:
+            if not rec.permit_number:
+                continue
+            val = str(rec.permit_number).strip()
+            
+            if numeric_only and not val.isdigit():
+                raise ValidationError(_('عذراً! حسب إعدادات إدارة التنبيهات، يجب أن يتكون رقم التصريح من أرقام فقط.'))
+                
+            if required_length > 0 and len(val) != required_length:
+                raise ValidationError(_('عذراً! حسب إعدادات إدارة التنبيهات، يجب أن يتكون رقم التصريح من (%s) رقم/خانة بالضبط. (الطول المدخل: %s خانة).') % (required_length, len(val)))
+                
+        if enforce_unique and val_list:
+            duplicates = self.search([
+                ('permit_number', 'in', val_list),
+                ('id', 'not in', self.ids)
+            ])
+            if duplicates:
+                dup_map = {d.permit_number: (d.work_order_number or d.name or '') for d in duplicates}
+                for rec in self:
+                    val = str(rec.permit_number).strip() if rec.permit_number else False
+                    if val and val in dup_map:
+                        raise ValidationError(_('عذراً! رقم التصريح (%s) مستخدم مسبقاً في أمر العمل رقم (%s). إعدادات إدارة التنبيهات تشترط عدم تكرار رقم التصريح.') % (val, dup_map[val]))
+
+    @api.onchange('execution_progress', 'stage_id', 'receipt_155_status', 'completion_certificate_status')
     def _onchange_execution_progress_update_overall_progress(self):
         if self.execution_progress and self.execution_progress >= 100.0:
             self.restoration_status = 'yes'
@@ -1028,6 +1402,7 @@ class UnifiedContractWorkOrder(models.Model):
         enforce_unique = alert_config.wo_number_unique
         required_length = alert_config.wo_number_length or 12
 
+        val_list = [str(r.work_order_number).strip() for r in self if r.work_order_number]
         for rec in self:
             if not rec.work_order_number:
                 continue
@@ -1039,14 +1414,17 @@ class UnifiedContractWorkOrder(models.Model):
             if required_length > 0 and len(val) != required_length:
                 raise ValidationError(_('عذراً! حسب إعدادات إدارة التنبيهات، يجب أن يتكون رقم أمر العمل من (%s) رقم/خانة بالضبط. (الطول المدخل: %s خانة).') % (required_length, len(val)))
                 
-            if enforce_unique:
-                existing = self.search([
-                    ('work_order_number', '=', val),
-                    ('id', '!=', rec.id)
-                ], limit=1)
-                if existing:
-                    target_display = existing.work_order_number or existing.name or ''
-                    raise ValidationError(_('عذراً! رقم أمر العمل (%s) مستخدم مسبقاً في أمر العمل رقم (%s). إعدادات إدارة التنبيهات تشترط عدم التكرار.') % (val, target_display))
+        if enforce_unique and val_list:
+            duplicates = self.search([
+                ('work_order_number', 'in', val_list),
+                ('id', 'not in', self.ids)
+            ])
+            if duplicates:
+                dup_map = {d.work_order_number: (d.work_order_number or d.name or '') for d in duplicates}
+                for rec in self:
+                    val = str(rec.work_order_number).strip() if rec.work_order_number else False
+                    if val and val in dup_map:
+                        raise ValidationError(_('عذراً! رقم أمر العمل (%s) مستخدم مسبقاً في أمر العمل رقم (%s). إعدادات إدارة التنبيهات تشترط عدم التكرار.') % (val, dup_map[val]))
 
     @api.constrains('permit_number')
     def _check_permit_number_config(self):
@@ -1055,6 +1433,7 @@ class UnifiedContractWorkOrder(models.Model):
         enforce_unique = alert_config.permit_number_unique
         required_length = alert_config.permit_number_length or 0
 
+        val_list = [str(r.permit_number).strip() for r in self if r.permit_number]
         for rec in self:
             if not rec.permit_number:
                 continue
@@ -1066,14 +1445,17 @@ class UnifiedContractWorkOrder(models.Model):
             if required_length > 0 and len(val) != required_length:
                 raise ValidationError(_('عذراً! حسب إعدادات إدارة التنبيهات، يجب أن يتكون رقم التصريح من (%s) رقم/خانة بالضبط. (الطول المدخل: %s خانة).') % (required_length, len(val)))
                 
-            if enforce_unique:
-                existing = self.search([
-                    ('permit_number', '=', val),
-                    ('id', '!=', rec.id)
-                ], limit=1)
-                if existing:
-                    target_display = existing.work_order_number or existing.name or ''
-                    raise ValidationError(_('عذراً! رقم التصريح (%s) مستخدم مسبقاً في أمر العمل رقم (%s). إعدادات إدارة التنبيهات تشترط عدم تكرار رقم التصريح.') % (val, target_display))
+        if enforce_unique and val_list:
+            duplicates = self.search([
+                ('permit_number', 'in', val_list),
+                ('id', 'not in', self.ids)
+            ])
+            if duplicates:
+                dup_map = {d.permit_number: (d.work_order_number or d.name or '') for d in duplicates}
+                for rec in self:
+                    val = str(rec.permit_number).strip() if rec.permit_number else False
+                    if val and val in dup_map:
+                        raise ValidationError(_('عذراً! رقم التصريح (%s) مستخدم مسبقاً في أمر العمل رقم (%s). إعدادات إدارة التنبيهات تشترط عدم تكرار رقم التصريح.') % (val, dup_map[val]))
 
     @api.depends('assignment_date')
     def _compute_elapsed_days(self):
@@ -1182,15 +1564,20 @@ class UnifiedContractWorkOrder(models.Model):
         }
 
     def action_next_stage(self):
+        all_stages = self.env['unified.contract.work.order.stage'].search([], order='sequence asc, id asc')
         for rec in self:
             current_seq = rec.stage_id.sequence if rec.stage_id else -1
-            next_stage = self.env['unified.contract.work.order.stage'].search([
-                ('sequence', '>', current_seq)
-            ], order='sequence asc', limit=1)
+            next_stage = next((s for s in all_stages if s.sequence > current_seq), None)
             if next_stage:
                 if rec._is_execution_stage(rec.stage_id) and rec._is_closure_or_later_stage(next_stage):
                     if rec.execution_progress < 100.0 and not self.env.context.get('skip_execution_check'):
                         return rec._get_skip_execution_wizard_action(next_stage)
+
+                if rec.stage_id and rec.stage_id.sequence == 4 and next_stage.sequence >= 5 and not self.env.context.get('skip_closure_check'):
+                    if rec.receipt_155_status != 'yes':
+                        raise ValidationError(_('عذراً! لا يمكن الانتقال لمرحلة الفوترة والتحصيل إلا بعد الموافقة على إجراء 155 (تحديد حالة إجراء 155: نعم).'))
+                    if rec.completion_certificate_status != 'yes':
+                        raise ValidationError(_('عذراً! لا يمكن الانتقال لمرحلة الفوترة والتحصيل إلا بعد إصدار شهادة الإنجاز.'))
 
                 rec.stage_id = next_stage.id
                 if rec.state == 'draft':
@@ -1280,7 +1667,32 @@ class UnifiedContractWorkOrder(models.Model):
             if cx and cy:
                 vals['google_maps_url'] = f"https://www.google.com/maps/search/?api=1&query={cy},{cx}"
 
+
+    def _check_field_write_permissions(self, vals):
+        """ Enforce unified.contract.field.permission settings for non-admin users at ORM layer """
+        if self.env.is_admin():
+            return
+        user = self.env.user
+        profiles = self.env['unified.contract.permission.profile'].search([
+            ('user_ids', 'in', [user.id])
+        ])
+        if not profiles:
+            return
+        restricted_perms = self.env['unified.contract.field.permission'].search([
+            ('profile_id', 'in', profiles.ids),
+            ('model_id.model', '=', self._name),
+            ('perm_write', '=', False)
+        ])
+        if not restricted_perms:
+            return
+        restricted_field_names = set(restricted_perms.mapped('field_id.name'))
+        written_fields = set(vals.keys()).intersection(restricted_field_names)
+        if written_fields:
+            field_labels = [self._fields[fn].string or fn for fn in written_fields if fn in self._fields]
+            raise UserError(_('عذراً! ليس لديك صلاحية تعديل الحقول التالية وفقاً لبروفايل الصلاحيات الخاص بك: %s') % (', '.join(field_labels)))
+
     def write(self, vals):
+        self._check_field_write_permissions(vals)
         self._sync_coordinates_and_maps_url(vals)
         if 'work_order_number' in vals and not vals.get('name'):
             vals['name'] = vals['work_order_number']
@@ -1292,6 +1704,11 @@ class UnifiedContractWorkOrder(models.Model):
                 if not self.env.context.get('skip_execution_check') and rec._is_execution_stage(rec.stage_id) and rec._is_closure_or_later_stage(new_stage):
                     if rec.execution_progress < 100.0:
                         raise ValidationError(_('عذراً! لا يمكن نقل أمر العمل لمرحلة الإغلاق لأن نسبة إنجاز التنفيذ أقل من 100%. يرجى استخدام زر (الانتقال للمرحلة التالية) أو إكمال نسبة التنفيذ 100% أولاً.'))
+                if not self.env.context.get('skip_closure_check') and rec.stage_id and rec.stage_id.sequence == 4 and new_stage and new_stage.sequence >= 5:
+                    if rec.receipt_155_status != 'yes':
+                        raise ValidationError(_('عذراً! لا يمكن نقل أمر العمل لمرحلة الفوترة والتحصيل إلا بعد تحديد حالة إجراء 155 إلى (نعم).'))
+                    if rec.completion_certificate_status != 'yes':
+                        raise ValidationError(_('عذراً! لا يمكن نقل أمر العمل لمرحلة الفوترة والتحصيل إلا بعد إصدار شهادة الإنجاز.'))
 
         # Automatic Permit Status Update upon entry of permit number and permit end date
         issued_permit_status = self.env['unified.contract.permit.status'].search([
@@ -1304,45 +1721,68 @@ class UnifiedContractWorkOrder(models.Model):
         stage_2_fields = {'is_scouting_completed', 'has_scouting_obstacles', 'scouting_obstacles_notes', 'permit_status_id', 'permit_number', 'permit_start_date', 'permit_end_date'}
         stage_3_fields = {'execution_start_date', 'execution_end_date', 'excavation_quantity', 'extension_quantity', 'equipment_count', 'execution_progress', 'restoration_status', 'asset_receipt_207', 'asset_receipt_207_date', 'asset_receipt_201', 'asset_receipt_201_date', 'programming_date', 'completion_certificate_status', 'asset_details', 'programming_notes', 'operation_status'}
         stage_4_fields = {'execution_notes', 'execution_attachment_ids', 'boq_amendment', 'boq_date', 'closing_document_ids', 'receipt_155_status', 'receipt_155_procedure_date', 'receipt_155_system_date', 'receipt_155_number', 'receipt_155_date', 'completion_certificate_no', 'completion_certificate_date', 'closing_attachment_ids'}
-        stage_5_fields = {'invoice_number', 'invoice_amount', 'payment_status'}
+        stage_5_fields = {'extract_service_number', 'amount_before_tax', 'tax_amount', 'amount_total', 'invoice_number', 'invoice_amount', 'payment_status', 'invoicing_number', 'invoicing_date', 'invoicing_amount', 'invoicing_attachment_ids'}
+        # Ensure procedure 155 dates and completion certificate status are dynamically synchronized on write
+        if 'receipt_155_status' in vals or 'receipt_155_procedure_date' in vals:
+            if not self.env.context.get('skip_certificate_reset'):
+                vals['completion_certificate_status'] = 'no'
+            if vals.get('receipt_155_status') == 'yes':
+                vals['receipt_155_system_date'] = fields.Date.context_today(self)
+                if 'receipt_155_procedure_date' not in vals:
+                    for rec in self:
+                        if not rec.receipt_155_procedure_date:
+                            vals['receipt_155_procedure_date'] = fields.Date.context_today(self)
+            elif vals.get('receipt_155_status') == 'no':
+                vals['receipt_155_system_date'] = False
+        elif 'receipt_155_procedure_date' in vals:
+            vals['receipt_155_system_date'] = fields.Date.context_today(self)
 
         res = super(UnifiedContractWorkOrder, self).write(vals)
+
+        stage_4 = None
+        if not self.env.context.get('skip_stage_4_auto_revert'):
+            stage_4 = self.env['unified.contract.work.order.stage'].search([('sequence', '=', 4)], limit=1) or self.env['unified.contract.work.order.stage'].search([('name', 'ilike', 'إغلاق')], limit=1)
 
         for rec in self:
             if any(f in vals for f in ('permit_number', 'permit_start_date', 'permit_end_date')):
                 rec._sync_permit_status_from_dates()
 
-            if vals.get('completion_certificate_status') == 'yes':
-                notifications = self.env['unified.contract.notification'].search([
-                    ('work_order_id', '=', rec.id),
-                    ('notification_type', '=', 'programming_alert'),
-                    ('is_read', '=', False)
-                ])
-                if notifications:
-                    notifications.write({'is_read': True})
+            # Auto-revert stage to Stage 4 if stage 4 conditions (155=yes AND cert=yes) are broken while in Stage 5
+            if not self.env.context.get('skip_stage_4_auto_revert'):
+                stage_4_ok = (rec.receipt_155_status == 'yes' and rec.completion_certificate_status == 'yes')
+                if not stage_4_ok and rec.stage_id and rec.stage_id.sequence >= 5:
+                    if stage_4:
+                        rec.with_context(skip_stage_permission_check=True, skip_stage_4_auto_revert=True).write({'stage_id': stage_4.id})
 
+            ctx_rec = rec.with_context(skip_stage_permission_check=True, skip_stage_4_auto_revert=True)
             if any(f in vals for f in stage_1_fields) and current_user_id not in rec.stage_1_user_ids.ids:
-                rec.write({'stage_1_user_ids': [(4, current_user_id)]})
+                ctx_rec.write({'stage_1_user_ids': [(4, current_user_id)]})
             if any(f in vals for f in stage_2_fields) and current_user_id not in rec.stage_2_user_ids.ids:
-                rec.write({'stage_2_user_ids': [(4, current_user_id)]})
+                ctx_rec.write({'stage_2_user_ids': [(4, current_user_id)]})
             if any(f in vals for f in stage_3_fields) and current_user_id not in rec.stage_3_user_ids.ids:
-                rec.write({'stage_3_user_ids': [(4, current_user_id)]})
+                ctx_rec.write({'stage_3_user_ids': [(4, current_user_id)]})
             if any(f in vals for f in stage_4_fields) and current_user_id not in rec.stage_4_user_ids.ids:
-                rec.write({'stage_4_user_ids': [(4, current_user_id)]})
+                ctx_rec.write({'stage_4_user_ids': [(4, current_user_id)]})
             if any(f in vals for f in stage_5_fields) and current_user_id not in rec.stage_5_user_ids.ids:
-                rec.write({'stage_5_user_ids': [(4, current_user_id)]})
+                ctx_rec.write({'stage_5_user_ids': [(4, current_user_id)]})
+
+        if vals.get('completion_certificate_status') == 'yes':
+            notifications = self.env['unified.contract.notification'].search([
+                ('work_order_id', 'in', self.ids),
+                ('notification_type', '=', 'programming_alert'),
+                ('is_read', '=', False)
+            ])
+            if notifications:
+                notifications.write({'is_read': True})
 
         if 'stage_id' in vals:
             for rec in self:
-                if rec.stage_id:
-                    rec.progress = rec.stage_id.stage_progress
                 if rec.is_first_stage and rec.state not in ('cancel', 'on_hold', 'done'):
                     rec.state = 'draft'
                 elif not rec.is_first_stage and rec.state == 'draft':
                     rec.state = 'in_progress'
                 if not rec.permit_status_id:
                     rec.permit_status_id = rec._get_default_permit_status_id()
-                rec._compute_team_id()
         return res
 
     def action_set_draft(self):

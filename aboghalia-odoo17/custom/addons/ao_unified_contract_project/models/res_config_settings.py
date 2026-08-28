@@ -35,3 +35,9 @@ class ResConfigSettings(models.TransientModel):
         default=3,
         help='حدد الحد الأقصى لعدد مرات التنبيه المسموح بإرسالها للمسؤولين قبل وبعد الانتهاء.'
     )
+    invoice_overdue_days = fields.Integer(
+        string='عدد أيام احتساب الفاتورة متأخرة',
+        config_parameter='ao_unified_contract.invoice_overdue_days',
+        default=60,
+        help='حدد عدد الأيام بعد تاريخ الرفع على النظام المالي لتعتبر الفاتورة متأخرة في التحصيل وتتغير حالتها تلقائياً.'
+    )

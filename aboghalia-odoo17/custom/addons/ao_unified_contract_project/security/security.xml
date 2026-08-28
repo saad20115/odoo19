@@ -23,11 +23,6 @@
             <field name="implied_ids" eval="[(4, ref('group_unified_contract_user'))]"/>
         </record>
 
-        <!-- Automatically grant internal users access -->
-        <record id="base.group_user" model="res.groups">
-            <field name="implied_ids" eval="[(4, ref('group_unified_contract_user'))]"/>
-        </record>
-
         <!-- Multi-Company Record Rules -->
         <record id="rule_unified_contract_project_multi_company" model="ir.rule">
             <field name="name">Unified Contract Project Multi-Company</field>

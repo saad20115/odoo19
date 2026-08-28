@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Backend OWL Client Action for Interactive Map (Inside Odoo App) -->
+    <record id="action_unified_contract_work_order_map_backend" model="ir.actions.client">
+        <field name="name">خريطة أوامر العمل التفاعلية 🗺️📍</field>
+        <field name="tag">unified_contract_work_order_map_backend</field>
+    </record>
+
+    <!-- Website Route Template (Full Screen Smooth Layout, 100% Expanded Map Canvas, Zero Whitespace) -->
+    <template id="work_order_map_dashboard_template" name="Work Order Map Dashboard">
+        <t t-call="website.layout">
+            <div class="d-flex flex-column w-100" style="height: calc(100vh - 55px); overflow: hidden; position: relative;">
+                <!-- Header Control & Legend Bar -->
+                <div class="bg-dark text-white p-2 px-3 d-flex justify-content-between align-items-center shadow-sm flex-wrap gap-2 flex-shrink-0" style="z-index: 1000;">
+                    <div class="d-flex align-items-center gap-3">
+                        <h5 class="m-0 fw-bold text-warning">🗺️📍 خريطة أوامر العمل التفاعلية (Interactive Map)</h5>
+                    </div>
+                    <!-- Color Code Legend -->
+                    <div class="d-flex align-items-center gap-3 flex-wrap small">
+                        <span><span class="badge" style="background:#f59e0b;">●</span> مرحلة الإسناد</span>
+                        <span><span class="badge" style="background:#f97316;">●</span> التصاريح والمعاينة</span>
+                        <span><span class="badge" style="background:#3b82f6;">●</span> التنفيذ والتشغيل</span>
+                        <span><span class="badge" style="background:#8b5cf6;">●</span> الإغلاق والتوثيق</span>
+                        <span><span class="badge" style="background:#10b981;">●</span> مكتمل ومحصل</span>
+                        <span><span class="badge" style="background:#ef4444;">●</span> متأخر / منتهي</span>
+                    </div>
+                    <div>
+                        <a href="/web#action=ao_unified_contract_project.action_unified_contract_work_orders" class="btn btn-outline-light btn-sm fw-bold">
+                            ⬅️ العودة لأوامر العمل في أودو
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Leaflet CSS & JS -->
+                <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+                <!-- Split Screen Container (Flex Layout 100% Stretch) -->
+                <div class="d-flex flex-row flex-grow-1 w-100 position-relative" style="overflow: hidden;">
+                    <!-- Right Sidebar: Interactive Cards List (Fixed 360px Width) -->
+                    <div class="bg-light p-3 border-end h-100 flex-shrink-0" style="width: 360px; overflow-y: auto; z-index: 10;">
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom">
+                            <h6 class="fw-bold text-dark m-0">📋 قائمة أوامر العمل بالموقع</h6>
+                            <span class="badge bg-primary rounded-pill"><t t-esc="len(work_orders)"/> أمر عمل</span>
+                        </div>
+                        <div class="row g-2">
+                            <t t-foreach="work_orders" t-as="wo">
+                                <div class="col-12">
+                                    <div t-attf-id="wo_card_#{wo.id}" 
+                                         t-attf-onclick="window.focusOnMap(#{wo.id}, #{wo.coordinate_y or 21.5433}, #{wo.coordinate_x or 39.1728})"
+                                         class="card p-3 shadow-sm rounded-3 border-start border-4 bg-white cursor-pointer wo-map-card"
+                                         t-attf-style="border-left-color: #{'#ef4444' if wo.state == 'late' or wo.permit_alert_status == 'expired' else ('#10b981' if wo.stage_5_status == 'paid' else '#3b82f6')} !important; cursor: pointer; transition: all 0.2s ease-in-out;">
+                                        <div class="d-flex justify-content-between align-items-center mb-1">
+                                            <strong class="text-primary fs-6">
+                                                أمر عمل #<t t-esc="wo.work_order_number or wo.name"/>
+                                            </strong>
+                                            <span t-attf-class="badge #{'bg-danger' if wo.state == 'late' or wo.permit_alert_status == 'expired' else ('bg-success' if wo.stage_5_status == 'paid' else 'bg-primary')}">
+                                                <t t-esc="wo.stage_id.name if wo.stage_id else 'جديد'"/>
+                                            </span>
+                                        </div>
+                                        <div class="text-muted small mb-1">
+                                            <span>🏗️ المشروع: </span> <strong class="text-dark"><t t-esc="wo.project_id.name if wo.project_id else '-'"/></strong>
+                                        </div>
+                                        <div class="text-muted small mb-2">
+                                            <span>👷 المقاول: </span> <strong class="text-dark"><t t-esc="wo.contractor_id.name if wo.contractor_id else '-'"/></strong>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center border-top pt-2 mt-1">
+                                            <small class="text-muted">
+                                                📍 <t t-esc="wo.coordinate_y or '21.5433'"/>, <t t-esc="wo.coordinate_x or '39.1728'"/>
+                                            </small>
+                                            <a t-attf-href="/web#id=#{wo.id}&amp;model=unified.contract.work.order&amp;view_type=form" target="_blank" class="btn btn-sm btn-outline-primary py-0 px-2" style="font-size: 12px;">
+                                                فتح التفاصيل ↗️
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Left Main Area: Full Width Leaflet Map Canvas (100% Expansion) -->
+                    <div class="flex-grow-1 h-100 position-relative" style="min-width: 0;">
+                        <div id="work_order_map" style="position: absolute; top: 0; bottom: 0; left: 0; right: 0; width: 100%; height: 100%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Inline Javascript with Full Container Resizing -->
+            <script type="text/javascript">
+                var rawData = <t t-out="map_data_json"/>;
+                var mapMarkers = {};
+                var mapInstance;
+
+                // Ensure focusOnMap is defined globally on window immediately
+                window.focusOnMap = function(id, lat, lng) {
+                    if (mapInstance &amp;&amp; lat &amp;&amp; lng) {
+                        mapInstance.invalidateSize();
+                        mapInstance.flyTo([lat, lng], 15, { duration: 1.2 });
+                        if (mapMarkers[id]) {
+                            mapMarkers[id].openPopup();
+                        }
+                    }
+                };
+
+                document.addEventListener("DOMContentLoaded", function() {
+                    if (typeof L === "undefined") return;
+                    mapInstance = L.map('work_order_map', {
+                        zoomControl: true,
+                        attributionControl: true
+                    }).setView([21.5433, 39.1728], 11);
+                    
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '© OpenStreetMap contributors'
+                    }).addTo(mapInstance);
+
+                    function triggerMapResize() {
+                        if (mapInstance) {
+                            mapInstance.invalidateSize();
+                        }
+                    }
+
+                    setTimeout(triggerMapResize, 100);
+                    setTimeout(triggerMapResize, 400);
+                    setTimeout(triggerMapResize, 1000);
+
+                    window.addEventListener("resize", triggerMapResize);
+
+                    if (rawData &amp;&amp; rawData.length > 0) {
+                        var bounds = [];
+                        rawData.forEach(function(item) {
+                            var lat = item.lat;
+                            var lng = item.lng;
+                            bounds.push([lat, lng]);
+
+                            // Stage-based color pins
+                            var color = "#f59e0b"; // Yellow (Stage 1)
+                            if (item.state === 'late' || item.stage_5_status === 'late') {
+                                color = "#ef4444"; // Red
+                            } else if (item.state === 'done' || item.stage_5_status === 'paid') {
+                                color = "#10b981"; // Green
+                            } else if (item.stage.indexOf("2") !== -1 || item.stage.indexOf("تصاريح") !== -1) {
+                                color = "#f97316"; // Orange
+                            } else if (item.stage.indexOf("3") !== -1 || item.stage.indexOf("تنفيذ") !== -1) {
+                                color = "#3b82f6"; // Blue
+                            } else if (item.stage.indexOf("4") !== -1 || item.stage.indexOf("إغلاق") !== -1) {
+                                color = "#8b5cf6"; // Purple
+                            }
+
+                            var customIcon = L.divIcon({
+                                className: 'custom-pin',
+                                html: '<div style="background-color:' + color + '; width:28px; height:28px; border-radius:50% 50% 50% 0; transform:rotate(-45deg); border:2px solid white; box-shadow:0 2px 5px rgba(0,0,0,0.3);"><div style="width:10px; height:10px; background:white; border-radius:50%; margin:7px auto;"></div></div>',
+                                iconSize: [28, 28],
+                                iconAnchor: [14, 28],
+                                popupAnchor: [0, -28]
+                            });
+
+                            var marker = L.marker([lat, lng], {icon: customIcon}).addTo(mapInstance);
+                            var popupContent = `
+                                <div style="font-family: system-ui; text-align: right; direction: rtl;">
+                                    <h6 style="color: #1e3a8a; font-weight: bold; margin-bottom: 4px;">أمر عمل #${item.number}</h6>
+                                    <div style="font-size: 13px; margin-bottom: 2px;"><b>المشروع:</b> ${item.project}</div>
+                                    <div style="font-size: 13px; margin-bottom: 2px;"><b>المقاول:</b> ${item.contractor}</div>
+                                    <div style="font-size: 13px; margin-bottom: 4px;"><b>المرحلة:</b> <b style="color:${color}">${item.stage}</b></div>
+                                    <div style="font-size: 13px; color: #16a34a; font-weight: bold;"><b>نسبة الإنجاز:</b> ${item.progress}%</div>
+                                </div>
+                            `;
+                            marker.bindPopup(popupContent);
+                            mapMarkers[item.id] = marker;
+                        });
+
+                        if (bounds.length > 0) {
+                            mapInstance.fitBounds(bounds, {padding: [50, 50]});
+                        }
+                    }
+                });
+            </script>
+        </t>
+    </template>
+</odoo>

@@ -204,10 +204,10 @@ class UnifiedContractPermissionProfile(models.Model):
 
     def _sync_profile_users_to_teams(self):
         """ Direction 2: Sync Permission Profile user_ids back to linked Teams """
-        for profile in self:
-            teams = self.env['unified.contract.team'].search([('permission_profile_id', '=', profile.id)])
-            for team in teams:
-                team.write({'member_ids': [(6, 0, profile.user_ids.ids)]})
+        teams = self.env['unified.contract.team'].search([('permission_profile_id', 'in', self.ids)])
+        for team in teams:
+            if team.permission_profile_id:
+                team.write({'member_ids': [(6, 0, team.permission_profile_id.user_ids.ids)]})
 
     def action_sync_team_users(self):
         """ Manual action button to trigger real-time user sync from linked teams """
@@ -217,15 +217,20 @@ class UnifiedContractPermissionProfile(models.Model):
 
     def _sync_all_team_users(self):
         """ Direction 1: Sync all leaders and members from linked teams into user_ids """
+        all_teams = self.env['unified.contract.team'].search([('permission_profile_id', 'in', self.ids)])
+        team_map = {}
+        for t in all_teams:
+            pid = t.permission_profile_id.id
+            if pid not in team_map:
+                team_map[pid] = self.env['res.users']
+            if t.leader_id:
+                team_map[pid] |= t.leader_id
+            if t.member_ids:
+                team_map[pid] |= t.member_ids
+
         for profile in self:
-            teams = self.env['unified.contract.team'].search([('permission_profile_id', '=', profile.id)])
-            team_users = self.env['res.users']
-            for t in teams:
-                if t.leader_id:
-                    team_users |= t.leader_id
-                if t.member_ids:
-                    team_users |= t.member_ids
-            profile.with_context(skip_team_user_sync=True).write({'user_ids': [(6, 0, team_users.ids)]})
+            users = team_map.get(profile.id, self.env['res.users'])
+            profile.with_context(skip_team_user_sync=True).write({'user_ids': [(6, 0, users.ids)]})
 
     @api.model_create_multi
     def create(self, vals_list):
@@ -266,28 +271,27 @@ class UnifiedContractPermissionProfile(models.Model):
 
     def _populate_all_module_field_permissions(self, target_models):
         """ Create access rights rows with is_required boolean checkbox """
-        existing_field_ids = self.access_right_ids.mapped('field_id.id')
+        existing_field_ids = set(self.access_right_ids.mapped('field_id.id'))
+        fields_records = self.env['ir.model.fields'].search([
+            ('model_id', 'in', target_models.ids),
+            ('state', '=', 'base')
+        ])
         new_lines = []
-        for model in target_models:
-            fields_records = self.env['ir.model.fields'].search([
-                ('model_id', '=', model.id),
-                ('state', '=', 'base')
-            ])
-            for f in fields_records:
-                if f.id not in existing_field_ids:
-                    clean_label = f.field_description or f.name
-                    is_req = f.required or f.name in ['name', 'code', 'project_id', 'stage_id', 'leader_id']
-                    new_lines.append({
-                        'profile_id': self.id,
-                        'name': clean_label,
-                        'model_id': model.id,
-                        'field_id': f.id,
-                        'is_required': is_req,
-                        'perm_read': True,
-                        'perm_write': True,
-                        'perm_create': True,
-                        'perm_unlink': False,
-                    })
+        for f in fields_records:
+            if f.id not in existing_field_ids:
+                clean_label = f.field_description or f.name
+                is_req = f.required or f.name in ['name', 'code', 'project_id', 'stage_id', 'leader_id']
+                new_lines.append({
+                    'profile_id': self.id,
+                    'model_id': f.model_id.id,
+                    'field_id': f.id,
+                    'name': clean_label,
+                    'is_required': is_req,
+                    'perm_read': True,
+                    'perm_write': True,
+                    'perm_create': True,
+                    'perm_unlink': False,
+                })
         if new_lines:
             self.env['unified.contract.field.permission'].create(new_lines)
 

@@ -29,6 +29,11 @@
                             <field name="permit_alert_max_count"/>
                         </setting>
                     </block>
+                    <block string="إعدادات الفوترة واحتساب التأخير" name="invoice_setting_block">
+                        <setting id="setting_invoice_overdue_days" help="تحديد عدد الأيام بعد الرفع على النظام لتتحول الفاتورة أوتوماتيكياً لحالة (متأخر).">
+                            <field name="invoice_overdue_days"/>
+                        </setting>
+                    </block>
                 </app>
             </xpath>
         </field>

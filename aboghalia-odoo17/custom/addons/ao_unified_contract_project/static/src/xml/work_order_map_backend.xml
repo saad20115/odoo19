@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ao_unified_contract_project.WorkOrderMapBackendTemplate">
+        <div class="o_action o_work_order_map_backend_container" style="width: 100%; height: 100%; min-height: calc(100vh - 110px); display: flex; flex-direction: column; overflow: hidden; background: #ffffff;">
+            <!-- Legend Bar -->
+            <div class="bg-light border-bottom p-2 px-3 d-flex justify-content-between align-items-center flex-wrap gap-2 shadow-sm flex-shrink-0" style="z-index: 100;">
+                <div class="d-flex align-items-center gap-2">
+                    <h5 class="m-0 fw-bold text-primary">🗺️📍 خريطة أوامر العمل التفاعلية (Work Orders Map)</h5>
+                </div>
+                <!-- Color Code Legend -->
+                <div class="d-flex align-items-center gap-3 flex-wrap small">
+                    <span class="d-flex align-items-center gap-1">
+                        <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #f59e0b;"></span>
+                        <span>مرحلة الإسناد</span>
+                    </span>
+                    <span class="d-flex align-items-center gap-1">
+                        <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #f97316;"></span>
+                        <span>التصاريح والمعاينة</span>
+                    </span>
+                    <span class="d-flex align-items-center gap-1">
+                        <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #3b82f6;"></span>
+                        <span>التنفيذ والتشغيل</span>
+                    </span>
+                    <span class="d-flex align-items-center gap-1">
+                        <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #8b5cf6;"></span>
+                        <span>الإغلاق والتوثيق</span>
+                    </span>
+                    <span class="d-flex align-items-center gap-1">
+                        <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #10b981;"></span>
+                        <span>مكتمل ومحصل</span>
+                    </span>
+                    <span class="d-flex align-items-center gap-1">
+                        <span class="rounded-circle d-inline-block" style="width: 12px; height: 12px; background-color: #ef4444;"></span>
+                        <span>متأخر / منتهي</span>
+                    </span>
+                </div>
+            </div>
+
+            <!-- Main Content: Split 50% Map / 50% Work Orders List -->
+            <div class="d-flex flex-row flex-grow-1 w-100 position-relative" style="overflow: hidden; height: calc(100vh - 150px);">
+                <!-- Left Area: Interactive Leaflet Map Canvas (Exact 50% Width) -->
+                <div class="h-100 position-relative" style="width: 50%; min-width: 50%; max-width: 50%; flex-shrink: 0; border-end: 1px solid #cbd5e1;">
+                    <div t-ref="mapContainer" id="backend_leaflet_map" style="width: 100%; height: 100%; min-width: 100%; min-height: 100%; display: block;"></div>
+                </div>
+
+                <!-- Right Area: Interactive Cards List & Search Bar (Exact 50% Width) -->
+                <div class="bg-light p-3 h-100 flex-shrink-0 d-flex flex-column" style="width: 50%; min-width: 50%; max-width: 50%; overflow: hidden; z-index: 10;">
+                    <!-- Top Search Header Box -->
+                    <div class="bg-white p-3 rounded-3 shadow-sm mb-3 border flex-shrink-0">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold text-dark m-0 d-flex align-items-center gap-2">
+                                <span>📋 قائمة أوامر العمل بالموقع</span>
+                            </h6>
+                            <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">
+                                <t t-esc="filteredWorkOrders.length"/> من أصل <t t-esc="workOrders.length"/>
+                            </span>
+                        </div>
+                        <!-- Live Search Input -->
+                        <div class="input-group input-group-md">
+                            <span class="input-group-text bg-light border-end-0 text-muted">🔍</span>
+                            <input type="text" 
+                                   class="form-control border-start-0 fs-6 shadow-none" 
+                                   placeholder="ابحث برقم امر العمل، اسم المشروع، المقاول، أو المرحلة..." 
+                                   t-model="state.searchQuery"
+                                   t-on-input="onSearchInput"/>
+                            <button t-if="state.searchQuery" 
+                                    class="btn btn-outline-secondary border-start-0" 
+                                    type="button" 
+                                    t-on-click="clearSearch">❌</button>
+                        </div>
+                    </div>
+
+                    <!-- Scrollable Single Column Cards List -->
+                    <div class="flex-grow-1" style="overflow-y: auto; padding-right: 2px;">
+                        <div class="row g-3">
+                            <t t-foreach="filteredWorkOrders" t-as="wo" t-key="wo.id">
+                                <div class="col-12">
+                                    <div class="card p-3 shadow-sm rounded-3 border-start border-5 bg-white cursor-pointer wo-map-backend-card hover-shadow"
+                                         t-attf-style="border-left-color: #{wo.pinColor} !important; cursor: pointer; transition: all 0.2s ease-in-out;"
+                                         t-on-click="() => this.focusOnMap(wo)">
+                                        <!-- Header Row: WO Number & Stage Badge -->
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <div class="d-flex align-items-center gap-2">
+                                                <span class="fs-5 fw-bold text-primary">
+                                                    أمر عمل #<t t-esc="wo.number"/>
+                                                </span>
+                                            </div>
+                                            <span class="badge px-3 py-2 text-white fs-6 shadow-sm rounded-pill" t-attf-style="background-color: #{wo.pinColor};">
+                                                <t t-esc="wo.stageName"/>
+                                            </span>
+                                        </div>
+
+                                        <!-- Details Row 1: Project & Contractor -->
+                                        <div class="row g-2 mb-2 bg-light p-2 rounded border-start border-2 border-secondary ms-0 me-0">
+                                            <div class="col-md-6 col-12">
+                                                <span class="text-muted small">🏗️ المشروع:</span>
+                                                <div class="fw-bold text-dark text-truncate" style="font-size: 13.5px;"><t t-esc="wo.projectName"/></div>
+                                            </div>
+                                            <div class="col-md-6 col-12">
+                                                <span class="text-muted small">👷 المقاول:</span>
+                                                <div class="fw-bold text-dark text-truncate" style="font-size: 13.5px;"><t t-esc="wo.contractorName"/></div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Details Row 2: Progress & Action Button -->
+                                        <div class="d-flex justify-content-between align-items-center pt-1">
+                                            <div class="d-flex align-items-center gap-2 flex-grow-1 me-3">
+                                                <small class="text-muted fw-bold" style="min-width: 75px;">📊 الإنجاز: <t t-esc="wo.progress"/>%</small>
+                                                <div class="progress flex-grow-1" style="height: 8px;">
+                                                    <div class="progress-bar progress-bar-striped progress-bar-animated" 
+                                                         role="progressbar" 
+                                                         t-attf-style="width: #{wo.progress}%; background-color: #{wo.pinColor};"></div>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <small class="text-muted">
+                                                    📍 <t t-esc="wo.lat"/>, <t t-esc="wo.lng"/>
+                                                </small>
+                                                <button class="btn btn-sm btn-outline-primary px-3 py-1 fw-bold rounded-pill"
+                                                        style="font-size: 12px;"
+                                                        t-on-click.stop="() => this.openWorkOrderForm(wo.id)">
+                                                    فتح امر العمل ↗️
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <!-- Empty State if search yields zero results -->
+                            <t t-if="filteredWorkOrders.length === 0">
+                                <div class="col-12 text-center py-5 text-muted bg-white rounded border">
+                                    <h4 class="mb-2">🔍 لا توجد نتائج مطابقة للبحث</h4>
+                                    <p class="m-0 small">جرب البحث بكلمات أخرى أو مسح حقل البحث.</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

@@ -15,6 +15,7 @@ class UnifiedContractProject(models.Model):
         tracking=True
     )
     code = fields.Char(
+        index=True,
         string='رقم العقد الموحد',
         required=True,
         copy=False,
@@ -56,12 +57,14 @@ class UnifiedContractProject(models.Model):
     )
     company_id = fields.Many2one(
         'res.company',
+        index=True,
         string='الشركة',
         default=lambda self: self.env.company,
         required=True
     )
     stage_id = fields.Many2one(
         'unified.contract.stage',
+        index=True,
         string='المرحلة الحالية',
         default=lambda self: self._default_stage_id(),
         group_expand='_read_group_stage_ids',
@@ -85,12 +88,13 @@ class UnifiedContractProject(models.Model):
     )
     state = fields.Selection([
         ('draft', 'جديد / تحت الإعداد'),
+        ('active', 'جاري التنفيذ / نشط'),
         ('in_progress', 'قيد التنفيذ'),
         ('on_hold', 'معلق مؤقتاً'),
         ('late', 'متأخر عن الجدول الزمنـي'),
         ('done', 'منتهي / مكتمل'),
         ('cancel', 'ملغـى'),
-    ], string='حالة العقد', default='draft', tracking=True)
+    ], string='حالة العقد', default='draft', tracking=True, index=True)
 
     description = fields.Html(
         string='نطاق العمل وملاحظات العقد'
@@ -102,7 +106,8 @@ class UnifiedContractProject(models.Model):
     )
     work_order_count = fields.Integer(
         string='عدد أوامر العمل',
-        compute='_compute_work_order_count'
+        compute='_compute_work_order_count',
+        store=True
     )
     team_ids = fields.One2many(
         'unified.contract.team',
@@ -111,7 +116,8 @@ class UnifiedContractProject(models.Model):
     )
     team_count = fields.Integer(
         string='عدد فرق العمل',
-        compute='_compute_team_count'
+        compute='_compute_team_count',
+        store=True
     )
 
     @api.depends('stage_id')
@@ -173,12 +179,12 @@ class UnifiedContractProject(models.Model):
 
     def action_next_stage(self):
         """ Move project to the next stage by sequence """
+        all_stages = self.env['unified.contract.stage'].search([], order='sequence asc, id asc')
         for rec in self:
             current_seq = rec.stage_id.sequence if rec.stage_id else -1
-            next_stage = self.env['unified.contract.stage'].search([
-                ('sequence', '>', current_seq)
-            ], order='sequence asc', limit=1)
-            if next_stage:
+            next_stages = [s for s in all_stages if s.sequence > current_seq]
+            if next_stages:
+                next_stage = next_stages[0]
                 rec.stage_id = next_stage.id
                 if rec.state == 'draft':
                     rec.state = 'in_progress'
@@ -209,7 +215,32 @@ class UnifiedContractProject(models.Model):
             }
         }
 
+
+    def _check_field_write_permissions(self, vals):
+        """ Enforce unified.contract.field.permission settings for non-admin users at ORM layer """
+        if self.env.is_admin():
+            return
+        user = self.env.user
+        profiles = self.env['unified.contract.permission.profile'].search([
+            ('user_ids', 'in', [user.id])
+        ])
+        if not profiles:
+            return
+        restricted_perms = self.env['unified.contract.field.permission'].search([
+            ('profile_id', 'in', profiles.ids),
+            ('model_id.model', '=', self._name),
+            ('perm_write', '=', False)
+        ])
+        if not restricted_perms:
+            return
+        restricted_field_names = set(restricted_perms.mapped('field_id.name'))
+        written_fields = set(vals.keys()).intersection(restricted_field_names)
+        if written_fields:
+            field_labels = [self._fields[fn].string or fn for fn in written_fields if fn in self._fields]
+            raise UserError(_('عذراً! ليس لديك صلاحية تعديل الحقول التالية وفقاً لبروفايل الصلاحيات الخاص بك: %s') % (', '.join(field_labels)))
+
     def write(self, vals):
+        self._check_field_write_permissions(vals)
         if 'stage_id' in vals and not self.env.context.get('skip_stage_permission_check'):
             new_stage = self.env['unified.contract.stage'].browse(vals['stage_id'])
             for rec in self:

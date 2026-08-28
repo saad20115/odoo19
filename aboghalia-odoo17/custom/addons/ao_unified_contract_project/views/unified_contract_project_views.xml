@@ -83,56 +83,49 @@
         <field name="name">unified.contract.project.tree</field>
         <field name="model">unified.contract.project</field>
         <field name="arch" type="xml">
-            <tree string="مشاريع العقود الموحدة">
-                <field name="code"/>
-                <field name="name"/>
-                <field name="contract_entity"/>
-                <field name="contract_date"/>
-                <field name="manager_id"/>
-                <field name="stage_id"/>
-                <field name="state" widget="badge"/>
+            <tree string="مشاريع العقود الموحدة" multi_edit="1" sample="1">
+                <field name="code" optional="show"/>
+                <field name="name" optional="show"/>
+                <field name="contract_entity" optional="show"/>
+                <field name="contract_date" optional="show"/>
+                <field name="contract_end_date" optional="show"/>
+                <field name="partner_id" optional="hide"/>
+                <field name="manager_id" optional="show"/>
+                <field name="contractor_ids" widget="many2many_tags" optional="show"/>
+                <field name="work_order_count" optional="show"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="stage_id" optional="show"/>
+                <field name="state" widget="badge" decoration-warning="state == 'draft'" decoration-info="state == 'in_progress'" decoration-danger="state in ('on_hold', 'cancel')" decoration-success="state == 'done'" optional="show"/>
             </tree>
         </field>
     </record>
 
-    <!-- Unified Contract Project Kanban View (Strictly Disabled Drag & Drop) -->
-    <record id="view_unified_contract_project_kanban" model="ir.ui.view">
-        <field name="name">unified.contract.project.kanban</field>
+    <!-- Unified Contract Project Calendar View -->
+    <record id="view_unified_contract_project_calendar" model="ir.ui.view">
+        <field name="name">unified.contract.project.calendar</field>
         <field name="model">unified.contract.project</field>
         <field name="arch" type="xml">
-            <kanban default_group_by="stage_id" class="o_kanban_small_column" records_draggable="0" groups_draggable="0">
-                <field name="id"/>
+            <calendar string="تقويم المشاريع" date_start="contract_date" date_stop="contract_end_date" color="stage_id" quick_create="false">
                 <field name="name"/>
                 <field name="code"/>
                 <field name="contract_entity"/>
                 <field name="manager_id"/>
                 <field name="state"/>
-                <templates>
-                    <t t-name="kanban-box">
-                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
-                            <div class="oe_kanban_details">
-                                <strong class="o_kanban_record_title">
-                                    <field name="name"/>
-                                </strong>
-                                <div>
-                                    <span class="text-muted"><field name="code"/></span>
-                                </div>
-                                <div class="mt-1">
-                                    <span>الجهة: <field name="contract_entity"/></span>
-                                </div>
-                                <div class="o_kanban_record_bottom mt-2">
-                                    <div class="oe_kanban_bottom_left">
-                                        <field name="state" widget="badge"/>
-                                    </div>
-                                    <div class="oe_kanban_bottom_right">
-                                        <field name="manager_id" widget="many2one_avatar_user"/>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </t>
-                </templates>
-            </kanban>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Unified Contract Project Graph View -->
+    <record id="view_unified_contract_project_graph" model="ir.ui.view">
+        <field name="name">unified.contract.project.graph</field>
+        <field name="model">unified.contract.project</field>
+        <field name="arch" type="xml">
+            <graph string="مؤشرات أداء المشاريع" type="bar" sample="1">
+                <field name="stage_id"/>
+                <field name="state"/>
+                <field name="work_order_count" type="measure"/>
+                <field name="team_count" type="measure"/>
+            </graph>
         </field>
     </record>
 
@@ -141,10 +134,44 @@
         <field name="name">unified.contract.project.pivot</field>
         <field name="model">unified.contract.project</field>
         <field name="arch" type="xml">
-            <pivot string="تحليل مشاريع العقد الموحد">
-                <field name="contract_entity" type="row"/>
-                <field name="stage_id" type="col"/>
+            <pivot string="التحليل المحوري للمشاريع" sample="1">
+                <field name="stage_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="work_order_count" type="measure"/>
+                <field name="team_count" type="measure"/>
             </pivot>
+        </field>
+    </record>
+
+    <!-- Unified Contract Project Search View -->
+    <record id="view_unified_contract_project_search" model="ir.ui.view">
+        <field name="name">unified.contract.project.search</field>
+        <field name="model">unified.contract.project</field>
+        <field name="arch" type="xml">
+            <search string="بحث المشاريع">
+                <field name="name" filter_domain="['|', ('name', 'ilike', self), ('code', 'ilike', self)]"/>
+                <field name="code"/>
+                <field name="contract_entity"/>
+                <field name="manager_id"/>
+                <field name="stage_id"/>
+                
+                <filter string="جديد / تحت الإعداد" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="قيد التنفيذ" name="in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="معلق" name="on_hold" domain="[('state', '=', 'on_hold')]"/>
+                <filter string="مكتمل" name="done" domain="[('state', '=', 'done')]"/>
+                
+                <group expand="0" string="تجميع حسب">
+                    <filter string="الجهة المالكة" name="group_entity" context="{'group_by': 'contract_entity'}"/>
+                    <filter string="مدير المشروع" name="group_manager" context="{'group_by': 'manager_id'}"/>
+                    <filter string="المرحلة الحالية" name="group_stage" context="{'group_by': 'stage_id'}"/>
+                    <filter string="حالة المشروع" name="group_state" context="{'group_by': 'state'}"/>
+                </group>
+                
+                <searchpanel>
+                    <field name="stage_id" icon="fa-tasks" enable_counters="1"/>
+                    <field name="state" icon="fa-info-circle" enable_counters="1"/>
+                </searchpanel>
+            </search>
         </field>
     </record>
 
@@ -152,7 +179,8 @@
     <record id="action_unified_contract_project" model="ir.actions.act_window">
         <field name="name">مشاريع العقد الموحد (Unified Contract Projects)</field>
         <field name="res_model">unified.contract.project</field>
-        <field name="view_mode">kanban,tree,form,pivot</field>
+        <field name="view_mode">tree,kanban,calendar,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_unified_contract_project_search"/>
         <field name="domain">[]</field>
         <field name="context">{}</field>
         <field name="help" type="html">
@@ -170,6 +198,15 @@
         <field name="name">مراحل المشاريع (Stages)</field>
         <field name="res_model">unified.contract.stage</field>
         <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- Project Reporting Action -->
+    <record id="action_unified_contract_project_reporting" model="ir.actions.act_window">
+        <field name="name">تقارير ومؤشرات أداء المشاريع 📈</field>
+        <field name="res_model">unified.contract.project</field>
+        <field name="view_mode">graph,pivot,tree,kanban,calendar,form</field>
+        <field name="search_view_id" ref="view_unified_contract_project_search"/>
+        <field name="context">{'search_default_group_by_stage': 1}</field>
     </record>
 
 </odoo>

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 1. Executive Analytics Dashboard Client Action -->
+    <record id="action_unified_contract_analytics_dashboard" model="ir.actions.client">
+        <field name="name">لوحة المؤشرات والتحليلات البيانية الشاملة 📊📈</field>
+        <field name="tag">unified_contract_analytics_dashboard</field>
+    </record>
+
+    <!-- 2. Work Orders Analytical Dashboard Client Action -->
+    <record id="action_unified_contract_work_orders_dashboard" model="ir.actions.client">
+        <field name="name">تحليلات ومؤشرات أداء أوامر العمل 📊</field>
+        <field name="tag">unified_contract_work_orders_dashboard</field>
+    </record>
+
+    <!-- 3. Projects Analytical Dashboard Client Action -->
+    <record id="action_unified_contract_projects_dashboard" model="ir.actions.client">
+        <field name="name">تحليلات ومؤشرات أداء المشاريع 📈</field>
+        <field name="tag">unified_contract_projects_dashboard</field>
+    </record>
+
+    <!-- 4. Invoices Analytical Dashboard Client Action -->
+    <record id="action_unified_contract_invoices_dashboard" model="ir.actions.client">
+        <field name="name">تحليلات وتدفقات الفواتير والتحصيل 🧾</field>
+        <field name="tag">unified_contract_invoices_dashboard</field>
+    </record>
+</odoo>

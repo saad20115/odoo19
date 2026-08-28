@@ -87,7 +87,7 @@ class UnifiedContractStageRevertWizard(models.TransientModel):
                     order.execution_status = 'in_progress'
             if order.is_first_stage:
                 order.state = 'draft'
-            order.message_post(body=f"تم إرجاع أمر العمل إلى مرحلة <b>({self.stage_id.name})</b> بواسطة {self.env.user.name}.<br/>السبب: {self.reason or 'بدون ملاحظات مدوّنة'}")
+            order.message_post(body=_('تم إرجاع أمر العمل إلى مرحلة <b>(%s)</b> بواسطة %s.<br/>السبب: %s') % (self.stage_id.name, self.env.user.name, self.reason or _('بدون ملاحظات مدوّنة')))
             
         elif self.res_model == 'unified.contract.project':
             project = self.env['unified.contract.project'].browse(self.res_id)
@@ -96,6 +96,6 @@ class UnifiedContractStageRevertWizard(models.TransientModel):
             project.with_context(skip_stage_permission_check=True).write({'stage_id': self.project_stage_id.id})
             if project.is_first_stage:
                 project.state = 'draft'
-            project.message_post(body=f"تم إرجاع المشروع إلى مرحلة <b>({self.project_stage_id.name})</b> بواسطة {self.env.user.name}.<br/>السبب: {self.reason or 'بدون ملاحظات مدوّنة'}")
+            project.message_post(body=_('تم إرجاع المشروع إلى مرحلة <b>(%s)</b> بواسطة %s.<br/>السبب: %s') % (self.project_stage_id.name, self.env.user.name, self.reason or _('بدون ملاحظات مدوّنة')))
             
         return {'type': 'ir.actions.act_window_close'}

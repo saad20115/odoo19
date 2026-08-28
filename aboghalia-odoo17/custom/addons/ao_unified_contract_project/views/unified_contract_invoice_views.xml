@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Unified Contract Invoice Form View -->
+    <record id="view_unified_contract_invoice_form" model="ir.ui.view">
+        <field name="name">unified.contract.invoice.form</field>
+        <field name="model">unified.contract.invoice</field>
+        <field name="arch" type="xml">
+            <form string="طلب فاتورة">
+                <header>
+                    <button name="action_confirm_and_upload" string="تأكيد الفاتورة والرفع على النظام 🚀" type="object" class="btn-success fw-bold" invisible="state not in ('draft', 'correction_requested')"/>
+                    <button name="action_request_correction" string="طلب تصحيح / تعديل 📝" type="object" class="btn-warning fw-bold text-dark" invisible="state not in ('draft', 'uploaded')"/>
+                    <button name="action_set_paid" string="تأكيد التحصيل الكامل 🏆" type="object" class="btn-primary fw-bold" invisible="state not in ('uploaded', 'late')"/>
+                    <button name="action_set_late" string="تحويل إلى: متأخر ⚠️" type="object" class="btn-outline-warning" invisible="state != 'uploaded'"/>
+                    <button name="action_set_draft" string="إعادة ضبط كمستند جاري 🔄" type="object" class="btn-secondary" invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,uploaded,late,paid"/>
+                </header>
+                <sheet>
+                    <div class="oe_title mb-4">
+                        <label for="name" string="رقم طلب الفاتورة 🧾" class="fw-bold text-muted small d-block mb-1"/>
+                        <h1 class="m-0 fw-bold text-primary">
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="بيانات أمر العمل والجهة المنفذة">
+                            <field name="work_order_id" options="{'no_create_edit': True}" class="fw-bold text-dark"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="contractor_id" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="1"/>
+                        </group>
+                        <group string="تفاصيل المستخلص والقيمة الفنية">
+                            <field name="extract_service_number" placeholder="مثال: EXT-2026-991" class="fw-bold text-primary fs-5"/>
+                            <field name="amount_before_tax" widget="monetary" options="{'currency_field': 'currency_id'}" class="fw-bold text-dark"/>
+                            <field name="tax_amount" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" class="fw-bold text-muted"/>
+                            <field name="amount_total" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="1" class="fw-bold text-success fs-4"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="إدخالات وبيانات الإدارة المالية 💼" name="finance_details">
+                            <group>
+                                <group string="تفاصيل الفاتورة الصادرة والرفع">
+                                    <field name="invoice_number" placeholder="مثال: INV-2026-881" class="fw-bold text-primary fs-5"/>
+                                    <field name="invoice_date"/>
+                                    <field name="upload_date" readonly="1"/>
+                                </group>
+                                <group string="توجيهات وملاحظات المالية">
+                                    <field name="notes" placeholder="سجل أي ملاحظات خاصة بالفاتورة أو التحصيل..."/>
+                                </group>
+                            </group>
+                            <separator string="مرفقات ومستندات الفاتورة 📁" class="mt-4 mb-3 fw-bold text-primary"/>
+                            <field name="invoice_attachment_ids" widget="many2many_binary" string="رفع مرفقات الفاتورة"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Unified Contract Invoice Tree View -->
+    <record id="view_unified_contract_invoice_tree" model="ir.ui.view">
+        <field name="name">unified.contract.invoice.tree</field>
+        <field name="model">unified.contract.invoice</field>
+        <field name="arch" type="xml">
+            <tree string="الفواتير" multi_edit="1" sample="1">
+                <field name="name" optional="show"/>
+                <field name="work_order_id" optional="show"/>
+                <field name="project_id" optional="show"/>
+                <field name="contractor_id" optional="show"/>
+                <field name="extract_service_number" optional="show"/>
+                <field name="amount_before_tax" widget="monetary" optional="show"/>
+                <field name="tax_amount" widget="monetary" optional="hide"/>
+                <field name="amount_total" widget="monetary" class="fw-bold text-success" optional="show"/>
+                <field name="invoice_number" optional="show"/>
+                <field name="invoice_date" optional="show"/>
+                <field name="upload_date" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company" optional="hide"/>
+                <field name="state" widget="badge" decoration-muted="state == 'draft'" decoration-danger="state == 'correction_requested'" decoration-info="state == 'uploaded'" decoration-warning="state == 'late'" decoration-success="state == 'paid'" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Unified Contract Invoice Pivot View -->
+    <record id="view_unified_contract_invoice_pivot" model="ir.ui.view">
+        <field name="name">unified.contract.invoice.pivot</field>
+        <field name="model">unified.contract.invoice</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل الفواتير المحوري" sample="1">
+                <field name="project_id" type="row"/>
+                <field name="state" type="col"/>
+                <field name="amount_before_tax" type="measure"/>
+                <field name="tax_amount" type="measure"/>
+                <field name="amount_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Unified Contract Invoice Graph View -->
+    <record id="view_unified_contract_invoice_graph" model="ir.ui.view">
+        <field name="name">unified.contract.invoice.graph</field>
+        <field name="model">unified.contract.invoice</field>
+        <field name="arch" type="xml">
+            <graph string="مؤشرات أداء الفواتير والتحصيل" type="bar" sample="1">
+                <field name="project_id"/>
+                <field name="state"/>
+                <field name="amount_total" type="measure"/>
+            </graph>
+        </field>
+    </record>
+
+    <!-- Unified Contract Invoice Kanban View -->
+    <record id="view_unified_contract_invoice_kanban" model="ir.ui.view">
+        <field name="name">unified.contract.invoice.kanban</field>
+        <field name="model">unified.contract.invoice</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" quick_create="false" class="o_kanban_small_column">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="work_order_id"/>
+                <field name="extract_service_number"/>
+                <field name="amount_total"/>
+                <field name="invoice_number"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click p-3 rounded-3 shadow-sm border bg-white mb-2">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="text-primary fs-6"><t t-esc="record.name.value"/></strong>
+                                <field name="state" widget="badge" decoration-muted="state == 'draft'" decoration-danger="state == 'correction_requested'" decoration-info="state == 'uploaded'" decoration-warning="state == 'late'" decoration-success="state == 'paid'"/>
+                            </div>
+                            <div class="text-dark small mb-1">
+                                <strong>أمر العمل:</strong> <t t-esc="record.work_order_id.value"/>
+                            </div>
+                            <div class="text-muted small mb-1">
+                                <strong>المستخلص:</strong> <t t-esc="record.extract_service_number.value"/>
+                            </div>
+                            <t t-if="record.invoice_number.value">
+                                <div class="text-info small mb-1">
+                                    <strong>الفاتورة:</strong> <t t-esc="record.invoice_number.value"/>
+                                </div>
+                            </t>
+                            <div class="mt-2 text-end border-top pt-2">
+                                <strong class="text-success fs-5"><t t-esc="record.amount_total.value"/></strong>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Unified Contract Invoice Search View -->
+    <record id="view_unified_contract_invoice_search" model="ir.ui.view">
+        <field name="name">unified.contract.invoice.search</field>
+        <field name="model">unified.contract.invoice</field>
+        <field name="arch" type="xml">
+            <search string="البحث في الفواتير">
+                <field name="name"/>
+                <field name="work_order_id"/>
+                <field name="extract_service_number"/>
+                <field name="invoice_number"/>
+                <field name="project_id"/>
+                <field name="contractor_id"/>
+                <filter string="محال للمالية (بانتظار الإصدار) 🟡" name="draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="طلب تصحيح / تعديل 🟣" name="correction_requested" domain="[('state', '=', 'correction_requested')]"/>
+                <filter string="مرفوع على SAP 🔵" name="uploaded" domain="[('state', '=', 'uploaded')]"/>
+                <filter string="متأخرات 🔴" name="late" domain="[('state', '=', 'late')]"/>
+                <filter string="محصلة 🟢" name="paid" domain="[('state', '=', 'paid')]"/>
+                <group expand="0" string="تجميع حسب">
+                    <filter string="حالة الفاتورة" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="المشروع" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="المقاول" name="group_contractor" context="{'group_by': 'contractor_id'}"/>
+                </group>
+                <searchpanel>
+                    <field name="state" icon="fa-info-circle" enable_counters="1"/>
+                    <field name="project_id" icon="fa-building" enable_counters="1"/>
+                    <field name="contractor_id" icon="fa-users" enable_counters="1"/>
+                </searchpanel>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action for Invoices -->
+    <!-- Action for Invoices -->
+    <record id="action_unified_contract_invoices" model="ir.actions.act_window">
+        <field name="name">الفواتير والتحصيل (Unified Contract Invoices)</field>
+        <field name="res_model">unified.contract.invoice</field>
+        <field name="view_mode">tree,kanban,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_unified_contract_invoice_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                لا توجد طلبيات فواتير حالياً!
+            </p>
+            <p>
+                تمت إحالة المستخلصات من مرحلة الفوترة والتحصيل بأوامر العمل لإنشاء الفواتير وتأكيدها.
+            </p>
+        </field>
+    </record>
+
+    <!-- Action for Invoice Reporting -->
+    <record id="action_unified_contract_invoice_reporting" model="ir.actions.act_window">
+        <field name="name">تقارير الفواتير والتحصيل 🧾</field>
+        <field name="res_model">unified.contract.invoice</field>
+        <field name="view_mode">graph,pivot,tree,kanban,form</field>
+        <field name="search_view_id" ref="view_unified_contract_invoice_search"/>
+        <field name="context">{'search_default_group_by_state': 1}</field>
+    </record>
+
+</odoo>
