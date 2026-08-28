@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_completion_certificate" model="ir.actions.report">
+        <field name="name">شهادة الإنجاز الرسمية</field>
+        <field name="model">unified.contract.work.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ao_unified_contract_project.report_completion_certificate_template</field>
+        <field name="report_file">ao_unified_contract_project.report_completion_certificate_template</field>
+        <field name="print_report_name">'شهادة إنجاز - %s' % (object.work_order_number or object.name)</field>
+
+        <field name="binding_model_id" ref="model_unified_contract_work_order"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_completion_certificate_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="direction: rtl; font-family: 'Cairo', 'Amiri', Arial, sans-serif; text-align: right; font-size: 14px; color: #333;">
+                        <style>
+                            .cert-header { background: #f8f9fa; border: 2px solid #0d6efd; border-radius: 8px; padding: 15px; text-align: center; margin-bottom: 20px; }
+                            .cert-title { color: #0d6efd; font-weight: bold; margin-bottom: 5px; }
+                            .table-custom { width: 100%; border-collapse: collapse; margin-bottom: 20px; }
+                            .table-custom th, .table-custom td { border: 1px solid #dee2e6; padding: 10px; text-align: right; }
+                            .table-custom th { background-color: #e9ecef; font-weight: bold; color: #495057; }
+                            .section-title { font-weight: bold; color: #198754; font-size: 16px; border-bottom: 2px solid #198754; padding-bottom: 5px; margin-top: 20px; margin-bottom: 10px; }
+                        </style>
+
+                        <div class="cert-header">
+                            <h2 class="cert-title">📜 شهادة إنجاز أمر عمل رسمية</h2>
+                            <h4 style="color: #495057;">رقم أمر العمل: <t t-esc="doc.work_order_number or doc.name"/></h4>
+                            <p style="margin-bottom: 0; color: #6c757d;">تاريخ الإصدار: <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%Y-%m-%d')"/></p>
+                        </div>
+
+                        <div class="section-title">📌 1. البيانات الأساسية لأمر العمل والمشروع</div>
+                        <table class="table-custom">
+                            <tr>
+                                <th>اسم المشروع</th>
+                                <td><t t-esc="doc.project_id.name"/></td>
+                                <th>اسم المقاول</th>
+                                <td><t t-esc="doc.contractor_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>المنطقة / الحي</th>
+                                <td><t t-esc="doc.region_id.name"/> / <t t-esc="doc.district_id.name"/></td>
+                                <th>نوع أمر العمل</th>
+                                <td><t t-esc="doc.work_order_type_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>تاريخ الإسناد</th>
+                                <td><t t-esc="doc.assignment_date"/></td>
+                                <th>نسبة الإنجاز الكلية</th>
+                                <td><strong style="color: #198754;"><t t-esc="'%.1f' % doc.progress"/>%</strong></td>
+                            </tr>
+                        </table>
+
+                        <div class="section-title">⚙️ 2. ملخص التنفيذ والإغلاق الرسمـي</div>
+                        <table class="table-custom">
+                            <tr>
+                                <th>تاريخ بداية ونهاية التنفيذ</th>
+                                <td><t t-esc="doc.execution_start_date"/> - <t t-esc="doc.execution_end_date"/></td>
+                                <th>كميات الحفر والتمديد</th>
+                                <td>حفر: <t t-esc="doc.excavation_quantity"/> | تمديد: <t t-esc="doc.extension_quantity"/></td>
+                            </tr>
+                            <tr>
+                                <th>استلام الأصول 207 / 201</th>
+                                <td>إجراء 207: <t t-esc="doc.asset_receipt_207"/> | إجراء 201: <t t-esc="doc.asset_receipt_201"/></td>
+                                <th>إجراء 155 (نموذج الإغلاق)</th>
+                                <td>الحالة: <t t-esc="doc.receipt_155_status"/> | تاريخ الإجراء: <t t-esc="doc.receipt_155_procedure_date"/></td>
+                            </tr>
+                            <tr>
+                                <th>بيانات التنفيذ</th>
+                                <td colspan="3"><t t-esc="doc.execution_notes or 'تم تنفيذ جميع الأعمال الميدانية وفق المواصفات الفنية المعتمدة.'"/></td>
+                            </tr>
+                        </table>
+
+                        <div class="section-title">✍️ 3. اعتماد وتوقيع الجهات المعنية</div>
+                        <table class="table-custom" style="margin-top: 30px;">
+                            <tr style="background-color: #f8f9fa; text-align: center;">
+                                <td style="width: 33%; height: 80px; vertical-align: top;">
+                                    <strong>المقاول المنفذ</strong><br/><br/>
+                                    <span>التوقيع: .....................</span>
+                                </td>
+                                <td style="width: 33%; height: 80px; vertical-align: top;">
+                                    <strong>مهندس الموقع / الاستشاري</strong><br/><br/>
+                                    <span>التوقيع: .....................</span>
+                                </td>
+                                <td style="width: 33%; height: 80px; vertical-align: top;">
+                                    <strong>مدير إدارة المشاريع</strong><br/><br/>
+                                    <span>التوقيع: .....................</span>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

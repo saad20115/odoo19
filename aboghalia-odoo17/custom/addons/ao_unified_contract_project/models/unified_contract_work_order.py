@@ -660,7 +660,48 @@ class UnifiedContractWorkOrder(models.Model):
         ('operational', 'يعمل بكفاءة وتشغيل كلي'),
     ], string='حالة التشغيل والاختبار', default='not_started', tracking=True)
 
-    # 4. Closing Phase Fields (مرفقات - استلام 155 - شهادة الإنجاز)
+    # 4. Closing Phase Fields (مرحلة الإغلاق والتوثيق)
+    execution_notes = fields.Text(
+        string='بيانات التنفيذ',
+        tracking=True,
+        help='سجل كامل لبيانات وتفاصيل التنفيذ المكتملة'
+    )
+    execution_attachment_ids = fields.Many2many(
+        'ir.attachment',
+        'wo_execution_attachment_rel',
+        'work_order_id',
+        'attachment_id',
+        string='مرفقات التنفيذ'
+    )
+    boq_amendment = fields.Text(
+        string='تعديل المقايسة',
+        tracking=True,
+        help='نص وتفاصيل تعديل المقايسة'
+    )
+    boq_date = fields.Date(
+        string='تاريخ المقايسة',
+        tracking=True
+    )
+    closing_document_ids = fields.One2many(
+        'unified.contract.closing.document',
+        'work_order_id',
+        string='جدول المرفقات المتعددة'
+    )
+    receipt_155_status = fields.Selection([
+        ('no', 'لا'),
+        ('yes', 'نعم'),
+    ], string='إجراء 155', default='no', required=True, tracking=True)
+
+    receipt_155_procedure_date = fields.Date(
+        string='تاريخ الإجراء 155',
+        tracking=True
+    )
+    receipt_155_system_date = fields.Date(
+        string='تاريخ الإجراء 155 على النظام',
+        tracking=True,
+        readonly=True
+    )
+
     receipt_155_number = fields.Char(
         string='رقم نموذج استلام 155',
         tracking=True,
@@ -684,6 +725,32 @@ class UnifiedContractWorkOrder(models.Model):
         string='مرفقات ومستندات الإغلاق',
         help='مستندات استلام 155 وشهادات الإنجاز والمرفقات الفنية'
     )
+
+    @api.onchange('receipt_155_status')
+    def _onchange_receipt_155_status_set_dates(self):
+        if self.receipt_155_status == 'yes':
+            if not self.receipt_155_procedure_date:
+                self.receipt_155_procedure_date = fields.Date.context_today(self)
+            self.receipt_155_system_date = fields.Date.context_today(self)
+
+    def action_issue_completion_certificate(self):
+        self.ensure_one()
+        # Update completion certificate status and date
+        self.write({
+            'completion_certificate_status': 'yes',
+            'completion_certificate_date': fields.Date.context_today(self),
+            'programming_alert_status': 'executed'
+        })
+
+        # Advance work order stage to Stage 5 ("مرحلة الفوترة والتحصيل")
+        stage_5 = self.env['unified.contract.work.order.stage'].search([('sequence', '=', 5)], limit=1)
+        if not stage_5:
+            stage_5 = self.env['unified.contract.work.order.stage'].search([('name', 'ilike', 'فوترة')], limit=1)
+
+        if stage_5:
+            self.with_context(skip_execution_check=True).write({'stage_id': stage_5.id})
+
+        return self.env.ref('ao_unified_contract_project.action_report_completion_certificate').report_action(self)
 
     # 5. Invoicing & Collection Phase Fields (الفوترة والتحصيل)
     invoice_number = fields.Char(
@@ -1236,7 +1303,7 @@ class UnifiedContractWorkOrder(models.Model):
         stage_1_fields = {'project_id', 'contractor_id', 'region_id', 'district_id', 'station_id', 'department_id', 'work_order_type_id', 'work_order_category_id', 'assignment_date', 'estimated_amount', 'team_id', 'coordinate_x', 'coordinate_y'}
         stage_2_fields = {'is_scouting_completed', 'has_scouting_obstacles', 'scouting_obstacles_notes', 'permit_status_id', 'permit_number', 'permit_start_date', 'permit_end_date'}
         stage_3_fields = {'execution_start_date', 'execution_end_date', 'excavation_quantity', 'extension_quantity', 'equipment_count', 'execution_progress', 'restoration_status', 'asset_receipt_207', 'asset_receipt_207_date', 'asset_receipt_201', 'asset_receipt_201_date', 'programming_date', 'completion_certificate_status', 'asset_details', 'programming_notes', 'operation_status'}
-        stage_4_fields = {'receipt_155_number', 'receipt_155_date', 'completion_certificate_no', 'completion_certificate_date', 'closing_attachment_ids'}
+        stage_4_fields = {'execution_notes', 'execution_attachment_ids', 'boq_amendment', 'boq_date', 'closing_document_ids', 'receipt_155_status', 'receipt_155_procedure_date', 'receipt_155_system_date', 'receipt_155_number', 'receipt_155_date', 'completion_certificate_no', 'completion_certificate_date', 'closing_attachment_ids'}
         stage_5_fields = {'invoice_number', 'invoice_amount', 'payment_status'}
 
         res = super(UnifiedContractWorkOrder, self).write(vals)
@@ -1299,3 +1366,27 @@ class UnifiedContractWorkOrder(models.Model):
     def action_reactivate(self):
         """ Reactivate a cancelled work order back to in_progress """
         self.write({'state': 'in_progress'})
+
+
+class UnifiedContractClosingDocument(models.Model):
+    _name = 'unified.contract.closing.document'
+    _description = 'مستندات وإرفاقات الإغلاق والتوثيق'
+    _order = 'id desc'
+
+    work_order_id = fields.Many2one(
+        'unified.contract.work.order',
+        string='أمر العمل',
+        ondelete='cascade',
+        required=True
+    )
+    name = fields.Char(
+        string='اسم المرفق',
+        required=True
+    )
+    file = fields.Binary(
+        string='المرفق',
+        required=True
+    )
+    file_name = fields.Char(
+        string='اسم الملف'
+    )

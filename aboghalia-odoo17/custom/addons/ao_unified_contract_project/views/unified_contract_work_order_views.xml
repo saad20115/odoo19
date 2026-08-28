@@ -192,59 +192,80 @@
                             </div>
                         </div>
                     </div>
-                    <group name="execution_section" invisible="not show_stage_3_details">
-                        <group string="بيانات وتواريخ وحالة التنفيذ ⚙️">
-                            <field name="execution_start_date"/>
-                            <field name="execution_end_date"/>
-                            <label for="execution_progress" string="نسبة إنجاز التنفيذ (%)"/>
-                            <div class="o_row">
-                                <field name="execution_progress" class="oe_inline fw-bold me-2" placeholder="0.0"/>
-                                <span>%</span>
-                            </div>
-                            <field name="execution_status" widget="badge" decoration-muted="execution_status == 'not_started'" decoration-info="execution_status == 'in_progress'" decoration-success="execution_status == 'completed'" decoration-danger="execution_status == 'skipped'"/>
-                            <field name="stage_3_user_ids" widget="many2many_avatar_user" string="المسؤولون عن التنفيذ والتشغيل" readonly="1"/>
+                    <div invisible="not show_stage_3_details">
+                        <group name="execution_section_top">
+                            <group string="بيانات وتواريخ وحالة التنفيذ ⚙️">
+                                <field name="execution_start_date"/>
+                                <field name="execution_end_date"/>
+                                <label for="execution_progress" string="نسبة إنجاز التنفيذ (%)"/>
+                                <div class="o_row">
+                                    <field name="execution_progress" class="oe_inline fw-bold me-2" placeholder="0.0"/>
+                                    <span>%</span>
+                                </div>
+                                <field name="execution_status" widget="badge" decoration-muted="execution_status == 'not_started'" decoration-info="execution_status == 'in_progress'" decoration-success="execution_status == 'completed'" decoration-danger="execution_status == 'skipped'"/>
+                                <field name="stage_3_user_ids" widget="many2many_avatar_user" string="المسؤولون عن التنفيذ والتشغيل" readonly="1"/>
+                            </group>
+                            <group string="الكميات والمعدات وإعادة الوضع 🚜">
+                                <field name="excavation_quantity"/>
+                                <field name="extension_quantity"/>
+                                <field name="equipment_count"/>
+                                <field name="restoration_status" widget="radio" options="{'horizontal': True}"/>
+                            </group>
                         </group>
-                        <group string="الكميات والمعدات وإعادة الوضع 🚜">
-                            <field name="excavation_quantity"/>
-                            <field name="extension_quantity"/>
-                            <field name="equipment_count"/>
-                            <field name="restoration_status" widget="radio" options="{'horizontal': True}"/>
-                        </group>
-                        <group string="استلام الأصول والشهادات 📄">
-                            <label for="asset_receipt_207" string="استلام الأصول (إجراء 207)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-2">
-                                <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="asset_receipt_207 != 'yes'" class="d-inline-flex align-items-center ms-3">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 207:</span>
-                                    <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
+
+                        <group string="استلام الأصول والشهادات 📄" col="1" class="w-100 mt-2">
+                            <div class="row w-100 g-3 align-items-center py-2 border-bottom">
+                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
+                                    1- استلام الأصول (إجراء 207):
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
+                                </div>
+                                <div class="col-md-5 col-6">
+                                    <div invisible="asset_receipt_207 != 'yes'" class="d-flex align-items-center">
+                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 207:</span>
+                                        <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
+                                    </div>
                                 </div>
                             </div>
 
-                            <label for="asset_receipt_201" string="استلام الأصول (إجراء 201)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-2">
-                                <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="asset_receipt_201 != 'yes'" class="d-inline-flex align-items-center ms-3">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 201:</span>
-                                    <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
+                            <div class="row w-100 g-3 align-items-center py-2 border-bottom">
+                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
+                                    2- استلام الأصول (إجراء 201):
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
+                                </div>
+                                <div class="col-md-5 col-6">
+                                    <div invisible="asset_receipt_201 != 'yes'" class="d-flex align-items-center">
+                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 201:</span>
+                                        <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
+                                    </div>
                                 </div>
                             </div>
 
-                            <label for="completion_certificate_status" string="شهادة الإتمام؟" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
-                            <div class="o_row d-flex align-items-center flex-wrap gap-2">
-                                <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
-                                <div invisible="completion_certificate_status != 'yes'" class="d-inline-flex align-items-center ms-3">
-                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء شهادة الإتمام:</span>
-                                    <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
+                            <div class="row w-100 g-3 align-items-center py-2">
+                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
+                                    3- شهادة الإتمام؟:
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
+                                </div>
+                                <div class="col-md-5 col-6">
+                                    <div invisible="completion_certificate_status != 'yes'" class="d-flex align-items-center">
+                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء شهادة الإتمام:</span>
+                                        <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
+                                    </div>
                                 </div>
                             </div>
                         </group>
-                        <group string="تاريخ البرنامج والتنبيهات 📅">
+
+                        <group string="تاريخ البرنامج والتنبيهات 📅" class="mt-2">
                             <field name="programming_date"/>
                             <field name="programming_alert_status" widget="badge" force_save="1" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status in ('scheduled', 'executed')" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
                             <field name="programming_notes" string="ملاحظات البرنامج" placeholder="سجل ملاحظات وإعدادات البرمجة الفنية..."/>
                         </group>
-
-                    </group>
+                    </div>
 
                     <hr class="my-4"/>
 
@@ -253,7 +274,7 @@
                         <!-- Row 1: col-12 -->
                         <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
-                                4. مرحلة الإغلاق والتوثيق (استلام 155 وشهادة الإنجاز) 📋📁
+                                4. مرحلة الإغلاق والتوثيق 📋📁
                             </h4>
                             <div class="d-flex align-items-center gap-2 align-self-center">
                                 <field name="stage_4_status" widget="badge" decoration-success="stage_4_status == 'completed'" decoration-info="stage_4_status == 'in_progress'" decoration-muted="stage_4_status == 'not_started'"/>
@@ -263,25 +284,69 @@
                         </div>
                         <!-- Row 2: col-12 -->
                         <div invisible="show_stage_4_details" class="col-12 pt-2 border-top d-flex align-items-center justify-content-between flex-wrap text-muted small gap-3">
-                            <div><span class="text-secondary">نموذج 155:</span> <field name="receipt_155_number" class="fw-bold text-dark me-1"/></div>
+                            <div><span class="text-secondary">إجراء 155:</span> <field name="receipt_155_status" class="fw-bold text-dark me-1"/></div>
                             <span class="text-muted">|</span>
-                            <div><span class="text-secondary">شهادة الإنجاز:</span> <field name="completion_certificate_no" class="fw-bold text-dark"/></div>
+                            <div><span class="text-secondary">تاريخ الإجراء:</span> <field name="receipt_155_procedure_date" class="fw-bold text-dark me-1" placeholder="غير محدد"/></div>
+                            <span class="text-muted">|</span>
+                            <div><span class="text-secondary">شهادة الإنجاز:</span> <field name="completion_certificate_status" class="fw-bold text-dark"/></div>
                         </div>
                     </div>
-                    <group name="closing_docs_section" invisible="not show_stage_4_details">
-                        <group string="نموذج استلام 155 والموثقين">
-                            <field name="receipt_155_number" placeholder="مثال: REC-155-9041"/>
-                            <field name="receipt_155_date"/>
-                            <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
+                    <div invisible="not show_stage_4_details">
+                        <!-- 1- بيانات ومرفقات التنفيذ -->
+                        <group string="1- بيانات ومرفقات التنفيذ ⚙️" col="1" class="w-100">
+                            <label for="execution_notes" string="بيانات التنفيذ" class="fw-bold fs-6 text-primary"/>
+                            <field name="execution_notes" placeholder="سجل كامل تفاصيل وبيانات التنفيذ المكتملة هنا..." class="w-100 mb-3" style="min-height: 80px;"/>
+                            
+                            <label for="execution_attachment_ids" string="مرفقات التنفيذ" class="fw-bold"/>
+                            <field name="execution_attachment_ids" widget="many2many_binary" string="مرفقات التنفيذ"/>
                         </group>
-                        <group string="شهادة الإنجاز الرسمية">
-                            <field name="completion_certificate_no" placeholder="مثال: CERT-2026-88"/>
-                            <field name="completion_certificate_date"/>
+
+                        <!-- 2 & 3- المقايسة وتاريخها والجدول -->
+                        <group string="2 &amp; 3- بيانات المقايسة والمرفقات المتعددة 📜" col="1" class="w-100 mt-2">
+                            <group>
+                                <field name="boq_amendment" placeholder="سجل تفاصيل تعديل المقايسة..."/>
+                                <field name="boq_date"/>
+                            </group>
+                            <field name="closing_document_ids" string="جدول المرفقات المتعددة (اسم المرفق والمرفق)" class="w-100">
+                                <tree editable="bottom">
+                                    <field name="name" placeholder="مثال: صور التوثيق / مخطط الخدمة"/>
+                                    <field name="file" filename="file_name" widget="binary"/>
+                                    <field name="file_name" column_invisible="True"/>
+                                </tree>
+                            </field>
                         </group>
-                        <group string="مرفقات مستندات الإغلاق">
-                            <field name="closing_attachment_ids" widget="many2many_binary"/>
+
+                        <!-- 4 & 5- إجراء 155 وتاريخ الإجراء على النظام -->
+                        <group string="4 &amp; 5- إجراء 155 وتاريخ الإجراء على النظام 📋" col="1" class="w-100 mt-2">
+                            <div class="row w-100 g-3 align-items-center py-2 border-bottom">
+                                <div class="col-md-4 col-12 fw-bold text-dark text-nowrap">
+                                    إجراء 155:
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
+                                </div>
+                                <div class="col-md-5 col-6">
+                                    <div invisible="receipt_155_status != 'yes'" class="d-flex align-items-center">
+                                        <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ الإجراء 155:</span>
+                                        <field name="receipt_155_procedure_date" class="oe_inline fw-bold text-dark"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <group class="mt-2">
+                                <field name="receipt_155_system_date" readonly="1" invisible="receipt_155_status != 'yes'"/>
+                                <field name="receipt_155_number" placeholder="مثال: REC-155-9041"/>
+                                <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
+                            </group>
                         </group>
-                    </group>
+
+                        <!-- 6- اصدار شهادة الانجاز والفوترة -->
+                        <group string="6- إصدار شهادة الإنجاز والتحويل للفوترة 📄🏆" class="w-100 mt-2">
+                            <div class="p-3 bg-light border rounded-3 text-center w-100 shadow-sm">
+                                <p class="text-muted mb-3 small fw-bold">عند الضغط على الزر أدناه يتم إصدار وتنزيل ملف PDF بشهادة الإنجاز الرسمية وتحديث حالة أمر العمل وتحويله مباشرة لمرحلة الفوترة والتحصيل.</p>
+                                <button name="action_issue_completion_certificate" string="إصدار شهادة الإنجاز وتحويل للفوترة 📄🏆" type="object" class="btn btn-success btn-lg shadow-sm px-4 fw-bold"/>
+                            </div>
+                        </group>
+                    </div>
 
                     <hr class="my-4"/>
 

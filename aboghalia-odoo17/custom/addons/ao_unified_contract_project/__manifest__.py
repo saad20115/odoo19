@@ -51,6 +51,7 @@ Key Features:
         'views/unified_contract_work_order_views.xml',
         'views/unified_contract_team_views.xml',
         'views/unified_contract_permission_profile_views.xml',
+        'reports/completion_certificate_report.xml',
         'views/menu_views.xml',
     ],
     'assets': {
