@@ -251,12 +251,12 @@
 
                     <hr class="my-4"/>
 
-                    <!-- 4. مرحلة الإغلاق والتوثيق Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
+                    <!-- 4. مرحلة الإغلاق Header Bar (Collapsible with Toggle Button & Second Row Parallel Summary) -->
                     <div class="row w-100 g-0 my-3 p-3 bg-light rounded-3 border shadow-sm">
                         <!-- Row 1: col-12 -->
                         <div class="col-12 d-flex align-items-center justify-content-between pb-2">
                             <h4 class="m-0 fw-bold text-primary align-self-start">
-                                4. مرحلة الإغلاق والتوثيق 📋📁
+                                4. مرحلة الإغلاق 📋📁
                             </h4>
                             <div class="d-flex align-items-center gap-2 align-self-center">
                                 <field name="stage_4_status" widget="badge" decoration-success="stage_4_status == 'completed'" decoration-info="stage_4_status == 'in_progress'" decoration-muted="stage_4_status == 'not_started'"/>
@@ -273,33 +273,21 @@
                             <div><span class="text-secondary">شهادة الإنجاز:</span> <field name="completion_certificate_status" class="fw-bold text-dark"/></div>
                         </div>
                     </div>
-                    <div invisible="not show_stage_4_details">
+                    <group name="closing_section_main" invisible="not show_stage_4_details">
                         <!-- 1- بيانات ومرفقات التنفيذ -->
-                        <group string="1- بيانات ومرفقات التنفيذ ⚙️" col="1" class="w-100">
-                            <label for="execution_notes" string="بيانات التنفيذ" class="fw-bold fs-6 text-primary"/>
-                            <field name="execution_notes" placeholder="سجل كامل تفاصيل وبيانات التنفيذ المكتملة هنا..." class="w-100 mb-3" style="min-height: 80px;"/>
-                            
-                            <label for="execution_attachment_ids" string="مرفقات التنفيذ" class="fw-bold"/>
+                        <group string="1- بيانات ومرفقات التنفيذ ⚙️">
+                            <field name="execution_notes" placeholder="سجل كامل تفاصيل وبيانات التنفيذ المكتملة هنا..."/>
                             <field name="execution_attachment_ids" widget="many2many_binary" string="مرفقات التنفيذ"/>
                         </group>
 
-                        <!-- 2 & 3- المقايسة وتاريخها والجدول -->
-                        <group string="2 &amp; 3- بيانات المقايسة والمرفقات المتعددة 📜" col="1" class="w-100 mt-2">
-                            <group>
-                                <field name="boq_amendment" placeholder="سجل تفاصيل تعديل المقايسة..."/>
-                                <field name="boq_date"/>
-                            </group>
-                            <field name="closing_document_ids" string="جدول المرفقات المتعددة (اسم المرفق والمرفق)" class="w-100">
-                                <tree editable="bottom">
-                                    <field name="name" placeholder="مثال: صور التوثيق / مخطط الخدمة"/>
-                                    <field name="file" filename="file_name" widget="binary"/>
-                                    <field name="file_name" column_invisible="True"/>
-                                </tree>
-                            </field>
+                        <!-- 2 & 3- بيانات وتاريخ المقايسة -->
+                        <group string="2 &amp; 3- بيانات وتاريخ المقايسة 📜">
+                            <field name="boq_amendment" placeholder="سجل تفاصيل تعديل المقايسة..."/>
+                            <field name="boq_date"/>
                         </group>
 
                         <!-- 4 & 5- إجراء 155 وتاريخ الإجراء على النظام -->
-                        <group string="4 &amp; 5- إجراء 155 وتاريخ الإجراء على النظام 📋">
+                        <group string="4 &amp; 5- إجراء 155 وتاريخ النظام 📋">
                             <label for="receipt_155_status" string="إجراء 155" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
                             <div class="o_row d-flex align-items-center flex-wrap gap-3">
                                 <field name="receipt_155_status" widget="radio" options="{'horizontal': True}"/>
@@ -313,13 +301,22 @@
                             <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
                         </group>
 
-                        <!-- 6- اصدار شهادة الانجاز والفوترة -->
-                        <group string="6- إصدار شهادة الإنجاز والتحويل للفوترة 📄🏆" class="w-100 mt-2">
-                            <div class="p-3 bg-light border rounded-3 text-center w-100 shadow-sm">
-                                <p class="text-muted mb-3 small fw-bold">عند الضغط على الزر أدناه يتم إصدار وتنزيل ملف PDF بشهادة الإنجاز الرسمية وتحديث حالة أمر العمل وتحويله مباشرة لمرحلة الفوترة والتحصيل.</p>
-                                <button name="action_issue_completion_certificate" string="إصدار شهادة الإنجاز وتحويل للفوترة 📄🏆" type="object" class="btn btn-success btn-lg shadow-sm px-4 fw-bold"/>
-                            </div>
+                        <!-- 3 (تابع)- جدول المرفقات المتعددة -->
+                        <group string="3 (تابع)- جدول المرفقات المتعددة 📁">
+                            <field name="closing_document_ids" nolabel="1" class="w-100">
+                                <tree editable="bottom">
+                                    <field name="name" placeholder="مثال: صور التوثيق / مخطط الخدمة"/>
+                                    <field name="file" filename="file_name" widget="binary"/>
+                                    <field name="file_name" column_invisible="True"/>
+                                </tree>
+                            </field>
                         </group>
+                    </group>
+
+                    <!-- 6- إصدار شهادة الإنجاز والتحويل للفوترة -->
+                    <div invisible="not show_stage_4_details" class="p-3 bg-light border rounded-3 text-center my-3 shadow-sm w-100">
+                        <p class="text-muted mb-2 small fw-bold">عند الضغط على الزر أدناه يتم إصدار وتنزيل ملف PDF بشهادة الإنجاز الرسمية وتحديث حالة أمر العمل وتحويله مباشرة لمرحلة الفوترة والتحصيل.</p>
+                        <button name="action_issue_completion_certificate" string="إصدار شهادة الإنجاز وتحويل للفوترة 📄🏆" type="object" class="btn btn-success btn-lg shadow-sm px-4 fw-bold"/>
                     </div>
 
                     <hr class="my-4"/>
