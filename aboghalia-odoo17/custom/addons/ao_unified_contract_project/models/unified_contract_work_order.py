@@ -318,6 +318,32 @@ class UnifiedContractWorkOrder(models.Model):
     def _parse_google_maps_url_coordinates(self, url_text):
         if not url_text:
             return False, False
+        url_str = str(url_text).strip()
+        url = unquote(url_str)
+
+        # Support shortened Google Maps URLs via HTTP HEAD redirect resolution
+        if any(shortener in url_str for shortener in ['goo.gl', 'maps.app.goo.gl', 'page.link']):
+            try:
+                import urllib.request
+                req = urllib.request.Request(url_str, headers={'User-Agent': 'Mozilla/5.0'})
+                with urllib.request.urlopen(req, timeout=2.0) as resp:
+                    resolved_url = resp.geturl()
+                    if resolved_url:
+                        url = unquote(resolved_url)
+            except Exception:
+                pass
+
+        patterns = [
+            r'@([-+]?\d+(?:\.\d+)?),\s*([-+]?\d+(?:\.\d+)?)',
+            r'[?&](?:query|q|ll|destination|near|center)=([-+]?\d+(?:\.\d+)?),\s*([-+]?\d+(?:\.\d+)?)',
+            r'/place/(?:[^/]+/)?@?([-+]?\d+(?:\.\d+)?),\s*([-+]?\d+(?:\.\d+)?)',
+            r'([-+]?\d{1,2}\.\d+),\s*([-+]?\d{1,3}\.\d+)',
+        ]
+        for pattern in patterns:
+            match = re.search(pattern, url)
+            if match:
+                return match.group(1), match.group(2)
+        return False, False
         url = unquote(str(url_text).strip())
         
         patterns = [
@@ -576,12 +602,25 @@ class UnifiedContractWorkOrder(models.Model):
         ('scheduled', 'مجدول 🟢'),
         ('warning', 'مجدول - تنبيه متبقي أيام ⚠️'),
         ('expired', 'مجدول - متأخر / منتهي 🔴'),
+        ('executed', 'تم التنفيذ 🟢'),
     ], string='تنبيه تاريخ البرنامج', compute='_compute_programming_alert_status', store=True)
 
     completion_certificate_status = fields.Selection([
         ('no', 'لا'),
         ('yes', 'نعم'),
     ], string='شهادة الإتمام؟', default='no', required=True, tracking=True)
+
+    @api.onchange('completion_certificate_status')
+    def _onchange_completion_certificate_status_update_alert(self):
+        if self.completion_certificate_status == 'yes':
+            self.programming_alert_status = 'executed'
+            if self.id:
+                notifications = self.env['unified.contract.notification'].search([
+                    ('work_order_id', '=', self.id),
+                    ('notification_type', '=', 'programming_alert'),
+                    ('is_read', '=', False)
+                ])
+                notifications.write({'is_read': True})
 
     asset_details = fields.Text(
         string='الأصول والمعدات المستخدمة',
@@ -703,14 +742,23 @@ class UnifiedContractWorkOrder(models.Model):
     def _compute_can_edit_assignment(self):
         user = self.env.user
         is_admin = self.env.is_admin()
+        non_admin_recs = [r for r in self if not (is_admin or r.is_first_stage)]
+        teams_map = {}
+        if non_admin_recs:
+            proj_ids = list(set(r.project_id.id for r in non_admin_recs if r.project_id))
+            if proj_ids:
+                assignment_teams = self.env['unified.contract.team'].search([
+                    ('project_id', 'in', proj_ids),
+                    ('work_order_stage_id.sequence', '=', 1)
+                ])
+                for t in assignment_teams:
+                    teams_map[t.project_id.id] = t
+
         for rec in self:
             if is_admin or rec.is_first_stage:
                 rec.can_edit_assignment = True
             else:
-                assignment_team = self.env['unified.contract.team'].search([
-                    ('project_id', '=', rec.project_id.id),
-                    ('work_order_stage_id.sequence', '=', 1)
-                ], limit=1)
+                assignment_team = teams_map.get(rec.project_id.id)
                 if assignment_team and (user.id == assignment_team.leader_id.id or user.id in assignment_team.member_ids.ids):
                     rec.can_edit_assignment = True
                 else:
@@ -826,18 +874,21 @@ class UnifiedContractWorkOrder(models.Model):
             self.restoration_status = 'yes'
         self._compute_overall_progress()
 
-    @api.depends('programming_date', 'state')
+    @api.depends('programming_date', 'completion_certificate_status', 'state')
     def _compute_programming_alert_status(self):
         today = fields.Date.context_today(self)
         alert_config = self.env['unified.contract.alert.setting'].sudo().get_config()
         alert_days = alert_config.programming_alert_days_before or 3
 
         for rec in self:
+            if rec.completion_certificate_status == 'yes':
+                rec.programming_alert_status = 'executed'
+                continue
             if not rec.programming_date:
                 rec.programming_alert_status = 'not_scheduled'
                 continue
             if rec.state in ('done', 'cancel'):
-                rec.programming_alert_status = 'scheduled'
+                rec.programming_alert_status = 'executed'
                 continue
 
             delta = (rec.programming_date - today).days
@@ -850,19 +901,24 @@ class UnifiedContractWorkOrder(models.Model):
 
     @api.depends('project_id', 'stage_id')
     def _compute_team_id(self):
+        projects = self.mapped('project_id')
+        teams_by_project = {}
+        if projects:
+            all_teams = self.env['unified.contract.team'].search([
+                ('project_id', 'in', projects.ids)
+            ])
+            for team in all_teams:
+                pid = team.project_id.id
+                if pid not in teams_by_project:
+                    teams_by_project[pid] = []
+                teams_by_project[pid].append(team)
+
         for rec in self:
             if rec.project_id and rec.stage_id:
-                team = self.env['unified.contract.team'].search([
-                    ('project_id', '=', rec.project_id.id),
-                    ('work_order_stage_id', '=', rec.stage_id.id)
-                ], limit=1)
+                proj_teams = teams_by_project.get(rec.project_id.id, [])
+                team = next((t for t in proj_teams if t.work_order_stage_id and t.work_order_stage_id.id == rec.stage_id.id), None)
                 if not team and rec.stage_id.name:
-                    team = self.env['unified.contract.team'].search([
-                        ('project_id', '=', rec.project_id.id),
-                        '|',
-                        ('stage_id.name', '=', rec.stage_id.name),
-                        ('name', 'ilike', rec.stage_id.name)
-                    ], limit=1)
+                    team = next((t for t in proj_teams if (t.stage_id and t.stage_id.name == rec.stage_id.name) or (t.name and rec.stage_id.name in t.name)), None)
                 
                 if team:
                     rec.team_id = team.id
@@ -1144,11 +1200,7 @@ class UnifiedContractWorkOrder(models.Model):
                     rec._check_revert_stage_permission()
                 if not self.env.context.get('skip_execution_check') and rec._is_execution_stage(rec.stage_id) and rec._is_closure_or_later_stage(new_stage):
                     if rec.execution_progress < 100.0:
-                        # Compute NEXT STAGE explicitly so it never moves backward or sideways
-                        next_stage = self.env['unified.contract.work.order.stage'].search([
-                            ('sequence', '>', rec.stage_id.sequence)
-                        ], order='sequence asc', limit=1)
-                        return rec._get_skip_execution_wizard_action(next_stage or new_stage)
+                        raise ValidationError(_('عذراً! لا يمكن نقل أمر العمل لمرحلة الإغلاق لأن نسبة إنجاز التنفيذ أقل من 100%. يرجى استخدام زر (الانتقال للمرحلة التالية) أو إكمال نسبة التنفيذ 100% أولاً.'))
 
         # Automatic Permit Status Update upon entry of permit number and permit end date
         issued_permit_status = self.env['unified.contract.permit.status'].search([
@@ -1168,6 +1220,15 @@ class UnifiedContractWorkOrder(models.Model):
         for rec in self:
             if any(f in vals for f in ('permit_number', 'permit_start_date', 'permit_end_date')):
                 rec._sync_permit_status_from_dates()
+
+            if vals.get('completion_certificate_status') == 'yes':
+                notifications = self.env['unified.contract.notification'].search([
+                    ('work_order_id', '=', rec.id),
+                    ('notification_type', '=', 'programming_alert'),
+                    ('is_read', '=', False)
+                ])
+                if notifications:
+                    notifications.write({'is_read': True})
 
             if any(f in vals for f in stage_1_fields) and current_user_id not in rec.stage_1_user_ids.ids:
                 rec.write({'stage_1_user_ids': [(4, current_user_id)]})

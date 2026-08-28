@@ -214,7 +214,7 @@
                         </group>
                         <group string="تاريخ البرنامج والتنبيهات 📅">
                             <field name="programming_date"/>
-                            <field name="programming_alert_status" widget="badge" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status == 'scheduled'" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
+                            <field name="programming_alert_status" widget="badge" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status in ('scheduled', 'executed')" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
                             <field name="programming_notes" string="ملاحظات البرنامج" placeholder="سجل ملاحظات وإعدادات البرمجة الفنية..."/>
                         </group>
 
