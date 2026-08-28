@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Permission Profile Form View (المجموعات والصلاحيات) -->
+    <record id="view_unified_contract_permission_profile_form" model="ir.ui.view">
+        <field name="name">unified.contract.permission.profile.form</field>
+        <field name="model">unified.contract.permission.profile</field>
+        <field name="arch" type="xml">
+            <form string="المجموعات والصلاحيات">
+                <header>
+                    <button name="action_sync_team_users"
+                            string="مزامنة المستخدمين من فرق العمل"
+                            type="object"
+                            class="btn-secondary"
+                            icon="fa-users"/>
+                    <button name="action_generate_all_module_access_rights"
+                            string="إعادة توليد وتحديث حقول وقواعد الموديول"
+                            type="object"
+                            class="btn-primary"
+                            icon="fa-refresh"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="app_name" string="التطبيق"/>
+                            <field name="name" string="الاسم" placeholder="مثال: مجموعة مدراء المشاريع، مهندس تنفيذ"/>
+                            <field name="share_group" string="مشاركة المجموعة"/>
+                        </group>
+                        <group string="صلاحيات التحكم الإضافية">
+                            <field name="can_revert_stage" string="السماح بإرجاع المراحل للسابقة"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="المستخدمون" name="users_page">
+                            <field name="user_ids">
+                                <tree editable="bottom">
+                                    <field name="name"/>
+                                    <field name="login"/>
+                                    <field name="email"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="موروث" name="inherited_page">
+                            <group string="وراثة المجموعات">
+                                <field name="parent_id" string="موروث من"/>
+                                <field name="inherited_profile_ids" widget="many2many_tags" string="المجموعات الموروثة"/>
+                            </group>
+                        </page>
+                        <page string="القوائم" name="menus_page">
+                            <field name="menu_ids">
+                                <tree>
+                                    <field name="complete_name"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="أدوات العرض" name="views_page">
+                            <field name="view_ids">
+                                <tree>
+                                    <field name="name"/>
+                                    <field name="type"/>
+                                    <field name="model"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="صلاحيات الوصول" name="access_rights_page">
+                            <field name="access_right_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="الاسم"/>
+                                    <field name="model_id" string="النموذج"/>
+                                    <field name="is_required" string="إلزامـي"/>
+                                    <field name="perm_read" string="صلاحيات القراءة"/>
+                                    <field name="perm_write" string="صلاحيات الكتابة"/>
+                                    <field name="perm_create" string="إنشاء صلاحيات الوصول"/>
+                                    <field name="perm_unlink" string="حذف صلاحيات الوصول"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="قواعد السجلات" name="record_rules_page">
+                            <field name="rule_ids">
+                                <tree editable="bottom">
+                                    <field name="name" string="اسم القاعدة"/>
+                                    <field name="domain_force" string="شروط وقواعد السجل (Domain)"/>
+                                    <field name="perm_read" string="قراءة"/>
+                                    <field name="perm_write" string="كتابة"/>
+                                    <field name="perm_create" string="إنشاء"/>
+                                    <field name="perm_unlink" string="حذف"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="الملاحظات" name="notes_page">
+                            <field name="description" placeholder="إضافة ملاحظات..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Permission Profile Tree View -->
+    <record id="view_unified_contract_permission_profile_tree" model="ir.ui.view">
+        <field name="name">unified.contract.permission.profile.tree</field>
+        <field name="model">unified.contract.permission.profile</field>
+        <field name="arch" type="xml">
+            <tree string="المجموعات والصلاحيات">
+                <field name="app_name" string="التطبيق"/>
+                <field name="name" string="الاسم"/>
+                <field name="parent_id" string="موروث من"/>
+                <field name="can_revert_stage" string="السماح بإرجاع المراحل"/>
+                <field name="user_count" string="المستخدمون"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_unified_contract_permission_profiles" model="ir.actions.act_window">
+        <field name="name">المجموعات والصلاحيات</field>
+        <field name="res_model">unified.contract.permission.profile</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                إضافة مجموعة وصلاحيات جديدة!
+            </p>
+            <p>
+                قم بتكوين المجموعات وصلاحيات الوصول ومزامنة الموظفين من فرق العمل والتحكم في صلاحيات إرجاع المراحل وقواعد السجلات.
+            </p>
+        </field>
+    </record>
+
+</odoo>

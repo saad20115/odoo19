@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_unified_contract_permit_extend_wizard_form" model="ir.ui.view">
+        <field name="name">unified.contract.permit.extend.wizard.form</field>
+        <field name="model">unified.contract.permit.extend.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تمديد تاريخ انتهاء التصريح 🔄">
+                <sheet>
+                    <div class="alert alert-info text-center fw-bold mb-3" role="alert">
+                        <i class="fa fa-refresh me-2"></i> تمديد تاريخ انتهاء التصريح الرسمي
+                    </div>
+
+                    <group>
+                        <group string="بيانات التمديد 📅">
+                            <field name="work_order_id" invisible="1"/>
+                            <field name="current_permit_end_date" string="تاريخ الانتهاء السابق/الحالي"/>
+                            <field name="new_permit_end_date" string="تاريخ الانتهاء الجديد للتمديد"/>
+                        </group>
+                        <group string="ملاحظات والتأكيد 📝">
+                            <field name="extension_reason" placeholder="سجل سبب التمديد أو رقم التمديد الرسمي..."/>
+                        </group>
+                    </group>
+                </sheet>
+
+                <footer>
+                    <button name="action_confirm_extend" string="تأكيد التمديد 🔄" type="object" class="btn-warning fw-bold"/>
+                    <button string="إلغاء ❌" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

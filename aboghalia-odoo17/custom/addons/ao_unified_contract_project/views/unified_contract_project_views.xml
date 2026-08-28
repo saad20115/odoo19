@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Unified Contract Project Form View -->
+    <record id="view_unified_contract_project_form" model="ir.ui.view">
+        <field name="name">unified.contract.project.form</field>
+        <field name="model">unified.contract.project</field>
+        <field name="arch" type="xml">
+            <form string="مشروع العقد الموحد">
+                <header>
+                    <field name="is_first_stage" invisible="1"/>
+                    <field name="is_last_stage" invisible="1"/>
+                    <field name="next_stage_name" invisible="1"/>
+                    <field name="prev_stage_name" invisible="1"/>
+                    <button name="action_next_stage" type="object" class="btn-primary" invisible="is_last_stage or state in ('done', 'cancel')">
+                        <field name="next_stage_name"/>
+                    </button>
+                    <button name="action_open_revert_wizard" type="object" class="btn-secondary" invisible="is_first_stage or state in ('done', 'cancel')">
+                        <field name="prev_stage_name"/>
+                    </button>
+                    <button name="action_reactivate" string="إعادة تفعيل المشروع 🔄" type="object" class="btn-primary" invisible="state != 'cancel'"/>
+                    <button name="action_set_on_hold" string="تعليق ⏸️" type="object" class="btn-warning" invisible="state in ('on_hold', 'done', 'cancel')"/>
+                    <button name="action_set_done" string="إكمال المشروع ✔️" type="object" class="btn-success" invisible="state in ('done', 'cancel')"/>
+                    <button name="action_set_cancel" string="إلغاء المشروع ❌" type="object" class="btn-danger" invisible="state == 'cancel'"/>
+                    <field name="stage_id" widget="statusbar" readonly="1" options="{'clickable': '0'}"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_work_orders"
+                                type="object"
+                                class="oe_stat_button"
+                                icon="fa-tasks">
+                            <field name="work_order_count" widget="statinfo" string="أوامر العمل"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="اسم مشروع العقد الموحد"/>
+                        <h1>
+                            <field name="name" placeholder="مثال: مشروع توريد وإحلال الكابلات الموحد - مكة"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="بيانات العقد الرئيسية">
+                            <field name="code" placeholder="مثال: UC-2026-9041"/>
+                            <field name="contract_date"/>
+                            <field name="contract_end_date"/>
+                            <field name="state" widget="badge"/>
+                        </group>
+                        <group string="بيانات المالكة والإدارة والمقاولين">
+                            <field name="contract_entity" placeholder="مثال: وزارة الشؤون البلدية والقروية"/>
+                            <field name="partner_id"/>
+                            <field name="manager_id"/>
+                            <field name="contractor_ids" widget="many2many_tags" placeholder="اختر المقاولين المعتمدين لتنفيذ أوامر العمل..."/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="إدارة فريق العمل" name="stage_teams_page">
+                            <field name="team_ids">
+                                <tree editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="name"/>
+                                    <field name="stage_id"/>
+                                    <field name="leader_id"/>
+                                    <field name="member_ids" widget="many2many_tags"/>
+                                    <field name="member_count"/>
+                                </tree>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Unified Contract Project Tree View -->
+    <record id="view_unified_contract_project_tree" model="ir.ui.view">
+        <field name="name">unified.contract.project.tree</field>
+        <field name="model">unified.contract.project</field>
+        <field name="arch" type="xml">
+            <tree string="مشاريع العقود الموحدة">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="contract_entity"/>
+                <field name="contract_date"/>
+                <field name="manager_id"/>
+                <field name="stage_id"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Unified Contract Project Kanban View (Strictly Disabled Drag & Drop) -->
+    <record id="view_unified_contract_project_kanban" model="ir.ui.view">
+        <field name="name">unified.contract.project.kanban</field>
+        <field name="model">unified.contract.project</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column" records_draggable="0" groups_draggable="0">
+                <field name="id"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="contract_entity"/>
+                <field name="manager_id"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click o_kanban_record_has_image_fill">
+                            <div class="oe_kanban_details">
+                                <strong class="o_kanban_record_title">
+                                    <field name="name"/>
+                                </strong>
+                                <div>
+                                    <span class="text-muted"><field name="code"/></span>
+                                </div>
+                                <div class="mt-1">
+                                    <span>الجهة: <field name="contract_entity"/></span>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="state" widget="badge"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="manager_id" widget="many2one_avatar_user"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Unified Contract Project Pivot View -->
+    <record id="view_unified_contract_project_pivot" model="ir.ui.view">
+        <field name="name">unified.contract.project.pivot</field>
+        <field name="model">unified.contract.project</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل مشاريع العقد الموحد">
+                <field name="contract_entity" type="row"/>
+                <field name="stage_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_unified_contract_project" model="ir.actions.act_window">
+        <field name="name">مشاريع العقد الموحد (Unified Contract Projects)</field>
+        <field name="res_model">unified.contract.project</field>
+        <field name="view_mode">kanban,tree,form,pivot</field>
+        <field name="domain">[]</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                إضافة مشروع عقد موحد جديد!
+            </p>
+            <p>
+                قم بإدارة وتتبع مشاريع العقود الموحدة وأوامر العمل بشكل مستقل كلياً.
+            </p>
+        </field>
+    </record>
+
+    <!-- Stage Action -->
+    <record id="action_unified_contract_stages" model="ir.actions.act_window">
+        <field name="name">مراحل المشاريع (Stages)</field>
+        <field name="res_model">unified.contract.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

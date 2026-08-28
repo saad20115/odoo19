@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="stage_draft" model="unified.contract.stage">
+            <field name="name">تحت الإعداد والتوثيق</field>
+            <field name="sequence">10</field>
+
+        </record>
+
+        <record id="stage_active" model="unified.contract.stage">
+            <field name="name">قيد التنفيذ والمتابعة</field>
+            <field name="sequence">20</field>
+
+        </record>
+
+        <record id="stage_on_hold" model="unified.contract.stage">
+            <field name="name">معلق مؤقتاً</field>
+            <field name="sequence">30</field>
+
+        </record>
+
+        <record id="stage_completed" model="unified.contract.stage">
+            <field name="name">مكتمل ومستلم</field>
+            <field name="sequence">40</field>
+
+        </record>
+
+        <record id="stage_closed" model="unified.contract.stage">
+            <field name="name">مغلق نهائياً</field>
+            <field name="sequence">50</field>
+            <field name="fold">True</field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Res Config Settings Form View -->
+    <record id="res_config_settings_view_form_unified_contract" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.unified.contract</field>
+        <field name="model">res.config.settings</field>
+        <field name="priority" eval="90"/>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="مشاريع العقد الموحد" string="مشاريع العقد الموحد" name="ao_unified_contract_project">
+                    <block string="إعدادات رقم أمر العمل" name="wo_number_setting_block">
+                        <setting id="setting_wo_number_length" help="تحديد طول خانات رقم أمر العمل المطلوب (مثلاً: 12 رقم).">
+                            <field name="wo_number_length"/>
+                        </setting>
+                        <setting id="setting_wo_number_unique" help="اشتراط أن يكون رقم أمر العمل فريداً وغير مكرر نهائياً.">
+                            <field name="wo_number_unique"/>
+                        </setting>
+                        <setting id="setting_wo_number_numeric" help="اشتراط أن يتكون رقم أمر العمل من أرقام فقط.">
+                            <field name="wo_number_numeric_only"/>
+                        </setting>
+                    </block>
+                    <block string="إعدادات وتنبيهات تصاريح الكشفية" name="permit_setting_block">
+                        <setting id="setting_permit_alert_days" help="تحديد عدد الأيام المتبقية قبل انتهاء التصريح لبدء التنبيهات المسبقة.">
+                            <field name="permit_alert_days_before"/>
+                        </setting>
+                        <setting id="setting_permit_alert_count" help="حدد الحد الأقصى لعدد مرات التنبيه المسموح بها.">
+                            <field name="permit_alert_max_count"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Settings Action -->
+    <record id="action_unified_contract_config_settings" model="ir.actions.act_window">
+        <field name="name">إعدادات العقد الموحد</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module' : 'ao_unified_contract_project', 'bin_size': False}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Work Order Stages -->
+        <record id="stage_work_order_assignment" model="unified.contract.work.order.stage">
+            <field name="name">الإسناد</field>
+            <field name="sequence">1</field>
+            <field name="stage_progress">0.0</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_work_order_scouting" model="unified.contract.work.order.stage">
+            <field name="name">الكشفية والتصاريح</field>
+            <field name="sequence">2</field>
+            <field name="stage_progress">3.0</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_work_order_execution" model="unified.contract.work.order.stage">
+            <field name="name">التنفيذ</field>
+            <field name="sequence">3</field>
+            <field name="stage_progress">60.0</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_work_order_closing_docs" model="unified.contract.work.order.stage">
+            <field name="name">الإغلاق (مرفقات - استلام 155 - شهادة الإنجاز)</field>
+            <field name="sequence">4</field>
+            <field name="stage_progress">85.0</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_work_order_invoicing" model="unified.contract.work.order.stage">
+            <field name="name">الفوترة والتحصيل</field>
+            <field name="sequence">5</field>
+            <field name="stage_progress">95.0</field>
+            <field name="fold">False</field>
+        </record>
+
+        <record id="stage_work_order_final_closure" model="unified.contract.work.order.stage">
+            <field name="name">الإغلاق النهائي</field>
+            <field name="sequence">6</field>
+            <field name="stage_progress">100.0</field>
+            <field name="fold">False</field>
+        </record>
+    </data>
+</odoo>

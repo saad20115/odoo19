@@ -1,0 +1,437 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Unified Contract Work Order Form View -->
+    <record id="view_unified_contract_work_order_form" model="ir.ui.view">
+        <field name="name">unified.contract.work.order.form</field>
+        <field name="model">unified.contract.work.order</field>
+        <field name="arch" type="xml">
+            <form string="أمر عمل العقد الموحد">
+                <header>
+                    <field name="is_first_stage" invisible="1"/>
+                    <field name="is_last_stage" invisible="1"/>
+                    <field name="next_stage_name" invisible="1"/>
+                    <field name="prev_stage_name" invisible="1"/>
+                    <field name="can_edit_assignment" invisible="1"/>
+                    <button name="action_next_stage" type="object" class="btn-primary" invisible="is_last_stage or state in ('done', 'cancel')">
+                        <field name="next_stage_name"/>
+                    </button>
+                    <button name="action_open_revert_wizard" type="object" class="btn-secondary" invisible="is_first_stage or state in ('done', 'cancel')">
+                        <field name="prev_stage_name"/>
+                    </button>
+                    <button name="action_reactivate" string="إعادة تفعيل أمر العمل 🔄" type="object" class="btn-primary" invisible="state != 'cancel'"/>
+                    <button name="action_set_on_hold" string="تعليق ⏸️" type="object" class="btn-warning" invisible="state in ('on_hold', 'done', 'cancel')"/>
+                    <button name="action_set_done" string="إنجاز أمر العمل ✔️" type="object" class="btn-success" invisible="state in ('done', 'cancel')"/>
+                    <button name="action_set_cancel" string="إلغاء أمر العمل ❌" type="object" class="btn-danger" invisible="state == 'cancel'"/>
+                    <field name="stage_id" widget="statusbar" readonly="1" options="{'clickable': '0'}"/>
+                </header>
+                <sheet>
+                    <field name="show_stage_1_details" invisible="1"/>
+                    <field name="show_stage_2_details" invisible="1"/>
+                    <field name="show_stage_3_details" invisible="1"/>
+                    <field name="show_stage_4_details" invisible="1"/>
+                    <field name="show_stage_5_details" invisible="1"/>
+
+                    <!-- Top Prominent Title Area with Work Order Number, Team ID, Overall Progress, and Work Order State side-by-side -->
+                    <div class="oe_title mb-4">
+                        <div class="row align-items-center">
+                            <div class="col-md-4">
+                                <label for="work_order_number" string="رقم أمر العمل"/>
+                                <h1>
+                                    <field name="work_order_number" placeholder="أدخل رقم أمر العمل (مثال: 100020260001)"/>
+                                </h1>
+                            </div>
+                            <div class="col-md-3 border-start ps-3">
+                                <label for="team_id" string="فريق العمل المسؤول عن المرحلة 👥" class="fw-bold text-primary"/>
+                                <h3>
+                                    <field name="team_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment" class="fw-bold text-dark"/>
+                                </h3>
+                            </div>
+                            <div class="col-md-3 border-start ps-3">
+                                <label for="progress" string="نسبة الإنجاز الإجمالية 📊" class="fw-bold text-primary"/>
+                                <div class="mt-2">
+                                    <field name="progress" widget="progressbar"/>
+                                </div>
+                            </div>
+                            <div class="col-md-2 border-start ps-3">
+                                <label for="state" string="حالة أمر العمل 📌" class="fw-bold text-primary"/>
+                                <h3>
+                                    <field name="state" widget="badge" decoration-warning="state == 'draft'" decoration-info="state == 'in_progress'" decoration-danger="state in ('late', 'cancel')" decoration-success="state == 'done'"/>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 1. مرحلة الإسناد Header Bar (Collapsible with Toggle Button & Parallel Summary) -->
+                    <div class="d-flex align-items-center justify-content-between my-2 p-2 bg-light rounded border">
+                        <div class="d-flex align-items-center flex-grow-1 min-w-0">
+                            <h4 class="m-0 fw-bold text-primary me-3 text-nowrap">
+                                1. مرحلة الإسناد
+                            </h4>
+                            <!-- Parallel Summary when folded -->
+                            <div invisible="show_stage_1_details" class="d-inline-flex align-items-center flex-wrap me-3 text-muted small gap-3">
+                                <span>المشروع: <field name="project_id" class="fw-bold text-dark me-1"/></span>
+                                <span>|</span>
+                                <span>المقاول: <field name="contractor_id" class="fw-bold text-dark me-1"/></span>
+                                <span>|</span>
+                                <span>تاريخ الإسناد: <field name="assignment_date" class="fw-bold text-dark"/></span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 ms-3">
+                            <field name="stage_1_status" widget="badge" decoration-success="stage_1_status == 'completed'" decoration-info="stage_1_status == 'in_progress'" decoration-muted="stage_1_status == 'not_started'"/>
+                            <button name="action_toggle_stage_1_details" type="object" string="إظهار" class="btn btn-sm btn-success text-white" invisible="show_stage_1_details"/>
+                            <button name="action_toggle_stage_1_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_1_details"/>
+                        </div>
+                    </div>
+                    <group invisible="not show_stage_1_details">
+                        <group string="بيانات الإسناد والجهات">
+                            <field name="project_id" readonly="not can_edit_assignment"/>
+                            <field name="project_contractor_ids" invisible="1"/>
+                            <field name="contractor_id" options="{'no_create': True}" readonly="not can_edit_assignment"/>
+                            <field name="stage_1_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإسناد" readonly="1"/>
+                            <field name="create_uid" string="تم الإنشاء بواسطة" readonly="1"/>
+                            <field name="region_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment"/>
+                            <field name="district_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment"/>
+                            <field name="station_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment"/>
+                            <field name="department_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment"/>
+                            <field name="work_order_type_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment"/>
+                            <field name="work_order_category_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment"/>
+                        </group>
+                        <group string="التواريخ والقيمة والشركات">
+                            <field name="assignment_date" readonly="not can_edit_assignment"/>
+                            <field name="work_order_date" readonly="not can_edit_assignment"/>
+                            <field name="elapsed_days"/>
+                            <field name="date_deadline"/>
+                            <field name="estimated_amount" readonly="not can_edit_assignment"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <separator string="الموقع الجغرافي والإحداثيات 🗺️📍"/>
+                            <field name="coordinate_x" placeholder="مثال: 39.1979"/>
+                            <field name="coordinate_y" placeholder="مثال: 21.5433"/>
+                            <label for="google_maps_url" string="رابط الموقع / الخريطة"/>
+                            <div class="o_row">
+                                <field name="google_maps_url" placeholder="ضع رابط الخريطة هنا أو أدخل الإحداثيات بالأعلى..."/>
+                                <button name="action_open_google_maps" type="object" string="انتقال 🗺️📍" class="btn btn-sm btn-outline-primary ms-2" invisible="not google_maps_url and not (coordinate_x and coordinate_y)"/>
+                            </div>
+                        </group>
+                    </group>
+
+                    <hr class="my-4"/>
+
+                    <!-- 2. مرحلة الكشفية والتصاريح Header Bar (Collapsible with Toggle Button & Parallel Permit Status and Permit Number) -->
+                    <div class="d-flex align-items-center justify-content-between my-2 p-2 bg-light rounded border">
+                        <div class="d-flex align-items-center flex-grow-1 min-w-0">
+                            <h4 class="m-0 fw-bold text-primary me-3 text-nowrap">
+                                2. مرحلة الكشفية والتصاريح 🔍📜
+                            </h4>
+                            <!-- Parallel Summary when folded -->
+                            <div invisible="show_stage_2_details" class="d-inline-flex align-items-center flex-wrap me-3 text-muted small gap-3">
+                                <span>حالة التصريح: <field name="permit_status_id" class="fw-bold text-dark me-1"/></span>
+                                <span>|</span>
+                                <span>رقم التصريح: <field name="permit_number" class="fw-bold text-dark me-1" placeholder="غير محدد"/></span>
+                                <span>|</span>
+                                <span class="d-inline-flex align-items-center">
+                                    <span class="me-1">تنبيه التصريح:</span>
+                                    <field name="permit_alert_status" widget="badge" decoration-muted="permit_alert_status == 'not_issued'" decoration-success="permit_alert_status == 'normal'" decoration-warning="permit_alert_status == 'warning'" decoration-danger="permit_alert_status == 'expired'"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 ms-3">
+                            <field name="stage_2_status" widget="badge" decoration-success="stage_2_status == 'completed'" decoration-info="stage_2_status == 'in_progress'" decoration-muted="stage_2_status == 'not_started'"/>
+                            <button name="action_toggle_stage_2_details" type="object" string="إظهار" class="btn btn-sm btn-success text-white" invisible="show_stage_2_details"/>
+                            <button name="action_toggle_stage_2_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_2_details"/>
+                        </div>
+                    </div>
+                    <group name="scouting_permits_section" invisible="not show_stage_2_details">
+                        <group string="نتائج الكشفية والمعاينة الفنية">
+                            <field name="is_scouting_completed" widget="radio" options="{'horizontal': True}"/>
+                            <field name="has_scouting_obstacles" widget="radio" options="{'horizontal': True}"/>
+                            <field name="scouting_obstacles_notes" placeholder="سجل تفاصيل العوائق الفنية إن وجدت..." invisible="has_scouting_obstacles != 'yes'"/>
+                            <field name="stage_2_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الكشفية والتصاريح" readonly="1"/>
+                        </group>
+                        <group string="بيانات وتواريخ التصريح والتنبيهات">
+                            <field name="permit_status_id" options="{'no_create_edit': True}"/>
+                            <field name="permit_number" placeholder="أدخل رقم التصريح الرسمـي..."/>
+                            <field name="permit_start_date"/>
+                            <label for="permit_end_date" string="تاريخ انتهاء التصريح"/>
+                            <div class="o_row">
+                                <field name="permit_end_date"/>
+                                <button name="action_open_extend_permit_wizard" type="object" string="تمديد التصريح 🔄" class="btn btn-sm btn-outline-warning ms-2" invisible="permit_alert_status in ('normal', 'not_issued') or not permit_end_date"/>
+                            </div>
+                            <field name="permit_alert_status" widget="badge" decoration-muted="permit_alert_status == 'not_issued'" decoration-success="permit_alert_status == 'normal'" decoration-warning="permit_alert_status == 'warning'" decoration-danger="permit_alert_status == 'expired'"/>
+                        </group>
+                    </group>
+
+                    <hr class="my-4"/>
+
+                    <!-- 3. مرحلة التنفيذ Header Bar (Collapsible with Toggle Button & Parallel Summary) -->
+                    <div class="d-flex align-items-center justify-content-between my-2 p-2 bg-light rounded border">
+                        <div class="d-flex align-items-center flex-grow-1 min-w-0">
+                            <h4 class="m-0 fw-bold text-primary me-3 text-nowrap">
+                                3. مرحلة التنفيذ ⚙️🛠️
+                            </h4>
+                            <!-- Parallel Summary when folded -->
+                            <div invisible="show_stage_3_details" class="d-inline-flex align-items-center flex-wrap me-3 text-muted small gap-3">
+                                <span>حالة التنفيذ: <field name="execution_status" widget="badge" decoration-muted="execution_status == 'not_started'" decoration-info="execution_status == 'in_progress'" decoration-success="execution_status == 'completed'"/></span>
+                                <span>|</span>
+                                <span>نسبة الإنجاز: <field name="execution_progress" widget="progressbar"/></span>
+                                <span>|</span>
+                                <span>تاريخ البرنامج: <field name="programming_date" class="fw-bold text-dark me-1" placeholder="غير محدد"/></span>
+                                <span>|</span>
+                                <span class="d-inline-flex align-items-center">
+                                    <span class="me-1">تنبيه البرنامج:</span>
+                                    <field name="programming_alert_status" widget="badge" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status == 'scheduled'" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 ms-3">
+                            <field name="stage_3_status" widget="badge" decoration-success="stage_3_status == 'completed'" decoration-danger="stage_3_status == 'skipped'" decoration-info="stage_3_status == 'in_progress'" decoration-muted="stage_3_status == 'not_started'"/>
+                            <button name="action_toggle_stage_3_details" type="object" string="إظهار" class="btn btn-sm btn-success text-white" invisible="show_stage_3_details"/>
+                            <button name="action_toggle_stage_3_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_3_details"/>
+                        </div>
+                    </div>
+                    <group name="execution_section" invisible="not show_stage_3_details">
+                        <group string="بيانات وتواريخ وحالة التنفيذ ⚙️">
+                            <field name="execution_start_date"/>
+                            <field name="execution_end_date"/>
+                            <label for="execution_progress" string="نسبة إنجاز التنفيذ (%)"/>
+                            <div class="o_row">
+                                <field name="execution_progress" class="oe_inline fw-bold me-2" placeholder="0.0"/>
+                                <span>%</span>
+                            </div>
+                            <field name="execution_status" widget="badge" decoration-muted="execution_status == 'not_started'" decoration-info="execution_status == 'in_progress'" decoration-success="execution_status == 'completed'" decoration-danger="execution_status == 'skipped'"/>
+                            <field name="stage_3_user_ids" widget="many2many_avatar_user" string="المسؤولون عن التنفيذ والتشغيل" readonly="1"/>
+                        </group>
+                        <group string="الكميات والمعدات وإعادة الوضع 🚜">
+                            <field name="excavation_quantity"/>
+                            <field name="extension_quantity"/>
+                            <field name="equipment_count"/>
+                            <field name="restoration_status" widget="radio" options="{'horizontal': True}"/>
+                        </group>
+                        <group string="استلام الأصول والشهادات 📄">
+                            <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
+                            <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
+                            <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
+                        </group>
+                        <group string="تاريخ البرنامج والتنبيهات 📅">
+                            <field name="programming_date"/>
+                            <field name="programming_alert_status" widget="badge" decoration-muted="programming_alert_status == 'not_scheduled'" decoration-success="programming_alert_status == 'scheduled'" decoration-warning="programming_alert_status == 'warning'" decoration-danger="programming_alert_status == 'expired'"/>
+                            <field name="programming_notes" string="ملاحظات البرنامج" placeholder="سجل ملاحظات وإعدادات البرمجة الفنية..."/>
+                        </group>
+
+                    </group>
+
+                    <hr class="my-4"/>
+
+                    <!-- 4. مرحلة الإغلاق والتوثيق Header Bar (Collapsible with Toggle Button & Parallel Summary) -->
+                    <div class="d-flex align-items-center justify-content-between my-2 p-2 bg-light rounded border">
+                        <div class="d-flex align-items-center flex-grow-1 min-w-0">
+                            <h4 class="m-0 fw-bold text-primary me-3 text-nowrap">
+                                4. مرحلة الإغلاق والتوثيق (استلام 155 وشهادة الإنجاز) 📋📁
+                            </h4>
+                            <!-- Parallel Summary when folded -->
+                            <div invisible="show_stage_4_details" class="d-inline-flex align-items-center flex-wrap me-3 text-muted small gap-3">
+                                <span>نموذج 155: <field name="receipt_155_number" class="fw-bold text-dark me-1"/></span>
+                                <span>|</span>
+                                <span>شهادة الإنجاز: <field name="completion_certificate_no" class="fw-bold text-dark"/></span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 ms-3">
+                            <field name="stage_4_status" widget="badge" decoration-success="stage_4_status == 'completed'" decoration-info="stage_4_status == 'in_progress'" decoration-muted="stage_4_status == 'not_started'"/>
+                            <button name="action_toggle_stage_4_details" type="object" string="إظهار" class="btn btn-sm btn-success text-white" invisible="show_stage_4_details"/>
+                            <button name="action_toggle_stage_4_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_4_details"/>
+                        </div>
+                    </div>
+                    <group name="closing_docs_section" invisible="not show_stage_4_details">
+                        <group string="نموذج استلام 155 والموثقين">
+                            <field name="receipt_155_number" placeholder="مثال: REC-155-9041"/>
+                            <field name="receipt_155_date"/>
+                            <field name="stage_4_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإغلاق والتوثيق" readonly="1"/>
+                        </group>
+                        <group string="شهادة الإنجاز الرسمية">
+                            <field name="completion_certificate_no" placeholder="مثال: CERT-2026-88"/>
+                            <field name="completion_certificate_date"/>
+                        </group>
+                        <group string="مرفقات مستندات الإغلاق">
+                            <field name="closing_attachment_ids" widget="many2many_binary"/>
+                        </group>
+                    </group>
+
+                    <hr class="my-4"/>
+
+                    <!-- 5. مرحلة الفوترة والتحصيل Header Bar (Collapsible with Toggle Button & Parallel Summary) -->
+                    <div class="d-flex align-items-center justify-content-between my-2 p-2 bg-light rounded border">
+                        <div class="d-flex align-items-center flex-grow-1 min-w-0">
+                            <h4 class="m-0 fw-bold text-primary me-3 text-nowrap">
+                                5. مرحلة الفوترة والتحصيل 💰🧾
+                            </h4>
+                            <!-- Parallel Summary when folded -->
+                            <div invisible="show_stage_5_details" class="d-inline-flex align-items-center flex-wrap me-3 text-muted small gap-3">
+                                <span>الفاتورة: <field name="invoice_number" class="fw-bold text-dark me-1"/></span>
+                                <span>|</span>
+                                <span>المبلغ: <field name="invoice_amount" class="fw-bold text-dark me-1"/></span>
+                                <span>|</span>
+                                <span class="d-inline-flex align-items-center">
+                                    <span class="me-1">حالة التحصيل:</span>
+                                    <field name="payment_status" widget="badge"/>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="d-flex align-items-center gap-2 ms-3">
+                            <field name="stage_5_status" widget="badge" decoration-success="stage_5_status == 'completed'" decoration-info="stage_5_status == 'in_progress'" decoration-muted="stage_5_status == 'not_started'"/>
+                            <button name="action_toggle_stage_5_details" type="object" string="إظهار" class="btn btn-sm btn-success text-white" invisible="show_stage_5_details"/>
+                            <button name="action_toggle_stage_5_details" type="object" string="إخفاء" class="btn btn-sm btn-light border text-dark" invisible="not show_stage_5_details"/>
+                        </div>
+                    </div>
+                    <group name="invoicing_section" invisible="not show_stage_5_details">
+                        <group string="بيانات الفاتورة والتحصيل والمسؤولين">
+                            <field name="invoice_number" placeholder="مثال: INV-2026-441"/>
+                            <field name="invoice_amount"/>
+                            <field name="payment_status" widget="badge"/>
+                            <field name="stage_5_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الفوترة والتحصيل" readonly="1"/>
+                        </group>
+                    </group>
+
+                    <hr class="my-4"/>
+
+                    <!-- 6. التوجيهات والتفاصيل الفنية -->
+                    <group string="التوجيهات والتفاصيل الفنية 📝" name="description_section">
+                        <field name="description" placeholder="سجل كافة الملاحظات والتوجيهات الفنية المعتمدة..."/>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Unified Contract Work Order Tree View -->
+    <record id="view_unified_contract_work_order_tree" model="ir.ui.view">
+        <field name="name">unified.contract.work.order.tree</field>
+        <field name="model">unified.contract.work.order</field>
+        <field name="arch" type="xml">
+            <tree string="أوامر العمل">
+                <field name="work_order_number"/>
+                <field name="project_id"/>
+                <field name="contractor_id"/>
+                <field name="team_id"/>
+                <field name="stage_1_user_ids" widget="many2many_avatar_user" string="المسؤولون عن الإسناد"/>
+                <field name="create_uid" string="تم الإنشاء بواسطة"/>
+                <field name="region_id"/>
+                <field name="district_id"/>
+                <field name="station_id"/>
+                <field name="permit_number"/>
+                <field name="permit_status_id"/>
+                <field name="permit_end_date"/>
+                <field name="permit_alert_status" widget="badge" decoration-muted="permit_alert_status == 'not_issued'" decoration-success="permit_alert_status == 'normal'" decoration-warning="permit_alert_status == 'warning'" decoration-danger="permit_alert_status == 'expired'"/>
+                <field name="stage_id"/>
+                <field name="progress" widget="progressbar"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Unified Contract Work Order Kanban View (Strictly Disabled Drag & Drop) -->
+    <record id="view_unified_contract_work_order_kanban" model="ir.ui.view">
+        <field name="name">unified.contract.work.order.kanban</field>
+        <field name="model">unified.contract.work.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage_id" class="o_kanban_small_column o_opportunity_kanban" sample="1" records_draggable="0" groups_draggable="0">
+                <field name="id"/>
+                <field name="color"/>
+                <field name="work_order_number"/>
+                <field name="project_id"/>
+                <field name="contractor_id"/>
+                <field name="team_id"/>
+                <field name="stage_1_user_ids"/>
+                <field name="create_uid"/>
+                <field name="permit_number"/>
+                <field name="permit_status_id"/>
+                <field name="permit_alert_status"/>
+                <field name="stage_id"/>
+                <field name="progress"/>
+                <field name="state"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                            <div class="oe_kanban_details d-flex flex-column justify-content-between">
+                                <div>
+                                    <strong class="o_kanban_record_title">
+                                        <field name="work_order_number"/>
+                                    </strong>
+                                    <div class="text-muted">
+                                        <i class="fa fa-folder-o me-1"/> <field name="project_id"/>
+                                    </div>
+                                    <div class="text-muted small" t-if="record.contractor_id.raw_value">
+                                        <i class="fa fa-building-o me-1"/> <field name="contractor_id"/>
+                                    </div>
+                                    <div class="text-muted small" t-if="record.team_id.raw_value">
+                                        <i class="fa fa-users me-1"/> <field name="team_id"/>
+                                    </div>
+                                    <div class="text-muted small mt-1" t-if="record.permit_number.raw_value">
+                                        <i class="fa fa-file-text-o me-1"/> تصريح: <field name="permit_number"/>
+                                    </div>
+                                    <div class="mt-1" t-if="record.permit_alert_status.raw_value">
+                                        <field name="permit_alert_status" widget="badge" decoration-muted="permit_alert_status == 'not_issued'" decoration-success="permit_alert_status == 'normal'" decoration-warning="permit_alert_status == 'warning'" decoration-danger="permit_alert_status == 'expired'"/>
+                                    </div>
+                                    <div class="mt-1 d-flex align-items-center justify-content-between">
+                                        <field name="stage_1_user_ids" widget="many2many_avatar_user"/>
+                                        <span class="text-muted small ms-1" title="تم الإنشاء بواسطة">
+                                            <i class="fa fa-user-plus me-1"/> <field name="create_uid"/>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="o_kanban_record_bottom mt-2">
+                                    <div class="oe_kanban_bottom_left">
+                                        <field name="progress" widget="progressbar"/>
+                                    </div>
+                                    <div class="oe_kanban_bottom_right">
+                                        <field name="state" widget="label_selection" options="{'classes': {'draft': 'default', 'in_progress': 'success', 'on_hold': 'warning', 'late': 'danger', 'done': 'primary', 'cancel': 'danger'}}"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Work Order Action -->
+    <record id="action_unified_contract_work_orders" model="ir.actions.act_window">
+        <field name="name">أوامر العمل</field>
+        <field name="res_model">unified.contract.work.order</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                إضافة أمر عمل جديد!
+            </p>
+            <p>
+                قم بإنشاء وتتبع أوامر العمل ومتابعة مرحلة الإسناد والتصاريح والتنفيذ والإغلاق برقم استلام 155 وشهادة الإنجاز والفوترة.
+            </p>
+        </field>
+    </record>
+
+    <!-- Work Order Stage Views -->
+    <record id="view_unified_contract_work_order_stage_tree" model="ir.ui.view">
+        <field name="name">unified.contract.work.order.stage.tree</field>
+        <field name="model">unified.contract.work.order.stage</field>
+        <field name="arch" type="xml">
+            <tree string="مراحل أوامر العمل" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="stage_progress"/>
+                <field name="fold"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_work_order_stages" model="ir.actions.act_window">
+        <field name="name">مراحل أوامر العمل</field>
+        <field name="res_model">unified.contract.work.order.stage</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

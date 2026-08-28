@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Main App Root Menu -->
+    <menuitem id="menu_unified_contract_project_root"
+              name="مشاريع العقد الموحد"
+              web_icon="ao_unified_contract_project,static/description/icon.png"
+              sequence="10"
+              groups="group_unified_contract_user"/>
+
+    <!-- 1. المشاريع -->
+    <menuitem id="menu_unified_contract_projects"
+              name="المشاريع"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_project"
+              sequence="1"/>
+
+    <!-- 2. أوامر العمل -->
+    <menuitem id="menu_unified_contract_work_orders"
+              name="أوامر العمل"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_work_orders"
+              sequence="2"/>
+
+    <!-- 3. الإشعارات -->
+    <menuitem id="menu_unified_contract_notifications"
+              name="الإشعارات"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_notification"
+              sequence="3"/>
+
+    <!-- 4. التقارير -->
+    <menuitem id="menu_unified_contract_reports"
+              name="التقارير"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_work_orders"
+              sequence="4"/>
+
+    <!-- 5. التهيئة والإعدادات -->
+    <menuitem id="menu_unified_contract_config"
+              name="التهيئة والإعدادات"
+              parent="menu_unified_contract_project_root"
+              sequence="5"
+              groups="group_unified_contract_manager"/>
+
+    <!-- مراحل المشاريع -->
+    <menuitem id="menu_unified_contract_stages"
+              name="مراحل المشاريع"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_stages"
+              sequence="1"/>
+
+    <!-- مراحل أوامر العمل -->
+    <menuitem id="menu_unified_contract_work_order_stages"
+              name="مراحل أوامر العمل"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_work_order_stages"
+              sequence="2"/>
+
+    <!-- إدارة فريق العمل -->
+    <menuitem id="menu_unified_contract_teams"
+              name="إدارة فريق العمل"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_teams"
+              sequence="3"/>
+
+    <!-- المجموعات والصلاحيات -->
+    <menuitem id="menu_unified_contract_permission_profiles"
+              name="المجموعات والصلاحيات"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_permission_profiles"
+              sequence="4"/>
+
+    <!-- إعدادات مرحلة الإسناد والتصاريح -->
+    <menuitem id="menu_unified_contract_regions"
+              name="تعريف المناطق"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_region"
+              sequence="10"/>
+
+    <menuitem id="menu_unified_contract_districts"
+              name="تعريف الأحياء والمواقع"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_district"
+              sequence="11"/>
+
+    <menuitem id="menu_unified_contract_stations"
+              name="تعريف المحطات"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_station"
+              sequence="12"/>
+
+    <menuitem id="menu_unified_contract_departments"
+              name="تعريف الأقسام والإدارات"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_department"
+              sequence="13"/>
+
+    <menuitem id="menu_unified_contract_work_order_types"
+              name="أنواع أوامر العمل"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_work_order_type"
+              sequence="14"/>
+
+    <menuitem id="menu_unified_contract_work_order_categories"
+              name="تصنيفات أوامر العمل"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_work_order_category"
+              sequence="15"/>
+
+    <menuitem id="menu_unified_contract_permit_statuses"
+              name="حالات التصاريح"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_permit_status"
+              sequence="16"/>
+
+    <!-- إدارة التنبيهات -->
+    <menuitem id="menu_unified_contract_alert_settings"
+              name="إدارة التنبيهات"
+              parent="menu_unified_contract_config"
+              action="action_unified_contract_alert_setting"
+              sequence="100"/>
+
+</odoo>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="ao_unified_contract_project.UnifiedContractRightSidebar">
+        <div class="o_ao_unified_sidebar">
+            <div class="o_ao_unified_sidebar_header">
+                <span class="header_title"><i class="fa fa-cubes me-1"/> مشاريع العقد الموحد</span>
+                <span class="o_ao_unified_sidebar_toggle" t-on-click="toggleSidebar">
+                    <i t-att-class="state.isCollapsed ? 'fa fa-chevron-left' : 'fa fa-chevron-right'"/>
+                </span>
+            </div>
+            <ul class="o_ao_unified_sidebar_menu">
+                <li class="o_ao_unified_sidebar_item" t-on-click="() => this.selectMenu('action_unified_contract_project')">
+                    <i class="fa fa-briefcase"/>
+                    <span class="item_text">جميع المشاريع</span>
+                </li>
+
+                <li class="o_ao_unified_sidebar_item" t-on-click="() => this.selectMenu('action_unified_contract_work_orders')">
+                    <i class="fa fa-tasks"/>
+                    <span class="item_text">أوامر العمل والمهام</span>
+                </li>
+
+                <ul class="o_ao_unified_sidebar_submenu">
+                    <li class="o_ao_unified_sidebar_subitem" t-on-click="() => this.selectMenu('action_unified_contract_work_order_stages')">
+                        <i class="fa fa-step-forward me-1"/>
+                        <span class="item_text">المراحل</span>
+                    </li>
+                </ul>
+
+                <li class="o_ao_unified_sidebar_item" t-on-click="() => this.selectMenu('action_unified_contract_collaborator')">
+                    <i class="fa fa-users"/>
+                    <span class="item_text">فريق العمل والمتعاونين</span>
+                </li>
+
+                <li class="o_ao_unified_sidebar_item" t-on-click="() => this.selectMenu('action_unified_contract_stages')">
+                    <i class="fa fa-tags"/>
+                    <span class="item_text">مراحل المشاريع</span>
+                </li>
+            </ul>
+        </div>
+    </t>
+
+</templates>

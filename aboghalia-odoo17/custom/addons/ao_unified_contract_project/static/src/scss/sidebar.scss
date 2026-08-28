@@ -1,0 +1,101 @@
+/* Unified Contract Project Clean Scoped Sidebar Styles */
+
+/* Scoped layout only for unified contract sidebar container */
+.o_ao_unified_sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #ffffff;
+    border-left: 1px solid #dee2e6;
+    display: flex;
+    flex-direction: column;
+    box-shadow: -2px 0 6px rgba(0, 0, 0, 0.03);
+    z-index: 10;
+    transition: all 0.2s ease-in-out;
+}
+
+.o_ao_unified_sidebar.collapsed {
+    width: 50px;
+    min-width: 50px;
+}
+
+.o_ao_unified_sidebar_header {
+    padding: 12px 14px;
+    background: #1b2a47;
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.o_ao_unified_sidebar.collapsed .header_title {
+    display: none;
+}
+
+.o_ao_unified_sidebar_toggle {
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    padding: 2px 6px;
+}
+
+.o_ao_unified_sidebar_menu {
+    list-style: none;
+    padding: 6px 0;
+    margin: 0;
+    overflow-y: auto;
+}
+
+.o_ao_unified_sidebar_item {
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    color: #212529;
+    font-size: 13px;
+    border-right: 3px solid transparent;
+    transition: background 0.15s ease;
+}
+
+.o_ao_unified_sidebar_item i {
+    width: 20px;
+    font-size: 14px;
+    margin-left: 8px;
+    text-align: center;
+    color: #714b67;
+}
+
+.o_ao_unified_sidebar_item:hover {
+    background-color: #f8f9fa;
+    color: #714b67;
+}
+
+.o_ao_unified_sidebar.collapsed .item_text {
+    display: none;
+}
+
+.o_ao_unified_sidebar_submenu {
+    list-style: none;
+    padding-right: 18px;
+    margin: 0;
+    background-color: #f8f9fa;
+}
+
+.o_ao_unified_sidebar.collapsed .o_ao_unified_sidebar_submenu {
+    display: none;
+}
+
+.o_ao_unified_sidebar_subitem {
+    padding: 6px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    color: #495057;
+    display: flex;
+    align-items: center;
+}
+
+.o_ao_unified_sidebar_subitem:hover {
+    color: #714b67;
+    font-weight: bold;
+}

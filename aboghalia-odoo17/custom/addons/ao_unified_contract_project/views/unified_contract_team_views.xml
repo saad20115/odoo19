@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Unified Contract Team Form View -->
+    <record id="view_unified_contract_team_form" model="ir.ui.view">
+        <field name="name">unified.contract.team.form</field>
+        <field name="model">unified.contract.team</field>
+        <field name="arch" type="xml">
+            <form string="إدارة فريق العمل">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" string="اسم فريق العمل"/>
+                        <h1>
+                            <field name="name" placeholder="مثال: فريق المعاينة والتصاريح - حي المروة"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="بيانات الفريق والمرحلة">
+                            <field name="project_id"/>
+                            <field name="stage_id"/>
+                            <field name="work_order_stage_id"/>
+                            <field name="leader_id" placeholder="اختر مدير الفريق..."/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="أعضاء الفريق والمتعاونين والصلاحيات">
+                            <field name="member_ids" widget="many2many_tags" placeholder="اختر الأعضاء والموظفين..."/>
+                            <field name="permission_profile_id" placeholder="اختر بروفايل الصلاحية الجاهز..."/>
+                            <field name="member_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="نطاق العمل والتوجيهات" name="notes_page">
+                            <field name="notes" placeholder="سجل نطاق وتوجيهات هذا الفريق..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Unified Contract Team Tree View -->
+    <record id="view_unified_contract_team_tree" model="ir.ui.view">
+        <field name="name">unified.contract.team.tree</field>
+        <field name="model">unified.contract.team</field>
+        <field name="arch" type="xml">
+            <tree string="إدارة فريق العمل">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="project_id"/>
+                <field name="stage_id"/>
+                <field name="leader_id"/>
+                <field name="member_ids" widget="many2many_tags"/>
+                <field name="member_count"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Team Action -->
+    <record id="action_unified_contract_teams" model="ir.actions.act_window">
+        <field name="name">إدارة فريق العمل</field>
+        <field name="res_model">unified.contract.team</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                إضافة فريق عمل جديد!
+            </p>
+            <p>
+                قم بتحديد فرق العمل المرتبطة بمراحل المشروع وتعيين مدراء الفرق والموظفين والأعضاء وتطبيق مجموعات الصلاحيات.
+            </p>
+        </field>
+    </record>
+
+</odoo>

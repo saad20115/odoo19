@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+
+        <!-- Category -->
+        <record id="category_unified_contract_project" model="ir.module.category">
+            <field name="name">إدارة مشاريع العقد الموحد (Unified Contract Projects)</field>
+            <field name="description">إدارة الصلاحيات والمجموعات الخاصة بمشاريع العقود الموحدة.</field>
+            <field name="sequence">15</field>
+        </record>
+
+        <!-- User Group -->
+        <record id="group_unified_contract_user" model="res.groups">
+            <field name="name">مستخدم مشاريع العقد الموحد (User)</field>
+            <field name="category_id" ref="category_unified_contract_project"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <!-- Manager Group -->
+        <record id="group_unified_contract_manager" model="res.groups">
+            <field name="name">مدير مشاريع العقد الموحد (Manager)</field>
+            <field name="category_id" ref="category_unified_contract_project"/>
+            <field name="implied_ids" eval="[(4, ref('group_unified_contract_user'))]"/>
+        </record>
+
+        <!-- Automatically grant internal users access -->
+        <record id="base.group_user" model="res.groups">
+            <field name="implied_ids" eval="[(4, ref('group_unified_contract_user'))]"/>
+        </record>
+
+        <!-- Multi-Company Record Rules -->
+        <record id="rule_unified_contract_project_multi_company" model="ir.rule">
+            <field name="name">Unified Contract Project Multi-Company</field>
+            <field name="model_id" ref="model_unified_contract_project"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="rule_unified_contract_work_order_multi_company" model="ir.rule">
+            <field name="name">Unified Contract Work Order Multi-Company</field>
+            <field name="model_id" ref="model_unified_contract_work_order"/>
+            <field name="global" eval="True"/>
+            <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+        </record>
+
+    </data>
+</odoo>

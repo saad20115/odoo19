@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Stage Revert Wizard Form View -->
+    <record id="view_unified_contract_stage_revert_wizard_form" model="ir.ui.view">
+        <field name="name">unified.contract.stage.revert.wizard.form</field>
+        <field name="model">unified.contract.stage.revert.wizard</field>
+        <field name="arch" type="xml">
+            <form string="إرجاع لمرحلة سابقة">
+                <sheet>
+                    <group>
+                        <field name="res_model" invisible="1"/>
+                        <field name="res_id" invisible="1"/>
+                        <field name="stage_id" string="المرحلة السابقة المراد الإرجاع إليها" invisible="res_model != 'unified.contract.work.order'" required="res_model == 'unified.contract.work.order'" options="{'no_create': True, 'no_open': True}"/>
+                        <field name="project_stage_id" string="المرحلة السابقة المراد الإرجاع إليها" invisible="res_model != 'unified.contract.project'" required="res_model == 'unified.contract.project'" options="{'no_create': True, 'no_open': True}"/>
+                    </group>
+                    <group>
+                        <field name="reason" placeholder="سجل سبب وملاحظات إرجاع السجل لمرحلة سابقة..."/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_confirm_revert" string="تأكيد الإرجاع ⬅️" type="object" class="btn-primary"/>
+                    <button string="إلغاء" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+</odoo>

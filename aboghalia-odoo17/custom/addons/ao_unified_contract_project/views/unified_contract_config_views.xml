@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- 1. Region Views (المناطق) -->
+    <record id="view_unified_contract_region_tree" model="ir.ui.view">
+        <field name="name">unified.contract.region.tree</field>
+        <field name="model">unified.contract.region</field>
+        <field name="arch" type="xml">
+            <tree string="المناطق" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_region" model="ir.actions.act_window">
+        <field name="name">تعريف المناطق</field>
+        <field name="res_model">unified.contract.region</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 2. District Views (الأحياء والمواقع) -->
+    <record id="view_unified_contract_district_tree" model="ir.ui.view">
+        <field name="name">unified.contract.district.tree</field>
+        <field name="model">unified.contract.district</field>
+        <field name="arch" type="xml">
+            <tree string="الأحياء والمواقع" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="region_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_district" model="ir.actions.act_window">
+        <field name="name">تعريف الأحياء والمواقع</field>
+        <field name="res_model">unified.contract.district</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 3. Station Views (المحطات) -->
+    <record id="view_unified_contract_station_tree" model="ir.ui.view">
+        <field name="name">unified.contract.station.tree</field>
+        <field name="model">unified.contract.station</field>
+        <field name="arch" type="xml">
+            <tree string="المحطات" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+                <field name="district_id"/>
+                <field name="region_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_station" model="ir.actions.act_window">
+        <field name="name">تعريف المحطات</field>
+        <field name="res_model">unified.contract.station</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 4. Department Views (الأقسام والإدارات) -->
+    <record id="view_unified_contract_department_tree" model="ir.ui.view">
+        <field name="name">unified.contract.department.tree</field>
+        <field name="model">unified.contract.department</field>
+        <field name="arch" type="xml">
+            <tree string="الأقسام والإدارات" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_department" model="ir.actions.act_window">
+        <field name="name">تعريف الأقسام والإدارات</field>
+        <field name="res_model">unified.contract.department</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 5. Work Order Type Views (أنواع أوامر العمل) -->
+    <record id="view_unified_contract_work_order_type_tree" model="ir.ui.view">
+        <field name="name">unified.contract.work.order.type.tree</field>
+        <field name="model">unified.contract.work.order.type</field>
+        <field name="arch" type="xml">
+            <tree string="أنواع أوامر العمل" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_work_order_type" model="ir.actions.act_window">
+        <field name="name">أنواع أوامر العمل</field>
+        <field name="res_model">unified.contract.work.order.type</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 6. Work Order Category Views (تصنيفات أوامر العمل) -->
+    <record id="view_unified_contract_work_order_category_tree" model="ir.ui.view">
+        <field name="name">unified.contract.work.order.category.tree</field>
+        <field name="model">unified.contract.work.order.category</field>
+        <field name="arch" type="xml">
+            <tree string="تصنيفات أوامر العمل" editable="bottom">
+                <field name="name"/>
+                <field name="code"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_work_order_category" model="ir.actions.act_window">
+        <field name="name">تصنيفات أوامر العمل</field>
+        <field name="res_model">unified.contract.work.order.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 7. Permit Status Views (حالات التصاريح) -->
+    <record id="view_unified_contract_permit_status_tree" model="ir.ui.view">
+        <field name="name">unified.contract.permit.status.tree</field>
+        <field name="model">unified.contract.permit.status</field>
+        <field name="arch" type="xml">
+            <tree string="حالات التصاريح" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="code"/>
+                <field name="description"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_permit_status" model="ir.actions.act_window">
+        <field name="name">تعريف حالات التصاريح</field>
+        <field name="res_model">unified.contract.permit.status</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <!-- 8. Alert Settings View (إدارة التنبيهات) -->
+    <record id="view_unified_contract_alert_setting_form" model="ir.ui.view">
+        <field name="name">unified.contract.alert.setting.form</field>
+        <field name="model">unified.contract.alert.setting</field>
+        <field name="arch" type="xml">
+            <form string="إدارة التنبيهات وإعدادات النظام">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" readonly="1"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="قواعد وضوابط رقم أمر العمل 🔢">
+                            <field name="wo_number_length"/>
+                            <field name="wo_number_numeric_only" widget="boolean_toggle"/>
+                            <field name="wo_number_unique" widget="boolean_toggle"/>
+                        </group>
+                        <group string="قواعد وضوابط رقم التصريح 📜">
+                            <field name="permit_number_length"/>
+                            <field name="permit_number_numeric_only" widget="boolean_toggle"/>
+                            <field name="permit_number_unique" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group string="إعدادات تنبيهات التصاريح 🔔">
+                            <field name="permit_alert_days_before"/>
+                            <field name="permit_alert_max_count"/>
+                        </group>
+                        <group string="إعدادات تنبيهات التنفيذ والبرنامج ⚙️">
+                            <field name="programming_alert_days_before"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_alert_setting" model="ir.actions.server">
+        <field name="name">إدارة التنبيهات</field>
+        <field name="model_id" ref="model_unified_contract_alert_setting"/>
+        <field name="state">code</field>
+        <field name="code">
+action = env['unified.contract.alert.setting'].action_open_alert_settings()
+        </field>
+    </record>
+
+    <!-- 9. Notification Views (الإشعارات) -->
+    <record id="view_unified_contract_notification_tree" model="ir.ui.view">
+        <field name="name">unified.contract.notification.tree</field>
+        <field name="model">unified.contract.notification</field>
+        <field name="arch" type="xml">
+            <tree string="الإشعارات">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="work_order_id"/>
+                <field name="user_id"/>
+                <field name="notification_type" widget="badge"/>
+                <field name="is_read"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_unified_contract_notification_form" model="ir.ui.view">
+        <field name="name">unified.contract.notification.form</field>
+        <field name="model">unified.contract.notification</field>
+        <field name="arch" type="xml">
+            <form string="تفاصيل الإشعار">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="work_order_id"/>
+                            <field name="user_id"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="notification_type" widget="badge"/>
+                            <field name="is_read"/>
+                        </group>
+                    </group>
+                    <group string="محتوى الإشعار">
+                        <field name="message"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_unified_contract_notification" model="ir.actions.act_window">
+        <field name="name">الإشعارات والتنبيهات</field>
+        <field name="res_model">unified.contract.notification</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+</odoo>

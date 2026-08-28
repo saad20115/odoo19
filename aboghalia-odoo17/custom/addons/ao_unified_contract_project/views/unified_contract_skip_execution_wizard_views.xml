@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_unified_contract_skip_execution_wizard_form_v5" model="ir.ui.view">
+        <field name="name">unified.contract.skip.execution.wizard.form.v5</field>
+        <field name="model">unified.contract.skip.execution.wizard</field>
+        <field name="arch" type="xml">
+            <form string="تنبيه - التنفيذ غير مكتمل">
+                <sheet>
+                    <field name="work_order_id" invisible="1"/>
+                    <field name="target_stage_id" invisible="1"/>
+                    <field name="target_stage_name" invisible="1"/>
+                    <field name="execution_progress" invisible="1"/>
+                    <field name="warning_message" invisible="1"/>
+
+                    <div class="alert alert-danger text-center fw-bold fs-5 mb-3" role="alert">
+                        <i class="fa fa-exclamation-triangle me-2"></i> التنفيذ غير مكتمل!
+                    </div>
+
+                    <div class="alert alert-warning text-center fw-bold p-4 fs-5" role="alert">
+                        نسبة إنجاز التنفيذ الحالية لم تصل إلى 100%.<br/><br/>
+                        هل ترغب في تجاوز وتخطي مرحلة التنفيذ والانتقال فوراً إلى <u>مرحلة الإغلاق</u>؟<br/><br/>
+                        <small class="text-danger fw-normal fs-6">(سيتم تغيير حالة إنجاز التنفيذ تلقائياً إلى: تم التخطي 🔴)</small>
+                    </div>
+                </sheet>
+
+                <footer>
+                    <button name="action_confirm_skip" string="تخطي والتجاوز إلى مرحلة الإغلاق ⏩" type="object" class="btn-danger fw-bold fs-5 px-4"/>
+                    <button string="إلغاء والتراجُع ❌" class="btn-secondary fs-5 px-4" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>
