@@ -32,32 +32,32 @@
                     <field name="show_stage_4_details" invisible="1"/>
                     <field name="show_stage_5_details" invisible="1"/>
 
-                    <!-- Top Prominent Title Area with Work Order Number, Team ID, Overall Progress, and Work Order State side-by-side -->
-                    <div class="oe_title mb-4">
-                        <div class="row align-items-center">
-                            <div class="col-md-4">
-                                <label for="work_order_number" string="رقم أمر العمل"/>
-                                <h1>
-                                    <field name="work_order_number" placeholder="أدخل رقم أمر العمل (مثال: 100020260001)"/>
-                                </h1>
+                    <!-- Top Prominent Title Area with Work Order Number, Team ID, Overall Progress, and Work Order State evenly distributed across 100% width -->
+                    <div class="card p-3 mb-4 rounded-3 border bg-white shadow-sm">
+                        <div class="row align-items-center g-3">
+                            <div class="col-md-3 col-12">
+                                <label for="work_order_number" string="رقم أمر العمل ❓" class="fw-bold text-muted small d-block mb-1"/>
+                                <h2 class="m-0 fw-bold text-dark">
+                                    <field name="work_order_number" placeholder="أدخل رقم أمر العمل"/>
+                                </h2>
                             </div>
-                            <div class="col-md-3 border-start ps-3">
-                                <label for="team_id" string="فريق العمل المسؤول عن المرحلة 👥" class="fw-bold text-primary"/>
-                                <h3>
+                            <div class="col-md-4 col-12 border-start ps-md-3">
+                                <label for="team_id" string="فريق العمل المسؤول عن المرحلة 👥" class="fw-bold text-primary small d-block mb-1"/>
+                                <h4 class="m-0 text-wrap" style="white-space: normal !important;">
                                     <field name="team_id" options="{'no_create_edit': True}" readonly="not can_edit_assignment" class="fw-bold text-dark"/>
-                                </h3>
+                                </h4>
                             </div>
-                            <div class="col-md-3 border-start ps-3">
-                                <label for="progress" string="نسبة الإنجاز الإجمالية 📊" class="fw-bold text-primary"/>
-                                <div class="mt-2">
+                            <div class="col-md-3 col-12 border-start ps-md-3">
+                                <label for="progress" string="نسبة الإنجاز الإجمالية 📊" class="fw-bold text-primary small d-block mb-1"/>
+                                <div class="mt-1">
                                     <field name="progress" widget="progressbar"/>
                                 </div>
                             </div>
-                            <div class="col-md-2 border-start ps-3">
-                                <label for="state" string="حالة أمر العمل 📌" class="fw-bold text-primary"/>
-                                <h3>
+                            <div class="col-md-2 col-12 border-start ps-md-3 text-center">
+                                <label for="state" string="حالة أمر العمل 📌" class="fw-bold text-primary small d-block mb-1"/>
+                                <h4 class="m-0 mt-1">
                                     <field name="state" widget="badge" decoration-warning="state == 'draft'" decoration-info="state == 'in_progress'" decoration-danger="state in ('late', 'cancel')" decoration-success="state == 'done'"/>
-                                </h3>
+                                </h4>
                             </div>
                         </div>
                     </div>
