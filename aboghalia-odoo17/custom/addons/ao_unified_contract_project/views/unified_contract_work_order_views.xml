@@ -211,9 +211,32 @@
                             <field name="restoration_status" widget="radio" options="{'horizontal': True}"/>
                         </group>
                         <group string="استلام الأصول والشهادات 📄">
-                            <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
-                            <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
-                            <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
+                            <label for="asset_receipt_207" string="استلام الأصول (إجراء 207)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-2">
+                                <field name="asset_receipt_207" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="asset_receipt_207 != 'yes'" class="d-inline-flex align-items-center ms-3">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 207:</span>
+                                    <field name="asset_receipt_207_date" class="oe_inline fw-bold text-dark"/>
+                                </div>
+                            </div>
+
+                            <label for="asset_receipt_201" string="استلام الأصول (إجراء 201)" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-2">
+                                <field name="asset_receipt_201" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="asset_receipt_201 != 'yes'" class="d-inline-flex align-items-center ms-3">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء 201:</span>
+                                    <field name="asset_receipt_201_date" class="oe_inline fw-bold text-dark"/>
+                                </div>
+                            </div>
+
+                            <label for="completion_certificate_status" string="شهادة الإتمام؟" class="fw-bold text-nowrap" style="white-space: nowrap !important;"/>
+                            <div class="o_row d-flex align-items-center flex-wrap gap-2">
+                                <field name="completion_certificate_status" widget="radio" options="{'horizontal': True}"/>
+                                <div invisible="completion_certificate_status != 'yes'" class="d-inline-flex align-items-center ms-3">
+                                    <span class="text-muted small me-2 text-nowrap fw-bold">تاريخ إجراء شهادة الإتمام:</span>
+                                    <field name="completion_certificate_date" class="oe_inline fw-bold text-dark"/>
+                                </div>
+                            </div>
                         </group>
                         <group string="تاريخ البرنامج والتنبيهات 📅">
                             <field name="programming_date"/>

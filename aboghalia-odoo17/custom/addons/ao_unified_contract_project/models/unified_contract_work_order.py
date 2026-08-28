@@ -586,12 +586,24 @@ class UnifiedContractWorkOrder(models.Model):
     asset_receipt_207 = fields.Selection([
         ('no', 'لا'),
         ('yes', 'نعم'),
-    ], string='استلام الأصول ( إجراء 207 )', default='no', required=True, tracking=True)
+    ], string='استلام الأصول (إجراء 207)', default='no', required=True, tracking=True)
+
+    asset_receipt_207_date = fields.Date(
+        string='تاريخ إجراء 207',
+        tracking=True,
+        help='تاريخ تنفيذ إجراء استلام الأصول 207'
+    )
 
     asset_receipt_201 = fields.Selection([
         ('no', 'لا'),
         ('yes', 'نعم'),
-    ], string='استلام الأصول ( إجراء 201 )', default='no', required=True, tracking=True)
+    ], string='استلام الأصول (إجراء 201)', default='no', required=True, tracking=True)
+
+    asset_receipt_201_date = fields.Date(
+        string='تاريخ إجراء 201',
+        tracking=True,
+        help='تاريخ تنفيذ إجراء استلام الأصول 201'
+    )
 
     programming_date = fields.Date(
         string='تاريخ البرنامج',
@@ -610,9 +622,21 @@ class UnifiedContractWorkOrder(models.Model):
         ('yes', 'نعم'),
     ], string='شهادة الإتمام؟', default='no', required=True, tracking=True)
 
+    @api.onchange('asset_receipt_207')
+    def _onchange_asset_receipt_207_set_date(self):
+        if self.asset_receipt_207 == 'yes' and not self.asset_receipt_207_date:
+            self.asset_receipt_207_date = fields.Date.context_today(self)
+
+    @api.onchange('asset_receipt_201')
+    def _onchange_asset_receipt_201_set_date(self):
+        if self.asset_receipt_201 == 'yes' and not self.asset_receipt_201_date:
+            self.asset_receipt_201_date = fields.Date.context_today(self)
+
     @api.onchange('completion_certificate_status')
     def _onchange_completion_certificate_status_update_alert(self):
         if self.completion_certificate_status == 'yes':
+            if not self.completion_certificate_date:
+                self.completion_certificate_date = fields.Date.context_today(self)
             self.programming_alert_status = 'executed'
             if self.id:
                 notifications = self.env['unified.contract.notification'].search([
@@ -1211,7 +1235,7 @@ class UnifiedContractWorkOrder(models.Model):
         current_user_id = self.env.user.id
         stage_1_fields = {'project_id', 'contractor_id', 'region_id', 'district_id', 'station_id', 'department_id', 'work_order_type_id', 'work_order_category_id', 'assignment_date', 'estimated_amount', 'team_id', 'coordinate_x', 'coordinate_y'}
         stage_2_fields = {'is_scouting_completed', 'has_scouting_obstacles', 'scouting_obstacles_notes', 'permit_status_id', 'permit_number', 'permit_start_date', 'permit_end_date'}
-        stage_3_fields = {'execution_start_date', 'execution_end_date', 'excavation_quantity', 'extension_quantity', 'equipment_count', 'execution_progress', 'restoration_status', 'asset_receipt_207', 'asset_receipt_201', 'programming_date', 'completion_certificate_status', 'asset_details', 'programming_notes', 'operation_status'}
+        stage_3_fields = {'execution_start_date', 'execution_end_date', 'excavation_quantity', 'extension_quantity', 'equipment_count', 'execution_progress', 'restoration_status', 'asset_receipt_207', 'asset_receipt_207_date', 'asset_receipt_201', 'asset_receipt_201_date', 'programming_date', 'completion_certificate_status', 'asset_details', 'programming_notes', 'operation_status'}
         stage_4_fields = {'receipt_155_number', 'receipt_155_date', 'completion_certificate_no', 'completion_certificate_date', 'closing_attachment_ids'}
         stage_5_fields = {'invoice_number', 'invoice_amount', 'payment_status'}
 
