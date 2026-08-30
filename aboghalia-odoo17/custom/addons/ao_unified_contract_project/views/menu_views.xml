@@ -15,40 +15,47 @@
               action="action_unified_contract_project"
               sequence="1"/>
 
-    <!-- 2. أوامر العمل -->
+    <!-- 2. أوامر عمل الإنشاءات (تبويب رئيسي) -->
     <menuitem id="menu_unified_contract_work_orders"
-              name="أوامر العمل"
+              name="أوامر عمل الإنشاءات"
               parent="menu_unified_contract_project_root"
               action="action_unified_contract_work_orders"
               sequence="2"/>
 
-    <!-- 3. خريطة أوامر العمل التفاعلية 🗺️📍 -->
+    <!-- 3. أوامر عمل الصيانة (تبويب رئيسي) -->
+    <menuitem id="menu_unified_contract_work_orders_maintenance"
+              name="أوامر عمل الصيانة"
+              parent="menu_unified_contract_project_root"
+              action="action_unified_contract_work_orders_maintenance"
+              sequence="3"/>
+
+    <!-- 4. خريطة أوامر العمل التفاعلية 🗺️📍 (تبويب رئيسي) -->
     <menuitem id="menu_unified_contract_work_order_map"
               name="خريطة أوامر العمل 🗺️"
               parent="menu_unified_contract_project_root"
               action="action_unified_contract_work_order_map_backend"
-              sequence="3"/>
+              sequence="4"/>
 
-    <!-- 4. الفواتير والتحصيل -->
+    <!-- 5. الفواتير والتحصيل -->
     <menuitem id="menu_unified_contract_invoices"
               name="الفواتير والتحصيل"
               parent="menu_unified_contract_project_root"
               action="action_unified_contract_invoices"
-              sequence="4"/>
+              sequence="5"/>
 
-    <!-- 4. الإشعارات -->
+    <!-- 6. الإشعارات -->
     <menuitem id="menu_unified_contract_notifications"
               name="الإشعارات"
               parent="menu_unified_contract_project_root"
               action="action_unified_contract_notification"
-              sequence="4"/>
+              sequence="6"/>
 
-    <!-- 5. التقارير والمؤشرات -->
+    <!-- 7. التقارير والمؤشرات -->
     <menuitem id="menu_unified_contract_reports"
               name="التقارير"
               parent="menu_unified_contract_project_root"
               action="action_unified_contract_analytics_dashboard"
-              sequence="5"/>
+              sequence="7"/>
 
     <menuitem id="menu_unified_contract_report_analytics_dashboard"
               name="لوحة المؤشرات والتحليلات الشاملة 📊📈"
@@ -74,11 +81,11 @@
               action="action_unified_contract_invoices_dashboard"
               sequence="3"/>
 
-    <!-- 5. التهيئة والإعدادات -->
+    <!-- 8. التهيئة والإعدادات -->
     <menuitem id="menu_unified_contract_config"
               name="التهيئة والإعدادات"
               parent="menu_unified_contract_project_root"
-              sequence="5"
+              sequence="8"
               groups="group_unified_contract_manager"/>
 
     <!-- الإعدادات العامة ⚙️ -->
