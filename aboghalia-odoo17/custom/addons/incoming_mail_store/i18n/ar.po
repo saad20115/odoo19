@@ -1,0 +1,524 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * incoming_mail_store
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-22 00:00+0000\n"
+"PO-Revision-Date: 2026-06-22 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: incoming_mail_store
+#: model:ir.module.module,summary:incoming_mail_store
+msgid "Store incoming emails from multiple providers in a dedicated model."
+msgstr "تخزين رسائل البريد الوارد من عدة مزودين في نموذج مخصص."
+
+#. module: incoming_mail_store
+#: model:ir.module.module,shortdesc:incoming_mail_store
+msgid "Incoming Mail Store"
+msgstr "مخزن البريد الوارد"
+
+#. module: incoming_mail_store
+#: model:ir.model,name:incoming_mail_store.model_incoming_mail
+msgid "Incoming Mail"
+msgstr "بريد وارد"
+
+#. module: incoming_mail_store
+#: model:ir.model,name:incoming_mail_store.model_fetchmail_fetch_wizard
+msgid "Fetch Emails by Date Range"
+msgstr "جلب رسائل البريد حسب نطاق التاريخ"
+
+#. module: incoming_mail_store
+#: model:ir.model,name:incoming_mail_store.model_fetchmail_fetch_job
+msgid "Fetch Date Range Job"
+msgstr "مهمة جلب نطاق التاريخ"
+
+#. module: incoming_mail_store
+#: model:ir.model,name:incoming_mail_store.model_incoming_mail_reply_wizard
+msgid "Reply to Incoming Mail"
+msgstr "الرد على البريد الوارد"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__name
+msgid "Subject"
+msgstr "الموضوع"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__email_from
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail_reply_wizard__email_from
+msgid "From"
+msgstr "من"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__email_to
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail_reply_wizard__email_to
+msgid "To"
+msgstr "إلى"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__email_cc
+msgid "CC"
+msgstr "نسخة"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__received_date
+msgid "Received On"
+msgstr "تاريخ الاستلام"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__fetchmail_server_id
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__fetchmail_server_id
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_wizard__fetchmail_server_id
+msgid "Incoming Mail Server"
+msgstr "خادم البريد الوارد"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__provider
+msgid "Provider"
+msgstr "مزود البريد"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__mailbox
+msgid "Mailbox"
+msgstr "صندوق البريد"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__state
+msgid "Status"
+msgstr "الحالة"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail__company_id
+msgid "Company"
+msgstr "الشركة"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_server__provider
+msgid "Email Provider"
+msgstr "مزود البريد الإلكتروني"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_wizard__date_from
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__date_from
+msgid "From"
+msgstr "من تاريخ"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_wizard__date_to
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__date_to
+msgid "To"
+msgstr "إلى تاريخ"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__total_found
+msgid "Emails Found"
+msgstr "رسائل تم العثور عليها"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__imported_count
+msgid "Imported"
+msgstr "تم استيرادها"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__skipped_count
+msgid "Already Imported"
+msgstr "مستوردة مسبقاً"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__failed_count
+msgid "Failed"
+msgstr "فشلت"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_fetchmail_fetch_job__result_message
+msgid "Result"
+msgstr "النتيجة"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail_reply_wizard__incoming_mail_id
+msgid "Incoming Mail"
+msgstr "بريد وارد"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail_reply_wizard__mail_server_id
+msgid "Outgoing Mail Server"
+msgstr "خادم البريد الصادر"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail_reply_wizard__subject
+msgid "Subject"
+msgstr "الموضوع"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,field_description:incoming_mail_store.field_incoming_mail_reply_wizard__body
+msgid "Message"
+msgstr "الرسالة"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__incoming_mail__state__new
+msgid "New"
+msgstr "جديد"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__incoming_mail__state__in_progress
+msgid "In Progress"
+msgstr "قيد المعالجة"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__incoming_mail__state__done
+msgid "Done"
+msgstr "منتهي"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__incoming_mail__state__archived
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_server__provider__zoho
+msgid "Zoho"
+msgstr "زوهو"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_server__provider__hostinger
+msgid "Hostinger"
+msgstr "هوستنجر"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_server__provider__gmail
+msgid "Gmail"
+msgstr "جيميل"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_server__provider__outlook
+msgid "Outlook / Microsoft 365"
+msgstr "أوتلوك / مايكروسوفت 365"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_server__provider__other
+msgid "Other"
+msgstr "أخرى"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_fetch_job__state__pending
+msgid "Pending"
+msgstr "قيد الانتظار"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_fetch_job__state__running
+msgid "Running"
+msgstr "قيد التشغيل"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_fetch_job__state__done
+msgid "Done"
+msgstr "منتهي"
+
+#. module: incoming_mail_store
+#: model:ir.model.fields.selection,name:incoming_mail_store.selection__fetchmail_fetch_job__state__failed
+msgid "Failed"
+msgstr "فشل"
+
+#. module: incoming_mail_store
+#: model:ir.actions.act_window,name:incoming_mail_store.action_incoming_mail
+#: model:ir.ui.menu,name:incoming_mail_store.menu_incoming_mail_root
+msgid "Incoming Mails"
+msgstr "رسائل البريد الوارد"
+
+#. module: incoming_mail_store
+#: model:ir.ui.menu,name:incoming_mail_store.menu_incoming_mail_inbox
+msgid "Inbox"
+msgstr "صندوق الوارد"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_form
+msgid "Incoming Mail"
+msgstr "بريد وارد"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_tree
+msgid "Incoming Mails"
+msgstr "رسائل البريد الوارد"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_form
+msgid "Reply by Email"
+msgstr "الرد بالبريد الإلكتروني"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_form
+msgid "Mark Done"
+msgstr "تحديد كمنتهي"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_form
+msgid "Archive"
+msgstr "أرشفة"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_form
+msgid "Email Details"
+msgstr "تفاصيل البريد"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_form
+msgid "Source"
+msgstr "المصدر"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_fetchmail_fetch_wizard_form
+msgid "Fetch Date Range"
+msgstr "جلب حسب نطاق التاريخ"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_fetchmail_fetch_wizard_form
+msgid "Fetch Emails"
+msgstr "جلب الرسائل"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_fetchmail_fetch_wizard_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_email_server_form_inherit_incoming_mail_store
+msgid "Fetch Date Range"
+msgstr "جلب حسب نطاق التاريخ"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_search
+msgid "In Progress"
+msgstr "قيد المعالجة"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_search
+msgid "Group By"
+msgstr "تجميع حسب"
+
+#. module: incoming_mail_store
+#: model_terms:ir.ui.view,arch_db:incoming_mail_store.view_incoming_mail_search
+msgid "Received Date"
+msgstr "تاريخ الاستلام"
+
+#. module: incoming_mail_store
+#: model:ir.actions.act_window,help:incoming_mail_store.action_incoming_mail
+msgid "Incoming emails from your configured mail servers will appear here."
+msgstr "ستظهر هنا رسائل البريد الوارد من خوادم البريد المُعدّة."
+
+#. module: incoming_mail_store
+#: model:ir.actions.act_window,help:incoming_mail_store.action_incoming_mail
+msgid "Configure each incoming mail server to create records on"
+msgstr "قم بضبط كل خادم بريد وارد لإنشاء سجلات على"
+
+#. module: incoming_mail_store
+#: model:ir.actions.act_window,help:incoming_mail_store.action_incoming_mail
+msgid "Incoming Mail"
+msgstr "بريد وارد"
+
+#. module: incoming_mail_store
+#: model:ir.actions.act_window,help:incoming_mail_store.action_incoming_mail
+msgid "in the \"Create a New Record\" field."
+msgstr "في حقل \"إنشاء سجل جديد\"."
+
+#. module: incoming_mail_store
+#: model:ir.cron,name:incoming_mail_store.ir_cron_fetchmail_date_range
+msgid "Incoming Mail: Fetch Date Range Jobs"
+msgstr "البريد الوارد: مهام جلب نطاق التاريخ"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_server.py:0
+msgid "Fetch Date Range"
+msgstr "جلب حسب نطاق التاريخ"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/fetchmail_fetch_wizard.py:0
+msgid "The start date must be before or equal to the end date."
+msgstr "يجب أن يكون تاريخ البداية قبل أو يساوي تاريخ النهاية."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/fetchmail_fetch_wizard.py:0
+msgid "Fetch started"
+msgstr "بدأ الجلب"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/fetchmail_fetch_wizard.py:0
+msgid "Fetching %(total)d email(s) from %(date_from)s to %(date_to)s in the background. You will be notified when it finishes."
+msgstr "جاري جلب %(total)d رسالة من %(date_from)s إلى %(date_to)s في الخلفية. سيتم إشعارك عند الانتهاء."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Server"
+msgstr "الخادم"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "%(server)s from %(date_from)s to %(date_to)s"
+msgstr "%(server)s من %(date_from)s إلى %(date_to)s"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Unexpected error while fetching emails. Check the server logs."
+msgstr "حدث خطأ غير متوقع أثناء جلب الرسائل. راجع سجلات الخادم."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Fetch by date range is only supported for IMAP servers."
+msgstr "جلب نطاق التاريخ مدعوم فقط لخوادم IMAP."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Please confirm the incoming mail server first."
+msgstr "يرجى تأكيد خادم البريد الوارد أولاً."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Set \"Create a New Record\" on this incoming mail server first."
+msgstr "يرجى ضبط \"إنشاء سجل جديد\" على خادم البريد الوارد أولاً."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "A fetch job is already running for server \"%(server)s\". Please wait until it finishes."
+msgstr "توجد مهمة جلب قيد التشغيل لخادم \"%(server)s\". يرجى الانتظار حتى تنتهي."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "No emails were found from %(date_from)s to %(date_to)s in mailbox %(mailbox)s."
+msgstr "لم يتم العثور على رسائل من %(date_from)s إلى %(date_to)s في صندوق البريد %(mailbox)s."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "All %(count)s email(s) from %(date_from)s to %(date_to)s are already imported in Odoo."
+msgstr "جميع %(count)s رسالة من %(date_from)s إلى %(date_to)s مستوردة مسبقاً في Odoo."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "The server must be a confirmed IMAP server."
+msgstr "يجب أن يكون الخادم خادم IMAP مؤكداً."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Connection or server error: %s"
+msgstr "خطأ في الاتصال أو الخادم: %s"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "No new emails imported. %(skipped)d email(s) from %(date_from)s to %(date_to)s were already in Odoo."
+msgstr "لم يتم استيراد رسائل جديدة. %(skipped)d رسالة من %(date_from)s إلى %(date_to)s موجودة مسبقاً في Odoo."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "No emails were imported from %(total)d message(s) found from %(date_from)s to %(date_to)s."
+msgstr "لم يتم استيراد رسائل من %(total)d رسالة تم العثور عليها من %(date_from)s إلى %(date_to)s."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Fetch completed: %(imported)d imported, %(skipped)d already existed, %(failed)d failed (out of %(total)d found)."
+msgstr "اكتمل الجلب: %(imported)d مستوردة، %(skipped)d موجودة مسبقاً، %(failed)d فشلت (من أصل %(total)d)."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Email fetch from %s to %s"
+msgstr "جلب البريد من %s إلى %s"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/fetchmail_fetch_job.py:0
+msgid "Fetch job finished."
+msgstr "انتهت مهمة الجلب."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/incoming_mail.py:0
+msgid "No Subject"
+msgstr "بدون موضوع"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/incoming_mail.py:0
+msgid "Re: No Subject"
+msgstr "رد: بدون موضوع"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/incoming_mail.py:0
+msgid "Re: %s"
+msgstr "رد: %s"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/incoming_mail.py:0
+msgid "This email has no sender address to reply to."
+msgstr "لا يحتوي هذا البريد على عنوان مرسل للرد عليه."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/models/incoming_mail.py:0
+msgid "Reply by Email"
+msgstr "الرد بالبريد الإلكتروني"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "Please write a reply message before sending."
+msgstr "يرجى كتابة رسالة الرد قبل الإرسال."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "Please choose an outgoing mail server."
+msgstr "يرجى اختيار خادم بريد صادر."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "The outgoing mail server \"%(server)s\" has no valid sender address. Please set a full email address in the SMTP username field."
+msgstr "خادم البريد الصادر \"%(server)s\" لا يحتوي على عنوان مرسل صالح. يرجى ضبط عنوان بريد كامل في حقل اسم مستخدم SMTP."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "Reply sent"
+msgstr "تم إرسال الرد"
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "Your reply was sent to %s."
+msgstr "تم إرسال ردك إلى %s."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "Unknown delivery error."
+msgstr "خطأ توصيل غير معروف."
+
+#. module: incoming_mail_store
+#: code:addons/incoming_mail_store/wizard/incoming_mail_reply_wizard.py:0
+msgid "The reply could not be sent.\n\n%s\n\nPlease check your outgoing mail server configuration."
+msgstr "تعذر إرسال الرد.\n\n%s\n\nيرجى التحقق من إعدادات خادم البريد الصادر."
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,help:incoming_mail_store.field_fetchmail_server__provider
+msgid "Detected automatically from the server hostname."
+msgstr "يتم اكتشافه تلقائياً من اسم مضيف الخادم."
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,help:incoming_mail_store.field_fetchmail_fetch_wizard__date_from
+msgid "Import emails received on or after this date."
+msgstr "استيراد الرسائل المستلمة في هذا التاريخ أو بعده."
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,help:incoming_mail_store.field_fetchmail_fetch_wizard__date_to
+msgid "Import emails received on or before this date."
+msgstr "استيراد الرسائل المستلمة في هذا التاريخ أو قبله."
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,help:incoming_mail_store.field_incoming_mail_reply_wizard__mail_server_id
+msgid "Choose which SMTP server will send this reply."
+msgstr "اختر خادم SMTP الذي سيرسل هذا الرد."
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,help:incoming_mail_store.field_incoming_mail_reply_wizard__email_from
+msgid "Sender address used for SMTP. It must match the selected outgoing server."
+msgstr "عنوان المرسل المستخدم لـ SMTP. يجب أن يطابق خادم البريد الصادر المحدد."
+
+#. module: incoming_mail_store
+#: model:ir.model.fields,help:incoming_mail_store.field_fetchmail_fetch_job__message_nums
+msgid "Remaining IMAP message numbers stored as JSON."
+msgstr "أرقام رسائل IMAP المتبقية مخزنة بصيغة JSON."

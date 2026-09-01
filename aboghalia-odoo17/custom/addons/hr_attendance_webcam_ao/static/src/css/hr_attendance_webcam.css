@@ -1,0 +1,64 @@
+/*
+    Copyright 2016 Siddharth Bhalgami <siddharth.bhalgami@techreceptives.com>
+    License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl).
+*/
+.openerp .oe_form .oe_form_field_image .oe_form_field_image_controls
+.oe_form_binary_file_web_cam {
+    color: inherit;
+}
+
+.live_webcam_outer_div, .webcam_result_outer_div {
+    padding-left: 20px;
+}
+
+#live_webcam {
+    max-width: 480x;
+    height: 360px;
+    /* Ivastanin: edit style */
+    margin: 48px auto auto auto;
+    width: 100%;
+    /* border: 1px solid #dee2e6; */
+}
+
+.direction_icon {
+    text-align: center;
+}
+
+
+.o_hr_attendance_sign_in_out_icon_cam {
+    font-size: 15em;
+    cursor: pointer;
+    margin: 20px 0px 20px 0px;
+    padding: 0px 15px 0px 15px;
+    border-radius: 10%;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.6);
+}
+
+/* Ivastanin */
+#enable_live_webcam {
+    background: url("/hr_attendance_webcam/static/src/img/enable_webcam.png") no-repeat center;
+    border: 1px solid #dee2e6;
+    display: none;
+    margin: 48px auto auto auto;
+    width: 90%;
+    height: 250px;
+    text-align: center;
+    vertical-align: bottom;
+    padding: 10%;
+}
+
+#enable_live_webcam h3{
+    margin-top: 50%;
+}
+
+@media (max-width: 767px) {
+    #enable_live_webcam {
+        display: table;
+    }
+    .o_hr_attendance_kiosk_backdrop {
+        display: none;
+    }
+    .o_hr_attendance_sign_in_out_icon {
+        display: none;
+    }
+}

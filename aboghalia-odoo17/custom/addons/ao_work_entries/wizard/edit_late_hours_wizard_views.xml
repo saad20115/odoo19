@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_edit_late_hours_wizard_form" model="ir.ui.view">
+        <field name="name">edit.late.hours.wizard.form</field>
+        <field name="model">edit.late.hours.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Edit Employees' Late Hours">
+                <sheet>
+                    <group>
+                        <field name="year" invisible="1"/>
+                        <field name="month" invisible="1"/>
+                        <field name="department_ids"
+                               widget="many2many_tags"
+                               options="{'no_create': True}"/>
+                        <field name="employee_ids"
+                               widget="many2many_tags"
+                               domain="[('department_id', 'in', department_ids)]"
+                               options="{'no_create': True}"/>
+                        <field name="late_hours"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_save" type="object" string="Save" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_edit_late_hours_wizard" model="ir.actions.act_window">
+        <field name="name">Edit Employees' Late Hours</field>
+        <field name="res_model">edit.late.hours.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

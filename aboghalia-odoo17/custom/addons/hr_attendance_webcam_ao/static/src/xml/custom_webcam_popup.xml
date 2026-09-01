@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-name="hr_attendance_webcam_ao.CustomWebcamPopup">
+        <Dialog title="Attendance Camera">
+            <p t-esc="state.message"/>
+        </Dialog>
+    </t>
+</templates>

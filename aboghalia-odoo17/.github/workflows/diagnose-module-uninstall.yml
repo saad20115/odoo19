@@ -1,0 +1,167 @@
+name: Diagnose Module Uninstall
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check uninstalled modules and data impact (live + beta)
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 20m
+          script: |
+            set -e
+            echo "===== HOST / TIME ====="
+            hostname; date -u; whoami
+
+            echo "===== SERVICES / LOGS (uninstall mentions) ====="
+            systemctl is-active odoo17-v2-server odoo17-v2-beta-server || true
+            for f in /var/log/odoo/* /var/log/odoo17* /odoo17-v2/*.log /odoo17-v2-beta/*.log; do
+              [ -f "$f" ] || continue
+              echo "--- $f ---"
+              grep -iE 'uninstall|button_immediate_uninstall|Module .* uninstalled|DELETE FROM|drop table' "$f" 2>/dev/null | tail -40 || true
+            done
+            journalctl -u odoo17-v2-server -u odoo17-v2-beta-server --since "7 days ago" --no-pager 2>/dev/null | grep -iE 'uninstall|module' | tail -60 || true
+
+            echo "===== BACKUPS AVAILABLE ====="
+            ls -lah /var/lib/odoo*/backups 2>/dev/null || true
+            ls -lah /odoo17-v2/backups /odoo17-v2-beta/backups /root/backups /home/*/backups 2>/dev/null || true
+            find /var/backups /opt /odoo17-v2 /odoo17-v2-beta -maxdepth 3 -iname '*dump*' -o -iname '*backup*.sql*' -o -iname '*.dump' 2>/dev/null | head -40 || true
+
+            diagnose_db() {
+              local DB="$1"
+              local CONF="$2"
+              local CODE="$3"
+              echo ""
+              echo "############################################################"
+              echo "##### DB=$DB CONF=$CONF"
+              echo "############################################################"
+
+              sudo -u odoo17-v2 python3 "$CODE/odoo17-v2-server/odoo-bin" shell -d "$DB" -c "$CONF" <<'PY'
+            from datetime import datetime, timedelta
+            import json
+
+            CRITICAL = [
+                'ao_po_followup', 'ao_makka_po_followup', 'ao_po_order',
+                'ao_sjc_task_management', 'incoming_mail_store',
+                'ao_user_login_defaults', 'ao_leave_approval',
+                'ao_work_entries', 'ao_attendance_app_api',
+            ]
+
+            Module = env['ir.module.module'].sudo()
+            print('=== CRITICAL MODULE STATES ===')
+            for name in CRITICAL:
+                m = Module.search([('name', '=', name)], limit=1)
+                if m:
+                    print(f'{name}: state={m.state} latest={m.latest_version} installed={m.installed_version}')
+                else:
+                    print(f'{name}: NOT FOUND in ir.module.module')
+
+            print('=== ALL UNINSTALLED / TO_REMOVE MODULES ===')
+            for m in Module.search([('state', 'in', ['uninstalled', 'to remove', 'to upgrade'])], order='name'):
+                if m.name.startswith(('ao_', 'incoming_', 'hr_', 'base_account', 'branch', 'documents_', 'gsk_', 'dev_', 'custom_', 'start', 'studio')) or m.name in CRITICAL:
+                    print(f'{m.name}: {m.state} latest={m.latest_version} installed={m.installed_version}')
+
+            print('=== RECENT ir.logging / mail tracking if any ===')
+            # Check if custom tables still exist
+            tables_of_interest = [
+                'po_followup', 'makka_po_followup', 'po_order', 'makka_po_order',
+                'incoming_mail', 'sjc_task', 'ao_sjc',
+            ]
+            cr = env.cr
+            print('=== TABLE EXISTENCE + ROW COUNTS ===')
+            cr.execute("""
+                SELECT table_name FROM information_schema.tables
+                WHERE table_schema='public'
+                  AND (
+                    table_name ILIKE '%po_followup%'
+                    OR table_name ILIKE '%po_order%'
+                    OR table_name ILIKE '%makka%'
+                    OR table_name ILIKE '%incoming_mail%'
+                    OR table_name ILIKE '%sjc%'
+                  )
+                ORDER BY table_name
+            """)
+            found = [r[0] for r in cr.fetchall()]
+            print('matching tables:', found)
+            for t in found:
+                try:
+                    cr.execute(f'SELECT COUNT(*) FROM "{t}"')
+                    print(f'  {t}: {cr.fetchone()[0]} rows')
+                except Exception as e:
+                    print(f'  {t}: ERROR {e}')
+                    cr.rollback()
+
+            print('=== MODELS OWNED BY CRITICAL MODULES (ir_model_data) ===')
+            for mod in CRITICAL:
+                cr.execute("""
+                    SELECT model, COUNT(*) FROM ir_model_data
+                    WHERE module=%s GROUP BY model ORDER BY COUNT(*) DESC LIMIT 20
+                """, (mod,))
+                rows = cr.fetchall()
+                if rows:
+                    print(f'-- {mod} --')
+                    for model, cnt in rows:
+                        print(f'  {model}: {cnt}')
+                else:
+                    print(f'-- {mod}: no ir_model_data left --')
+
+            print('=== ORPHAN CHECK: models without module xmlids ===')
+            for model_name, table in [
+                ('po.followup', 'po_followup'),
+                ('makka.po.followup', 'makka_po_followup'),
+                ('po.order', 'po_order'),
+                ('makka.po.order', 'makka_po_order'),
+                ('incoming.mail', 'incoming_mail'),
+            ]:
+                cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name=%s)", (table,))
+                exists = cr.fetchone()[0]
+                if not exists:
+                    print(f'{model_name}: TABLE MISSING (data likely dropped on uninstall)')
+                    continue
+                cr.execute(f'SELECT COUNT(*) FROM "{table}"')
+                cnt = cr.fetchone()[0]
+                cr.execute("SELECT id FROM ir_model WHERE model=%s", (model_name,))
+                mid = cr.fetchone()
+                print(f'{model_name}: table_ok rows={cnt} ir_model={"yes" if mid else "NO"}')
+
+            print('=== ATTACHMENTS linked to those models ===')
+            for model_name in ['po.followup', 'makka.po.followup', 'po.order', 'makka.po.order', 'incoming.mail']:
+                cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model=%s", (model_name,))
+                print(f'  {model_name}: {cr.fetchone()[0]} attachments')
+
+            print('=== WRITE DATE of module records (hint of recent uninstall) ===')
+            cr.execute("""
+                SELECT name, state, latest_version, write_date, write_uid
+                FROM ir_module_module
+                WHERE name = ANY(%s)
+                ORDER BY write_date DESC NULLS LAST
+            """, (CRITICAL,))
+            for row in cr.fetchall():
+                print(row)
+
+            print('=== MODULES written in last 14 days ===')
+            cr.execute("""
+                SELECT name, state, write_date
+                FROM ir_module_module
+                WHERE write_date >= (NOW() AT TIME ZONE 'utc') - INTERVAL '14 days'
+                ORDER BY write_date DESC
+                LIMIT 40
+            """)
+            for row in cr.fetchall():
+                print(row)
+
+            print('DONE')
+            PY
+            }
+
+            diagnose_db MainDB1 /etc/odoo17-v2-server.conf /odoo17-v2
+            diagnose_db BetaDB1 /etc/odoo17-v2-beta.conf /odoo17-v2-beta
+
+            echo "===== DONE ALL ====="

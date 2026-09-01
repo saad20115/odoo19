@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_po_followup" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.po.followup</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="PO Follow-up"
+                     string="PO Follow-up"
+                     name="ao_po_followup"
+                     groups="ao_po_followup.group_po_followup_manager">
+                    <block title="Accounting Odoo Connection">
+                        <setting string="Accounting API"
+                                 help="Used by Assign to Accounting to create draft invoices on Accounting Aboghalia.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="po_accounting_url" class="col-lg-3 o_light_label"/>
+                                    <field name="po_accounting_url" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="po_accounting_db" class="col-lg-3 o_light_label"/>
+                                    <field name="po_accounting_db" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="po_accounting_login" class="col-lg-3 o_light_label"/>
+                                    <field name="po_accounting_login" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="po_accounting_password" class="col-lg-3 o_light_label"/>
+                                    <field name="po_accounting_password" password="True" class="col-lg-6"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="PO Order Incoming API">
+                        <setting string="Send to Portal credentials"
+                                 help="Accounting Aboghalia uses these credentials when calling Send to Portal.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="po_order_api_login" class="col-lg-3 o_light_label"/>
+                                    <field name="po_order_api_login" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="po_order_api_password" class="col-lg-3 o_light_label"/>
+                                    <field name="po_order_api_password" password="True" class="col-lg-6"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Home Screen">
+                        <setting string="Default app for contract users"
+                                 help="After login, users in PO Follow-up group open PO Follow-up directly.">
+                            <div class="mt8">
+                                <button name="action_set_po_followup_home_for_users"
+                                        type="object"
+                                        string="Set PO Follow-up as home for all Users"
+                                        class="btn-primary"
+                                        icon="fa-home"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_po_followup_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ao_po_followup'}</field>
+    </record>
+</odoo>

@@ -1,0 +1,101 @@
+name: Diagnose Employee Request Data
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check employee.request and invoices on live
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 15m
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+            print('=== employee.request table ===')
+            cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='employee_request')")
+            if cr.fetchone()[0]:
+                cr.execute('SELECT COUNT(*) FROM employee_request')
+                print('TOTAL', cr.fetchone()[0])
+                cr.execute('SELECT MIN(create_date), MAX(create_date), MIN(start_date), MAX(start_date), MIN(id), MAX(id) FROM employee_request')
+                print('ranges', cr.fetchone())
+                cr.execute("""
+                    SELECT create_date::date, COUNT(*)
+                    FROM employee_request
+                    GROUP BY 1 ORDER BY 1
+                """)
+                print('by create_date:')
+                for r in cr.fetchall():
+                    print(r)
+                cr.execute("""
+                    SELECT start_date, COUNT(*)
+                    FROM employee_request
+                    GROUP BY 1 ORDER BY 1
+                    LIMIT 40
+                """)
+                print('by start_date sample:')
+                for r in cr.fetchall():
+                    print(r)
+                cr.execute('SELECT id, serial_number, start_date, create_date, status FROM employee_request ORDER BY id LIMIT 15')
+                print('first rows', cr.fetchall())
+                cr.execute('SELECT id, serial_number, start_date, create_date, status FROM employee_request ORDER BY id DESC LIMIT 15')
+                print('last rows', cr.fetchall())
+                cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model='employee.request'")
+                print('attachments', cr.fetchone()[0])
+            else:
+                print('TABLE MISSING - all employee.request data wiped')
+
+            print('=== project tables after reinstall ===')
+            for t in ['project_project','project_task']:
+                cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name=%s)", (t,))
+                if cr.fetchone()[0]:
+                    cr.execute(f'SELECT COUNT(*), MIN(create_date), MAX(create_date) FROM "{t}"')
+                    print(t, cr.fetchone())
+                else:
+                    print(t, 'MISSING')
+
+            print('=== ACCOUNTING INVOICES (account.move) ===')
+            cr.execute("""
+                SELECT move_type, state, COUNT(*), MIN(invoice_date), MAX(invoice_date)
+                FROM account_move
+                WHERE move_type IN ('out_invoice','in_invoice','out_refund','in_refund','entry')
+                GROUP BY 1,2 ORDER BY 1,2
+            """)
+            for r in cr.fetchall():
+                print(r)
+            cr.execute("SELECT COUNT(*) FROM account_move WHERE move_type IN ('out_invoice','in_invoice','out_refund','in_refund')")
+            print('invoice-like total', cr.fetchone()[0])
+            cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model='account.move'")
+            print('invoice attachments', cr.fetchone()[0])
+
+            print('=== EXPENSE still ok ===')
+            cr.execute('SELECT COUNT(*), MIN(create_date), MAX(create_date) FROM hr_expense')
+            print('hr_expense', cr.fetchone())
+            cr.execute('SELECT COUNT(*) FROM hr_expense_sheet')
+            print('sheets', cr.fetchone()[0])
+
+            print('=== PO still ok ===')
+            for t in ['po_order','po_followup','makka_po_followup','incoming_mail']:
+                cr.execute(f'SELECT COUNT(*) FROM {t}')
+                print(t, cr.fetchone()[0])
+
+            print('=== orphan attachments for employee.request ===')
+            cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model='employee.request'")
+            print(cr.fetchone()[0])
+            cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model IN ('project.task','project.project')")
+            print('project attachments left', cr.fetchone()[0])
+
+            print('=== backups on server ===')
+            print('DONE')
+            PY
+            echo '=== filesystem backups ==='
+            find /var /odoo17-v2 /odoo17-v2-beta /root /home /backup /backups -maxdepth 4 \( -iname '*MainDB*' -o -iname '*.sql.gz' -o -iname '*odoo*dump*' -o -iname '*backup*.sql*' \) 2>/dev/null | head -40 || true
+            ls /var/lib/postgresql/16/main/pg_wal 2>/dev/null | head -3 || true
+            echo DONE_ALL

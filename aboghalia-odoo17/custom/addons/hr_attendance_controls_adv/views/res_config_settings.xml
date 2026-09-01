@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>	
+  		<record id="res_config_settings_view_form_hr_attendance" model="ir.ui.view">
+			<field name="name">res.config.settings.view.form.inherit.hr.attendance</field>
+            <field name="model">res.config.settings</field>
+			<field name="inherit_id" ref="hr_attendance.res_config_settings_view_form"/>			
+			<field name="arch" type="xml">						
+				<xpath expr="//div[@data-key='hr_attendance']" position="inside">
+                    <h2>Check In / Check Out Control</h2>
+                    <div class="row mt16 o_settings_container" name="hr_attendance_controls">
+                        <div class="col-12 col-lg-6 o_setting_box" title="Geolocation">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_geolocation"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Geolocation</span>
+                                <div class="text-muted">
+                                    Enable to Capture the Geolocation while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="Geofence">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_geofence"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Geofence</span>
+                                <div class="text-muted">
+                                    Enable to Capture the Geofence while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="Photo">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_face_recognition"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Face Recognition</span>
+                                <div class="text-muted">
+                                    Enable to Check Face Recognition while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="IP Address">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_ip"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">IP Address</span>
+                                <div class="text-muted">
+                                    Enable to Capture the IP Address while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="Reason">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_reason"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Reason</span>
+                                <div class="text-muted">
+                                    Enable to Capture the Reasons while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <h2>Kiosk Mode Control</h2>
+                    <div class="row mt16 o_settings_container" name="hr_attendance_kiosk_controls">
+                        <div class="col-12 col-lg-6 o_setting_box" title="Geolocation">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_geolocation_k"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Geolocation</span>
+                                <div class="text-muted">
+                                    Enable to Capture the Geolocation while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="Geofence">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_geofence_k"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Geofence</span>
+                                <div class="text-muted">
+                                    Enable to Capture the Geofence while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="Photo">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_face_recognition_k"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">Face Recognition</span>
+                                <div class="text-muted">
+                                    Enable to Check Face Recognition while using the kiosk mode
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-lg-6 o_setting_box" title="IP Address">
+                            <div class="o_setting_left_pane">
+                                <field name="hr_attendance_ip_k"/>
+                            </div>
+                            <div class="o_setting_right_pane">
+                                <span class="o_form_label">IP Address</span>
+                                <div class="text-muted">
+                                    Enable to Capture the IP Address while using the attendance
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+				</xpath>				
+			</field>
+		</record>
+	</data>		
+</odoo>

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    <record id="equipment_handing_report" model="ir.actions.report" >
+        <field name="name">نموذج تسليم</field>
+        <field name="model">maintenance.equipment</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">start.equipment_handing_template</field>
+        <field name="report_file">start.equipment_handing_template</field>
+        <field name="binding_model_id" ref="maintenance.model_maintenance_equipment"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">object.name.split('/')[-1]</field>
+     </record>
+
+        
+        
+        <template id="equipment_handing_template">
+            <t t-call="web.basic_layout">
+              <t t-foreach="docs" t-as="docs">
+                <div class="page">
+                    <h2 style="text-align: center;">نموذج تسليم</h2>
+                    <table class="table table-bordered" style="width: 100%; margin-top: 20px;">
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الرقم التسلسلي</th>
+                            <td style="width: 60%;"><t t-esc="docs.serial_no"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الفئة</th>
+                            <td style="width: 60%;"><t t-esc="docs.category_id.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الاسم</th>
+                            <td style="width: 60%;"><t t-esc="docs.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">تم الاستخدام بواسطة</th>
+                            <td style="width: 60%;"><t t-esc="docs.equipment_assign_to"/></td>
+
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">اسم الموظف</th>
+                            <td style="width: 60%;"><t t-esc="docs.employee_id.name"/></td>
+
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">القسم</th>
+                            <td style="width: 60%;"><t t-esc="docs.department_id.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">فريق الصيانة</th>
+                            <td style="width: 60%;"><t t-esc="docs.maintenance_team_id.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الفني</th>
+                            <td style="width: 60%;"><t t-esc="docs.technician_user_id.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">تاريخ الإسناد</th>
+                            <td style="width: 60%;"><t t-esc="docs.assign_date"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">تاريخ مخلفات التصنيع</th>
+                            <td style="width: 60%;"><t t-esc="docs.scrap_date"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">مستخدم في الموقع</th>
+                            <td style="width: 60%;"><t t-esc="docs.location"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الوصف</th>
+                            <td style="width: 60%;"><t t-esc="docs.note"/></td>
+                        </tr>
+
+                        
+                    </table>
+                    <table class="table table-bordered" style="width: 100%; margin-top: 20px;">
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 20%;">الاسم </th>
+
+                            <td style="width: 30%;"></td>
+
+                            <th style="width: 20%;">التوقيع</th>
+                            
+                            <td style="width: 30%;"></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </t>
+            </t>
+        </template>
+    </data>
+</odoo>

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    
+
+    <record id="view_payslip_form_inherit_reset_draft" model="ir.ui.view">
+        <field name="name">hr.payslip.form.reset.draft</field>
+        <field name="model">hr.payslip</field>
+        <field name="inherit_id" ref="hr_payroll_community.hr_payslip_view_form" />
+        <field name="arch" type="xml">
+
+            <xpath expr="//button[@name='action_payslip_done']" position="after">
+                <button name="action_reset_to_draft" string="Reset to Draft" type="object" class="oe_highlight"
+                        invisible="state!='done'"/>
+            </xpath>
+        </field>
+    </record>
+    
+
+</odoo>

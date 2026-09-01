@@ -1,0 +1,75 @@
+name: Diagnose Sticky Errors
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Diagnose action 1438, record 696, duplicate groups
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 15m
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+
+            print('=== ACTION 1138 (current menu) ===')
+            a = env['ir.actions.act_window'].sudo().browse(1138)
+            print('exists', a.exists(), 'name', a.name if a.exists() else None, 'model', a.res_model if a.exists() else None)
+
+            print('=== ACTION 1438 ===')
+            a2 = env['ir.actions.actions'].sudo().browse(1438)
+            print('exists', a2.exists())
+            if a2.exists():
+                print(a2.type, a2.name)
+            cr.execute('SELECT id, name, type FROM ir_actions WHERE id=1438')
+            print('sql', cr.fetchone())
+            cr.execute("SELECT module, name, model, res_id FROM ir_model_data WHERE model LIKE 'ir.actions%' AND res_id=1438")
+            print('xmlid', cr.fetchall())
+
+            print('=== RECORD 696 employee.request ===')
+            cr.execute('SELECT id, serial_number, active, create_date FROM employee_request WHERE id=696')
+            print(cr.fetchone())
+            cr.execute('SELECT id FROM employee_request WHERE id BETWEEN 690 AND 710 ORDER BY id')
+            print('nearby ids', [r[0] for r in cr.fetchall()])
+
+            print('=== MENU 1025 ===')
+            m = env['ir.ui.menu'].sudo().browse(1025)
+            print('exists', m.exists(), 'name', m.name if m.exists() else None, 'action', m.action if m.exists() else None)
+            if m.exists():
+                print('complete', m.complete_name, 'xmlid', m.get_external_id())
+
+            print('=== EMPLOYEE REQUEST GROUPS (duplicates) ===')
+            groups = env['res.groups'].sudo().search([('name', 'ilike', 'Employee Request')])
+            for g in groups:
+                xmlids = env['ir.model.data'].sudo().search([('model','=','res.groups'),('res_id','=',g.id)])
+                print(g.id, g.full_name, 'users', len(g.users), 'xmlids', [(x.module, x.name) for x in xmlids], 'category', g.category_id.name)
+
+            print('=== employee.request menus/actions xmlids ===')
+            cr.execute("""
+                SELECT module, name, model, res_id
+                FROM ir_model_data
+                WHERE (module LIKE 'samir%' OR name ILIKE '%employee_request%')
+                  AND model IN ('ir.ui.menu','ir.actions.act_window','res.groups','ir.module.category')
+                ORDER BY module, model, name
+            """)
+            for r in cr.fetchall():
+                print(r)
+
+            print('=== user home action / favorites pointing to 1438 or 696 ===')
+            cr.execute("SELECT id, login, action_id FROM res_users WHERE action_id=1438")
+            print('users home 1438', cr.fetchall())
+            cr.execute("SELECT id, name, res_id, res_model FROM ir_ui_view_custom LIMIT 0")
+            # window actions in history can't easily query; check mail / ir_filters
+            cr.execute("SELECT id, name, action_id FROM ir_filters WHERE action_id=1438 OR context ILIKE '%696%' LIMIT 20")
+            print('filters', cr.fetchall())
+
+            print('DONE')
+            PY

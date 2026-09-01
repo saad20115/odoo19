@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template id="template" xml:space="preserve">
+
+    <div t-name="FaceRecognitionDialog" class="modal" data-backdrop="static" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+	        <div class="modal-content">
+                <header class="modal-header">                    
+                    <h4 class="modal-title">Face Recognition</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </header>
+	            <main class="modal-body p-2">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12 controls">
+                                <fieldset class="reader-config-group">
+                                    <div class="row">
+                                        <div class="col-3">
+                                            <label>
+                                                <span>Select Camera</span>
+                                            </label>
+                                        </div>
+                                        <div class="col-6">
+                                            <select name="video_source" class="videoSource" id="videoSource">
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="row mt8">
+                            <div class="col-12" id="videoContainer" style="position: relative;">
+                                <video muted="true" autoplay="true" playsinline="true"  id="video" style="width: 100%; max-height: 100%; box-sizing: border-box;"/>
+                                <canvas id="canvas" style="position: absolute; top: 0; left: 0; display: block; padding: inherit;"/>
+                                <canvas id="image" style="display: none;"/>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+	        </div>
+	    </div>
+	</div>
+	
+</template>

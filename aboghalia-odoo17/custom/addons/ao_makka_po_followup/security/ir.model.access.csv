@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_makka_po_contractor_user,makka.po.contractor.user,model_makka_po_contractor,group_makka_po_followup_user,1,1,1,0
+access_makka_po_contractor_manager,makka.po.contractor.manager,model_makka_po_contractor,group_makka_po_followup_manager,1,1,1,1
+access_makka_po_office_user,makka.po.office.user,model_makka_po_office,group_makka_po_followup_user,1,1,1,0
+access_makka_po_office_manager,makka.po.office.manager,model_makka_po_office,group_makka_po_followup_manager,1,1,1,1
+access_makka_po_entity_user,makka.po.entity.user,model_makka_po_entity,group_makka_po_followup_user,1,1,1,0
+access_makka_po_entity_manager,makka.po.entity.manager,model_makka_po_entity,group_makka_po_followup_manager,1,1,1,1
+access_makka_po_followup_user,makka.po.followup.user,model_makka_po_followup,group_makka_po_followup_user,1,1,1,1
+access_makka_po_followup_manager,makka.po.followup.manager,model_makka_po_followup,group_makka_po_followup_manager,1,1,1,1
+access_makka_po_order_user,makka.po.order.user,model_makka_po_order,group_makka_po_followup_user,1,1,1,0
+access_makka_po_order_manager,makka.po.order.manager,model_makka_po_order,group_makka_po_followup_manager,1,1,1,1
+access_makka_po_order_assign_wizard_user,makka.po.order.assign.wizard.user,model_makka_po_order_assign_wizard,group_makka_po_followup_user,1,1,1,1
+access_makka_po_order_assign_wizard_manager,makka.po.order.assign.wizard.manager,model_makka_po_order_assign_wizard,group_makka_po_followup_manager,1,1,1,1
+access_makka_po_import_fix_wizard_user,makka.po.import.fix.wizard.user,model_makka_po_import_fix_wizard,group_makka_po_followup_user,1,1,1,1
+access_makka_po_import_fix_wizard_manager,makka.po.import.fix.wizard.manager,model_makka_po_import_fix_wizard,group_makka_po_followup_manager,1,1,1,1

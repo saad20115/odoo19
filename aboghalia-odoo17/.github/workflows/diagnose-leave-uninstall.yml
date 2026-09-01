@@ -1,0 +1,91 @@
+name: Diagnose Leave Uninstall Impact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check leave + samir impact on live
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 15m
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+            print('=== ao_leave_approval / ao_po_order / samir modules ===')
+            for name in ['ao_leave_approval','ao_po_order','samir_gamal_1','samir','samir_etislate']:
+                m = env['ir.module.module'].sudo().search([('name','=',name)], limit=1)
+                print(name, '->', (m.state, m.latest_version, m.installed_version, m.write_date, m.write_uid.id, m.write_uid.login) if m else 'MISSING')
+
+            print('=== columns on hr_leave / hr_leave_type that look custom ===')
+            for table in ['hr_leave','hr_leave_type','hr_employee']:
+                cr.execute("""
+                    SELECT column_name, data_type FROM information_schema.columns
+                    WHERE table_name=%s AND (
+                      column_name ILIKE '%ao_%' OR column_name ILIKE '%approv%' OR column_name ILIKE '%level%'
+                      OR column_name ILIKE '%leave%' OR column_name ILIKE '%gamal%' OR column_name ILIKE '%samir%'
+                    )
+                    ORDER BY column_name
+                """, (table,))
+                rows = cr.fetchall()
+                print(table, rows[:80])
+
+            print('=== hr_leave row count + sample states ===')
+            cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='hr_leave')")
+            if cr.fetchone()[0]:
+                cr.execute('SELECT COUNT(*), COUNT(*) FILTER (WHERE state=%s) FROM hr_leave', ('validate',))
+                print('hr_leave counts', cr.fetchone())
+                cr.execute("SELECT state, COUNT(*) FROM hr_leave GROUP BY state ORDER BY COUNT(*) DESC")
+                print(cr.fetchall())
+            else:
+                print('hr_leave table MISSING')
+
+            print('=== fields still registered for leave approval ===')
+            cr.execute("""
+                SELECT f.name, f.ttype, f.state, m.model
+                FROM ir_model_fields f JOIN ir_model m ON m.id=f.model_id
+                WHERE f.name ILIKE '%ao_%' OR f.modules ILIKE '%leave_approval%' OR f.name ILIKE '%approval_level%'
+                ORDER BY m.model, f.name LIMIT 50
+            """)
+            print(cr.fetchall())
+
+            print('=== ir_model_data leftover for leave/po_order ===')
+            for mod in ['ao_leave_approval','ao_po_order','samir_gamal_1']:
+                cr.execute('SELECT COUNT(*), COUNT(DISTINCT model) FROM ir_model_data WHERE module=%s', (mod,))
+                print(mod, cr.fetchall())
+
+            print('=== po.order ownership xmlids ===')
+            cr.execute("""
+                SELECT module, name, model FROM ir_model_data
+                WHERE model IN ('ir.model','ir.model.fields') AND (name ILIKE '%po_order%' OR name ILIKE 'model_po_order%')
+                ORDER BY module, name LIMIT 40
+            """)
+            print(cr.fetchall())
+
+            print('=== who is uid 1 and recent mail.message about uninstall? ===')
+            u = env['res.users'].sudo().browse(1)
+            print('uid1', u.login, u.name)
+            cr.execute("""
+                SELECT id, create_date, create_uid, body FROM mail_message
+                WHERE body ILIKE '%uninstall%' OR body ILIKE '%ao_po_order%' OR body ILIKE '%leave_approval%'
+                ORDER BY id DESC LIMIT 20
+            """)
+            for r in cr.fetchall():
+                print(r[0], r[1], r[2], (r[3] or '')[:200])
+
+            print('=== filestore / filestore backups? ===')
+            print('DONE')
+            PY
+
+            echo '=== POSTGRES BACKUPS ==='
+            sudo -u postgres psql -c "\l+" | head -40
+            ls -lah /var/lib/postgresql/*/main 2>/dev/null | head -5 || true
+            find / -maxdepth 4 -name '*.sql.gz' -o -name '*MainDB*' -o -name '*odoo*backup*' 2>/dev/null | head -40 || true
+            ls -lah /odoo17-v2/data /var/lib/odoo17-v2 2>/dev/null | head -20 || true

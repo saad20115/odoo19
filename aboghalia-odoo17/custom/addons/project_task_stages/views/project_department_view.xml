@@ -1,0 +1,50 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <!-- Project Department Tree View -->
+    <record id="view_project_department_tree" model="ir.ui.view">
+        <field name="name">Project Departments</field>
+        <field name="model">project.department</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string='Project Departments' editable="bottom">
+                <field name="name" string="اسم القسم"/>
+                <field name="parent_department" string="القسم الأب"/>
+                <button name="action_open_tasks_related_to_department" type="object" string="عرض المهام حسب القسم"/>
+                <button name="action_open_tasks_related_to_department_as_parent" type="object" string="عرض المهام حسب الاقسام الفرعية لهذا القسم"/>
+            </tree>
+        </field>
+    </record>
+
+     <!-- Project Department Form View -->
+    <record id="view_project_department_form" model="ir.ui.view">
+        <field name="name">Project Department</field>
+        <field name="model">project.department</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name" string="اسم القسم"/>
+                        <field name="parent_department" string="القسم الأب"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Project Department Action -->
+    <record id="action_project_department" model="ir.actions.act_window">
+        <field name="name">الاقسام</field>
+        <field name="res_model">project.department</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new Department records.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="action_project_department" id="menu_project_department" parent="project.menu_project_config" sequence="5"/>
+
+</odoo>

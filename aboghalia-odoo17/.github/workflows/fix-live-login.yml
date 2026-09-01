@@ -1,0 +1,38 @@
+name: Fix Live Login Workers
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Restart live cleanly and apply Haytham company
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            echo "===== BEFORE ====="
+            ss -tlnp | grep 8068 || true
+            systemctl stop odoo17-v2-server || true
+            # Free the port without pkill -f (that can kill this SSH script).
+            fuser -k 8068/tcp 2>/dev/null || true
+            sleep 2
+            echo "===== START ====="
+            systemctl start odoo17-v2-server
+            sleep 6
+            systemctl is-active odoo17-v2-server
+            ss -tlnp | grep 8068
+            echo "===== APPLY HAYTHAM ====="
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            u = env['res.users'].sudo().search([('login','=','haytham_hady@hotmail.com')], limit=1)
+            print('BEFORE', u.company_id.name, u.action_id.name)
+            company = u._ao_apply_login_company()
+            u.write({'action_id': env.ref('mail.action_discuss').id})
+            env.cr.commit()
+            print('AFTER', u.company_id.name, u.action_id.name, 'from_employee', company.name)
+            PY
+            echo "===== DONE ====="

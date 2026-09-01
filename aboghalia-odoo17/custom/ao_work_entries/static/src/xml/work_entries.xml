@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <!-- Main Attendance Grid Template -->
+    <t t-name="hr_attendance_grid_template" owl="1">
+        <div class="o_attendance_grid_container">
+            <!-- Header Section -->
+            <div class="o_attendance_header">
+                <div class="o_attendance_title">
+                    <h2>Employee Attendance - <t t-esc="state.currentMonthName"/> <t t-esc="state.currentYear"/></h2>
+                </div>
+                <div class="o_attendance_controls">
+                    <button class="btn btn-primary me-2" t-on-click="onPreviousMonth">
+                        <i class="fa fa-chevron-left"/> Previous
+                    </button>
+                    <button class="btn btn-primary me-2" t-on-click="onNextMonth">
+                        Next <i class="fa fa-chevron-right"/>
+                    </button>
+                    <button class="btn btn-secondary me-2" t-on-click="onToday">
+                        Today
+                    </button>
+                    <button class="btn btn-info me-2" t-on-click="() => this.exportData('xlsx')">
+                        <i class="fa fa-download"/> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.isLoading" class="o_attendance_loading">
+                <div class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-2x"/>
+                    <p class="mt-2">Loading attendance data...</p>
+                </div>
+            </div>
+
+            <!-- Attendance Grid -->
+            <div t-else="" class="o_attendance_grid">
+                <!-- Grid Header -->
+                <div class="o_attendance_grid_header">
+                    <div class="o_employee_header_cell">
+                        <span>Employee</span>
+                    </div>
+                    <t t-foreach="state.daysInMonth" t-as="day" t-key="'day_' + day">
+                        <div class="o_day_header_cell" 
+                             t-att-class="getDayHeaderClass(day)"
+                             t-att-title="getDayTooltip(day)">
+                            <span t-esc="day"/>
+                            <small t-if="isWeekend(day)" class="d-block text-muted">
+                                <t t-esc="getWeekdayName(day)"/>
+                            </small>
+                        </div>
+                    </t>
+                </div>
+
+                <!-- Employee Rows -->
+                <div class="o_attendance_grid_body">
+                    <t t-foreach="state.employees" t-as="employee" t-key="'emp_' + employee.id">
+                        <div class="o_employee_row" t-att-data-employee-id="employee.id">
+                            <!-- Employee Name Cell -->
+                            <div class="o_employee_name_cell">
+                                <div class="o_employee_info">
+                                    <img class="o_employee_avatar" 
+                                         t-att-src="getEmployeeAvatar(employee.id)"
+                                         t-att-alt="employee.name"/>
+                                    <div class="o_employee_details">
+                                        <span class="o_employee_name" t-esc="employee.name"/>
+                                        <small class="o_employee_department text-muted" 
+                                               t-if="employee.department_name" 
+                                               t-esc="employee.department_name"/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Attendance Cells -->
+                            <t t-foreach="state.daysInMonth" t-as="day" t-key="'cell_' + employee.id + '_' + day">
+                                <div class="o_attendance_cell"
+                                     t-att-class="getAttendanceCellClass(employee.id, day)"
+                                     t-att-data-employee-id="employee.id"
+                                     t-att-data-day="day"
+                                     t-att-title="getAttendanceCellTooltip(employee.id, day)"
+                                     t-on-click="(ev) => this.onAttendanceCellClick(ev, employee.id, day)"
+                                     t-on-contextmenu="(ev) => this.onAttendanceCellRightClick(ev, employee.id, day)">
+                                    
+                                    <!-- Status Icon -->
+                                    <div class="o_attendance_status_icon">
+                                        <i t-att-class="getStatusIcon(employee.id, day)"/>
+                                    </div>
+
+                                    <!-- Hours Display (if present) -->
+                                    <div t-if="getWorkedHours(employee.id, day)" 
+                                         class="o_attendance_hours">
+                                        <small t-esc="getWorkedHours(employee.id, day)"/>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </div>
+            </div>
+
+            <!-- Legend -->
+            <div class="o_attendance_legend">
+                <div class="o_legend_title">
+                    <strong>Legend:</strong>
+                </div>
+                <div class="o_legend_items">
+                    <div class="o_legend_item">
+                        <div class="o_legend_color o_status_present"></div>
+                        <span>Present</span>
+                    </div>
+                    <div class="o_legend_item">
+                        <div class="o_legend_color o_status_absent"></div>
+                        <span>Absent</span>
+                    </div>
+                    <div class="o_legend_item">
+                        <div class="o_legend_color o_status_holiday"></div>
+                        <span>Holiday</span>
+                    </div>
+                    <div class="o_legend_item">
+                        <div class="o_legend_color o_status_leave"></div>
+                        <span>Leave</span>
+                    </div>
+                    <div class="o_legend_item">
+                        <div class="o_legend_color o_status_weekend"></div>
+                        <span>Weekend</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Summary Statistics -->
+            <div class="o_attendance_summary">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="o_stat_card">
+                            <div class="o_stat_number" t-esc="state.stats.total_employees"/>
+                            <div class="o_stat_label">Total Employees</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_stat_card">
+                            <div class="o_stat_number" t-esc="state.stats.working_days"/>
+                            <div class="o_stat_label">Working Days</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_stat_card">
+                            <div class="o_stat_number" t-esc="state.stats.avg_attendance + '%'"/>
+                            <div class="o_stat_label">Avg Attendance</div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="o_stat_card">
+                            <div class="o_stat_number" t-esc="state.stats.total_absent"/>
+                            <div class="o_stat_label">Total Absences</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Context Menu (conditionally rendered) -->
+            <div t-if="contextMenu.visible" 
+                 class="o_attendance_context_menu" 
+                 t-att-style="getContextMenuStyle()"
+                 t-on-click.stop="">
+                <div class="o_context_menu_header">
+                    <strong t-esc="contextMenu.props.employeeName"/>
+                    <br/>
+                    <small class="text-muted">
+                        <t t-esc="contextMenu.props.dayName"/>, <t t-esc="contextMenu.props.date"/>
+                    </small>
+                </div>
+                <div class="o_context_menu_items">
+                    <div class="o_context_menu_item" 
+                         t-on-click="() => this.onContextMenuStatusChange(contextMenu.props.employeeId, contextMenu.props.day, 'present')"
+                         t-att-class="contextMenu.props.currentStatus === 'present' ? 'active' : ''">
+                        <i class="fa fa-check-circle text-success me-2"/>
+                        Mark as Present
+                    </div>
+                    <div class="o_context_menu_item" 
+                         t-on-click="() => this.onContextMenuStatusChange(contextMenu.props.employeeId, contextMenu.props.day, 'absent')"
+                         t-att-class="contextMenu.props.currentStatus === 'absent' ? 'active' : ''">
+                        <i class="fa fa-times-circle text-danger me-2"/>
+                        Mark as Absent
+                    </div>
+                    <div class="o_context_menu_item" 
+                         t-on-click="() => this.onContextMenuStatusChange(contextMenu.props.employeeId, contextMenu.props.day, 'holiday')"
+                         t-att-class="contextMenu.props.currentStatus === 'holiday' ? 'active' : ''">
+                        <i class="fa fa-calendar text-warning me-2"/>
+                        Mark as Holiday
+                    </div>
+                    <div class="o_context_menu_item" 
+                         t-on-click="() => this.onContextMenuStatusChange(contextMenu.props.employeeId, contextMenu.props.day, 'leave')"
+                         t-att-class="contextMenu.props.currentStatus === 'leave' ? 'active' : ''">
+                        <i class="fa fa-plane text-info me-2"/>
+                        Mark as Leave
+                    </div>
+                    <hr class="my-1"/>
+                    <div class="o_context_menu_item" t-on-click="() => this.onViewEmployeeDetails(contextMenu.props.employeeId, contextMenu.props.day)">
+                        <i class="fa fa-eye text-primary me-2"/>
+                        View Details
+                    </div>
+                    <div class="o_context_menu_item" t-on-click="() => this.onEditHours(contextMenu.props.employeeId, contextMenu.props.day)">
+                        <i class="fa fa-clock-o text-secondary me-2"/>
+                        Edit Hours
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Quick Edit Hours Modal Template -->
+    <t t-name="hr_attendance_grid.QuickEditHours" owl="1">
+        <div class="modal fade show" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Working Hours</h5>
+                        <button type="button" class="btn-close" t-on-click="onClose"/>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Employee:</label>
+                            <strong t-esc="props.employeeName"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date:</label>
+                            <strong t-esc="props.date"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Check In:</label>
+                            <input type="time" class="form-control" 
+                                   t-model="state.checkIn" 
+                                   t-on-change="onTimeChange"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Check Out:</label>
+                            <input type="time" class="form-control" 
+                                   t-model="state.checkOut"
+                                   t-on-change="onTimeChange"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Total Hours:</label>
+                            <input type="number" class="form-control" 
+                                   t-model="state.totalHours"
+                                   step="0.5" min="0" max="24"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" t-on-click="onClose">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" t-on-click="onSave">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"/>
+    </t>
+
+    <!-- Employee Details Dialog Template -->
+    <t t-name="hr_attendance_grid.EmployeeDetailsDialog" owl="1">
+        <div class="modal fade show" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Employee Details</h5>
+                        <button type="button" class="btn-close" t-on-click="onClose"/>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Employee Information</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Name:</strong></td>
+                                        <td t-esc="state.employee.name"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Department:</strong></td>
+                                        <td t-esc="state.employee.department"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Job Title:</strong></td>
+                                        <td t-esc="state.employee.job_title"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td t-esc="state.employee.work_email"/>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Attendance Records for <t t-esc="state.date"/></h6>
+                                <div t-if="state.attendanceRecords.length === 0" class="text-muted">
+                                    No attendance records found for this date.
+                                </div>
+                                <div t-else="">
+                                    <t t-foreach="state.attendanceRecords" t-as="record" t-key="record.id">
+                                        <div class="card mb-2">
+                                            <div class="card-body p-2">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <small class="text-muted">Check In:</small><br/>
+                                                        <strong t-esc="formatTime(record.check_in)"/>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted">Check Out:</small><br/>
+                                                        <strong t-esc="formatTime(record.check_out)"/>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted">Hours:</small><br/>
+                                                        <strong t-esc="record.worked_hours + 'h'"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" t-on-click="onClose">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"/>
+    </t>
+
+</templates>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_po_entity_tree" model="ir.ui.view">
+        <field name="name">po.entity.tree</field>
+        <field name="model">po.entity</field>
+        <field name="arch" type="xml">
+            <tree string="Entities" editable="bottom">
+                <field name="name"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_po_entity" model="ir.actions.act_window">
+        <field name="name">Entities</field>
+        <field name="res_model">po.entity</field>
+        <field name="view_mode">tree</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first entity
+            </p>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<odoo>
+    <!-- Inherited form view for project -->
+    <record id="view_project_plus_form" model="ir.ui.view">
+        <field name="name">project.plus.form</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+             <xpath expr="//field[@name='tag_ids']" position="after">
+                     <field name="project_template_type" string="نوع المشروع"/>
+             </xpath>
+        </field>
+    </record>
+</odoo>

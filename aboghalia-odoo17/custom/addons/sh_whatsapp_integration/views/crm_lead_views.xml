@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add action entry in the Action Menu for CRM Lead -->
+    <record id="crm_case_form_inherit_custom_view_leads" model="ir.ui.view">
+        <field name="name">crm.lead.form.lead</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+        <field name="arch" type="xml">
+
+            <!-- Here in all context we won't pass 'default_partner_ids': partner_id or False
+            because it's take mobile no. default even whatsapp button is clicked from phon no. -->
+            <xpath expr="//field[@name='mobile']" position="after">
+                <button
+                    type="action"
+                    name="%(sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_action)d"
+                    class="btn-sm btn-link mb4 fa fa-whatsapp"
+                    aria-label="Whatsapp Number"
+                    title="Whatsapp Number"
+                    invisible="not mobile"
+                    context="{'default_whatsapp_mobile': mobile, 'default_crm_lead_id':active_id}"
+                    groups="sh_whatsapp_integration.group_crm_whatsapp_msg_feature"
+                />
+            </xpath>
+
+            <xpath expr="//sheet/group/group[@name='lead_info']/div[3]/field[@name='phone']"
+                position="after">
+                <button
+                    type="action"
+                    name="%(sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_action)d"
+                    class="btn-sm btn-link mb4 fa fa-whatsapp"
+                    aria-label="Whatsapp Number"
+                    title="Whatsapp Number"
+                    invisible="not phone"
+                    context="{'default_whatsapp_mobile': phone,'default_crm_lead_id':active_id}"
+                    groups="sh_whatsapp_integration.group_crm_whatsapp_msg_feature"
+                />
+            </xpath>
+
+            <xpath
+                expr="//sheet/notebook/page[@name='lead']/group/group[2]/div[2]/field[@name='mobile']"
+                position="after">
+                <button
+                    type="action"
+                    name="%(sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_action)d"
+                    class="btn-sm btn-link mb4 fa fa-whatsapp"
+                    aria-label="Whatsapp Number"
+                    title="Whatsapp Number"
+                    invisible="not mobile"
+                    context="{'default_whatsapp_mobile': mobile,'default_crm_lead_id':active_id}"
+                    groups="sh_whatsapp_integration.group_crm_whatsapp_msg_feature"
+                />
+            </xpath>
+
+            <xpath expr="//field[@name='phone']" position="after">
+                <button
+                    type="action"
+                    name="%(sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_action)d"
+                    class="btn-sm btn-link mb4 fa fa-whatsapp"
+                    aria-label="Whatsapp Number"
+                    title="Whatsapp Number"
+                    invisible="not phone"
+                    context="{'default_whatsapp_mobile': phone,'default_crm_lead_id':active_id}"
+                    groups="sh_whatsapp_integration.group_crm_whatsapp_msg_feature"
+                />
+            </xpath>
+        </field>
+    </record>
+
+    <!-- for send by whattsapp button -->
+    <record id="view_crm_lead_order_inherit_custom_form" model="ir.ui.view">
+        <field name="name">crm.lead.form</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form" />
+        <field name="arch" type="xml">
+            <button name="iap_enrich" position="after">
+                <button type="object" name="action_quotation_send_wp" class="oe_highlight" string="Send By
+    Whatsapp" groups="sh_whatsapp_integration.group_crm_whatsapp_msg_feature"/>
+            </button>
+        </field>
+    </record>
+</odoo>

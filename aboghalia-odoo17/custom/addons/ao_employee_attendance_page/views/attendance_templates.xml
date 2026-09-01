@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <t t-name="ao_employee_attendance_page.MyAttendanceTemplate">
+        <div class="o_my_attendance_app">
+            
+            <!-- Loading State -->
+            <div t-if="state.loading" class="o_loading_container">
+                <div class="o_loading_spinner"></div>
+                <div class="o_loading_text">Loading your attendance...</div>
+            </div>
+
+            <!-- Main Content -->
+            <div t-if="!state.loading and state.employee" class="o_attendance_container">
+                
+                <!-- Header -->
+                <div class="o_attendance_header">
+                    <div class="o_time_display">
+                        <div class="o_current_date" t-esc="currentDate"/>
+                        <div class="o_current_time" t-esc="currentTimeString"/>
+                    </div>
+                    <button class="o_refresh_btn" t-on-click="refresh" title="Refresh">
+                        <i class="fa fa-refresh"/>
+                    </button>
+                </div>
+
+                <!-- Employee Card -->
+                <div class="o_employee_card">
+                    <div class="o_employee_avatar">
+                        <img t-if="state.employee.image_url" 
+                             t-att-src="state.employee.image_url"
+                             t-att-alt="state.employee.name"/>
+                        <div t-else="" class="o_avatar_initials" t-esc="state.employee.initials"/>
+                    </div>
+                    
+                    <div class="o_employee_info">
+                        <h1 class="o_employee_name" t-esc="state.employee.name"/>
+                        <div t-if="state.employee.department" class="o_employee_department" t-esc="state.employee.department"/>
+                    </div>
+                </div>
+
+                <!-- Status Card -->
+                <div class="o_status_card">
+                    <div t-if="state.employee.is_checked_in" class="o_status_checked_in">
+                        <div class="o_status_icon">
+                            <i class="fa fa-check-circle"/>
+                        </div>
+                        <div class="o_status_content">
+                            <div class="o_status_title">Currently Checked In</div>
+                            <div t-if="state.employee.last_check_in" class="o_status_time">
+                                Since: <span t-esc="state.employee.last_check_in"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div t-else="" class="o_status_checked_out">
+                        <div class="o_status_icon">
+                            <i class="fa fa-times-circle"/>
+                        </div>
+                        <div class="o_status_content">
+                            <div class="o_status_title">Currently Checked Out</div>
+                            <div t-if="state.employee.last_check_out" class="o_status_time">
+                                Last out: <span t-esc="state.employee.last_check_out"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Today's Hours -->
+                <div class="o_hours_card">
+                    <div class="o_hours_icon">
+                        <i class="fa fa-clock-o"/>
+                    </div>
+                    <div class="o_hours_content">
+                        <div class="o_hours_title">Today's Hours</div>
+                        <div class="o_hours_value"><t t-esc="state.employee.worked_hours_today || 0"/> hours</div>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="o_action_section">
+                    <button t-if="!state.employee.is_checked_in" 
+                            class="o_action_btn o_check_in_btn" 
+                            t-on-click="checkIn"
+                            t-att-disabled="state.actionLoading">
+                        <i class="fa fa-sign-in"/>
+                        <span t-if="!state.actionLoading">Check In</span>
+                        <span t-else="">Checking In...</span>
+                    </button>
+                    
+                    <button t-else="" 
+                            class="o_action_btn o_check_out_btn" 
+                            t-on-click="checkOut"
+                            t-att-disabled="state.actionLoading">
+                        <i class="fa fa-sign-out"/>
+                        <span t-if="!state.actionLoading">Check Out</span>
+                        <span t-else="">Checking Out...</span>
+                    </button>
+                </div>
+
+                <!-- Message Display -->
+                <div t-if="state.message" class="o_message_container">
+                    <div t-att-class="'o_message o_message_' + state.messageType">
+                        <i t-if="state.messageType === 'success'" class="fa fa-check-circle"/>
+                        <i t-if="state.messageType === 'error'" class="fa fa-exclamation-triangle"/>
+                        <span t-esc="state.message"/>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Error State -->
+            <div t-if="!state.loading and !state.employee" class="o_error_container">
+                <div class="o_error_icon">
+                    <i class="fa fa-exclamation-triangle"/>
+                </div>
+                <div class="o_error_message">
+                    Unable to load attendance data. Please contact your administrator.
+                </div>
+                <button class="o_retry_btn" t-on-click="refresh">Try Again</button>
+            </div>
+
+        </div>
+    </t>
+
+</templates>

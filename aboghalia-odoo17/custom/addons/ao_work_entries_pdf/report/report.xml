@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="report_attendance_grid_pdf" model="ir.actions.report">
+        <field name="name">Attendance Grid (PDF)</field>
+        <field name="model">res.company</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">ao_work_entries_pdf.attendance_grid_report_pdf</field>
+        <field name="report_file">ao_work_entries_pdf.attendance_grid_report_pdf</field>
+        <field name="print_report_name">'Attendance_Grid_%s_%s' % (time.strftime('%%Y'), time.strftime('%%m'))</field>
+    </record>
+</odoo>

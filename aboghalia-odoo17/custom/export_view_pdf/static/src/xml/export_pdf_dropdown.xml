@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<!--    Dropdown item for export pdf-->
+    <t t-name="web.ExportPdf">
+        <button class="'o_export_pdf_menu'" t-on-click="onDirectExportPdf">
+            <i class="fa fa-fw fa-upload me-1"/>Export PDF
+        </button>
+        <!-- <DropdownItem class="'o_export_pdf_menu'" onSelected.bind="onDirectExportPdf">
+            <i class="fa fa-fw fa-upload me-1"/>Export PDF
+        </DropdownItem> -->
+    </t>
+</templates>

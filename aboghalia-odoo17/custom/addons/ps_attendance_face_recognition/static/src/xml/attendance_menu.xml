@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+<t t-name="ps_attendance_face_recognition.attendance_menu_custom" t-inherit="hr_attendance.attendance_menu"
+   t-inherit-mode="extension">
+
+    <xpath expr="//button[@t-on-click='() => this.signInOut()'][contains(@class, 'flex-basis-100')]" position="attributes">
+        <attribute name="t-if">!this.state.isFaceRecognitionEnabled</attribute>
+    </xpath>
+
+    <xpath expr="//button[@t-if='this.isFirstAttendance']" position="attributes">
+        <attribute name="t-if">this.isFirstAttendance and !this.state.isFaceRecognitionEnabled</attribute>
+    </xpath>
+
+    <xpath expr="//button[@t-if='this.isFirstAttendance and !this.state.isFaceRecognitionEnabled']" position="after">
+        <t t-if="this.state.isFaceRecognitionEnabled">  <!-- ✅ Hide buttons when enabled -->
+            <div t-if="!this.state.checkedIn" class="d-flex flex-wrap gap-3">
+                <button class="flex-basis-100 btn btn-md btn-success"
+                        data-tooltip="Camera" t-on-click="onCheckIn">
+                    <span>Check in</span>
+                    <i t-attf-class="fa fa-sign-{{ this.state.checkedIn ? 'out' : 'in' }} ms-1"/>
+                </button>
+            </div>
+            <div t-if="this.state.checkedIn" class="d-flex flex-wrap gap-3">
+                <button class="flex-basis-100 btn btn-md btn-warning"
+                        data-tooltip="Camera" t-on-click="onCheckOut">
+                    <span>Check out</span>
+                    <i t-attf-class="fa fa-sign-{{ this.state.checkedIn ? 'out' : 'in' }} ms-1"/>
+                </button>
+            </div>
+        </t>
+    </xpath>
+</t>
+</templates>

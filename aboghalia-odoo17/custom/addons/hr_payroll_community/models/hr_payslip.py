@@ -1,0 +1,1197 @@
+# -*- coding: utf-8 -*-
+#############################################################################
+#    A part of Open HRMS Project <https://www.openhrms.com>
+#
+#    Cybrosys Technologies Pvt. Ltd.
+#
+#    Copyright (C) 2023-TODAY Cybrosys Technologies(<https://www.cybrosys.com>)
+#    Author: Cybrosys Techno Solutions(<https://www.cybrosys.com>)
+#
+#    You can modify it under the terms of the GNU LESSER
+#    GENERAL PUBLIC LICENSE (LGPL v3), Version 3.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU LESSER GENERAL PUBLIC LICENSE (LGPL v3) for more details.
+#
+#    You should have received a copy of the GNU LESSER GENERAL PUBLIC LICENSE
+#    (LGPL v3) along with this program.
+#    If not, see <http://www.gnu.org/licenses/>.
+#
+#############################################################################
+from datetime import date, datetime, time
+import babel
+from dateutil.relativedelta import relativedelta
+from pytz import timezone
+from odoo import api, fields, models, tools, _
+from odoo.exceptions import UserError, ValidationError
+
+# This will generate 16th of days
+ROUNDING_FACTOR = 16
+
+
+class HrContractAbsence(models.Model):
+   
+    _inherit = 'hr.contract'
+    _description = 'Employee Contract'
+
+    
+    x_today_wage = fields.Float(string='اجر اليوم')
+    x_absence = fields.Float(string='الغياب', store=True , compute="_compute_x_absence")
+    x_penalties = fields.Float(string='جزاءات' , store=True , compute="_compute_x_penalties")
+    x_delay = fields.Float(string='تأخير', compute="_compute_x_delay")
+    x_total_salary = fields.Float(string='الراتب الشامل', compute="_compute_x_total_salary" , store = True)
+    x_other_discounts = fields.Float(string='خصومات أخرى' , readonly = True )
+    x_other_addons = fields.Float(string='إضافات أخرى' , readonly = True )
+    x_traffic_violations = fields.Float(string='المخالفات المرورية' , readonly=True)
+    x_number_of_absence_days = fields.Float(string='عدد أيام الغياب' , store=False)
+    x_number_of_leaves = fields.Float(string='عدد أيام المغادرة')
+    x_number_of_penalty_days = fields.Float(string='عدد أيام الجزاءات')
+    x_number_of_hours = fields.Float(string='عدد ساعات التأخير')
+    x_hour_rate = fields.Float(string='اجر الساعه', compute="_compute_x_hour_rate")
+    x_overtime_hour = fields.Float(string='ساعة العمل الإضافي')
+    x_total_overtime = fields.Float(string='اجمالي العمل الاضافي', compute="_compute_x_total_overtime")
+    x_number_of_overtime_hours = fields.Float(string='عدد ساعات العمل الاضافي')
+    x_total_discounts = fields.Float(string='إجمالي الخصومات', compute="_compute_x_total_discounts")
+    x_extra_total = fields.Float(string='اجمالي الاضافي', compute="_compute_x_extra_total")
+
+    hra = fields.Monetary(string='HRA', tracking=True, 
+                          help="House rent allowance.")
+    other_allowance = fields.Monetary(string="Other Allowance", 
+                                      help="Other allowances")
+    wage = fields.Monetary('Wage', required=True, tracking=True,  help="Employee's monthly gross wage.", group_operator="avg")
+
+
+    @api.depends("commission","travel_allowance","da","meal_allowance","medical_allowance","other_allowance")
+    def _compute_x_extra_total(self):
+        for record in self:
+            record.x_extra_total = record.commission + record.travel_allowance + record.da + record.meal_allowance + record.medical_allowance + record.other_allowance 
+        
+    @api.depends("x_absence","x_penalties","x_delay","x_other_discounts")
+    def _compute_x_total_discounts(self):
+        for record in self:
+            record.x_total_discounts = record.x_absence + record.x_penalties + record.x_delay + record.x_other_discounts
+        
+
+    @api.depends("x_overtime_hour","x_number_of_overtime_hours")
+    def _compute_x_total_overtime(self):
+        # Overtime amount is disabled from payroll calculations.
+        for record in self:
+            record.x_total_overtime = 0.0
+
+
+    @api.depends("wage","hra","commission","da","travel_allowance","meal_allowance","medical_allowance","other_allowance")
+    def _compute_x_total_salary(self):
+        for record in self:
+                    
+                    record.x_total_salary = record.wage + record.hra + record.commission + record.da + record.travel_allowance + record.meal_allowance + record.medical_allowance + record.other_allowance # - ( (record.x_social_insurance/100) * (record.wage + record.hra) )
+               
+    @api.depends("x_absence","x_number_of_absence_days")
+    def _compute_x_absence(self):
+        for record in self:
+            if record.x_today_wage:
+                if record.x_number_of_absence_days:
+                    record.x_absence = record.x_number_of_absence_days * record.x_today_wage
+                else:
+                    record.x_absence = 0.0
+            else:
+                record.x_absence = 0.0
+
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        res = super().read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        if 'x_number_of_absence_days' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_absence_days = 0.0
+                    for record in lines:
+                        total_absence_days += record.x_number_of_absence_days
+                    line['x_number_of_absence_days'] = total_absence_days
+
+        return res
+                
+    @api.depends("x_penalties","x_number_of_penalty_days") 
+    def _compute_x_penalties(self):
+        for record in self:
+            if record.x_today_wage:
+                if record.x_number_of_penalty_days:
+                    record.x_penalties = record.x_number_of_penalty_days * record.x_today_wage
+                else:
+                    record.x_penalties = 0.0
+            else:
+                record.x_penalties = 0.0
+
+    @api.depends("x_delay","x_number_of_hours","x_hour_rate")
+    def _compute_x_delay(self):
+        for record in self:
+            if record.x_hour_rate:
+                if record.x_number_of_hours:
+                    record.x_delay = record.x_number_of_hours * record.x_hour_rate
+                else:
+                    record.x_delay = 0.0
+            else:
+                record.x_delay = 0.0
+
+
+class HrPayslip(models.Model):
+    """Create new model for getting total Payroll Sheet for an Employee"""
+    _name = 'hr.payslip'
+    _inherit = 'mail.thread'
+    _description = 'Pay Slip'
+
+    def _register_hook(self):
+        """Delete leftover payslip multi-company rules from the database."""
+        super()._register_hook()
+        try:
+            from odoo.addons.hr_payroll_community.hooks import (
+                _disable_payslip_multi_company_rules,
+            )
+            _disable_payslip_multi_company_rules(self.env)
+        except Exception as exc:
+            import logging
+            logging.getLogger(__name__).warning(
+                "Failed to delete payslip multi-company rules: %s", exc
+            )
+
+    traffic_violations = fields.Monetary(string="المخالفات المرورية", currency_field = "company_currency_id")
+    other_additions = fields.Monetary(string="إضافات أخري", currency_field = "company_currency_id")
+    social_insurance = fields.Monetary(string="التأمينات الاجتماعية ", currency_field = "company_currency_id")
+    struct_id = fields.Many2one(comodel_name='hr.payroll.structure',
+                                string='Structure',
+                                help='Defines the rules that have to be applied'
+                                     ' to this payslip, accordingly '
+                                     'to the contract chosen. If you let empty '
+                                     'the field contract, this field isn\'t '
+                                     'mandatory anymore and thus the rules '
+                                     'applied will be all the rules set on the '
+                                     'structure of all contracts of the '
+                                     'employee valid for the chosen period')
+    name = fields.Char(string='Payslip Name', help="Enter Payslip Name")
+    number = fields.Char(string='Reference', copy=False,
+                         help="References for Payslip", )
+    employee_id = fields.Many2one(comodel_name='hr.employee', string='Employee',
+                                  required=True,
+                                  help="Choose Employee for Payslip")
+    date_from = fields.Date(string='Date From', required=True,
+                            help="Start date for Payslip",
+                            default=lambda self: fields.Date.to_string(
+                              (datetime.now() + relativedelta(months=-1, day=1,
+                                                              days=0)).date()))
+    date_to = fields.Date(string='Date To', required=True,
+                          help="End date for Payslip",
+                          default=lambda self: fields.Date.to_string(
+                              (datetime.now() + relativedelta(months=0, day=1,
+                                                              days=-1)).date()))
+    # this is chaos: 4 states are defined, 3 are used ('verify' isn't)
+    # and 5 exist ('confirm' seems to have existed)
+    state = fields.Selection(selection=[
+        ('draft', 'Draft'),
+        ('verify', 'Waiting'),
+        ('done', 'Done'),
+        ('cancel', 'Rejected'),
+    ], string='Status', index=True, readonly=True, copy=False, default='draft',
+        help="""* When the payslip is created the status is \'Draft\'
+                \n* If the payslip is under verification, 
+                the status is \'Waiting\'.
+                \n* If the payslip is confirmed then status is set to \'Done\'.
+                \n* When user cancel payslip the status is \'Rejected\'.""")
+    line_ids = fields.One2many('hr.payslip.line',
+                               'slip_id',
+                               string='Payslip Lines',
+                               help="Choose Payslip for line")
+    # Stored independently so multi-company salary splits can keep a different
+    # company per payslip without writing back to hr.employee.company_id.
+    company_id = fields.Many2one(
+        'res.company',
+        string='Company',
+        store=True,
+        readonly=False,
+        copy=False,
+        default=lambda self: self.env.company,
+        help="Company of this payslip (independent from the employee company)",
+    )
+    worked_days_line_ids = fields.One2many('hr.payslip.worked.days',
+                                           'payslip_id',
+                                           string='Payslip Worked Days',
+                                           copy=True,
+                                           help="Payslip worked days for line")
+    input_line_ids = fields.One2many('hr.payslip.input',
+                                     'payslip_id',
+                                     string='Payslip Inputs',
+                                     help="Choose Payslip Input")
+    paid = fields.Boolean(string='Made Payment Order ? ',
+                          copy=False, help="Is Payment Order")
+    note = fields.Text(string='Internal Note', help="Description for Payslip")
+    contract_id = fields.Many2one('hr.contract', string='Contract',
+                                  help="Choose Contract for Payslip")
+    details_by_salary_rule_category_ids = fields.One2many(
+        comodel_name='hr.payslip.line',
+        compute='_compute_details_by_salary_rule_category_ids',
+        string='Details by Salary Rule Category', help="Details from the salary"
+                                                       " rule category")
+    credit_note = fields.Boolean(string='Credit Note',
+                                 help="Indicates this payslip has "
+                                      "a refund of another")
+    payslip_run_id = fields.Many2one('hr.payslip.run',
+                                     string='Payslip Batches',
+                                     copy=False, help="Choose Payslip Run")
+    payslip_count = fields.Integer(compute='_compute_payslip_count',
+                                   string="Payslip Computation Details",
+                                   help="Set Payslip Count")
+    payslip_net = fields.Monetary(string="صافي الراتب", currency_field = "company_currency_id")
+    payslip_loan = fields.Monetary(string="السلف", currency_field = "company_currency_id")
+    payslip_gross = fields.Monetary(string="الإجمالي", currency_field = "company_currency_id")
+
+    company_currency_id = fields.Many2one(
+        string='Company Currency',
+        related='company_id.currency_id', readonly=True,
+    )
+    x_department = fields.Many2one('hr.department',string='القسم' , readonly=False, store=True)
+    x_job = fields.Many2one('hr.job',string='الوظيفة', related="contract_id.job_id")
+    o_wage = fields.Monetary(string='الاجر' , currency_field = "company_currency_id")
+    o_other_allowance = fields.Monetary(string='البدلات الأخرى' , currency_field = "company_currency_id")
+    o_hra = fields.Monetary(string='السكن' , currency_field = "company_currency_id",compute ="_compute_hra_count" , store = True , readonly = False )
+    o_social_insurance = fields.Monetary(string='التأمينات الاجتماعية' , currency_field = "company_currency_id", store = True , readonly = False )
+    x_total_salary = fields.Monetary(string='الراتب الشامل', currency_field = "company_currency_id")
+    x_total = fields.Float(string='الإجمالي', related="line_ids.total" , readonly = False)
+    beneficiary_address_1 = fields.Text(string='Beneficiary Address 1')
+    beneficiary_address_2 = fields.Text(string='Beneficiary Address 2')
+    beneficiary_address_3 = fields.Text(string='Beneficiary Address 3')
+    # beneficiar_bank = fields.Text(string='Beneficiary Bank')
+    x_absence = fields.Monetary(string='الغياب', currency_field = "company_currency_id")
+    x_penalties = fields.Monetary(string='جزاءات', currency_field = "company_currency_id")
+    x_delay = fields.Monetary(string='تأخير', currency_field = "company_currency_id")
+    x_other_discounts = fields.Monetary(string='خصومات أخرى', currency_field = "company_currency_id")
+    x_other_addons = fields.Monetary(string='إضافات أخرى' , currency_field = "company_currency_id")
+    x_number_of_absence_days = fields.Float(string='عدد أيام الغياب')
+    x_number_of_penalty_days = fields.Float(string='عدد أيام الجزاءات')
+    x_number_of_hours = fields.Float(string='عدد ساعات التأخير')
+    x_hour_rate = fields.Monetary(string='اجر الساعه',currency_field = "company_currency_id", compute="_compute_x_hour_rate")
+    x_number_of_overtime_hours = fields.Float(string='عدد ساعات العمل الاضافي')
+    remaining_leave_days = fields.Float(
+        string='الأجازات المدفوعة',
+        default=0.0,
+        digits=(16, 2),
+    )
+    x_total_overtime = fields.Monetary(string='اجمالي العمل الاضافي', currency_field = "company_currency_id", readonly = True)
+    is_cleared = fields.Boolean(string='Is Cleared' , default= False)
+    active=fields.Boolean(string='Active' , default= True)
+    payslip_name = fields.Many2one('custom.payslip', string='Payslip Name')
+    salary_receive_method_id = fields.Many2one(
+        'hr.salary.receive.method',
+        string='Salary Receive Method',
+    )
+
+    @api.onchange('employee_id')
+    def onchange_employee_id_last(self):
+        for rec in self:
+            rec.x_department = rec.employee_id.department_id
+            rec.salary_receive_method_id = rec.employee_id.salary_receive_method_id
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        Employee = self.env['hr.employee']
+        for vals in vals_list:
+            if not vals.get('employee_id'):
+                continue
+            employee = Employee.browse(vals['employee_id'])
+            if not vals.get('salary_receive_method_id') and employee.salary_receive_method_id:
+                vals['salary_receive_method_id'] = employee.salary_receive_method_id.id
+            if not vals.get('x_department') and employee.department_id:
+                vals['x_department'] = employee.department_id.id
+            # Needed after removing related= on company_id
+            if not vals.get('company_id') and employee.company_id:
+                vals['company_id'] = employee.company_id.id
+        return super().create(vals_list)
+
+    def write(self, vals):
+        res = super().write(vals)
+        if 'salary_receive_method_id' in vals:
+            for slip in self.filtered('employee_id'):
+                if slip.employee_id.salary_receive_method_id != slip.salary_receive_method_id:
+                    slip.employee_id.salary_receive_method_id = slip.salary_receive_method_id
+        return res
+
+    @api.onchange('x_other_discounts')
+    def onchange_other_discounts(self):
+        for rec in self:
+            if rec.contract_id :
+               rec.contract_id.x_other_discounts = rec.x_other_discounts 
+            else:
+                rec.x_other_discounts = 0.0
+
+    @api.onchange('x_other_addons')
+    def onchange_other_addons(self):
+        for rec in self:
+            if rec.contract_id :
+               rec.contract_id.x_other_addons = rec.x_other_addons 
+            else:
+                rec.x_other_addons = 0.0
+
+    @api.onchange('traffic_violations')
+    def onchange_traffic_violations(self):
+        for rec in self:
+            if rec.contract_id :
+               rec.contract_id.x_traffic_violations = rec.traffic_violations 
+            else:
+                rec.traffic_violations = 0.0
+    
+    def _compute_other_allowance(self):
+        for rec in self:
+            if rec.contract_id :
+                rec.o_other_allowance = rec.contract_id.other_allowance
+            else:
+                rec.o_other_allowance = 0.0
+    
+   
+    def _compute_hra_count(self):
+        for rec in self:
+            if rec.contract_id :
+                rec.o_hra = rec.contract_id.hra
+            else:
+                rec.o_hra = 0.0
+
+    # def _compute_social_insurance_count(self):
+    #     for rec in self:
+    #         if rec.contract_id :
+    #             rec.o_social_insurance = (rec.contract_id.x_social_insurance/100) * (rec.contract_id.wage + rec.contract_id.hra)
+    #         else:
+    #             rec.o_hra = 0.0
+                
+    def clear_butoon(self):
+       slips = self.env["hr.payslip"].search([])
+       for slip in slips:
+        if slip.is_cleared == False :
+            slip.y_absence = slip.x_absence 
+            slip.y_penalties = slip.x_penalties
+            slip.y_delay = slip.x_delay
+            slip.y_other_discounts = slip.x_other_discounts
+            slip.y_traffic_violations = slip.traffic_violations
+            slip.y_other_addons = slip.x_other_addons
+            # slip.y_number_of_absence_days = slip.x_number_of_absence_days
+            slip.y_number_of_penalty_days = slip.x_number_of_penalty_days
+            slip.y_number_of_hours = slip.x_number_of_hours
+            slip.y_hour_rate = slip.x_hour_rate
+            slip.y_number_of_overtime_hours = slip.x_number_of_overtime_hours
+            slip.y_total_overtime = slip.x_total_overtime
+            slip.is_cleared = True
+       contracts = self.env["hr.contract"].search([])
+       for contract in contracts:
+            contract.x_number_of_absence_days = 0
+            contract.x_number_of_penalty_days = 0
+            contract.x_number_of_hours = 0
+            contract.x_number_of_overtime_hours = 0
+            contract.x_other_addons = 0
+
+    def _compute_details_by_salary_rule_category_ids(self):
+        """Compute function for Salary Rule Category for getting
+         all Categories"""
+        for payslip in self:
+            payslip.details_by_salary_rule_category_ids = payslip.mapped(
+                'line_ids').filtered(lambda line: line.category_id)
+
+    def _compute_payslip_count(self):
+        """Compute function for getting Total count of Payslips"""
+        for payslip in self:
+            payslip.payslip_count = len(payslip.line_ids)
+
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        res = super().read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        if 'payslip_loan' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_loans = 0.0
+                    for record in lines:
+                        total_loans += record.payslip_loan
+                    line['payslip_loan'] = total_loans
+
+        if 'payslip_net' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_nets = 0.0
+                    for record in lines:
+                        total_nets += record.payslip_net
+                    line['payslip_net'] = total_nets
+
+        if 'payslip_gross' in fields:
+            for line in res:
+                if '__domain' in line:
+                    lines = self.search(line['__domain'])
+                    total_gross = 0.0
+                    for record in lines:
+                        total_gross += record.payslip_gross
+                    line['payslip_gross'] = total_gross
+
+        return res
+
+    def _compute_payslip_loan(self):
+        for payslip in self:
+            payslip.payslip_loan = 0.0
+            for line in payslip.line_ids:
+                if line.code == 'LO':		
+                        payslip.payslip_loan = line.total
+
+    def _compute_payslip_nets(self):
+        for payslip in self:
+            payslip.payslip_net = 0.0
+            for line in payslip.line_ids:
+                if line.code == 'NET':		
+                        payslip.payslip_net = line.total
+                        
+                        
+    def _compute_payslip_gross(self):
+        for payslip in self:
+            payslip.payslip_gross = 0.0
+            for line in payslip.line_ids:
+                if line.code == 'GROSS':		
+                        payslip.payslip_gross = line.total
+
+    @api.constrains('date_from', 'date_to')
+    def _check_dates(self):
+        """Function for adding constrains for payslip datas
+        by considering date_from and date_to fields"""
+        if any(self.filtered(
+                lambda payslip: payslip.date_from > payslip.date_to)):
+            raise ValidationError(
+                _("Payslip 'Date From' must be earlier 'Date To'."))
+
+    def action_payslip_draft(self):
+        """Function for change stage of Payslip"""
+        return self.write({'state': 'draft'})
+
+    def action_payslip_done(self):
+        """Function for change stage of Payslip"""
+        # self.action_compute_sheet()
+        return self.write({'state': 'done'})
+
+    def action_payslip_cancel(self):
+        """Function for change stage of Payslip"""
+        return self.write({'state': 'cancel'})
+
+    def action_refund_sheet(self):
+        """Function for refund the Payslip sheet"""
+        for payslip in self:
+            copied_payslip = payslip.copy(
+                {'credit_note': True, 'name': _('Refund: ') + payslip.name})
+            copied_payslip.action_compute_sheet()
+            copied_payslip.action_payslip_done()
+        formview_ref = self.env.ref('hr_payroll_community.hr_payslip_view_form',
+                                    False)
+        treeview_ref = self.env.ref('hr_payroll_community.hr_payslip_view_tree',
+                                    False)
+        return {
+            'name': _("Refund Payslip"),
+            'view_mode': 'tree, form',
+            'view_id': False,
+            'res_model': 'hr.payslip',
+            'type': 'ir.actions.act_window',
+            'target': 'current',
+            'domain': "[('id', 'in', %s)]" % copied_payslip.ids,
+            'views': [(treeview_ref and treeview_ref.id or False, 'tree'),
+                      (formview_ref and formview_ref.id or False, 'form')],
+            'context': {}
+        }
+
+    def unlink(self):
+        """Function for unlink the Payslip"""
+        if any(self.filtered(
+                lambda payslip: payslip.state not in ('draft', 'cancel'))):
+            raise UserError(
+                _('You cannot delete a payslip which is not draft or cancelled!'
+                  ))
+        return super(HrPayslip, self).unlink()
+
+    # TODO move this function into hr_contract module, on hr.employee object
+    @api.model
+    def get_contract(self, employee, date_from, date_to):
+        """
+        @param employee: recordset of employee
+        @param date_from: date_field
+        @param date_to: date_field
+        @return: returns the ids of all the contracts for the given employee
+        that need to be considered for the given dates
+        """
+        # a contract is valid if it ends between the given dates
+        clause_1 = ['&', ('date_end', '<=', date_to),
+                    ('date_end', '>=', date_from)]
+        # OR if it starts between the given dates
+        clause_2 = ['&', ('date_start', '<=', date_to),
+                    ('date_start', '>=', date_from)]
+        # OR if it starts before the date_from and finish after the
+        # date_end (or never finish)
+        clause_3 = ['&', ('date_start', '<=', date_from), '|',
+                    ('date_end', '=', False), ('date_end', '>=', date_to)]
+        # Ignore contract status (draft/open/close/cancel) — match by period only.
+        # Prefer running contracts when several overlap the same period.
+        clause_final = [('employee_id', '=', employee.id), '|',
+                        '|'] + clause_1 + clause_2 + clause_3
+        contracts = self.env['hr.contract'].search(clause_final)
+        contracts = contracts.sorted(key=lambda c: 0 if c.state == 'open' else 1)
+        return contracts.ids
+
+    def action_compute_extra_lost(self):
+        """Fill absence / late / overtime from the Attendance dashboard monthly summary.
+
+        Falls back to legacy lost_hours/extra_hours only if the dashboard summary
+        models are not available.
+        """
+        for payslip in self:
+            if not payslip.employee_id or not payslip.date_from:
+                continue
+
+            year = payslip.date_from.year
+            month = payslip.date_from.month
+            vals = {}
+
+            # Preferred: same numbers as Attendance grid (Calculate Metrics)
+            if 'hr.employee.attendance.grid' in self.env:
+                result = self.env['hr.employee.attendance.grid'].get_employee_monthly_summary(
+                    payslip.employee_id.id, year, month
+                )
+                if result.get('success') and result.get('summary'):
+                    summary = result['summary']
+                    vals = {
+                        'x_number_of_absence_days': summary.get('total_absence_days', 0) or 0,
+                        'x_number_of_hours': summary.get('total_late_hours', 0.0) or 0.0,
+                        'x_number_of_overtime_hours': summary.get('total_overtime_hours', 0.0) or 0.0,
+                        'remaining_leave_days': summary.get('remaining_leave_days', 0) or 0,
+                    }
+            elif 'hr.employee.monthly.summary' in self.env:
+                summary = self.env['hr.employee.monthly.summary'].search([
+                    ('employee_id', '=', payslip.employee_id.id),
+                    ('year', '=', year),
+                    ('month', '=', month),
+                ], limit=1)
+                if summary:
+                    vals = {
+                        'x_number_of_absence_days': summary.total_absence_days,
+                        'x_number_of_hours': summary.total_late_hours,
+                        'x_number_of_overtime_hours': summary.total_overtime_hours,
+                        'remaining_leave_days': summary.remaining_leave_days,
+                    }
+
+            if vals:
+                payslip.write(vals)
+                continue
+
+            # Legacy fallback (do not use for normal payroll — lost_hours is unreliable)
+            attendances = self.env['hr.attendance'].search([
+                ('employee_id', '=', payslip.employee_id.id),
+            ])
+            date_slip = payslip.date_from.strftime('%m-%Y')
+            extra_hours = 0.0
+            lost_hours = 0.0
+            for att in attendances:
+                if att.check_in and att.check_in.strftime('%m-%Y') == date_slip:
+                    extra_hours += att.extra_hours or 0.0
+                    lost_hours += att.lost_hours or 0.0
+            payslip.write({
+                'x_number_of_overtime_hours': extra_hours,
+                'x_number_of_hours': lost_hours,
+            })
+
+
+
+    def action_compute_sheet(self):
+        """Function for compute Payslip sheet"""
+        for payslip in self:
+            if not payslip.x_department and payslip.employee_id.department_id:
+                payslip.write({
+                    'x_department': payslip.employee_id.department_id.id,
+                })
+
+            if not payslip.contract_id:
+                contract_ids = self.get_contract(
+                    payslip.employee_id, payslip.date_from, payslip.date_to
+                )
+                if contract_ids:
+                    payslip.contract_id = contract_ids[0]
+                    if payslip.contract_id.struct_id:
+                        payslip.struct_id = payslip.contract_id.struct_id
+
+            if not payslip.contract_id:
+                raise UserError(_(
+                    "No contract found for employee %s in this period. "
+                    "Cannot compute the payslip."
+                ) % (payslip.employee_id.display_name,))
+
+            number = payslip.number or self.env['ir.sequence'].next_by_code(
+                'salary.slip')
+            # delete old payslip lines
+            payslip.line_ids.unlink()
+            contract = payslip.contract_id
+            # Overtime amount is excluded from payslip calculations.
+            total_overtime = 0.0
+            absence = (payslip.x_number_of_absence_days or 0.0) * (contract.x_today_wage or 0.0)
+            penalties = (payslip.x_number_of_penalty_days or 0.0) * (contract.x_today_wage or 0.0)
+            delay = (payslip.x_number_of_hours or 0.0) * (contract.x_hour_rate or 0.0)
+            social_insurance = 0
+            total_salary = (
+                (contract.wage or 0.0)
+                + (contract.hra or 0.0)
+                + (contract.commission or 0.0)
+                + (contract.da or 0.0)
+                + (contract.travel_allowance or 0.0)
+                + (contract.meal_allowance or 0.0)
+                + (contract.medical_allowance or 0.0)
+                + (contract.other_allowance or 0.0)
+                - social_insurance
+            )
+            payslip.write({
+                'x_total_overtime': total_overtime,
+                'x_absence': absence,
+                'x_total_salary': total_salary,
+                'x_penalties': penalties,
+                'x_delay': delay,
+                'social_insurance': social_insurance,
+                'o_wage': contract.wage,
+                'o_hra': contract.hra,
+                'o_other_allowance': contract.other_allowance,
+            })
+            # set the list of contract for which the rules have to be applied
+            # if we don't give the contract, then the rules to apply should be
+            payslip.onchange_contract_id()
+            # for all current contracts of the employee
+            contract_ids = payslip.contract_id.ids or \
+                           self.get_contract(payslip.employee_id,
+                                             payslip.date_from, payslip.date_to)
+            if not contract_ids:
+                raise UserError(_(
+                    "No contract found for employee %s in this period. "
+                    "Cannot compute the payslip."
+                ) % (payslip.employee_id.display_name,))
+            lines = [(0, 0, line) for line in
+                     self._get_payslip_lines(contract_ids, payslip.id)]
+            payslip.write({'line_ids': lines, 'number': number})
+            contracts = self.env['hr.contract'].browse(contract_ids)
+            payslip.get_inputs(contracts, payslip.date_from, payslip.date_to)
+            net_s = 0.0
+            gross_s = 0.0
+            loan = 0.0
+            for line in payslip.line_ids:
+                if line.code == 'NET':
+                    net_s = line.total
+                elif line.code == 'GROSS':
+                    gross_s = line.total
+                elif line.code == 'LO':
+                    loan = -line.total
+            payslip.write({
+                'payslip_net': net_s,
+                'payslip_gross': gross_s,
+                'payslip_loan': loan,
+            })
+
+        return True
+                
+
+
+
+    @api.model
+    def get_worked_day_lines(self, contracts, date_from, date_to):
+        """
+        @param contracts: Browse record of contracts, date_from, date_to
+        @return: returns a list of dict containing the input that should be
+        applied for the given contract between date_from and date_to
+        """
+        res = []
+        # fill only if the contract as a working schedule linked
+        for contract in contracts.filtered(
+                lambda contract: contract.resource_calendar_id):
+            day_from = datetime.combine(fields.Date.from_string(date_from),
+                                        time.min)
+            day_to = datetime.combine(fields.Date.from_string(date_to),
+                                      time.max)
+            # compute leave days
+            leaves = {}
+            calendar = contract.resource_calendar_id
+            tz = timezone(calendar.tz)
+            day_leave_intervals = contract.employee_id.list_leaves(
+                day_from, day_to, calendar=contract.resource_calendar_id)
+            multi_leaves = []
+            for day, hours, leave in day_leave_intervals:
+                work_hours = calendar.get_work_hours_count(
+                    tz.localize(datetime.combine(day, time.min)),
+                    tz.localize(datetime.combine(day, time.max)),
+                    compute_leaves=False,
+                )
+                if len(leave) > 1:
+                    for each in leave:
+                        if each.holiday_id:
+                            multi_leaves.append(each.holiday_id)
+                else:
+                    holiday = leave.holiday_id
+                    current_leave_struct = leaves.setdefault(
+                        holiday.holiday_status_id, {
+                            'name': holiday.holiday_status_id.name or _(
+                                'Global Leaves'),
+                            'sequence': 5,
+                            'code': holiday.holiday_status_id.code or 'GLOBAL',
+                            'number_of_days': 0.0,
+                            'number_of_hours': 0.0,
+                            'contract_id': contract.id,
+                        })
+                    current_leave_struct['number_of_hours'] += hours
+                    if work_hours:
+                        current_leave_struct[
+                            'number_of_days'] += hours / work_hours
+            # compute worked days
+            work_data = contract.employee_id.get_work_days_data(
+                day_from, day_to, calendar=contract.resource_calendar_id)
+            attendances = {
+                'name': _("Normal Working Days paid at 100%"),
+                'sequence': 1,
+                'code': 'WORK100',
+                'number_of_days': work_data['days'],
+                'number_of_hours': work_data['hours'],
+                'contract_id': contract.id,
+            }
+            res.append(attendances)
+            uniq_leaves = [*set(multi_leaves)]
+            c_leaves = {}
+            for rec in uniq_leaves:
+                duration = rec.duration_display.replace("days", "").strip()
+                duration_in_hours = float(duration) * 24
+                c_leaves.setdefault(rec.holiday_status_id,
+                                    {'hours': duration_in_hours})
+            for item in c_leaves:
+                if not leaves or item not in leaves:
+                    data = {
+                        'name': item.name,
+                        'sequence': 20,
+                        'code': item.code or 'LEAVES',
+                        'number_of_hours': c_leaves[item]['hours'],
+                        'number_of_days': c_leaves[item][
+                                              'hours'] / work_hours,
+                        'contract_id': contract.id,
+                    }
+                    res.append(data)
+                for time_off in leaves:
+                    if item == time_off:
+                        leaves[item]['number_of_hours'] += c_leaves[item][
+                            'hours']
+                        leaves[item]['number_of_days'] \
+                            += c_leaves[item]['hours'] / work_hours
+            res.extend(leaves.values())
+        return res
+
+    @api.model
+    def get_inputs(self, contracts, date_from, date_to):
+        """Function for getting contracts upon date_from and date_to fields"""
+        res = []
+        structure_ids = contracts.get_all_structures()
+        rule_ids = self.env['hr.payroll.structure'].browse(
+            structure_ids).get_all_rules()
+        sorted_rule_ids = [id for id, sequence in
+                           sorted(rule_ids, key=lambda x: x[1])]
+        inputs = self.env['hr.salary.rule'].browse(sorted_rule_ids).mapped(
+            'input_ids')
+        for contract in contracts:
+            for input in inputs:
+                input_data = {
+                    'name': input.name,
+                    'code': input.code,
+                    'contract_id': contract.id,
+                    'date_from': date_from,
+                    'date_to': date_to,
+                }
+                res.append(input_data)
+        return res
+
+    @api.model
+    def _get_payslip_lines(self, contract_ids, payslip_id):
+        """Function for getting Payslip Lines"""
+
+        def _sum_salary_rule_category(localdict, category, amount):
+            """Function for getting total sum of Salary Rule Category"""
+            if category.parent_id:
+                localdict = _sum_salary_rule_category(localdict,
+                                                      category.parent_id,
+                                                      amount)
+            localdict['categories'].dict[category.code] \
+                = category.code in localdict[
+                'categories'].dict and localdict['categories'].dict[
+                category.code] + amount or amount
+            return localdict
+
+        class BrowsableObject(object):
+            """Class for Browsable Object"""
+
+            def __init__(self, employee_id, dict, env):
+                """Function for getting employee_id,dict and env"""
+                self.employee_id = employee_id
+                self.dict = dict
+                self.env = env
+
+            def __getattr__(self, attr):
+                """Function for return dict"""
+                return attr in self.dict and self.dict.__getitem__(attr) or 0.0
+
+        class InputLine(BrowsableObject):
+            """a class that will be used into the python code, mainly for
+            usability purposes"""
+
+            def sum(self, code, from_date, to_date=None):
+                """Function for getting sum of Payslip with respect to
+                 from_date,to_date fields"""
+                if to_date is None:
+                    to_date = fields.Date.today()
+                self.env.cr.execute("""
+                    SELECT sum(amount) as sum
+                    FROM hr_payslip as hp, hr_payslip_input as pi
+                    WHERE hp.employee_id = %s AND hp.state = 'done'
+                    AND hp.date_from >= %s AND hp.date_to <= %s AND hp.id = 
+                    pi.payslip_id AND pi.code = %s""",
+                                    (
+                                        self.employee_id, from_date, to_date,
+                                        code))
+                return self.env.cr.fetchone()[0] or 0.0
+
+        class WorkedDays(BrowsableObject):
+            """a class that will be used into the python code, mainly for
+            usability purposes"""
+
+            def _sum(self, code, from_date, to_date=None):
+                """Function for getting sum of Payslip days with respect to
+                 from_date,to_date fields"""
+                if to_date is None:
+                    to_date = fields.Date.today()
+                self.env.cr.execute("""
+                    SELECT sum(number_of_days) as number_of_days, 
+                    sum(number_of_hours) as number_of_hours
+                    FROM hr_payslip as hp, hr_payslip_worked_days as pi
+                    WHERE hp.employee_id = %s AND hp.state = 'done'
+                    AND hp.date_from >= %s AND hp.date_to <= %s AND hp.id = 
+                    pi.payslip_id AND pi.code = %s""",
+                                    (
+                                        self.employee_id, from_date, to_date,
+                                        code))
+                return self.env.cr.fetchone()
+
+            def sum(self, code, from_date, to_date=None):
+                """Function for getting sum of Payslip with respect to
+                 from_date,to_date fields"""
+                res = self._sum(code, from_date, to_date)
+                return res and res[0] or 0.0
+
+            def sum_hours(self, code, from_date, to_date=None):
+                """Function for getting sum of Payslip hours with respect to
+                 from_date,to_date fields"""
+                res = self._sum(code, from_date, to_date)
+                return res and res[1] or 0.0
+
+        class Payslips(BrowsableObject):
+            """a class that will be used into the python code, mainly for
+            usability purposes"""
+
+            def sum(self, code, from_date, to_date=None):
+                """Function for getting sum of Payslip with respect to
+                 from_date,to_date fields"""
+                if to_date is None:
+                    to_date = fields.Date.today()
+                self.env.cr.execute("""SELECT sum(case when hp.credit_note = 
+                False then (pl.total) else (-pl.total) end)
+                FROM hr_payslip as hp, hr_payslip_line as pl
+                WHERE hp.employee_id = %s AND hp.state = 'done'
+                AND hp.date_from >= %s AND hp.date_to <= %s AND hp.id 
+                = pl.slip_id AND pl.code = %s""",
+                                    (
+                                        self.employee_id, from_date, to_date,
+                                        code))
+                res = self.env.cr.fetchone()
+                return res and res[0] or 0.0
+
+        # we keep a dict with the result because a value can be overwritten
+        # by another rule with the same code
+        result_dict = {}
+        rules_dict = {}
+        worked_days_dict = {}
+        inputs_dict = {}
+        blacklist = []
+        payslip = self.env['hr.payslip'].browse(payslip_id)
+        for worked_days_line in payslip.worked_days_line_ids:
+            worked_days_dict[worked_days_line.code] = worked_days_line
+        for input_line in payslip.input_line_ids:
+            inputs_dict[input_line.code] = input_line
+        categories = BrowsableObject(payslip.employee_id.id, {}, self.env)
+        inputs = InputLine(payslip.employee_id.id, inputs_dict, self.env)
+        worked_days = WorkedDays(payslip.employee_id.id, worked_days_dict,
+                                 self.env)
+        payslips = Payslips(payslip.employee_id.id, payslip, self.env)
+        rules = BrowsableObject(payslip.employee_id.id, rules_dict, self.env)
+        baselocaldict = {'categories': categories, 'rules': rules,
+                         'payslip': payslips, 'worked_days': worked_days,
+                         'inputs': inputs}
+        # get the ids of the structures on the contracts and their
+        # parent id as well
+        contracts = self.env['hr.contract'].browse(contract_ids)
+        if len(contracts) == 1 and payslip.struct_id:
+            structure_ids = list(
+                set(payslip.struct_id._get_parent_structure().ids))
+        else:
+            structure_ids = contracts.get_all_structures()
+        # get the rules of the structure and thier children
+        rule_ids = self.env['hr.payroll.structure'].browse(
+            structure_ids).get_all_rules()
+        # run the rules by sequence
+        sorted_rule_ids = [id for id, sequence in
+                           sorted(rule_ids, key=lambda x: x[1])]
+        sorted_rules = self.env['hr.salary.rule'].browse(sorted_rule_ids)
+        for contract in contracts:
+            employee = contract.employee_id
+            localdict = dict(baselocaldict, employee=employee,
+                             contract=contract)
+            for rule in sorted_rules:
+                key = rule.code + '-' + str(contract.id)
+                localdict['result'] = None
+                localdict['result_qty'] = 1.0
+                localdict['result_rate'] = 100
+                # check if the rule can be applied
+                if rule._satisfy_condition(
+                        localdict) and rule.id not in blacklist:
+                    # compute the amount of the rule
+                    amount, qty, rate = rule._compute_rule(localdict)
+                    # check if there is already a rule computed with that code
+                    previous_amount = rule.code in localdict and localdict[
+                        rule.code] or 0.0
+                    # set/overwrite the amount computed for this rule in
+                    # the localdict
+                    tot_rule = amount * qty * rate / 100.0
+                    localdict[rule.code] = tot_rule
+                    rules_dict[rule.code] = rule
+                    # sum the amount for its salary category
+                    localdict = _sum_salary_rule_category(
+                        localdict, rule.category_id, tot_rule - previous_amount)
+                    # create/overwrite the rule in the temporary results
+                    result_dict[key] = {
+                        'salary_rule_id': rule.id,
+                        'contract_id': contract.id,
+                        'name': rule.name,
+                        'code': rule.code,
+                        'category_id': rule.category_id.id,
+                        'sequence': rule.sequence,
+                        'appears_on_payslip': rule.appears_on_payslip,
+                        'condition_select': rule.condition_select,
+                        'condition_python': rule.condition_python,
+                        'condition_range': rule.condition_range,
+                        'condition_range_min': rule.condition_range_min,
+                        'condition_range_max': rule.condition_range_max,
+                        'amount_select': rule.amount_select,
+                        'amount_fix': rule.amount_fix,
+                        'amount_python_compute': rule.amount_python_compute,
+                        'amount_percentage': rule.amount_percentage,
+                        'amount_percentage_base': rule.amount_percentage_base,
+                        'register_id': rule.register_id.id,
+                        'amount': amount,
+                        'employee_id': contract.employee_id.id,
+                        'quantity': qty,
+                        'rate': rate,
+                    }
+                else:
+                    # blacklist this rule and its children
+                    blacklist += [id for id, seq in
+                                  rule._recursive_search_of_rules()]
+        return list(result_dict.values())
+
+    # YTI
+    # TODO To rename. This method is not really an onchange,
+    #  as it is not in any view
+    # employee_id and contract_id could be browse records
+    def onchange_employee_id(self, date_from, date_to, employee_id=False,
+                             contract_id=False):
+        """Function for return worked days when changing onchange_employee_id"""
+        # defaults
+        res = {
+            'value': {
+                'line_ids': [],
+                # delete old input lines
+                'input_line_ids': [(2, x,) for x in self.input_line_ids.ids],
+                # delete old worked days lines
+                'worked_days_line_ids': [(2, x,) for x in
+                                         self.worked_days_line_ids.ids],
+                # 'details_by_salary_head':[], TODO put me back
+                'name': '',
+                'contract_id': False,
+                'struct_id': False,
+            }
+        }
+        if (not employee_id) or (not date_from) or (not date_to):
+            return res
+        ttyme = datetime.combine(fields.Date.from_string(date_from), time.min)
+        employee = self.env['hr.employee'].browse(employee_id)
+        locale = self.env.context.get('lang') or 'en_US'
+        res['value'].update({
+            'name': _('Salary Slip of %s for %s') % (
+                employee.name, tools.ustr(
+                    babel.dates.format_date(date=ttyme, format='MMMM-y',
+                                            locale=locale))),
+            'company_id': employee.company_id.id,
+        })
+        if not self.env.context.get('contract'):
+            # fill with the first contract of the employee
+            contract_ids = self.get_contract(employee, date_from, date_to)
+        else:
+            if contract_id:
+                # set the list of contract for which the input have to be filled
+                contract_ids = [contract_id]
+            else:
+                # if we don't give the contract, then the input to fill
+                # should be for all current contracts of the employee
+                contract_ids = self.get_contract(employee, date_from, date_to)
+        if not contract_ids:
+            return res
+        contract = self.env['hr.contract'].browse(contract_ids[0])
+        res['value'].update({
+            'contract_id': contract.id
+        })
+        struct = contract.struct_id
+        if not struct:
+            return res
+        res['value'].update({
+            'struct_id': struct.id,
+        })
+        # computation of the salary input
+        contracts = self.env['hr.contract'].browse(contract_ids)
+        worked_days_line_ids = self.get_worked_day_lines(contracts, date_from,
+                                                         date_to)
+        input_line_ids = self.get_inputs(contracts, date_from, date_to)
+        res['value'].update({
+            'worked_days_line_ids': worked_days_line_ids,
+            'input_line_ids': input_line_ids,
+        })
+        return res
+
+    @api.onchange('employee_id', )
+    def onchange_employee(self):
+        """Function for getting contract for employee"""
+        if (not self.employee_id) or (not self.date_from) or (not self.date_to):
+            return
+        employee = self.employee_id
+        date_from = self.date_from
+        date_to = self.date_to
+        contract_ids = []
+        ttyme = datetime.combine(fields.Date.from_string(date_from), time.min)
+        locale = self.env.context.get('lang') or 'en_US'
+        # Keep a manually entered name (e.g. after Compute Sheet / contract onchange)
+        if not self.name:
+            self.name = _('Salary Slip of %s for %s') % (
+                employee.name, tools.ustr(
+                    babel.dates.format_date(date=ttyme, format='MMMM-y',
+                                            locale=locale)))
+        self.company_id = employee.company_id
+        if not self.env.context.get('contract') or not self.contract_id:
+            contract_ids = self.get_contract(employee, date_from, date_to)
+            if not contract_ids:
+                return
+            self.contract_id = self.env['hr.contract'].browse(contract_ids[0])
+        if not self.contract_id.struct_id:
+            return
+        self.struct_id = self.contract_id.struct_id
+        if self.contract_id:
+            contract_ids = self.contract_id.ids
+        # computation of the salary input
+        contracts = self.env['hr.contract'].browse(contract_ids)
+        worked_days_line_ids = self.get_worked_day_lines(contracts, date_from,
+                                                         date_to)
+        worked_days_lines = self.worked_days_line_ids.browse([])
+        for r in worked_days_line_ids:
+            worked_days_lines += worked_days_lines.new(r)
+        self.worked_days_line_ids = worked_days_lines
+        input_line_ids = self.get_inputs(contracts, date_from, date_to)
+        input_lines = self.input_line_ids.browse([])
+        for r in input_line_ids:
+            input_lines += input_lines.new(r)
+        self.input_line_ids = input_lines
+        return
+
+    @api.onchange('contract_id')
+    def onchange_contract_id(self):
+        """Function for getting structure when changing contract"""
+        if not self.contract_id:
+            self.struct_id = False
+        self.with_context(contract=True).onchange_employee()
+        return
+
+    def get_salary_line_total(self, code):
+        """Function for getting total salary line"""
+        self.ensure_one()
+        line = self.line_ids.filtered(lambda line: line.code == code)
+        if line:
+            return line[0].total
+        else:
+            return 0.0
+
+    @api.onchange('date_from')
+    def onchange_date_from(self):
+        """Function for getting contract for employee"""
+        date_from = self.date_from
+        date_to = self.date_to
+        contract_ids = []
+        if self.contract_id:
+            contract_ids = self.contract_id.ids
+        # # computation of the salary input
+        contracts = self.env['hr.contract'].browse(contract_ids)
+        worked_days_line_ids = self.get_worked_day_lines(contracts, date_from,
+                                                         date_to)
+        worked_days_lines = self.worked_days_line_ids.browse([])
+        for r in worked_days_line_ids:
+            worked_days_lines += worked_days_lines.new(r)
+        self.worked_days_line_ids = worked_days_lines
+        input_line_ids = self.get_inputs(contracts, date_from, date_to)
+        input_lines = self.input_line_ids.browse([])
+        for r in input_line_ids:
+            input_lines += input_lines.new(r)
+        self.input_line_ids = input_lines
+        if self.line_ids.search([('name', '=', 'Meal Voucher')]):
+            self.line_ids.search(
+                [('name', '=', 'Meal Voucher')]).salary_rule_id.write(
+                {'quantity': self.worked_days_line_ids.number_of_days})
+        return
+
+    @api.onchange('date_to')
+    def onchange_date_to(self):
+        """Function for getting contract for employee"""
+        if (not self.employee_id) or (not self.date_from) or (not self.date_to):
+            return
+        date_from = self.date_from
+        date_to = self.date_to
+        contract_ids = []
+        if self.contract_id:
+            contract_ids = self.contract_id.ids
+        # computation of the salary input
+        contracts = self.env['hr.contract'].browse(contract_ids)
+        worked_days_line_ids = self.get_worked_day_lines(contracts, date_from,
+                                                         date_to)
+        worked_days_lines = self.worked_days_line_ids.browse([])
+        for r in worked_days_line_ids:
+            worked_days_lines += worked_days_lines.new(r)
+        self.worked_days_line_ids = worked_days_lines
+        input_line_ids = self.get_inputs(contracts, date_from, date_to)
+        input_lines = self.input_line_ids.browse([])
+        for r in input_line_ids:
+            input_lines += input_lines.new(r)
+        self.input_line_ids = input_lines
+        if self.line_ids.search([('name', '=', 'Meal Voucher')]):
+            self.line_ids.search(
+                [('name', '=', 'Meal Voucher')]).salary_rule_id.write(
+                {'quantity': self.worked_days_line_ids.number_of_days})
+        return
+
+
+
+
+class Employee(models.Model):
+    _inherit = 'hr.employee'
+    _description = 'Employee'
+
+    beneficiary_id = fields.Char(string='Beneficiary ID')
+    beneficiar_bank = fields.Char(string='Beneficiary Bank')
+
+
+

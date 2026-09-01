@@ -1,0 +1,47 @@
+name: Diagnose ER Menu ACL
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check menus ACL and fix plan data
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+            print('=== act_window for employee.request ===')
+            acts = env['ir.actions.act_window'].sudo().search([('res_model','=','employee.request')])
+            for a in acts:
+                print(a.id, a.name, a.get_external_id().get(a.id))
+
+            print('=== menus containing Employee / اتصالات / request ===')
+            menus = env['ir.ui.menu'].sudo().search(['|','|','|',('name','ilike','Employee'),('name','ilike','اتصال'),('name','ilike','request'),('name','ilike','Request')])
+            for m in menus:
+                print(m.id, m.complete_name, 'action=', m.action, 'xmlid=', m.get_external_id().get(m.id))
+
+            print('=== ACL rows for employee.request ===')
+            for acl in env['ir.model.access'].sudo().search([('model_id.model','=','employee.request')]):
+                print(acl.id, acl.name, 'group=', acl.group_id.id, acl.group_id.full_name, 'xmlid=', acl.get_external_id().get(acl.id))
+
+            print('=== rules ===')
+            for r in env['ir.rule'].sudo().search([('model_id.model','=','employee.request')]):
+                print(r.id, r.name, r.groups.mapped('full_name'), r.domain_force)
+
+            print('=== modules samir* ===')
+            for m in env['ir.module.module'].sudo().search([('name','like','samir')]):
+                print(m.name, m.state)
+
+            print('=== can admin read 696 ===')
+            rec = env['employee.request'].sudo().browse(696)
+            print(rec.exists(), rec.serial_number if rec.exists() else None)
+            print('DONE')
+            PY

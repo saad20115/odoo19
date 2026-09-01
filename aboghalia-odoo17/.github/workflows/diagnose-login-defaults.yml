@@ -1,0 +1,65 @@
+name: Diagnose Login Defaults
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Diagnose live vs beta
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            echo "===== LIVE CODE ====="
+            cd /odoo17-v2
+            git log -1 --oneline
+            grep -E "version|_ao_find_related|ao_force_employee" custom/addons/ao_user_login_defaults/__manifest__.py custom/addons/ao_user_login_defaults/models/res_users.py custom/addons/ao_user_login_defaults/models/ir_http.py | head -40
+
+            echo "===== BETA CODE ====="
+            cd /odoo17-v2-beta
+            git log -1 --oneline
+            grep -E "version|_ao_find_related|ao_force_employee" custom/addons/ao_user_login_defaults/__manifest__.py custom/addons/ao_user_login_defaults/models/res_users.py custom/addons/ao_user_login_defaults/models/ir_http.py | head -40
+
+            echo "===== PORTS / SERVICES ====="
+            grep -E 'http_port|db_name|dbfilter|addons_path' /etc/odoo17-v2-server.conf /etc/odoo17-v2-beta.conf || true
+            systemctl is-active odoo17-v2-server odoo17-v2-beta-server || true
+            ss -tlnp | grep -E '8068|8070' || true
+            grep -rE 'portal.aboghalia|8068|8070' /etc/nginx /etc/apache2 /etc/caddy 2>/dev/null | head -40 || true
+
+            echo "===== LIVE DB MODULE + HAYTHAM ====="
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            m = env['ir.module.module'].sudo().search([('name','=','ao_user_login_defaults')], limit=1)
+            print('MODULE', m.state, m.latest_version, m.installed_version)
+            u = env['res.users'].sudo().search([('login','=','haytham_hady@hotmail.com')], limit=1)
+            print('USER', u.id, 'action', u.action_id.id, u.action_id.name, 'company', u.company_id.id, u.company_id.name)
+            print('ALLOWED', u.company_ids.mapped(lambda c: (c.id, c.name)))
+            emps = env['hr.employee'].sudo().search(['|',('user_id','=',u.id),('work_email','=ilike',u.login)])
+            print('EMPS', [(e.id, e.name, e.company_id.id, e.company_id.name, e.user_id.id, e.work_email) for e in emps])
+            if hasattr(u, '_ao_get_employee_company'):
+                print('EMP_COMPANY', u._ao_get_employee_company().name)
+                print('SAFE_HOME', u._ao_safe_home_action_id())
+            else:
+                print('METHODS MISSING - code not loaded in this process')
+            PY
+
+            echo "===== BETA DB MODULE + HAYTHAM ====="
+            sudo -u odoo17-v2 python3 /odoo17-v2-beta/odoo17-v2-server/odoo-bin shell -d BetaDB1 -c /etc/odoo17-v2-beta.conf <<'PY'
+            m = env['ir.module.module'].sudo().search([('name','=','ao_user_login_defaults')], limit=1)
+            print('MODULE', m.state, m.latest_version, m.installed_version)
+            u = env['res.users'].sudo().search([('login','=','haytham_hady@hotmail.com')], limit=1)
+            print('USER', u.id, 'action', u.action_id.id, u.action_id.name, 'company', u.company_id.id, u.company_id.name)
+            print('ALLOWED', u.company_ids.mapped(lambda c: (c.id, c.name)))
+            emps = env['hr.employee'].sudo().search(['|',('user_id','=',u.id),('work_email','=ilike',u.login)])
+            print('EMPS', [(e.id, e.name, e.company_id.id, e.company_id.name, e.user_id.id, e.work_email) for e in emps])
+            if hasattr(u, '_ao_get_employee_company'):
+                print('EMP_COMPANY', u._ao_get_employee_company().name)
+                print('SAFE_HOME', u._ao_safe_home_action_id())
+            else:
+                print('METHODS MISSING - code not loaded in this process')
+            PY

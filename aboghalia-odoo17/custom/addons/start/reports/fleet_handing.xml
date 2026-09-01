@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+    <record id="fleet_handing_report" model="ir.actions.report" >
+        <field name="name">نموذج تسليم</field>
+        <field name="model">fleet.vehicle</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">start.fleet_handing_template</field>
+        <field name="report_file">start.fleet_handing_template</field>
+        <field name="binding_model_id" ref="fleet.model_fleet_vehicle"/>
+        <field name="binding_type">report</field>
+        <field name="print_report_name">object.name.split('/')[-1]</field>
+     </record>
+
+        
+        
+        <template id="fleet_handing_template">
+            <t t-call="web.basic_layout">
+              <t t-foreach="docs" t-as="docs">
+                <div class="page">
+                    <h2 style="text-align: center;">نموذج تسليم</h2>
+                    <table class="table table-bordered" style="width: 100%; margin-top: 20px;">
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الرقم التسلسلي</th>
+                            <td style="width: 60%;"><t t-esc="docs.sequence"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">النموذج</th>
+                            <td style="width: 60%;"><t t-esc="docs.model_id.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">لوحة السيارة</th>
+                            <td style="width: 60%;"><t t-esc="docs.license_plate"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">السائق</th>
+                            <td style="width: 60%;"><t t-esc="docs.driver_id.name"/></td>
+
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الفئة</th>
+                            <td style="width: 60%;"><t t-esc="docs.category_id.name"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">رقم الشاسيه</th>
+                            <td style="width: 60%;"><t t-esc="docs.vin_sn"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">الموقع</th>
+                            <td style="width: 60%;"><t t-esc="docs.location"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">تاريخ الإسناد</th>
+                            <td style="width: 60%;"><t t-esc="docs.next_assignation_date"/></td>
+
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">تاريخ التسجيل</th>
+                            <td style="width: 60%;"><t t-esc="docs.acquisition_date"/></td>
+                        </tr>
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 40%;">تاريخ اول عقد</th>
+                            <td style="width: 60%;"><t t-esc="docs.first_contract_date"/></td>
+                        </tr>
+
+                        
+                    </table>
+                    <table class="table table-bordered" style="width: 100%; margin-top: 20px;">
+                        <tr style="width: 100%; text-align: center;">
+                            <th style="width: 20%;">الاسم </th>
+
+                            <td style="width: 30%;"></td>
+
+                            <th style="width: 20%;">التوقيع</th>
+                            
+                            <td style="width: 30%;"></td>
+                        </tr>
+
+                    </table>
+                </div>
+            </t>
+            </t>
+        </template>
+    </data>
+</odoo>

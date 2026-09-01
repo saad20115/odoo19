@@ -1,0 +1,66 @@
+name: Diagnose Leave Columns
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check leave columns and backups on live
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 15m
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+            print('=== hr_leave columns ===')
+            cr.execute("SELECT column_name FROM information_schema.columns WHERE table_name='hr_leave' ORDER BY column_name")
+            cols = [r[0] for r in cr.fetchall()]
+            print('total_cols', len(cols))
+            for c in ['current_level','manager_approver_id','project_manager_approver_id','general_manager_approver_id','hr_manager_approver_id','leave_project_manager_id']:
+                print(c, 'PRESENT' if c in cols else 'MISSING')
+
+            print('=== hr_employee leave_project_manager_id ===')
+            cr.execute("SELECT column_name FROM information_schema.columns WHERE table_name='hr_employee' AND column_name='leave_project_manager_id'")
+            print('leave_project_manager_id', 'PRESENT' if cr.fetchone() else 'MISSING')
+
+            print('=== hr_leave counts ===')
+            cr.execute('SELECT COUNT(*) FROM hr_leave')
+            print('rows', cr.fetchone()[0])
+            cr.execute('SELECT state, COUNT(*) FROM hr_leave GROUP BY state ORDER BY 2 DESC')
+            print(cr.fetchall())
+
+            print('=== groups leftover from leave approval ===')
+            cr.execute("SELECT id, name FROM res_groups WHERE name::text ILIKE %s", ('%Leave%',))
+            print(cr.fetchall()[:30])
+            cr.execute("SELECT id, name FROM ir_module_category WHERE name::text ILIKE %s", ('%Leave%',))
+            print('cats', cr.fetchall())
+
+            print('=== po.order still owned by followup ===')
+            cr.execute("SELECT module, name, model FROM ir_model_data WHERE name IN ('model_po_order','model_po_followup') OR (model='ir.model' AND name LIKE 'model_po_%') ORDER BY module, name")
+            print(cr.fetchall())
+
+            print('=== samir modules detail ===')
+            for name in ['samir','samir_gamal_1','samir_etislate','ao_po_order','ao_leave_approval']:
+                m = env['ir.module.module'].sudo().search([('name','=',name)], limit=1)
+                if m:
+                    print(name, m.state, m.shortdesc, m.write_date)
+
+            print('=== mail tracking values mentioning current_level ===')
+            cr.execute("SELECT COUNT(*) FROM mail_tracking_value WHERE field_desc ILIKE %s OR field ILIKE %s", ('%Current Level%','%current_level%'))
+            print('tracking rows', cr.fetchone()[0])
+
+            print('DONE')
+            PY
+
+            echo '=== DB sizes / dump search ==='
+            sudo -u postgres psql -c "SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database WHERE datname IN ('MainDB1','BetaDB1');"
+            find /var /odoo17-v2 /odoo17-v2-beta /root /home -maxdepth 3 \( -name '*.sql' -o -name '*.sql.gz' -o -name '*.dump' -o -name '*backup*' \) 2>/dev/null | head -50 || true
+            ls -lah /var/lib/odoo17-v2 /odoo17-v2/.local 2>/dev/null | head -20 || true
+            echo DONE_ALL

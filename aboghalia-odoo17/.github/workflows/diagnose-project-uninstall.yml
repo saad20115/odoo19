@@ -1,0 +1,160 @@
+name: Diagnose Project Uninstall
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Diagnose project uninstall impact on live portal
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 20m
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            from datetime import datetime, timedelta
+            cr = env.cr
+            Module = env['ir.module.module'].sudo()
+
+            print('=== PROJECT + RELATED MODULE STATES ===')
+            names = [
+                'project', 'project_account', 'project_purchase', 'project_sale',
+                'hr_timesheet', 'sale_project', 'project_sms', 'project_mail',
+                'project_todo', 'industry_fsm', 'helpdesk', 'documents_project',
+                'incoming_mail_store', 'ao_po_followup', 'ao_makka_po_followup',
+                'ao_leave_approval', 'ao_po_order', 'hr_expense', 'hr_expense_extract',
+                'account', 'account_accountant', 'sale', 'purchase',
+                'samir', 'samir_gamal_1', 'samir_etislate',
+            ]
+            for name in names:
+                m = Module.search([('name', '=', name)], limit=1)
+                if m:
+                    print(f'{name}: state={m.state} write={m.write_date} ver={m.installed_version}->{m.latest_version}')
+                else:
+                    print(f'{name}: NOT IN DB')
+
+            print('=== MODULES written today (likely install/uninstall) ===')
+            cr.execute("""
+                SELECT name, state, write_date
+                FROM ir_module_module
+                WHERE write_date::date = CURRENT_DATE
+                ORDER BY write_date DESC, name
+            """)
+            for row in cr.fetchall():
+                print(row)
+
+            print('=== MENUS matching اتصالات / اداري ===')
+            Menu = env['ir.ui.menu'].sudo()
+            menus = Menu.search(['|', '|', ('name', 'ilike', 'اتصال'), ('name', 'ilike', 'اداري'), ('name', 'ilike', 'mail')])
+            for m in menus[:40]:
+                print(m.id, m.complete_name, 'active=', m.active, 'xmlid=', m.get_external_id().get(m.id))
+
+            print('=== INCOMING MAIL ===')
+            cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='incoming_mail')")
+            if cr.fetchone()[0]:
+                cr.execute('SELECT COUNT(*) FROM incoming_mail')
+                print('incoming_mail rows', cr.fetchone()[0])
+                cr.execute("""
+                    SELECT MIN(create_date), MAX(create_date),
+                           COUNT(*) FILTER (WHERE create_date::date < DATE '2026-08-16'),
+                           COUNT(*) FILTER (WHERE create_date::date >= DATE '2026-08-16')
+                    FROM incoming_mail
+                """)
+                print('create range / before16 / from16', cr.fetchone())
+                # try common date fields
+                cr.execute("""
+                    SELECT column_name FROM information_schema.columns
+                    WHERE table_name='incoming_mail' AND data_type IN ('date','timestamp without time zone','timestamp with time zone')
+                    ORDER BY column_name
+                """)
+                print('date cols', [r[0] for r in cr.fetchall()])
+            else:
+                print('incoming_mail TABLE MISSING')
+
+            print('=== PROJECT TABLES ===')
+            for t in ['project_project', 'project_task', 'project_task_type', 'account_analytic_line']:
+                cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name=%s)", (t,))
+                if not cr.fetchone()[0]:
+                    print(t, 'MISSING')
+                    continue
+                cr.execute(f'SELECT COUNT(*) FROM "{t}"')
+                cnt = cr.fetchone()[0]
+                cr.execute(f'SELECT MIN(create_date), MAX(create_date) FROM "{t}"')
+                print(t, 'rows=', cnt, 'create=', cr.fetchone())
+
+            print('=== INVOICES account_move ===')
+            cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name='account_move')")
+            if cr.fetchone()[0]:
+                cr.execute("""
+                    SELECT move_type, state, COUNT(*), MIN(invoice_date), MAX(invoice_date), MIN(create_date), MAX(create_date)
+                    FROM account_move
+                    GROUP BY move_type, state
+                    ORDER BY move_type, state
+                """)
+                for row in cr.fetchall():
+                    print(row)
+                cr.execute('SELECT COUNT(*) FROM account_move')
+                print('TOTAL account_move', cr.fetchone()[0])
+                cr.execute("""
+                    SELECT COUNT(*) FILTER (WHERE create_date::date < DATE '2026-08-16'),
+                           COUNT(*) FILTER (WHERE create_date::date >= DATE '2026-08-16')
+                    FROM account_move
+                """)
+                print('account_move before/from Aug16', cr.fetchone())
+            else:
+                print('account_move MISSING')
+
+            print('=== EXPENSE ===')
+            for t in ['hr_expense', 'hr_expense_sheet']:
+                cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name=%s)", (t,))
+                if cr.fetchone()[0]:
+                    cr.execute(f'SELECT COUNT(*), MIN(create_date), MAX(create_date) FROM "{t}"')
+                    print(t, cr.fetchone())
+                else:
+                    print(t, 'MISSING')
+
+            print('=== PO / MAKKA still there ===')
+            for t in ['po_followup','po_order','makka_po_followup','incoming_mail']:
+                cr.execute("SELECT EXISTS (SELECT 1 FROM information_schema.tables WHERE table_name=%s)", (t,))
+                if cr.fetchone()[0]:
+                    cr.execute(f'SELECT COUNT(*) FROM "{t}"')
+                    print(t, cr.fetchone()[0])
+                else:
+                    print(t, 'MISSING')
+
+            print('=== ir_model_data for project (how much reinstalled fresh) ===')
+            cr.execute("SELECT COUNT(*) FROM ir_model_data WHERE module='project'")
+            print('project xmlids', cr.fetchone()[0])
+
+            print('=== custom fields on project.task / project.project still present? ===')
+            for model in ['project.task', 'project.project']:
+                fields = env['ir.model.fields'].sudo().search([
+                    ('model', '=', model),
+                    ('state', '=', 'manual'),
+                ])
+                print(model, 'manual/studio fields', len(fields), [(f.name, f.field_description) for f in fields[:30]])
+
+            print('=== studio / customizations modules ===')
+            for m in Module.search([('name', 'ilike', 'studio')]):
+                print(m.name, m.state, m.write_date)
+            for m in Module.search([('name', 'ilike', 'web_studio')]):
+                print(m.name, m.state, m.write_date)
+
+            print('=== attachments count ===')
+            cr.execute('SELECT COUNT(*) FROM ir_attachment')
+            print('attachments', cr.fetchone()[0])
+            cr.execute("""
+                SELECT res_model, COUNT(*) FROM ir_attachment
+                WHERE res_model IN ('account.move','hr.expense','hr.expense.sheet','incoming.mail','project.task','project.project','po.order','makka.po.followup')
+                GROUP BY res_model ORDER BY 2 DESC
+            """)
+            print(cr.fetchall())
+
+            print('DONE')
+            PY

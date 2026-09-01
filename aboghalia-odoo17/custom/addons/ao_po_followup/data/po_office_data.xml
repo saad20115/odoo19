@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Unique offices extracted from Google Sheet (duplicates / spelling variants merged) -->
+    <record id="po_office_badr" model="po.office">
+        <field name="name">بدر</field>
+    </record>
+    <record id="po_office_madinah" model="po.office">
+        <field name="name">المدينة</field>
+    </record>
+    <record id="po_office_yanbu" model="po.office">
+        <field name="name">ينبع</field>
+    </record>
+    <record id="po_office_khaybar" model="po.office">
+        <field name="name">خيبر</field>
+    </record>
+</odoo>

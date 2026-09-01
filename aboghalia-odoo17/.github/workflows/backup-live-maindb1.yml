@@ -1,0 +1,57 @@
+name: Backup Live MainDB1
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Export live MainDB1 dump and locate filestore
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 120m
+          script: |
+            set -e
+            TS=$(date -u +%Y%m%d_%H%M%S)
+            OUT=/root/odoo_live_backup_$TS
+            sudo mkdir -p "$OUT"
+            echo "===== OUT=$OUT ====="
+
+            echo "===== DB sizes ====="
+            sudo -u postgres psql -c "SELECT datname, pg_size_pretty(pg_database_size(datname)) FROM pg_database WHERE datname IN ('MainDB1','BetaDB1');"
+
+            echo "===== Finding filestore ====="
+            sudo find /var/lib /odoo17-v2 /odoo17-v2-beta /home -type d -path '*/filestore/MainDB1' 2>/dev/null || true
+            sudo find /var/lib /odoo17-v2 -type d -name filestore 2>/dev/null | head -20 || true
+            grep -E 'data_dir|filestore' /etc/odoo17-v2-server.conf 2>/dev/null || true
+            ls -lah /var/lib/odoo17-v2 /odoo17-v2 2>/dev/null | head -30 || true
+
+            echo "===== pg_dump MainDB1 (custom format) ====="
+            sudo -u postgres pg_dump -Fc -f "$OUT/MainDB1_LIVE_${TS}.dump" MainDB1
+            sudo ls -lah "$OUT/MainDB1_LIVE_${TS}.dump"
+
+            echo "===== employee.request only SQL also ====="
+            sudo -u postgres pg_dump -Fc -t 'employee_request*' -t 'ir_attachment' -f "$OUT/MainDB1_employee_request_and_attachments_LIVE_${TS}.dump" MainDB1 || true
+            # ir_attachment full dump is huge; also make table-only counts
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+            cr.execute('SELECT COUNT(*) FROM employee_request')
+            print('employee_request', cr.fetchone()[0])
+            cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model='employee.request'")
+            print('er_attachments', cr.fetchone()[0])
+            cr.execute('SELECT COUNT(*) FROM account_move')
+            print('account_move', cr.fetchone()[0])
+            cr.execute('SELECT COUNT(*) FROM hr_expense')
+            print('hr_expense', cr.fetchone()[0])
+            PY
+
+            echo "===== disk free ====="
+            df -h / /root | head -10
+            sudo ls -lah "$OUT"
+            echo "BACKUP_DIR=$OUT"
+            echo "DONE_LIVE_EXPORT"

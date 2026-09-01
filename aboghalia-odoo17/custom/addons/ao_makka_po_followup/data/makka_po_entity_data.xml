@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Unique entities extracted from Google Sheet (duplicates / spelling variants merged) -->
+    <record id="po_entity_maintenance" model="makka.po.entity">
+        <field name="name">صيانة</field>
+    </record>
+    <record id="po_entity_meter_rehab" model="makka.po.entity">
+        <field name="name">تاهيل عدادات</field>
+    </record>
+    <record id="po_entity_meter_maintenance" model="makka.po.entity">
+        <field name="name">صيانة العدادات</field>
+    </record>
+    <record id="po_entity_cabin_rehab" model="makka.po.entity">
+        <field name="name">تاهيل كبائن توزيع</field>
+    </record>
+    <record id="po_entity_pole_rehab" model="makka.po.entity">
+        <field name="name">تاهيل اعمدة</field>
+    </record>
+    <record id="po_entity_station_rehab" model="makka.po.entity">
+        <field name="name">تاهيل محطات</field>
+    </record>
+    <record id="po_entity_station_maintenance" model="makka.po.entity">
+        <field name="name">صيانة محطات</field>
+    </record>
+    <record id="po_entity_box_rehab" model="makka.po.entity">
+        <field name="name">تاهيل صناديق</field>
+    </record>
+    <record id="po_entity_cabinet_rehab" model="makka.po.entity">
+        <field name="name">تاهيل دولايب توزيع</field>
+    </record>
+    <record id="po_entity_rehab" model="makka.po.entity">
+        <field name="name">تاهيل</field>
+    </record>
+    <record id="po_entity_cable_welding" model="makka.po.entity">
+        <field name="name">لحام كيبل</field>
+    </record>
+</odoo>

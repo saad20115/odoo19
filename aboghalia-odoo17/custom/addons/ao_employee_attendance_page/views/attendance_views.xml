@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Attendance Page Action -->
+    <record id="action_attendance_page" model="ir.actions.client">
+        <field name="name">My Attendance</field>
+        <field name="tag">attendance_page</field>
+    </record>
+
+    <!-- Menu Item -->
+    <menuitem id="menu_attendance_page"
+              name="My Attendance"
+              action="action_attendance_page"
+              parent="hr_attendance.menu_hr_attendance_root"
+              sequence="1"/>
+</odoo>

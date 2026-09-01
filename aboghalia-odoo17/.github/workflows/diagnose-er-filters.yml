@@ -1,0 +1,42 @@
+name: Diagnose ER Filters
+
+on:
+  workflow_dispatch:
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check filters and missing post-July data
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            cr = env.cr
+            cr.execute('SELECT COUNT(*) FROM employee_request WHERE active=true')
+            print('active', cr.fetchone()[0])
+            cr.execute('SELECT COUNT(*) FROM employee_request WHERE active=false')
+            print('archived', cr.fetchone()[0])
+            cr.execute("SELECT company_id, COUNT(*) FROM employee_request GROUP BY 1")
+            print('by company', cr.fetchall())
+            cr.execute("SELECT status, COUNT(*) FROM employee_request GROUP BY 1")
+            print('by status', cr.fetchall())
+            # compare with BetaDB? can't from this shell easily
+            print('manual fields on employee.request')
+            fields = env['ir.model.fields'].sudo().search([('model','=','employee.request'),('state','=','manual')])
+            print(len(fields), [(f.name, f.field_description) for f in fields])
+            # check if mail messages remain for employee.request
+            cr.execute("SELECT COUNT(*) FROM mail_message WHERE model='employee.request'")
+            print('chatter messages', cr.fetchone()[0])
+            cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE res_model='employee.request' OR name ILIKE %s", ('%employee.request%',))
+            print('att', cr.fetchone()[0])
+            # any filestore orphans?
+            cr.execute("SELECT COUNT(*) FROM ir_attachment WHERE create_date < DATE '2026-08-27' AND res_model IS NULL")
+            print('null model attachments before today', cr.fetchone()[0])
+            print('DONE')
+            PY

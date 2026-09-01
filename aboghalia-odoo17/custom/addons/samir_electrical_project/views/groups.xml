@@ -1,0 +1,101 @@
+<odoo>
+    <data noupdate="1">
+
+     <record id="module_category_samir_projects" model="ir.module.category">
+            <field name="name">permissions</field>
+            <field name="sequence">10</field>
+        </record>
+
+    <record id="group_samir_assignment_team" model="res.groups">
+            <field name="name">Assignment.Team</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_map" model="res.groups">
+            <field name="name">الخريطة</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_issuing_permits" model="res.groups">
+            <field name="name">اصدار التصاريح</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+
+    <record id="group_samir_excution_team" model="res.groups">
+            <field name="name">Excution.Team</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+
+    <record id="group_samir_closing_team" model="res.groups">
+            <field name="name">Closing.Team</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+        <!-- Security Group for Managers -->
+    <record id="group_samir_invoicing_team" model="res.groups">
+            <field name="name">Invoicing.Team</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_enter_stations_team" model="res.groups">
+            <field name="name">دخول محططات 110</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_central_area_replacements_team" model="res.groups">
+            <field name="name">استبدالات المنطقة المركزيه</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_third_parties_team" model="res.groups">
+            <field name="name">الجهات الخارجية</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_transferred_orders_team" model="res.groups">
+            <field name="name">اوامر محولة</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_photonics_maintenance_team" model="res.groups">
+            <field name="name">صيانة الضوئيات</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_programes_team" model="res.groups">
+            <field name="name">البرامج</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_connectivity_projects_team" model="res.groups">
+            <field name="name">مشاريع الربط</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_connections_feelings_team" model="res.groups">
+            <field name="name">توصيلات المشاعر</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_connections_team" model="res.groups">
+            <field name="name">التوصيلات</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_x_projects_team" model="res.groups">
+            <field name="name">المشاريع</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_project_projects_team" model="res.groups">
+            <field name="name">مشاريع المشارع</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_maintenance_of_feelings_team" model="res.groups">
+            <field name="name">الصيانة في المشاعر</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_qualification_rooms_team" model="res.groups">
+            <field name="name">تأهيل غرف العدادات بمنى</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_arafat_transformer_rooms_team" model="res.groups">
+            <field name="name">غرف محولات عرفات</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_rehabilitation_of_station_rooms_team" model="res.groups">
+            <field name="name">اعاده تأهيل غرف المحطات</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    <record id="group_samir_zaidi_transformers_team" model="res.groups">
+            <field name="name">محولات الزايدي</field>
+            <field name="category_id" ref="module_category_samir_projects"/>
+        </record>
+    </data> 
+</odoo>

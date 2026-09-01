@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--
+    Author: Mohamed Adel
+    Description:
+    Custom Odoo report to print a QR code and serial number
+    centered on a small label-size page (45mm x 35mm).
+    -->
+
+    <!-- Custom Paper Format: 45mm x 35mm -->
+    <record id="report_qr_custom_paper_format" model="report.paperformat">
+        <field name="name">QR Custom Format</field>
+        <field name="default" eval="False"/>
+        <field name="format">custom</field>
+        <field name="page_height">45</field> <!-- 3.5 cm -->
+        <field name="page_width">90</field>  <!-- 4.5 cm -->
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">2</field>
+        <field name="margin_bottom">2</field>
+        <field name="margin_left">1</field>
+        <field name="margin_right">1</field>
+        <field name="header_line" eval="False"/>
+    </record>
+
+    <!-- Report Action -->
+    <record id="action_employee_request_qr_report" model="ir.actions.report">
+        <field name="name">Print QR Code with Serial Number</field>
+        <field name="model">employee.request</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">samir_gamal.report_employee_request_qr</field>
+        <field name="binding_model_id" ref="model_employee_request"/>
+        <field name="paperformat_id" ref="report_qr_custom_paper_format"/>
+    </record>
+
+    <!-- Report Template -->
+    <template id="report_employee_request_qr">
+        <t t-call="web.basic_layout">
+            <t t-set="doc" t-value="docs[0]"/>
+           
+            <div style="width: 100%; height: 100vh; display: flex; justify-content: center; align-items: center; direction: ltr;">
+                
+                <table style="border-collapse: collapse; width: 100%; border: 1px solid #ccc;">
+                    <tr>
+                        <!-- QR Code Cell - Fixed Width -->
+                        <td style="width: 30mm; height: 30mm; vertical-align: middle; text-align: center; border: 1px solid #ddd; padding: 2px;">
+                            <img t-att-src="'data:image/png;base64,' + (doc.qr_code or '')"
+                                 style="width: 25mm; height: 25mm; object-fit: contain;" />
+                        </td>
+                        
+                        <!-- Data Cell - Takes Remaining Width -->
+                        <td style="width: auto; vertical-align: middle; text-align: right; border: 1px solid #ddd; font-size: 8pt; line-height: 1.1; padding: 3px; background-color: #f9f9f9;">
+                            <div><t t-esc="doc.serial_number"/><strong> :رقم المعاملة</strong></div>
+                            <div><strong>تاريخ: </strong><t t-esc="doc.start_date" t-options="{'widget': 'date', 'format': 'dd/MM/yyyy'}"/></div>
+                            <div><strong>القسم: </strong> <t t-esc="doc.department.name"/></div>
+                            <div><strong>نوع المعاملة: </strong><t t-esc="doc.transaction_type.name"/></div>
+                        </td>
+                    </tr>
+                </table>
+                
+            </div>
+        </t>
+    </template>
+
+</odoo>

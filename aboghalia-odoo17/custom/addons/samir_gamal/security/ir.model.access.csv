@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_request_user,employee.request.user,model_employee_request,,1,1,1,1
+access_employee_request_manager,employee.request.manager,model_employee_request,,1,1,1,1
+access_employee_request_admin,employee.request.manager,model_employee_request,,1,1,1,1
+
+access_employee_request_accountant,employee.request.accountant,model_employee_request,account.group_account_user,1,1,1,1
+access_employee_request_accountant_admin,employee.request.accountant,model_employee_request,,1,1,1,1
+
+access_employee_request_tag,access.employee.request.tag,model_employee_request_tag,base.group_user,1,1,1,0
+access_employee_request_tag_admin,access.employee.request.tag,model_employee_request_tag,,1,1,1,0
+
+access_employee_request_type_user,employee.request.type.user,model_employee_request_type,base.group_user,1,1,1,0
+access_employee_request_type_manager,employee.request.type.manager,model_employee_request_type,base.group_system,1,1,1,1
+access_employee_request_analysis,employee.request.analysis.user,model_employee_request_analysis,base.group_user,1,1,1,1
+access_employee_request_type_admin,employee.request.type.manager,model_employee_request_type,,1,1,1,1

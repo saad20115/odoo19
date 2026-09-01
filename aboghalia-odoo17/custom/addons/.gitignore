@@ -1,0 +1,15 @@
+# Python
+*.py[cod]
+__pycache__/
+*.egg-info/
+.eggs/
+# Odoo
+*.pot~
+.~lock.*
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+*~
+# Logs / local
+*.log

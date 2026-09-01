@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="inherit_company_header" inherit_id="hr_attendance.companyHeader">
+        <xpath expr="//img" position="after">
+            <button class="testing btn btn-light btn-lg p-5 rounded-3">
+                <i class="fa fa-3x fa-barcode mb-3"/>
+                <span class="d-block">Scan your badge Custom</span>
+            </button>
+        </xpath>
+    </t>
+</templates>

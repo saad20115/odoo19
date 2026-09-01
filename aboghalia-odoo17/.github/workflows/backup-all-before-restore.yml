@@ -1,0 +1,57 @@
+name: Backup All Live DBs Before Restore
+
+on:
+  workflow_dispatch:
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Dump all Odoo DBs and locate filestores
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          command_timeout: 120m
+          script: |
+            set -e
+            TS=$(date -u +%Y%m%d_%H%M%S)
+            # /var/tmp so postgres user can write dumps (not /root)
+            OUT=/var/tmp/BEFORE_RESTORE_$TS
+            sudo mkdir -p "$OUT"
+            sudo chmod 1777 "$OUT"
+            echo "OUT=$OUT"
+
+            echo "===== DB list ====="
+            sudo -u postgres psql -c "\l+"
+
+            for DB in second_odoo_17 AccountingBetaDB1 MainDB1 BetaDB1 Attendance GeolocationTest OldDB oldold test_Z; do
+              echo "===== Dumping $DB ====="
+              sudo -u postgres pg_dump -Fc -f "$OUT/${DB}_TODAY.dump" "$DB"
+              sudo ls -lah "$OUT/${DB}_TODAY.dump"
+            done
+
+            echo "===== Filestore locations ====="
+            sudo find /var/lib /odoo17-v2 /odoo17-v2-beta /home /opt -type d -name filestore 2>/dev/null | tee "$OUT/filestore_paths.txt" || true
+            grep -hE 'data_dir' /etc/odoo*.conf /etc/odoo17*.conf 2>/dev/null | tee -a "$OUT/filestore_paths.txt" || true
+
+            echo "===== Archive critical filestores if found ====="
+            while IFS= read -r FS; do
+              [ -z "$FS" ] && continue
+              [ -d "$FS" ] || continue
+              SAFE=$(echo "$FS" | tr '/' '_')
+              echo "Archiving $FS ..."
+              sudo tar -czf "$OUT/filestore${SAFE}.tar.gz" -C "$(dirname "$FS")" "$(basename "$FS")" || true
+            done < <(sudo find /var/lib /odoo17-v2 /odoo17-v2-beta -type d \( -path '*/filestore/MainDB1' -o -path '*/filestore/second_odoo_17' -o -path '*/filestore/BetaDB1' -o -path '*/filestore/AccountingBetaDB1' \) 2>/dev/null)
+
+            echo "===== Counts snapshot ====="
+            sudo -u postgres psql -d MainDB1 -c "SELECT 'employee_request' AS t, COUNT(*) FROM employee_request UNION ALL SELECT 'er_attach', COUNT(*) FROM ir_attachment WHERE res_model='employee.request' UNION ALL SELECT 'account_move', COUNT(*) FROM account_move;"
+            sudo -u postgres psql -d second_odoo_17 -c "SELECT COUNT(*) AS account_move FROM account_move;" 2>/dev/null || true
+
+            echo "===== FINAL ====="
+            sudo ls -lah "$OUT"
+            df -h / /root
+            echo "BACKUP_DIR=$OUT"
+            echo "DONE_ALL_DUMPS"
