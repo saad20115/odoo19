@@ -647,6 +647,9 @@
                 <filter string="متأخر" name="late" domain="[('state', '=', 'late')]"/>
                 <filter string="منتهي / مكتمل" name="done" domain="[('state', '=', 'done')]"/>
                 <separator/>
+                <filter string="أوامر عمل الإنشاءات 🏗️" name="filter_construction" domain="[('work_order_type_id.name', 'not ilike', 'صيانة')]"/>
+                <filter string="أوامر عمل الصيانة 🛠️" name="filter_maintenance" domain="[('work_order_type_id.name', 'ilike', 'صيانة')]"/>
+                <separator/>
                 <filter string="تصريح ساري المفعول" name="permit_normal" domain="[('permit_alert_status', '=', 'normal')]"/>
                 <filter string="تصريح قارب الانتهاء ⚠️" name="permit_warning" domain="[('permit_alert_status', '=', 'warning')]"/>
                 <filter string="تصريح منتهي 🔴" name="permit_expired" domain="[('permit_alert_status', '=', 'expired')]"/>
@@ -765,18 +768,36 @@
         </field>
     </record>
 
-    <!-- Work Order Action -->
+    <!-- Construction Work Order Action -->
     <record id="action_unified_contract_work_orders" model="ir.actions.act_window">
-        <field name="name">أوامر العمل</field>
+        <field name="name">أوامر عمل الإنشاءات</field>
         <field name="res_model">unified.contract.work.order</field>
         <field name="view_mode">tree,kanban,calendar,pivot,graph,form</field>
         <field name="search_view_id" ref="view_unified_contract_work_order_search"/>
+        <field name="context">{'search_default_filter_construction': 1}</field>
         <field name="help" type="html">
             <p class="o_view_nocontent_smiling_face">
-                إضافة أمر عمل جديد!
+                إضافة أمر عمل إنشاءات جديد!
             </p>
             <p>
-                قم بإنشاء وتتبع أوامر العمل ومتابعة مرحلة الإسناد والتصاريح والتنفيذ والإغلاق برقم استلام 155 وشهادة الإنجاز والفوترة.
+                قم بإنشاء وتتبع أوامر عمل الإنشاءات والتمديدات ومتابعة مرحلة الإسناد والتصاريح والتنفيذ والإغلاق برقم استلام 155 وشهادة الإنجاز والفوترة.
+            </p>
+        </field>
+    </record>
+
+    <!-- Maintenance Work Order Action -->
+    <record id="action_unified_contract_work_orders_maintenance" model="ir.actions.act_window">
+        <field name="name">أوامر عمل الصيانة</field>
+        <field name="res_model">unified.contract.work.order</field>
+        <field name="view_mode">tree,kanban,calendar,pivot,graph,form</field>
+        <field name="search_view_id" ref="view_unified_contract_work_order_search"/>
+        <field name="context">{'search_default_filter_maintenance': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                إضافة أمر عمل صيانة جديد!
+            </p>
+            <p>
+                قم بإنشاء وتتبع أوامر عمل الصيانة الوقائية والطارئة والإصلاحات الميدانية.
             </p>
         </field>
     </record>
