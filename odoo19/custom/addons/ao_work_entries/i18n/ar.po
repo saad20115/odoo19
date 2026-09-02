@@ -1,0 +1,408 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * ao_work_entries
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-06-30 00:00+0000\n"
+"PO-Revision-Date: 2026-06-30 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: ao_work_entries
+#: model:ir.actions.act_window,name:ao_work_entries.action_attendance_report_wizard
+#: model_terms:ir.ui.view,arch_db:ao_work_entries.view_attendance_report_wizard_form
+msgid "Attendance Summary Report"
+msgstr "تقرير ملخص الحضور"
+
+#. module: ao_work_entries
+#: model:ir.model,name:ao_work_entries.model_attendance_report_wizard
+msgid "Attendance Summary Report Wizard"
+msgstr "معالج تقرير ملخص الحضور"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_attendance_report_wizard__department_id
+msgid "Department"
+msgstr "القسم"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_attendance_report_wizard__date_from
+msgid "From"
+msgstr "من"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_attendance_report_wizard__date_to
+msgid "To"
+msgstr "إلى"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_attendance_report_wizard__print_all
+msgid "Print All"
+msgstr "طباعة الكل"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,help:ao_work_entries.field_attendance_report_wizard__department_id
+msgid "Filter employees by department. Ignored when Print All is enabled."
+msgstr "تصفية الموظفين حسب القسم. يتم تجاهله عند تفعيل طباعة الكل."
+
+#. module: ao_work_entries
+#: model:ir.model.fields,help:ao_work_entries.field_attendance_report_wizard__print_all
+msgid "Include all employees regardless of department."
+msgstr "تضمين جميع الموظفين بغض النظر عن القسم."
+
+#. module: ao_work_entries
+#: model_terms:ir.ui.view,arch_db:ao_work_entries.view_attendance_report_wizard_form
+msgid "Print"
+msgstr "طباعة"
+
+#. module: ao_work_entries
+#: model_terms:ir.ui.view,arch_db:ao_work_entries.view_attendance_report_wizard_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/attendance_report_wizard.py:0
+#, python-format
+msgid "The start date must be before or equal to the end date."
+msgstr "يجب أن يكون تاريخ البداية قبل تاريخ النهاية أو مساوياً له."
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/attendance_report_wizard.py:0
+#, python-format
+msgid "Please select a department or enable Print All."
+msgstr "يرجى اختيار قسم أو تفعيل طباعة الكل."
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "No employees found for the selected criteria."
+msgstr "لم يتم العثور على موظفين وفق المعايير المحددة."
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "All Departments"
+msgstr "جميع الأقسام"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Attendance Summary Report"
+msgstr "تقرير ملخص الحضور"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Period: %s to %s"
+msgstr "الفترة: %s إلى %s"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Department: %s"
+msgstr "القسم: %s"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Employee"
+msgstr "الموظف"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Department"
+msgstr "القسم"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Attendance Hours"
+msgstr "ساعات الحضور"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Absent Hours"
+msgstr "ساعات الغياب"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Absence Days"
+msgstr "أيام الغياب"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Attendance Days"
+msgstr "أيام الحضور"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "xlsxwriter library is required for Excel export."
+msgstr "مكتبة xlsxwriter مطلوبة لتصدير Excel."
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Error generating report: %s"
+msgstr "خطأ في إنشاء التقرير: %s"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Attendance Report (Excel)"
+msgstr "تقرير الحضور (إكسل)"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Edit Employees' Absence Days"
+msgstr "تعديل أيام غياب الموظفين"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+#: model:ir.model.fields,field_description:ao_work_entries.field_hr_employee_monthly_summary__remaining_leave_days
+msgid "Remaining Leave Days"
+msgstr "الأجازات المدفوعة"
+
+#. module: ao_work_entries
+#: model:ir.actions.act_window,name:ao_work_entries.action_edit_absence_days_wizard
+#: model_terms:ir.ui.view,arch_db:ao_work_entries.view_edit_absence_days_wizard_form
+msgid "Edit Employees' Absence Days"
+msgstr "تعديل أيام غياب الموظفين"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_edit_absence_days_wizard__department_id
+msgid "Department"
+msgstr "القسم"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_edit_absence_days_wizard__employee_ids
+msgid "Employees"
+msgstr "الموظفون"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_edit_absence_days_wizard__absence_days
+msgid "Update Absence Days"
+msgstr "تحديث أيام الغياب"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_absence_days_wizard.py:0
+#, python-format
+msgid "Please select at least one employee."
+msgstr "يرجى اختيار موظف واحد على الأقل."
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_absence_days_wizard.py:0
+#, python-format
+msgid "Absence Days Updated"
+msgstr "تم تحديث أيام الغياب"
+
+#. module: ao_work_entries
+#: model:ir.model,name:ao_work_entries.model_edit_absence_days_wizard
+msgid "Edit Employees Absence Days Wizard"
+msgstr "معالج تعديل أيام غياب الموظفين"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_edit_absence_days_wizard__year
+#: model:ir.model.fields,field_description:ao_work_entries.field_hr_employee_monthly_summary__year
+msgid "Year"
+msgstr "السنة"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_edit_absence_days_wizard__month
+#: model:ir.model.fields,field_description:ao_work_entries.field_hr_employee_monthly_summary__month
+msgid "Month"
+msgstr "الشهر"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,help:ao_work_entries.field_edit_absence_days_wizard__absence_days
+msgid "New total absence days value (zero is allowed)"
+msgstr "قيمة إجمالي أيام الغياب الجديدة (يُسمح بالصفر)"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_hr_employee_monthly_summary__absence_days_manually_set
+msgid "Absence Days Manually Set"
+msgstr "أيام الغياب مُعدّلة يدوياً"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,help:ao_work_entries.field_hr_employee_monthly_summary__absence_days_manually_set
+msgid "When set, absence days were manually adjusted and should not be overwritten by automatic calculations"
+msgstr "عند التفعيل، تم تعديل أيام الغياب يدوياً ولا يجب استبدالها بالحسابات التلقائية"
+
+#. module: ao_work_entries
+#: model_terms:ir.ui.view,arch_db:ao_work_entries.view_edit_absence_days_wizard_form
+msgid "Save"
+msgstr "حفظ"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_absence_days_wizard.py:0
+#, python-format
+msgid "Update failed"
+msgstr "فشل التحديث"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_absence_days_wizard.py:0
+#, python-format
+msgid "%(employee)s: %(message)s"
+msgstr "%(employee)s: %(message)s"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_absence_days_wizard.py:0
+#, python-format
+msgid "No employees were updated.\n%s"
+msgstr "لم يتم تحديث أي موظف.\n%s"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_absence_days_wizard.py:0
+#, python-format
+msgid "Updated absence days to %(days)s for %(count)s employee(s)."
+msgstr "تم تحديث أيام الغياب إلى %(days)s لـ %(count)s موظف."
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Bulk edit absence days for employees"
+msgstr "تعديل جماعي لأيام غياب الموظفين"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Edit Employees' Late Hours"
+msgstr "تعديل ساعات تأخر الموظفين"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Bulk edit late hours for employees"
+msgstr "تعديل جماعي لساعات تأخر الموظفين"
+
+#. module: ao_work_entries
+#: model:ir.actions.act_window,name:ao_work_entries.action_edit_late_hours_wizard
+#: model_terms:ir.ui.view,arch_db:ao_work_entries.view_edit_late_hours_wizard_form
+msgid "Edit Employees' Late Hours"
+msgstr "تعديل ساعات تأخر الموظفين"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_edit_late_hours_wizard__late_hours
+msgid "Update Late Hours"
+msgstr "تحديث ساعات التأخر"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_late_hours_wizard.py:0
+#, python-format
+msgid "Late Hours Updated"
+msgstr "تم تحديث ساعات التأخر"
+
+#. module: ao_work_entries
+#: model:ir.model,name:ao_work_entries.model_edit_late_hours_wizard
+msgid "Edit Employees Late Hours Wizard"
+msgstr "معالج تعديل ساعات تأخر الموظفين"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,help:ao_work_entries.field_edit_late_hours_wizard__late_hours
+msgid "New total late hours value (zero is allowed)"
+msgstr "قيمة إجمالي ساعات التأخر الجديدة (يُسمح بالصفر)"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,field_description:ao_work_entries.field_hr_employee_monthly_summary__late_hours_manually_set
+msgid "Late Hours Manually Set"
+msgstr "ساعات التأخر مُعدّلة يدوياً"
+
+#. module: ao_work_entries
+#: model:ir.model.fields,help:ao_work_entries.field_hr_employee_monthly_summary__late_hours_manually_set
+msgid "When set, late hours were manually adjusted and should not be overwritten by automatic calculations"
+msgstr "عند التفعيل، تم تعديل ساعات التأخر يدوياً ولا يجب استبدالها بالحسابات التلقائية"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/wizard/edit_late_hours_wizard.py:0
+#, python-format
+msgid "Updated late hours to %(hours)s for %(count)s employee(s)."
+msgstr "تم تحديث ساعات التأخر إلى %(hours)s لـ %(count)s موظف."
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Archive employee"
+msgstr "أرشفة الموظف"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+#, python-format
+msgid "Archive employee %(name)s?\n\nThey will be removed from this dashboard and excluded from Calculate Metrics and Create Payslips."
+msgstr "أرشفة الموظف %(name)s؟\n\nسيتم إزالته من لوحة الحضور واستبعاده من حساب المقاييس وإنشاء كشوف الرواتب."
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Failed to archive employee"
+msgstr "فشل أرشفة الموظف"
+
+#. module: ao_work_entries
+#. odoo-javascript
+#: code:addons/ao_work_entries/static/src/js/work_entries.js:0
+msgid "Error archiving employee: "
+msgstr "خطأ في أرشفة الموظف: "
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Employee not found"
+msgstr "الموظف غير موجود"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Employee is already archived"
+msgstr "الموظف مؤرشف بالفعل"
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Employee %(name)s has been archived."
+msgstr "تم أرشفة الموظف %(name)s."
+
+#. module: ao_work_entries
+#. odoo-python
+#: code:addons/ao_work_entries/models/work_entries.py:0
+#, python-format
+msgid "Employee is archived or inactive"
+msgstr "الموظف مؤرشف أو غير نشط"

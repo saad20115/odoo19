@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_payslip_compute_confirm_wizard_view_form" model="ir.ui.view">
+        <field name="name">hr.payslip.compute.confirm.wizard.form</field>
+        <field name="model">hr.payslip.compute.confirm.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Compute / Confirm Payslips">
+                <group>
+                    <group string="Period">
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                    </group>
+                </group>
+                <separator string="Selected Payslips"/>
+                <field name="payslip_ids" nolabel="1">
+                    <tree create="0" delete="1">
+                        <field name="employee_id"/>
+                        <field name="x_department"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="state"/>
+                    </tree>
+                </field>
+                <field name="employee_ids" invisible="1"/>
+                <footer>
+                    <button name="action_compute"
+                            string="Compute"
+                            type="object"
+                            class="btn-primary"
+                            invisible="context.get('payslip_wizard_mode') == 'confirm'"/>
+                    <button name="action_confirm"
+                            string="Confirm"
+                            type="object"
+                            class="btn-primary"
+                            invisible="context.get('payslip_wizard_mode') == 'compute'"/>
+                    <button string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_hr_payslip_compute_confirm_wizard" model="ir.actions.act_window">
+        <field name="name">Compute / Confirm</field>
+        <field name="res_model">hr.payslip.compute.confirm.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="hr_payslip_compute_confirm_wizard_view_form"/>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Appears under Action when selecting payslips in the list -->
+    <record id="action_server_hr_payslip_create" model="ir.actions.server">
+        <field name="name">Compute</field>
+        <field name="model_id" ref="model_hr_payslip"/>
+        <field name="binding_model_id" ref="model_hr_payslip"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if not records:
+    raise UserError("Please select at least one payslip.")
+wizard = env['hr.payslip.compute.confirm.wizard'].create({
+    'payslip_ids': [(6, 0, records.ids)],
+    'employee_ids': [(6, 0, records.mapped('employee_id').ids)],
+    'date_from': records[0].date_from,
+    'date_to': records[0].date_to,
+})
+view_id = env.ref('hr_payroll_community.hr_payslip_compute_confirm_wizard_view_form').id
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Compute',
+    'res_model': 'hr.payslip.compute.confirm.wizard',
+    'res_id': wizard.id,
+    'view_mode': 'form',
+    'view_id': view_id,
+    'views': [(view_id, 'form')],
+    'target': 'new',
+    'context': {
+        'payslip_wizard_mode': 'compute',
+    },
+}
+        </field>
+    </record>
+
+    <record id="action_server_hr_payslip_confirm" model="ir.actions.server">
+        <field name="name">Confirm</field>
+        <field name="model_id" ref="model_hr_payslip"/>
+        <field name="binding_model_id" ref="model_hr_payslip"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+if not records:
+    raise UserError("Please select at least one payslip.")
+wizard = env['hr.payslip.compute.confirm.wizard'].create({
+    'payslip_ids': [(6, 0, records.ids)],
+    'employee_ids': [(6, 0, records.mapped('employee_id').ids)],
+    'date_from': records[0].date_from,
+    'date_to': records[0].date_to,
+})
+view_id = env.ref('hr_payroll_community.hr_payslip_compute_confirm_wizard_view_form').id
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Confirm',
+    'res_model': 'hr.payslip.compute.confirm.wizard',
+    'res_id': wizard.id,
+    'view_mode': 'form',
+    'view_id': view_id,
+    'views': [(view_id, 'form')],
+    'target': 'new',
+    'context': {
+        'payslip_wizard_mode': 'confirm',
+    },
+}
+        </field>
+    </record>
+
+    <!-- Remove old combined action from Action menu after upgrade -->
+    <record id="action_server_hr_payslip_compute_confirm" model="ir.actions.server">
+        <field name="name">Compute &amp; Confirm</field>
+        <field name="model_id" ref="model_hr_payslip"/>
+        <field name="binding_model_id" eval="False"/>
+        <field name="state">code</field>
+        <field name="code">
+action = False
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="category_employee_self_service" model="ir.module.category">
+            <field name="name">الخدمات الذاتية للموظف</field>
+            <field name="description">فئة صلاحيات البوابة الإلكترونية والخدمات الذاتية للموظفين</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_employee_self_service_user" model="res.groups">
+            <field name="name">مستخدم البوابة الذاتية</field>
+            <field name="category_id" ref="category_employee_self_service"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_employee_self_service_manager" model="res.groups">
+            <field name="name">مدير البوابة الذاتية والاعتمادات</field>
+            <field name="category_id" ref="category_employee_self_service"/>
+            <field name="implied_ids" eval="[(4, ref('group_employee_self_service_user'))]"/>
+        </record>
+    </data>
+</odoo>

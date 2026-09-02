@@ -1,0 +1,95 @@
+name: Fix Haytham Expense Access
+
+on:
+  workflow_dispatch:
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Diagnose and fix Haytham access on MainDB1
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            sudo -u odoo17-v2 python3 /odoo17-v2/odoo17-v2-server/odoo-bin shell -d MainDB1 -c /etc/odoo17-v2-server.conf <<'PY'
+            login = 'haytham_hady@hotmail.com'
+            u = env['res.users'].sudo().search([('login', '=', login)], limit=1)
+            print('===== USER =====')
+            print(u.id, u.name, u.login, u.active)
+            print('company_id', u.company_id.id, u.company_id.name)
+            print('company_ids', u.company_ids.mapped(lambda c: (c.id, c.name)))
+
+            print('===== GROUPS =====')
+            for g in u.groups_id.sorted('full_name'):
+                print('-', g.id, g.full_name)
+
+            needed = [
+                'base.group_user',
+                'hr.group_hr_user',
+                'hr_expense.group_hr_expense_team_approver',
+                'hr_expense.group_hr_expense_user',
+                'account.group_account_readonly',
+            ]
+            print('===== NEEDED GROUPS STATUS =====')
+            for xid in needed:
+                g = env.ref(xid, raise_if_not_found=False)
+                if not g:
+                    print(xid, 'MISSING_XMLID')
+                    continue
+                print(xid, g.full_name, 'HAS' if g in u.groups_id else 'NO')
+
+            # Ensure Internal User + HR Officer + Expense User/Approver
+            add_xmlids = [
+                'base.group_user',
+                'hr.group_hr_user',
+                'hr_expense.group_hr_expense_user',
+                'hr_expense.group_hr_expense_team_approver',
+            ]
+            to_add = env['res.groups']
+            for xid in add_xmlids:
+                g = env.ref(xid, raise_if_not_found=False)
+                if g and g not in u.groups_id:
+                    to_add |= g
+                    print('WILL_ADD', xid, g.full_name)
+            if to_add:
+                u.write({'groups_id': [(4, g.id) for g in to_add]})
+
+            # Keep جمال as default company from employee
+            if hasattr(u, '_ao_apply_login_company'):
+                company = u._ao_apply_login_company()
+                print('LOGIN_COMPANY', company.id, company.name)
+            else:
+                emp = env['hr.employee'].sudo().search([
+                    '|', ('user_id', '=', u.id), ('work_email', '=ilike', login)
+                ], limit=1)
+                if emp and emp.company_id:
+                    vals = {'company_id': emp.company_id.id}
+                    if emp.company_id not in u.company_ids:
+                        vals['company_ids'] = [(4, emp.company_id.id)]
+                    u.write(vals)
+                    print('SET_COMPANY_FROM_EMP', emp.company_id.name)
+
+            env.cr.commit()
+
+            # Re-check access as this user in جمال company
+            jamal = env['res.company'].sudo().search([('name', 'ilike', 'جمال')], limit=1) or env['res.company'].sudo().browse(2)
+            print('===== ACCESS CHECK AS USER IN JAMAL =====', jamal.id, jamal.name)
+            user_env = env(user=u.id)(context=dict(env.context, allowed_company_ids=[jamal.id]))
+            for model in ['hr.department', 'hr.expense', 'hr.expense.sheet', 'hr.employee']:
+                try:
+                    user_env[model].check_access_rights('read')
+                    n = user_env[model].search_count([])
+                    print(model, 'READ_OK count=', n)
+                except Exception as e:
+                    print(model, 'READ_FAIL', type(e).__name__, str(e).split('\n')[0][:180])
+
+            print('===== GROUPS AFTER =====')
+            for g in u.groups_id.sorted('full_name'):
+                print('-', g.full_name)
+            print('DONE')
+            PY

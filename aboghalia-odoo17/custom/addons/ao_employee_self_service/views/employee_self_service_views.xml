@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- URL Action to open the Electronic Portal -->
+    <record id="action_open_employee_portal_url" model="ir.actions.act_url">
+        <field name="name">البوابة الإلكترونية</field>
+        <field name="url">/portal/self-service</field>
+        <field name="target">self</field>
+    </record>
+
+    <!-- Top-Level Root Menu Item — appears in Odoo App Switcher (9-dot grid) -->
+    <menuitem id="menu_employee_self_service_root"
+              name="البوابة الإلكترونية"
+              action="action_open_employee_portal_url"
+              web_icon="ao_employee_self_service,static/description/icon.png"
+              sequence="0"/>
+</odoo>
+

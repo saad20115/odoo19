@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_incoming_mail_tree" model="ir.ui.view">
+        <field name="name">incoming.mail.tree</field>
+        <field name="model">incoming.mail</field>
+        <field name="arch" type="xml">
+            <tree string="Incoming Mails" decoration-muted="state == 'archived'">
+                <header>
+                    <button name="action_open_fetch_date_range_wizard" type="object"
+                        string="Fetch Date Range" display="always" class="btn-primary"/>
+                </header>
+                <field name="received_date"/>
+                <field name="name"/>
+                <field name="email_from"/>
+                <field name="provider"/>
+                <field name="mailbox"/>
+                <field name="fetchmail_server_id"/>
+                <field name="state" widget="badge"
+                    decoration-info="state == 'new'"
+                    decoration-warning="state == 'in_progress'"
+                    decoration-success="state == 'done'"
+                    decoration-muted="state == 'archived'"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_incoming_mail_form" model="ir.ui.view">
+        <field name="name">incoming.mail.form</field>
+        <field name="model">incoming.mail</field>
+        <field name="arch" type="xml">
+            <form string="Incoming Mail">
+                <field name="shared_user_ids" invisible="1"/>
+                <header>
+                    <button name="action_reply" type="object" string="Reply by Email"
+                        invisible="state == 'archived'" class="btn-primary"
+                        groups="incoming_mail_store.group_incoming_mail_user"/>
+                    <button name="action_assign_employee" type="object" string="Notify via OdooBot"
+                        invisible="state == 'archived'"
+                        groups="incoming_mail_store.group_incoming_mail_user"/>
+                    <button name="action_mark_done" type="object" string="Mark Done"
+                        invisible="state in ('done', 'archived')"/>
+                    <button name="action_archive" type="object" string="Archive"
+                        invisible="state == 'archived'"
+                        groups="incoming_mail_store.group_incoming_mail_user"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,in_progress,done,archived"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="Subject"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Email Details">
+                            <field name="email_from"/>
+                            <field name="email_to"/>
+                            <field name="email_cc"/>
+                            <field name="received_date"/>
+                        </group>
+                        <group string="Source">
+                            <field name="provider"/>
+                            <field name="mailbox"/>
+                            <field name="fetchmail_server_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_incoming_mail_search" model="ir.ui.view">
+        <field name="name">incoming.mail.search</field>
+        <field name="model">incoming.mail</field>
+        <field name="arch" type="xml">
+            <search string="Incoming Mails">
+                <field name="name"/>
+                <field name="email_from"/>
+                <field name="email_to"/>
+                <field name="mailbox"/>
+                <field name="fetchmail_server_id"/>
+                <filter string="New" name="filter_new" domain="[('state', '=', 'new')]"/>
+                <filter string="In Progress" name="filter_in_progress" domain="[('state', '=', 'in_progress')]"/>
+                <filter string="Done" name="filter_done" domain="[('state', '=', 'done')]"/>
+                <separator/>
+                <filter string="Zoho" name="filter_zoho" domain="[('provider', '=', 'zoho')]"/>
+                <filter string="Hostinger" name="filter_hostinger" domain="[('provider', '=', 'hostinger')]"/>
+                <filter string="Gmail" name="filter_gmail" domain="[('provider', '=', 'gmail')]"/>
+                <filter string="Outlook" name="filter_outlook" domain="[('provider', '=', 'outlook')]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Provider" name="group_provider" context="{'group_by': 'provider'}"/>
+                    <filter string="Incoming Mail Server" name="group_fetchmail_server" context="{'group_by': 'fetchmail_server_id'}"/>
+                    <filter string="Status" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Received Date" name="group_received_date" context="{'group_by': 'received_date:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_incoming_mail" model="ir.actions.act_window">
+        <field name="name">Incoming Mails</field>
+        <field name="res_model">incoming.mail</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="view_incoming_mail_search"/>
+        <field name="context">{'search_default_filter_new': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Incoming emails from your configured mail servers will appear here.
+            </p>
+            <p>
+                Configure each incoming mail server to create records on
+                <strong>Incoming Mail</strong> in the "Create a New Record" field.
+            </p>
+        </field>
+    </record>
+
+</odoo>

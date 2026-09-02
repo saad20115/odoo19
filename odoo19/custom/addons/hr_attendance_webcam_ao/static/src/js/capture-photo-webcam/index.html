@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Demo - Capture Photo From Webcam Using Javascript</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+    />
+    <style type="text/css">
+      button {
+        width: 120px;
+        padding: 10px;
+        display: block;
+        margin: 20px auto;
+        border: 2px solid #111111;
+        cursor: pointer;
+        background-color: white;
+      }
+
+      #btn-start-camera {
+        margin-top: 50px;
+      }
+
+      #video {
+        display: none;
+        margin: 50px auto 0 auto;
+      }
+
+      #take-snapshot {
+        display: none;
+      }
+
+      #dataurl-container {
+        display: none;
+      }
+
+      #canvas {
+        display: block;
+        margin: 0 auto 20px auto;
+      }
+
+      #dataurl-header {
+        text-align: center;
+        font-size: 15px;
+      }
+
+      #dataurl {
+        display: block;
+        height: 100px;
+        width: 320px;
+        margin: 10px auto;
+        resize: none;
+        outline: none;
+        border: 1px solid #111111;
+        padding: 5px;
+        font-size: 13px;
+        box-sizing: border-box;
+      }
+    </style>
+  </head>
+
+  <body>
+    <button id="btn-start-camera">Start Camera</button>
+    <video id="video" width="500" height="400" autoplay></video>
+    <button id="take-snapshot">Take Snapshot</button>
+    <div id="dataurl-container">
+      <canvas id="canvas" width="500" height="400"></canvas>
+      <div id="dataurl-header">Image Data URL</div>
+      <textarea id="dataurl" readonly></textarea>
+    </div>
+
+    <script>
+      let btn_start_camera = document.querySelector("#btn-start-camera");
+      let video = document.querySelector("#video");
+      let btn_take_snapshot = document.querySelector("#take-snapshot");
+      let canvas = document.querySelector("#canvas");
+      let dataurl = document.querySelector("#dataurl");
+      let dataurl_container = document.querySelector("#dataurl-container");
+
+      // start camera
+      btn_start_camera.addEventListener("click", async function () {
+        let stream = null;
+
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            video: true,
+            audio: false,
+          });
+        } catch (error) {
+          alert(error.message);
+          return;
+        }
+
+        video.srcObject = stream;
+
+        video.style.display = "block";
+        btn_start_camera.style.display = "none";
+        btn_take_snapshot.style.display = "block";
+      });
+
+      // take the snapshot
+      btn_take_snapshot.addEventListener("click", function () {
+        canvas
+          .getContext("2d")
+          .drawImage(video, 0, 0, canvas.width, canvas.height);
+        let image_data_url = canvas.toDataURL("image/png");
+
+        dataurl.value = image_data_url;
+        dataurl_container.style.display = "block";
+      });
+    </script>
+  </body>
+</html>

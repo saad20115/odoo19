@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ao_employee_attendance_page.AttendancePage" owl="1">
+        <div class="o_attendance_page_container">
+            <!-- Header -->
+            <div class="o_attendance_header">
+                <h1 class="o_page_title">
+                    <i class="fa fa-clock-o me-2"/>Employee Attendance
+                </h1>
+                <div class="o_current_time">
+                    <i class="fa fa-calendar me-1"/>
+                    <span t-esc="state.currentTime"/>
+                </div>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.loading" class="o_loading_container">
+                <div class="o_loading_content">
+                    <i class="fa fa-spinner fa-spin fa-3x mb-3"/>
+                    <p class="o_loading_text">Loading attendance data...</p>
+                </div>
+            </div>
+
+            <!-- Error State -->
+            <div t-elif="state.error" class="o_error_container">
+                <div class="o_error_content">
+                    <i class="fa fa-exclamation-triangle fa-3x mb-3"/>
+                    <h3>Error</h3>
+                    <p t-esc="state.error"/>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div t-elif="state.employee" class="o_attendance_content">
+                <!-- Employee Info Card -->
+                <div class="o_employee_card">
+                    <div class="o_employee_avatar">
+                        
+                        <div t-att-class="'o_status_badge ' + statusClass">
+                            <i t-if="isCheckedIn" class="fa fa-check"/>
+                            <i t-else="" class="fa fa-times"/>
+                        </div>
+                    </div>
+                    
+                    <div class="o_employee_info">
+                        <div class="o_image_container">
+                            <img t-if="state.employee.image_1920" 
+                                 t-att-src="getEmployeeImageUrl()" 
+                                 t-att-alt="state.employee.name" 
+                                 class="o_employee_image"/>
+                            <div t-else="" class="o_employee_image o_placeholder_avatar">
+                                <i class="fa fa-user"></i>
+                            </div>
+                        </div>
+                        <h1 class="o_employee_name" t-esc="state.employee.name"/>
+                        <div t-att-class="'o_employee_status ' + statusClass">
+                            <span t-esc="statusText"/>
+                        </div>
+                        <div t-if="isCheckedIn and state.employee.current_check_in" 
+                             class="o_check_in_info">
+                            <small>Since: <t t-esc="formatTime(state.employee.current_check_in)"/></small>
+                            <div t-if="state.employee.current_location and state.employee.current_location.location_name" 
+                                 class="o_location_info">
+                                <i class="fa fa-map-marker me-1"/>
+                                <small t-esc="state.employee.current_location.location_name"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="o_today_hours">
+                        <div class="o_hours_label">Today's Hours</div>
+                        <div class="o_hours_value" t-esc="formatWorkedHours(state.todayHours)"/>
+                    </div>
+                </div>
+
+                <!-- Action Button -->
+                <div class="o_action_section">
+                    <!-- Location Status -->
+                    <div t-if="state.locationPermission" class="o_location_status mb-3">
+                        <div t-if="state.locationPermission === 'granted'" class="o_location_enabled">
+                            <i class="fa fa-map-marker text-success me-1"/>
+                            <small class="text-success">Location tracking enabled</small>
+                        </div>
+                        <div t-elif="state.locationPermission === 'denied'" class="o_location_disabled">
+                            <i class="fa fa-exclamation-triangle text-warning me-1"/>
+                            <small class="text-warning">Location access denied - attendance allowed without location</small>
+                        </div>
+                        <div t-elif="state.locationPermission === 'prompt'" class="o_location_prompt">
+                            <i class="fa fa-map-marker text-info me-1"/>
+                            <small class="text-info">Location permission will be requested</small>
+                        </div>
+                        <div t-else="" class="o_location_unavailable">
+                            <i class="fa fa-globe text-muted me-1"/>
+                            <small class="text-muted">Location services unavailable</small>
+                        </div>
+                    </div>
+
+                    <button t-att-class="'btn btn-lg o_action_button ' + actionButtonClass"
+                            t-att-disabled="state.processing or state.gettingLocation"
+                            t-on-click="isCheckedIn ? handleCheckOut : handleCheckIn">
+                        <i t-if="state.processing or state.gettingLocation" class="fa fa-spinner fa-spin me-2"/>
+                        <i t-elif="isCheckedIn" class="fa fa-sign-out me-2"/>
+                        <i t-else="" class="fa fa-sign-in me-2"/>
+                        <span t-if="state.gettingLocation" t-esc="'Getting Location...'"/>
+                        <span t-else="" t-esc="actionButtonText"/>
+                    </button>
+                </div>
+
+                <!-- Recent Attendances -->
+                <div class="o_recent_section">
+                    <h3 class="o_section_title">
+                        <i class="fa fa-history me-2"/>Recent Attendances
+                    </h3>
+                    
+                    <div t-if="!state.attendances.length" class="o_no_records">
+                        <i class="fa fa-info-circle me-2"/>
+                        No attendance records found.
+                    </div>
+                    
+                    <div t-else="" class="o_attendance_list">
+                        <div t-foreach="state.attendances" 
+                             t-as="attendance" 
+                             t-key="attendance.id" 
+                             class="o_attendance_item">
+                            
+                            <div class="o_attendance_date">
+                                <i class="fa fa-calendar-o me-1"/>
+                                <span t-esc="formatDateTime(attendance.check_in).split(' ')[0]"/>
+                            </div>
+                            
+                            <div class="o_attendance_details">
+                                <div class="o_time_row">
+                                    <span class="o_time_label">Check In:</span>
+                                    <span class="o_time_value" t-esc="formatTime(attendance.check_in)"/>
+                                </div>
+                                
+                                <div class="o_time_row">
+                                    <span class="o_time_label">Check Out:</span>
+                                    <span t-if="attendance.check_out" 
+                                          class="o_time_value" 
+                                          t-esc="formatTime(attendance.check_out)"/>
+                                    <span t-else="" class="o_time_value o_in_progress">In Progress</span>
+                                </div>
+                                
+                                <div t-if="attendance.worked_hours" class="o_time_row">
+                                    <span class="o_time_label">Duration:</span>
+                                    <span class="o_time_value o_duration" 
+                                          t-esc="formatWorkedHours(attendance.worked_hours)"/>
+                                </div>
+
+                                <div t-if="attendance.check_in_location" class="o_time_row">
+                                    <span class="o_time_label">
+                                        <i class="fa fa-map-marker me-1 text-success"/>In Location:
+                                    </span>
+                                    <span class="o_time_value o_location_text" 
+                                          t-esc="attendance.check_in_location.location_name"/>
+                                </div>
+
+                                <div t-if="attendance.check_out_location" class="o_time_row">
+                                    <span class="o_time_label">
+                                        <i class="fa fa-map-marker me-1 text-danger"/>Out Location:
+                                    </span>
+                                    <span class="o_time_value o_location_text" 
+                                          t-esc="attendance.check_out_location.location_name"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</templates>

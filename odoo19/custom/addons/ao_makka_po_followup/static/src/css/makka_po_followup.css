@@ -1,0 +1,113 @@
+/* PO Follow-up Makka list: compact columns (not stretched) + full-row colors */
+
+.o_list_view.ao_makka_po_followup_tree .o_list_renderer,
+.o_list_view.ao_makka_po_followup_tree .o_content {
+    overflow-x: auto !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree table.o_list_table {
+    width: max-content !important;
+    min-width: unset !important;
+    max-width: none !important;
+    table-layout: auto !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree table.o_list_table col {
+    width: auto !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table thead th {
+    background: #eef2f7 !important;
+    color: #1f2937 !important;
+    font-weight: 700;
+    white-space: nowrap !important;
+    font-size: 12px;
+    line-height: 1.3;
+    padding: 6px 8px !important;
+    vertical-align: middle;
+    border-bottom: 1px solid #d1d5db !important;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table tbody td {
+    font-size: 12px;
+    padding: 4px 8px !important;
+    white-space: nowrap !important;
+    vertical-align: middle;
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table th.o_list_record_selector,
+.o_list_view.ao_makka_po_followup_tree .o_list_table td.o_list_record_selector {
+    width: 32px !important;
+    min-width: 32px !important;
+    max-width: 32px !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_cell .o_field_widget {
+    width: auto !important;
+    min-width: 0 !important;
+}
+
+/* Full row backgrounds */
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-info > td {
+    background-color: #cfe2ff !important;
+    color: #084298 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-muted > td {
+    background-color: #e9ecef !important;
+    color: #495057 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-success > td {
+    background-color: #c8e6c9 !important;
+    color: #1b5e20 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-danger > td {
+    background-color: #f8d7da !important;
+    color: #842029 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-info:hover > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-info.o_data_row_selected > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-info.o_selected_row > td {
+    background-color: #9ec5fe !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-muted:hover > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-muted.o_data_row_selected > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-muted.o_selected_row > td {
+    background-color: #dee2e6 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-success:hover > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-success.o_data_row_selected > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-success.o_selected_row > td {
+    background-color: #a5d6a7 !important;
+}
+
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-danger:hover > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-danger.o_data_row_selected > td,
+.o_list_view.ao_makka_po_followup_tree .o_list_table .o_data_row.text-danger.o_selected_row > td {
+    background-color: #f1aeb5 !important;
+}
+
+/* Makka PO Order row colors */
+.o_list_view.ao_makka_po_order_tree .o_list_table .o_data_row.text-warning > td {
+    background-color: #fff3cd !important;
+    color: #664d03 !important;
+}
+
+.o_list_view.ao_makka_po_order_tree .o_list_table .o_data_row.text-info > td {
+    background-color: #cfe2ff !important;
+    color: #084298 !important;
+}
+
+.o_list_view.ao_makka_po_order_tree .o_list_table .o_data_row.text-success > td {
+    background-color: #c8e6c9 !important;
+    color: #1b5e20 !important;
+}

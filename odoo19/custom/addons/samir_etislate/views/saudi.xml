@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_ao_section_samir_form" model="ir.ui.view">
+        <field name="name">ao.section.samir.form</field>
+        <field name="model">ao.section.samir</field>
+        <field name="arch" type="xml">
+
+            <form string="Your Model">
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="color"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+<record id="view_saudi_form" model="ir.ui.view">
+<field name="model">saudi.arabia</field>
+<field name="name">Saudi</field>
+<field name="arch" type="xml">
+  
+  <form>
+    <sheet>
+
+        <group>
+            <group>
+                <field name="export_number"/>
+                <field name="customer_name"/>
+                <field name="import_number"/>
+                <field name="referred_to"/>
+            </group>
+            <group>
+                <field name="transaction_type"/>
+                <field name="project_name"/>
+                <field name="date"/>
+                <field name="status"/>
+                <field name="another"/>
+            </group>
+        </group>
+    </sheet>
+    <div class="oe_chatter">
+        <field name="message_follower_ids" widget="mail_followers"/>
+        <field name="message_ids" widget="mail_thread"/>
+    </div>
+  </form>
+</field>
+
+</record>
+
+
+
+
+<record id="view_saudi_tree" model="ir.ui.view">
+<field name="model">saudi.arabia</field>
+<field name="name">Saudi Arabia</field>
+<field name="arch" type="xml">
+  
+    <tree>
+            <field name="transaction_number"/>
+            <field name="date"/>
+            <field name="customer_name"/>
+            <field name="responsible_empolyee"/>
+            <field name="status"/>
+            <field name="transaction_type"/>
+            <field name="transaction_subject"/>   
+            <field name="id"/>
+            <!-- <field name="y_section"/> -->
+    </tree>
+
+</field>
+</record>
+
+
+<record id="view_expense_form_in_employee_form" model="ir.ui.view">
+<field name="model">hr.employee</field>
+<field name="name">hr_employee_expense</field>
+<field name="inherit_id" ref="hr.view_employee_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//button[@name='196']" position="after">
+                <button name="action_new_expense" string="طلب نفقة" type="object" class="oe_highlight"/>
+        </xpath>
+ <div class="oe_button_box" position="inside">
+                <button class="oe_stat_button" name="action_view_my_approvals"
+                        type="object" icon="fa-check">
+                    <field string="My Approvals" name="approvals_count" widget="statinfo"/>
+                </button>
+            </div>
+            <div class="oe_button_box" position="inside">
+                <button class="oe_stat_button" name="action_view_my_tasks"
+                        type="object" icon="fa-tasks">
+                    <field string="My Tasks" name="tasks_count" widget="statinfo"/>
+                </button>
+            </div>
+    </field>
+</record>
+
+<record id="view_hr_expense_form" model="ir.ui.view">
+    <field name="model">hr.expense</field>
+    <field name="name">hr_expense</field>
+    <field name="inherit_id" ref="hr_expense.hr_expense_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='total_amount_currency']" position="after">
+                <field name="active"/>
+            </xpath>
+            <xpath expr="//form/sheet" position="before">
+                <widget name="web_ribbon" title="Archived" bg_color="bg-danger"
+                        invisible="active== True"/>
+            </xpath>
+            <xpath expr="//header" position="inside">
+          	<field name="loan_check" invisible="1"/>
+                <button name="action_expense_return" type="object" string="Expense Return" class="btn-primary"
+                    invisible="state!='done'"/>
+                <button name="create_loan" type="object" string="Create Loan" class="btn-primary" 
+invisible="state!='done' or x_request_type != 8 or loan_check == True"/>
+            </xpath>
+
+        </field>
+    </record>
+
+
+
+
+
+<!-- 
+    <record id="view_hr_expense_search_inherit" model="ir.ui.view">
+        <field name="name">hr.expense.search.inherit</field>
+        <field name="model">hr.expense</field>
+        <field name="inherit_id" ref="hr_expense.hr_expense_view_search"/>
+        <field name="arch" type="xml">
+            <field name="y_section"/>
+            
+        </field>
+    </record> -->
+
+    <record id="hr_expense.hr_expense_actions_my_all" model="ir.actions.act_window">
+
+        <field name="domain">[]</field>
+    
+    </record>
+
+
+
+</odoo>

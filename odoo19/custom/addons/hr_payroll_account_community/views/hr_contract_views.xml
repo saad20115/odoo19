@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- This record customizes the hr.contract form view to include additional fields related to accounting. -->
+    <record id="hr_contract_view_form" model="ir.ui.view">
+        <field name="name">hr.contract.view.form.inherit.hr.payroll.account.community</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//label[@for='other_allowance']" position="before">
+                <label for="x_social_insurance"/>
+                <div class="o_row">
+                    <field name="x_social_insurance" nolabel="1"/>
+                    <span>% / month</span>
+                </div>
+            </xpath>
+
+            <xpath expr="//group[@name='top_info_right']" position="after">
+                <group string="Accounting">
+                    <field name="analytic_account_id"
+                           groups="analytic.group_analytic_accounting"/>
+                    <field name="journal_id"/>
+                </group>
+            </xpath>
+    
+            <xpath expr="//group[@name='salary']" position="after">
+                              
+            <group>
+                <group>
+                    <field name="x_today_wage"/>
+                    <field name="x_hour_rate"/>
+                    <field name="x_overtime_hour"/>
+                    <field name="x_total_overtime" invisible="1"/>
+                    <field name="x_number_of_overtime_hours"/>
+                </group>
+                <group>
+                    <field name="x_other_addons"/>
+                    <field name="x_traffic_violations"/>
+                    <field name="x_absence"/>
+                    <field name="x_penalties"/>
+                    <field name="x_delay"/>
+                    <field name="x_other_discounts"/>
+                    <field name="x_total_discounts"/>
+                    <field name="x_total_salary"/>
+                </group>
+            </group>
+                 
+
+            </xpath>
+            <xpath expr="//group[@name='yearly_benefits']" position="after">
+                              
+                <group>
+                    <field name="x_extra_total"/>
+                </group>
+
+            </xpath>
+        </field>
+    </record>
+</odoo>

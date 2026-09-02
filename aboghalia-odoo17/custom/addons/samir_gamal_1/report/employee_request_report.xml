@@ -27,7 +27,7 @@
         <field name="name">Print QR Code with Serial Number</field>
         <field name="model">employee.request</field>
         <field name="report_type">qweb-pdf</field>
-        <field name="report_name">samir_gamal.report_employee_request_qr</field>
+        <field name="report_name">samir_gamal_1.report_employee_request_qr</field>
         <field name="binding_model_id" ref="model_employee_request"/>
         <field name="paperformat_id" ref="report_qr_custom_paper_format"/>
     </record>

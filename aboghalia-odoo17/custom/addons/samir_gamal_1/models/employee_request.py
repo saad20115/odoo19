@@ -1,4 +1,3 @@
-from dataclasses import field
 from datetime import date
 from odoo import models, fields, api
 from odoo.exceptions import ValidationError
@@ -37,7 +36,16 @@ class EmployeeRequest(models.Model):
     #     return self.PREFIXES.get(company_name, 'GEN')
    
     def _get_employee_request_prefix(self):
-        return self.company_id.employee_request_prefix or ''
+        if self.company_id and self.company_id.employee_request_prefix:
+            return self.company_id.employee_request_prefix
+        name = (self.company_id.name or '') if self.company_id else ''
+        if 'سمير' in name:
+            return 'SCE'
+        elif 'جمال' in name:
+            return 'JBH'
+        elif 'التنسيقي' in name or 'سلسلة' in name:
+            return 'SJC'
+        return 'GEN'
 
     #Changed the model field qr_code to store the QR code as a Char instead of Binary
     #Changes were made by Mohamed Adel
@@ -55,7 +63,7 @@ class EmployeeRequest(models.Model):
                 ('company_id', '=', res.company_id.id),
                 ('id', '!=', res.id),
             ]
-            last_request = self.search(domain, order='id desc', limit=1)
+            last_request = self.with_context(active_test=False).search(domain, order='serial_number desc', limit=1)
 
             next_num = 1
             if last_request and last_request.serial_number:
@@ -80,8 +88,19 @@ class EmployeeRequest(models.Model):
 
 
 
+    request_mode = fields.Selection([
+        ('incoming', 'وارد'),
+        ('outgoing', 'صادر'),
+        ('internal', 'داخلي'),
+    ], string="اتجاه المعاملة", required=True, default='incoming', tracking=True)
+
+    request_scope = fields.Selection([
+        ('internal', 'داخلي'),
+        ('external', 'خارجي'),
+    ], string="نطاق المعاملة", required=True, default='external', tracking=True)
+
     company_id = fields.Many2one('res.company', string="الشركة", default=lambda self: self.env.company, required=True)
-    partner_id=fields.Many2one('res.partner',  required=True,string='اسم العميل/الجهة ')
+    partner_id = fields.Many2one('res.partner', required=False, string='اسم العميل/الجهة ')
     partner_phone = fields.Char(
         string="رقم الهاتف",
         related='partner_id.phone',
@@ -95,14 +114,76 @@ class EmployeeRequest(models.Model):
     'employee.request.type',
     string="نوع المعاملة",
     tracking=True, required=True)
-    status = fields.Selection([
-    ('new', 'جديد'),
-    ('in_progress', 'قيد الإجراء'),
-    ('overdue', 'متأخر'),
-    ('done', 'منتهى'),
-    ], string="Status", compute='_compute_status', store=True, tracking=True, default='new')
+    
+    priority = fields.Selection([
+        ('normal', 'عادي'),
+        ('urgent', 'عاجل'),
+        ('very_urgent', 'عاجل جداً'),
+        ('instant', 'فوري / سري للغاية')
+    ], string="الأولوية", required=True, default='normal', tracking=True)
 
-    employee_ids = fields.Many2many('hr.employee', string="الموظف المسؤول", tracking=True, required=True)
+    confidentiality = fields.Selection([
+        ('public', 'عام'),
+        ('restricted', 'مقيد'),
+        ('confidential', 'سري'),
+        ('secret', 'سري للغاية')
+    ], string="درجة السرية", required=True, default='public', tracking=True)
+
+    project_id = fields.Many2one('project.project', string="المشروع المرتبط", tracking=True)
+    parent_transaction_id = fields.Many2one('employee.request', string="المعاملة الأصلية", tracking=True)
+    financial_value = fields.Monetary(string="القيمة المالية", currency_field='currency_id', tracking=True)
+    contact_email = fields.Char(string="البريد الإلكتروني للجهة", related='partner_id.email', store=True, readonly=False)
+    contact_person = fields.Char(string="اسم الشخص المسؤول بالجهة")
+
+    # SLA Tracking Fields
+    is_sla_paused = fields.Boolean(string="هل الـ SLA مجمد؟", default=False, tracking=True)
+    sla_due_date = fields.Datetime(string="الموعد النهائي للـ SLA", tracking=True)
+    total_paused_seconds = fields.Integer(string="إجمالي ثواني التجميد", default=0, tracking=True)
+    @api.model
+    def _read_group_status(self, stages, domain, order):
+        return ['draft', 'routed', 'in_progress', 'pending_external', 'completed', 'closed']
+
+    @api.model
+    def read_group(self, domain, fields, groupby, offset=0, limit=None, orderby=False, lazy=True):
+        res = super().read_group(domain, fields, groupby, offset=offset, limit=limit, orderby=orderby, lazy=lazy)
+        gb_field = (groupby if isinstance(groupby, str) else (groupby[0] if groupby else '')).split(':')[0]
+        if gb_field == 'status' and isinstance(res, list):
+            order_map = {'draft': 0, 'routed': 1, 'in_progress': 2, 'pending_external': 3, 'completed': 4, 'closed': 5}
+            def _get_key(g):
+                val = g.get('status')
+                if isinstance(val, (tuple, list)):
+                    val = val[0]
+                return order_map.get(val, 99)
+            res.sort(key=_get_key)
+        return res
+
+    @api.model
+    def web_read_group(self, domain, fields, groupby, limit=None, offset=0, orderby=False, lazy=True):
+        res = super().web_read_group(domain, fields, groupby, limit=limit, offset=offset, orderby=orderby, lazy=lazy)
+        gb_field = (groupby if isinstance(groupby, str) else (groupby[0] if groupby else '')).split(':')[0]
+        if gb_field == 'status' and isinstance(res, dict) and 'groups' in res and isinstance(res['groups'], list):
+            order_map = {'draft': 0, 'routed': 1, 'in_progress': 2, 'pending_external': 3, 'completed': 4, 'closed': 5}
+            def _get_key(g):
+                val = g.get('status')
+                if isinstance(val, (tuple, list)):
+                    val = val[0]
+                return order_map.get(val, 99)
+
+            res['groups'].sort(key=_get_key)
+
+        return res
+
+    status = fields.Selection([
+        ('draft', 'مسودة'),
+        ('routed', 'تم التوجيه'),
+        ('in_progress', 'قيد الإجراء'),
+        ('pending_external', 'بانتظار رد خارجي'),
+        ('completed', 'مكتملة'),
+        ('closed', 'مغلقة'),
+    ], string="Status", store=True, tracking=True, default='draft', group_expand='_read_group_status')
+
+    employee_ids = fields.Many2many('hr.employee', string="الموظف المسؤول", tracking=True)
+    subtask_ids = fields.One2many('employee.request.subtask', 'request_id', string="المهام الفرعية")
     start_date = fields.Date(string="تاريخ البداية" , tracking=True, required=True)
     end_date = fields.Date(string="تاريخ النهاية" , tracking=True, required=True)
     active = fields.Boolean(string='Active', default=True)
@@ -110,20 +191,48 @@ class EmployeeRequest(models.Model):
 
 
     
-    @api.depends('end_date')
+    @api.model
+    def _cron_monitor_sla(self):
+        """
+        Cron job to monitor SLA due dates and take actions if overdue.
+        In this implementation, it logs an audit entry if the transaction goes overdue.
+        """
+        now = fields.Datetime.now()
+        # Find transactions that are not closed/completed, SLA is not paused, and SLA is past due
+        overdue_transactions = self.search([
+            ('status', 'not in', ['completed', 'closed']),
+            ('is_sla_paused', '=', False),
+            ('sla_due_date', '<', now)
+        ])
+        
+        for record in overdue_transactions:
+            # Here we can add logic to send notifications or escalate
+            # For now, we simply log it in the audit trail if it's the first time we detect it
+            # To avoid spamming, we can check if there's already an SLA breach log for this status
+            existing_log = self.env['cts.audit.log'].search([
+                ('transaction_id', '=', record.id),
+                ('action', '=', 'SLA Breach Detected'),
+                ('old_status', '=', record.status)
+            ], limit=1)
+            
+            if not existing_log:
+                self.env['cts.audit.log'].create({
+                    'transaction_id': record.id,
+                    'user_id': self.env.ref('base.user_root').id,
+                    'action': 'SLA Breach Detected',
+                    'old_status': record.status,
+                    'new_status': record.status,
+                    'notes': 'تم تجاوز الموعد النهائي للمعاملة (SLA Overdue).'
+                })
+                # Optional: Escalate to manager or send notification
+                
+    @api.depends('sla_due_date')
     def _compute_status(self):
-        today = date.today()
-        for rec in self:
-            if rec.status == 'done':
-                continue  # Keep 'done' as final
-            if rec.end_date and rec.end_date < today:
-                rec.status = 'overdue'
-            elif rec.status not in ['overdue', 'done']:
-                if rec.status != 'in_progress':
-                    rec.status = 'new'
+        # We will handle SLA overdue via cron and separate boolean field to keep status clean
+        pass
 
     # customer_id = fields.Many2one('res.partner', string="Customer Name")
-    department= fields.Many2one('hr.department',string="القسم" ,  tracking=True, required=True)
+    department = fields.Many2one('hr.department', string="القسم", tracking=True)
     incoming_number = fields.Char(string="رقم الوارد")
     created_by = fields.Many2one('res.users', string="Created By", default=lambda self: self.env.user, readonly=True)
     tag_ids = fields.Many2many('employee.request.tag', string="Tags", required=True)  # new m2m field for tags
@@ -141,7 +250,7 @@ class EmployeeRequest(models.Model):
                         ('company_id', '=', vals['company_id']),
                         ('id', '!=', record.id),
                     ]
-                    last_request = self.search(domain, order='id desc', limit=1)
+                    last_request = self.with_context(active_test=False).search(domain, order='serial_number desc', limit=1)
                     
                     next_num = 1
                     if last_request and last_request.serial_number:
@@ -181,6 +290,16 @@ class EmployeeRequest(models.Model):
     def action_done(self):
         for rec in self:
             rec.status = 'done'
+
+
+    @api.model
+    def _register_hook(self):
+        super()._register_hook()
+        try:
+            from odoo.addons.samir_gamal_1.hooks import cleanup_leftover_employee_request_ui
+            cleanup_leftover_employee_request_ui(self.env)
+        except ImportError:
+            pass
 
     @api.depends('serial_number')
     def _compute_qr_code(self):
@@ -247,11 +366,17 @@ class EmployeeRequest(models.Model):
         # Only send notifications for actual messages (not notifications)
         if body and self.employee_ids:
             # Send push notification to all employees in the request
-            self.env['hr.employee'].send_employee_chatter_notification(
-                employee_ids=self.employee_ids,
-                message=body,
-                serial_number=self.serial_number
-            )
+            try:
+                self.env['hr.employee'].send_employee_chatter_notification(
+                    employee_ids=self.employee_ids,
+                    message=body,
+                    serial_number=self.serial_number
+                )
+            except AttributeError:
+                pass
+            except Exception as e:
+                import logging
+                logging.getLogger(__name__).warning("Failed to send chatter notification: %s", str(e))
         
         return message
     # @api.depends('serial_number', 'start_date', 'end_date', 'status')

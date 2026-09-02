@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_expense_sheet_inherit_view_form" model="ir.ui.view">
+        <field name="name">hr.expense.sheet.inherit.view.form</field>
+        <field name="model">hr.expense.sheet</field>
+        <field name="inherit_id" ref="hr_expense.view_hr_expense_sheet_form" />
+        <field name="arch" type="xml">
+            <field name="employee_id" position="after">
+                <field name="approval_level_id" />
+                <field name="is_boolean" invisible="1" />
+
+            </field>
+
+            <xpath expr="//button[@name='action_approve_expense_sheets']" position="replace">
+                <button class="oe_highlight" string="Approve" type="object" name="action_approve_expense_report" 
+                invisible="state != 'submit' or not is_boolean" groups="hr_expense.group_hr_expense_team_approver"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_refuse_expense_sheets']" position="replace">
+                <button string="Reject" type="action" name="%(sh_expense_dynamic_approval.sh_rejection_reason_action)d" invisible="state != 'submit' or not is_boolean" groups="hr_expense.group_hr_expense_team_approver" />
+            </xpath>
+
+            <xpath expr="//button[@name='action_reset_expense_sheets']" position="before">
+                <button class="oe_highlight" string="Approve" type="object" name="action_approve"
+                invisible="state != 'submit' or approval_level_id"
+                groups="hr_expense.group_hr_expense_team_approver"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_approve']" position="after">
+                <button string="Reject" type="action" name="%(sh_expense_dynamic_approval.sh_rejection_reason_action)d" 
+                invisible="state != 'submit' or approval_level_id"
+                groups="hr_expense.group_hr_expense_team_approver"   />
+            </xpath>
+
+            <xpath expr="//notebook//page[@name='expenses']" position="after">
+                <page string="Approval Info" name="approval_info">
+                    <group>
+
+                        <group string="Next Approval">
+                            <field name="level" />
+                            <field name="user_ids" widget="many2many_tags" />
+                            <field name="group_ids" widget="many2many_tags" />
+                        </group>
+
+                        <group string="Reject Expense Report Info">
+                            <field name="rejection_date" />
+                            <field name="reject_by" />
+                            <field name="reject_reason" />
+                        </group>
+
+                        <field name="approval_info_line" nolabel="1" context="{'form_view_ref': 'sh_expense_dynamic_approval.sh_approval_info_view_form'}">
+                            <tree>
+                                <field name="level" />
+                                <field name="user_ids" />
+                                <field name="group_ids" />
+                                <field name="status" widget="boolean_toggle" readonly="1" />
+                                <field name="approval_date" />
+                                <field name="approved_by" />
+                                <field name="hr_expense_sheet_id" invisible="1" />
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="sh_hr_expense_sheet_my_approval_action" model="ir.actions.act_window">
+        <field name="name">My Approval</field>
+        <field name="res_model">hr.expense.sheet</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,kanban,form,pivot,graph,activity</field>
+        <field name="view_id" ref="hr_expense.view_hr_expense_sheet_tree" />
+        <field name="domain">[('is_boolean','=',True)]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face"></p>
+        </field>
+    </record>
+
+    <menuitem   id="sh_hr_expense_sheet_my_approval_action_menu" 
+                name="My Approval" 
+                action="sh_hr_expense_sheet_my_approval_action"  
+                parent="hr_expense.menu_hr_expense_report" 
+                sequence="1" />
+</odoo>

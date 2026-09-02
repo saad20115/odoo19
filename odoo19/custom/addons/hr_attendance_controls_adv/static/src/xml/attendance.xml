@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-extend="HrAttendanceMyMainMenu">
+        <t t-jquery="t[t-set='bodyContent'] div.flex-grow-1" t-operation="after">
+            <div class="row mt8 mb8 attendance_reason" style="display: none;">
+                <div t-if="widget.reasons" class="col-8" style="margin-left: auto; margin-right: auto;">                    
+                    <input type="text" name="reasons" id="oe_attendance_reasons" list="reasons_list" class="o_input mt8 oe_attendance_reasons" 
+                        placeholder="Select / Enter your Reason here." autocomplete="off"/>
+                    <datalist id="reasons_list">
+                        <t t-foreach="[widget.reasons]" t-as="reasons">
+                            <t t-foreach="reasons" t-as="reason" >
+                                <t t-if="reason.attendance_state != widget.employee.attendance_state or reason.attendance_state == False">
+                                    <option t-att-value="reason.name"/>                     
+                                </t>                                       
+                            </t>
+                        </t>
+                    </datalist>
+                </div>
+            </div>            
+        </t>
+        <t t-jquery="t[t-set='bodyContent'] t[t-call='HrAttendanceCheckInOutButtons']" t-operation="after">
+            <t t-if="widget.employee">
+                <div class="glocation_kisok_container mb8" id="glocation_kisok" style="display: none;">
+                    <i class="fa fa-1x fa-angle-double-down glocation_kisok_toggle" id="glocation_kisok_toggle">
+                        Geo Location
+                    </i>
+                    <div class="glocation_kisok_view" style="display: none;">
+                        <span></span>
+                    </div>
+                </div>
+
+                <div class="gmap_kisok_container mb8" id="gmap_kisok" style="display: none;">
+                    <i class="fa fa-1x fa-angle-double-down gmap_kisok_toggle" id="gmap_kisok_toggle">
+                        Map Location
+                    </i>
+                    <div class="gmap_kisok_view" style="display: none;"></div>
+                </div>
+
+                <div class="gip_kisok_container mb8" id="gip_kisok" style="display: none;">
+                    <i class="fa fa-1x fa-angle-double-down gip_kisok_toggle" id="gip_kisok_toggle">
+                        IP Address (Public)
+                    </i>
+                    <div class="gip_kisok_view" style="display: none;">
+                        <span></span>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </t>
+
+    <t t-extend="HrAttendanceKioskMode">
+        <t t-jquery="t[t-set='bodyContent'] div.o_hr_attendance_kiosk_welcome_row" t-operation="after">
+            <div class="row face_recognition_kisok_container mt16" id="face_recognition" style="display: none; margin-top: auto !important;margin-bottom: auto !important;">
+                <div class="col-sm-3" style="margin-top: auto !important;margin-bottom: auto !important;">
+                    <span class="mt8 mb0 face_recognition_status">Face Recognition ON</span>
+                </div>
+                <div class="col-sm-6">
+                    <h3 class="mt0 mb8"><i>or</i></h3>
+                    <div class="col-sm-12 mt16">
+                        <button class="btn btn-default o_hr_kiosk_face_recognition">
+                            <img class="img img-fluid d-block mx-auto h-100" src="/hr_attendance_controls_adv/static/src/img/kiosk_face_icon.png"/>
+                        </button>
+                        <h5 class="mt8 mb0 text-muted">Scan Your Face</h5>
+                    </div>                        
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+                
+            <div class="row glocation_kisok_container mb8" id="glocation_kisok" style="display: none;">
+                <i class="fa fa-1x fa-angle-double-down glocation_kisok_toggle" id="glocation_kisok_toggle">
+                    Geo Location
+                </i>
+                <div class="glocation_kisok_view" style="display: none;">
+                    <span></span>
+                </div>
+            </div>
+
+            <div class="row gmap_kisok_container mb8" id="gmap_kisok" style="display: none;">
+                <i class="fa fa-1x fa-angle-double-down gmap_kisok_toggle" id="gmap_kisok_toggle">
+                    Map Location
+                </i>
+                <div class="gmap_kisok_view" style="display: none;"></div>
+            </div>
+
+            <div class="row gip_kisok_container mb8" id="gip_kisok" style="display: none;">
+                <i class="fa fa-1x fa-angle-double-down gip_kisok_toggle" id="gip_kisok_toggle">
+                    IP Address (Public)
+                </i>
+                <div class="gip_kisok_view" style="display: none;">
+                    <span></span>
+                </div>
+            </div>
+
+        </t>
+    </t>
+
+</templates>

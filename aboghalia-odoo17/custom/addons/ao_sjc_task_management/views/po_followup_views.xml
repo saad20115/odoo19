@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_po_followup_tree_sjc" model="ir.ui.view">
+        <field name="name">po.followup.tree.sjc</field>
+        <field name="model">po.followup</field>
+        <field name="inherit_id" ref="ao_po_followup.view_po_followup_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='uploaded_to_system']" position="after">
+                <field name="disbursement" string="الصرف" optional="show"/>
+                <field name="sjc_due_date" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

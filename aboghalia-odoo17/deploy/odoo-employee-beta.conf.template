@@ -1,0 +1,16 @@
+[options]
+admin_passwd = CHANGE_ME_MASTER_PASSWORD
+db_host = False
+db_port = False
+db_user = odoo17-v2
+db_password = CHANGE_ME_DB_PASSWORD
+db_name = False
+dbfilter = ^BetaEmployeeDB1$
+addons_path = /odoo17-v2-employee-beta/odoo17-v2-server/addons,/odoo17-v2-employee-beta/custom/addons
+data_dir = /var/lib/odoo-employee-beta
+logfile = /var/log/odoo/odoo-employee-beta.log
+http_port = 8072
+proxy_mode = False
+workers = 2
+max_cron_threads = 1
+list_db = False

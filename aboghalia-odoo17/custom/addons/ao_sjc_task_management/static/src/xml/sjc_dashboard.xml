@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ao_sjc_task_management.SjcDashboard">
+        <div class="sjc-root" t-att-class="{'sjc-ar': isAr}">
+            <div class="sjc-topbar">
+                <div class="sjc-logo">SJC<span>+</span></div>
+                <div class="sjc-tb-center">
+                    <strong t-esc="state.data.title || label('overview')"/>
+                    <span t-esc="roleLabel"/>
+                </div>
+                <div class="sjc-user-pill">
+                    <t t-if="state.data.user_avatar">
+                        <img class="sjc-av-img" t-att-src="state.data.user_avatar" t-att-alt="state.data.user_name"/>
+                    </t>
+                    <t t-else="">
+                        <div class="sjc-av" t-esc="(state.data.user_name or '?').slice(0, 2)"/>
+                    </t>
+                    <div class="sjc-uname" t-esc="state.data.user_name"/>
+                </div>
+            </div>
+
+            <div class="sjc-main-full">
+                <t t-if="state.loading">
+                    <div class="sjc-empty"><i class="fa fa-spinner fa-spin"/> <t t-esc="label('loading')"/></div>
+                </t>
+
+                <!-- ================= DASHBOARD ================= -->
+                <t t-elif="page === 'dashboard'">
+                    <div class="sjc-hero">
+                        <div>
+                            <h2 t-esc="state.data.user_name"/>
+                            <p t-esc="state.data.title || label('overview')"/>
+                        </div>
+                    </div>
+                    <div class="sjc-stats">
+                        <div class="sjc-sc"><div class="sjc-sn" t-esc="state.data.kpis.total"/><div class="sjc-sl" t-esc="label('total')"/></div>
+                        <div class="sjc-sc"><div class="sjc-sn cy" t-esc="state.data.kpis.in_progress"/><div class="sjc-sl" t-esc="label('in_progress')"/></div>
+                        <div class="sjc-sc"><div class="sjc-sn cg" t-esc="state.data.kpis.completed"/><div class="sjc-sl" t-esc="label('completed')"/></div>
+                        <div class="sjc-sc"><div class="sjc-sn cr" t-esc="state.data.kpis.overdue"/><div class="sjc-sl" t-esc="label('overdue')"/></div>
+                    </div>
+
+                    <div class="sjc-section-title" t-esc="label('menu_summary')"/>
+                    <div class="sjc-menu-grid">
+                        <t t-foreach="state.data.menu_summaries || []" t-as="menu" t-key="menu.key">
+                            <div class="sjc-menu-card">
+                                <div class="sjc-menu-card-title" t-esc="menu.title"/>
+                                <div class="sjc-menu-card-kpis">
+                                    <span><t t-esc="label('total')"/>: <strong t-esc="menu.kpis.total"/></span>
+                                    <span t-if="menu.kpis.new != null"><t t-esc="label('new')"/>: <strong t-esc="menu.kpis.new"/></span>
+                                    <span class="cy"><t t-esc="label('in_progress')"/>: <strong t-esc="menu.kpis.in_progress"/></span>
+                                    <span class="cg"><t t-esc="label('completed')"/>: <strong t-esc="menu.kpis.completed"/></span>
+                                    <span class="cr"><t t-esc="label('overdue')"/>: <strong t-esc="menu.kpis.overdue"/></span>
+                                </div>
+                                <div class="sjc-prog"><div class="sjc-prog-fill" t-att-style="'width:' + (menu.progress || 0) + '%'"/></div>
+                                <div class="sjc-menu-card-note">
+                                    <strong t-esc="label('conclusion')"/>:
+                                    <t t-esc="menu.conclusion"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+
+                <!-- ================= PO MAKKA / MADINA ================= -->
+                <t t-elif="page === 'po_makka' or page === 'po_madina'">
+                    <div class="sjc-hero">
+                        <div>
+                            <h2 t-esc="state.data.title"/>
+                            <p><t t-esc="label('grace')"/>: <t t-esc="state.data.grace_days"/> — <t t-esc="label('total')"/>: <t t-esc="state.data.kpis.total"/></p>
+                        </div>
+                    </div>
+                    <div class="sjc-stats">
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('all')">
+                            <div class="sjc-sn" t-esc="state.data.kpis.total"/><div class="sjc-sl" t-esc="label('total')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('in_progress')">
+                            <div class="sjc-sn cy" t-esc="state.data.kpis.in_progress"/><div class="sjc-sl" t-esc="label('in_progress')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('completed')">
+                            <div class="sjc-sn cg" t-esc="state.data.kpis.completed"/><div class="sjc-sl" t-esc="label('completed')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('overdue')">
+                            <div class="sjc-sn cr" t-esc="state.data.kpis.overdue"/><div class="sjc-sl" t-esc="label('overdue')"/>
+                        </div>
+                    </div>
+
+                    <div t-att-class="showPeopleSidebar ? 'sjc-page-split' : 'sjc-page-solo'">
+                        <div class="sjc-page-main">
+                            <div class="sjc-filters">
+                                <button t-att-class="state.filter === 'all' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('all')" t-esc="label('all')"/>
+                                <button t-att-class="state.filter === 'in_progress' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('in_progress')" t-esc="label('in_progress')"/>
+                                <button t-att-class="state.filter === 'completed' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('completed')" t-esc="label('completed')"/>
+                                <button t-att-class="state.filter === 'overdue' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('overdue')" t-esc="label('overdue')"/>
+                            </div>
+                            <div class="sjc-card">
+                                <div class="sjc-ch">
+                                    <span t-esc="label('tasks')"/>
+                                    (<t t-esc="filteredPoTasks().length"/> / <t t-esc="filteredPoTasksAll().length"/>)
+                                </div>
+                                <div class="sjc-cb sjc-task-grid sjc-task-grid-compact">
+                                    <t t-if="!filteredPoTasks().length">
+                                        <div class="sjc-empty" t-esc="label('empty')"/>
+                                    </t>
+                                    <t t-foreach="filteredPoTasks()" t-as="task" t-key="task.id">
+                                        <div class="sjc-task-card" t-on-click="() => this.openTaskDetail(task)">
+                                            <div class="sjc-task-card-main">
+                                                <div class="sjc-task-card-title" t-esc="task.name"/>
+                                                <div class="sjc-task-card-sub">
+                                                    <span t-if="cardSubtitle(task)" t-esc="cardSubtitle(task)"/>
+                                                    <span t-if="task.due_date" class="sjc-task-card-due" t-esc="task.due_date"/>
+                                                </div>
+                                                <div class="sjc-task-card-hint" t-esc="label('click_for_details')"/>
+                                            </div>
+                                            <div class="sjc-task-card-side">
+                                                <button type="button" class="sjc-goto-btn"
+                                                        t-att-title="label('go_to_record')"
+                                                        t-on-click.stop="(ev) => this.goToRecord(task, ev)">
+                                                    <i class="fa fa-external-link"/>
+                                                </button>
+                                                <span class="sjc-badge" t-att-class="'st-' + task.status" t-esc="task.status_label"/>
+                                            </div>
+                                        </div>
+                                    </t>
+</div>
+                                <div class="sjc-load-more" t-if="hasMoreTasks()">
+                                    <button type="button" class="btn btn-secondary" t-on-click="() => this.loadMoreTasks()">
+                                        <t t-esc="label('load_more')"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside t-if="showPeopleSidebar" class="sjc-people-sidebar">
+                            <div class="sjc-sidebar-head">
+                                <div class="sjc-sidebar-title" t-esc="label('employees_sidebar')"/>
+                                <input type="search" class="sjc-sidebar-search"
+                                       t-att-placeholder="label('search_people')"
+                                       t-att-value="state.peopleSearch"
+                                       t-on-input="onPeopleSearch"/>
+                            </div>
+                            <div class="sjc-sidebar-body">
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('accounting_senders')"/>
+                                    <t t-foreach="filterPeople(state.data.accounting_senders)" t-as="sender" t-key="'as-' + sender.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="sender.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="sender.name"/>
+                                                <div class="sjc-person-meta" t-esc="label('po_sent_count')"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="sender.po_count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.accounting_senders).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('team_members')"/>
+                                    <t t-foreach="filterPeople(state.data.team_members)" t-as="member" t-key="'tm-' + member.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="member.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="member.name"/>
+                                                <div class="sjc-person-meta" t-if="member.assigned_by">
+                                                    <t t-esc="label('assigned_by')"/>: <t t-esc="member.assigned_by.name"/>
+                                                </div>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="member.po_count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.team_members).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </t>
+
+                <!-- ================= ADMIN COMMS ================= -->
+                <t t-elif="page === 'admin_comms'">
+                    <div class="sjc-hero">
+                        <div>
+                            <h2 t-esc="state.data.title"/>
+                            <p>
+                                <t t-esc="label('grace')"/>: <t t-esc="state.data.grace_days"/>
+                                — <t t-esc="label('total')"/>: <t t-esc="state.data.kpis.total"/>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="sjc-stats sjc-stats-5">
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('all')">
+                            <div class="sjc-sn" t-esc="state.data.kpis.total"/><div class="sjc-sl" t-esc="label('total')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('new')">
+                            <div class="sjc-sn" t-esc="state.data.kpis.new"/><div class="sjc-sl" t-esc="label('new')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('in_progress')">
+                            <div class="sjc-sn cy" t-esc="state.data.kpis.in_progress"/><div class="sjc-sl" t-esc="label('in_progress')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('completed')">
+                            <div class="sjc-sn cg" t-esc="state.data.kpis.completed"/><div class="sjc-sl" t-esc="label('completed')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('overdue')">
+                            <div class="sjc-sn cr" t-esc="state.data.kpis.overdue"/><div class="sjc-sl" t-esc="label('overdue')"/>
+                        </div>
+                    </div>
+
+                    <t t-if="showOverviewPanels">
+                        <div class="sjc-section-title" t-esc="label('companies')"/>
+                        <div class="sjc-mailbox-grid">
+                            <t t-foreach="state.data.companies || []" t-as="co" t-key="co.id">
+                                <div class="sjc-mailbox-card">
+                                    <div class="sjc-mailbox-name" t-esc="co.name"/>
+                                    <div class="sjc-mailbox-count" t-esc="co.count"/>
+                                </div>
+                            </t>
+                            <t t-if="!(state.data.companies || []).length">
+                                <div class="sjc-empty" t-esc="label('empty')"/>
+                            </t>
+                        </div>
+                    </t>
+
+                    <div t-att-class="showPeopleSidebar ? 'sjc-page-split' : 'sjc-page-solo'">
+                        <div class="sjc-page-main">
+                            <div class="sjc-filters">
+                                <button t-att-class="state.filter === 'all' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('all')" t-esc="label('all')"/>
+                                <button t-att-class="state.filter === 'new' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('new')" t-esc="label('new')"/>
+                                <button t-att-class="state.filter === 'in_progress' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('in_progress')" t-esc="label('in_progress')"/>
+                                <button t-att-class="state.filter === 'completed' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('completed')" t-esc="label('completed')"/>
+                                <button t-att-class="state.filter === 'overdue' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('overdue')" t-esc="label('overdue')"/>
+                            </div>
+                            <div class="sjc-card">
+                                <div class="sjc-ch">
+                                    <span t-esc="label('tasks')"/>
+                                    (<t t-esc="filteredPoTasks().length"/> / <t t-esc="filteredPoTasksAll().length"/>)
+                                </div>
+                                <div class="sjc-cb sjc-task-grid sjc-task-grid-compact">
+                                    <t t-if="!filteredPoTasks().length">
+                                        <div class="sjc-empty" t-esc="label('empty')"/>
+                                    </t>
+                                    <t t-foreach="filteredPoTasks()" t-as="task" t-key="task.id">
+                                        <div class="sjc-task-card" t-on-click="() => this.openTaskDetail(task)">
+                                            <div class="sjc-task-card-main">
+                                                <div class="sjc-task-card-title" t-esc="task.name"/>
+                                                <div class="sjc-task-card-sub">
+                                                    <span t-if="cardSubtitle(task)" t-esc="cardSubtitle(task)"/>
+                                                    <span t-if="task.due_date" class="sjc-task-card-due" t-esc="task.due_date"/>
+                                                </div>
+                                                <div class="sjc-task-card-hint" t-esc="label('click_for_details')"/>
+                                            </div>
+                                            <div class="sjc-task-card-side">
+                                                <button type="button" class="sjc-goto-btn"
+                                                        t-att-title="label('go_to_record')"
+                                                        t-on-click.stop="(ev) => this.goToRecord(task, ev)">
+                                                    <i class="fa fa-external-link"/>
+                                                </button>
+                                                <span class="sjc-badge" t-att-class="'st-' + task.status" t-esc="task.status_label"/>
+                                            </div>
+                                        </div>
+                                    </t>
+</div>
+                                <div class="sjc-load-more" t-if="hasMoreTasks()">
+                                    <button type="button" class="btn btn-secondary" t-on-click="() => this.loadMoreTasks()">
+                                        <t t-esc="label('load_more')"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside t-if="showPeopleSidebar" class="sjc-people-sidebar">
+                            <div class="sjc-sidebar-head">
+                                <div class="sjc-sidebar-title" t-esc="label('employees_sidebar')"/>
+                                <input type="search" class="sjc-sidebar-search"
+                                       t-att-placeholder="label('search_people')"
+                                       t-att-value="state.peopleSearch"
+                                       t-on-input="onPeopleSearch"/>
+                            </div>
+                            <div class="sjc-sidebar-body">
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('created_by_users')"/>
+                                    <t t-foreach="filterPeople(state.data.creators)" t-as="person" t-key="'cr-' + person.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="person.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="person.name"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="person.count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.creators).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('responsible_employees')"/>
+                                    <t t-foreach="filterPeople(state.data.responsibles)" t-as="person" t-key="'re-' + person.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="person.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="person.name"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="person.count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.responsibles).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </t>
+
+                <!-- ================= EXPENSES ================= -->
+                <t t-elif="page === 'expenses'">
+                    <div class="sjc-hero">
+                        <div>
+                            <h2 t-esc="state.data.title"/>
+                            <p>
+                                <t t-esc="label('grace')"/>: <t t-esc="state.data.grace_days"/>
+                                — <t t-esc="label('total')"/>: <t t-esc="state.data.kpis.total"/>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="sjc-stats sjc-stats-5">
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('all')">
+                            <div class="sjc-sn" t-esc="state.data.kpis.total"/><div class="sjc-sl" t-esc="label('total')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('new')">
+                            <div class="sjc-sn" t-esc="state.data.kpis.new"/><div class="sjc-sl" t-esc="label('new')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('in_progress')">
+                            <div class="sjc-sn cy" t-esc="state.data.kpis.in_progress"/><div class="sjc-sl" t-esc="label('in_progress')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('completed')">
+                            <div class="sjc-sn cg" t-esc="state.data.kpis.completed"/><div class="sjc-sl" t-esc="label('completed')"/>
+                        </div>
+                        <div class="sjc-sc sjc-sc-click" t-on-click="() => this.setFilter('overdue')">
+                            <div class="sjc-sn cr" t-esc="state.data.kpis.overdue"/><div class="sjc-sl" t-esc="label('overdue')"/>
+                        </div>
+                    </div>
+
+                    <t t-if="showOverviewPanels">
+                        <div class="sjc-section-title" t-esc="label('departments')"/>
+                        <div class="sjc-mailbox-grid">
+                            <t t-foreach="state.data.departments || []" t-as="dept" t-key="dept.id">
+                                <div class="sjc-mailbox-card">
+                                    <div class="sjc-mailbox-name" t-esc="dept.name"/>
+                                    <div class="sjc-mailbox-count" t-esc="dept.count"/>
+                                </div>
+                            </t>
+                            <t t-if="!(state.data.departments || []).length">
+                                <div class="sjc-empty" t-esc="label('empty')"/>
+                            </t>
+                        </div>
+                    </t>
+
+                    <div t-att-class="showPeopleSidebar ? 'sjc-page-split' : 'sjc-page-solo'">
+                        <div class="sjc-page-main">
+                            <div class="sjc-filters">
+                                <button t-att-class="state.filter === 'all' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('all')" t-esc="label('all')"/>
+                                <button t-att-class="state.filter === 'new' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('new')" t-esc="label('new')"/>
+                                <button t-att-class="state.filter === 'in_progress' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('in_progress')" t-esc="label('in_progress')"/>
+                                <button t-att-class="state.filter === 'completed' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('completed')" t-esc="label('completed')"/>
+                                <button t-att-class="state.filter === 'overdue' ? 'sjc-tf active' : 'sjc-tf'" t-on-click="() => this.setFilter('overdue')" t-esc="label('overdue')"/>
+                            </div>
+                            <div class="sjc-card">
+                                <div class="sjc-ch">
+                                    <span t-esc="label('tasks')"/>
+                                    (<t t-esc="filteredPoTasks().length"/> / <t t-esc="filteredPoTasksAll().length"/>)
+                                </div>
+                                <div class="sjc-cb sjc-task-grid sjc-task-grid-compact">
+                                    <t t-if="!filteredPoTasks().length">
+                                        <div class="sjc-empty" t-esc="label('empty')"/>
+                                    </t>
+                                    <t t-foreach="filteredPoTasks()" t-as="task" t-key="task.id">
+                                        <div class="sjc-task-card" t-on-click="() => this.openTaskDetail(task)">
+                                            <div class="sjc-task-card-main">
+                                                <div class="sjc-task-card-title" t-esc="task.name"/>
+                                                <div class="sjc-task-card-sub">
+                                                    <span t-if="cardSubtitle(task)" t-esc="cardSubtitle(task)"/>
+                                                    <span t-if="task.due_date" class="sjc-task-card-due" t-esc="task.due_date"/>
+                                                </div>
+                                                <div class="sjc-task-card-hint" t-esc="label('click_for_details')"/>
+                                            </div>
+                                            <div class="sjc-task-card-side">
+                                                <button type="button" class="sjc-goto-btn"
+                                                        t-att-title="label('go_to_record')"
+                                                        t-on-click.stop="(ev) => this.goToRecord(task, ev)">
+                                                    <i class="fa fa-external-link"/>
+                                                </button>
+                                                <span class="sjc-badge" t-att-class="'st-' + task.status" t-esc="task.status_label"/>
+                                            </div>
+                                        </div>
+                                    </t>
+</div>
+                                <div class="sjc-load-more" t-if="hasMoreTasks()">
+                                    <button type="button" class="btn btn-secondary" t-on-click="() => this.loadMoreTasks()">
+                                        <t t-esc="label('load_more')"/>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside t-if="showPeopleSidebar" class="sjc-people-sidebar">
+                            <div class="sjc-sidebar-head">
+                                <div class="sjc-sidebar-title" t-esc="label('employees_sidebar')"/>
+                                <input type="search" class="sjc-sidebar-search"
+                                       t-att-placeholder="label('search_people')"
+                                       t-att-value="state.peopleSearch"
+                                       t-on-input="onPeopleSearch"/>
+                            </div>
+                            <div class="sjc-sidebar-body">
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('created_by_users')"/>
+                                    <t t-foreach="filterPeople(state.data.creators)" t-as="person" t-key="'ecr-' + person.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="person.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="person.name"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="person.count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.creators).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('sent_to_manager')"/>
+                                    <t t-foreach="filterPeople(state.data.senders)" t-as="person" t-key="'es-' + person.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="person.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="person.name"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="person.count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.senders).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('managers')"/>
+                                    <t t-foreach="filterPeople(state.data.managers)" t-as="person" t-key="'em-' + person.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="person.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="person.name"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="person.count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.managers).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </t>
+
+                <!-- ================= EMAILS ================= -->
+                <t t-elif="page === 'emails'">
+                    <div class="sjc-hero">
+                        <div>
+                            <h2 t-esc="state.data.title"/>
+                            <p><t t-esc="label('total')"/>: <t t-esc="state.data.total_mails"/></p>
+                        </div>
+                        <div class="sjc-hero-actions" t-if="state.data.can_interact_mail">
+                            <button type="button" class="btn btn-primary sjc-btn-inbox" t-on-click="() => this.openIncomingMail()">
+                                <i class="fa fa-envelope-o"/> <t t-esc="label('open_inbox')"/>
+                            </button>
+                        </div>
+                    </div>
+
+                    <t t-if="showOverviewPanels">
+                        <div class="sjc-section-title" t-esc="label('mailboxes')"/>
+                        <div class="sjc-mailbox-grid">
+                            <t t-foreach="state.data.mailboxes" t-as="box" t-key="box.name">
+                                <div class="sjc-mailbox-card">
+                                    <div class="sjc-mailbox-name" t-esc="box.name"/>
+                                    <div class="sjc-mailbox-count" t-esc="box.count"/>
+                                </div>
+                            </t>
+                            <t t-if="!state.data.mailboxes.length">
+                                <div class="sjc-empty" t-esc="label('empty')"/>
+                            </t>
+                        </div>
+                    </t>
+
+                    <div t-att-class="showPeopleSidebar ? 'sjc-page-split' : 'sjc-page-solo'">
+                        <div class="sjc-page-main">
+                            <div class="sjc-card">
+                                <div class="sjc-ch" t-esc="label('recent')"/>
+                                <div class="sjc-cb">
+                                    <t t-foreach="state.data.recent" t-as="mail" t-key="mail.id">
+                                        <div class="sjc-task-card sjc-task-card-row" t-on-click="() => this.openTaskDetail(mail)">
+                                            <div class="sjc-task-card-main">
+                                                <div class="sjc-task-card-title" t-esc="mail.name"/>
+                                                <div class="sjc-task-card-sub">
+                                                    <span t-esc="mail.mailbox || mail.email_from"/>
+                                                </div>
+                                                <div class="sjc-task-card-hint" t-esc="label('click_for_details')"/>
+                                            </div>
+                                            <div class="sjc-task-card-side">
+                                                <button type="button" class="sjc-goto-btn"
+                                                        t-att-title="label('go_to_record')"
+                                                        t-on-click.stop="(ev) => this.goToRecord(mail, ev)">
+                                                    <i class="fa fa-external-link"/>
+                                                </button>
+                                                <span class="sjc-badge st-new" t-if="mail.state === 'new'" t-esc="mail.status_label"/>
+                                                <span class="sjc-badge st-completed" t-elif="mail.state === 'done' || mail.state === 'archived'" t-esc="mail.status_label"/>
+                                                <span class="sjc-badge st-in_progress" t-else="" t-esc="mail.status_label"/>
+                                            </div>
+                                        </div>
+                                    </t>
+                                    <t t-if="!state.data.recent.length">
+                                        <div class="sjc-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+
+                        <aside t-if="showPeopleSidebar" class="sjc-people-sidebar">
+                            <div class="sjc-sidebar-head">
+                                <div class="sjc-sidebar-title" t-esc="label('employees_sidebar')"/>
+                                <input type="search" class="sjc-sidebar-search"
+                                       t-att-placeholder="label('search_people')"
+                                       t-att-value="state.peopleSearch"
+                                       t-on-input="onPeopleSearch"/>
+                            </div>
+                            <div class="sjc-sidebar-body">
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('inbox_staff')"/>
+                                    <t t-foreach="filterPeople(state.data.inbox_staff)" t-as="staff" t-key="'is-' + staff.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="staff.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="staff.name"/>
+                                                <div class="sjc-person-meta" t-esc="label('assigned_out')"/>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="staff.assigned_count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.inbox_staff).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                                <div class="sjc-sidebar-group">
+                                    <div class="sjc-sidebar-group-title" t-esc="label('assignees')"/>
+                                    <t t-foreach="filterPeople(state.data.assignees)" t-as="person" t-key="'ea-' + person.id">
+                                        <div class="sjc-person-row">
+                                            <img class="sjc-avatar" t-att-src="person.avatar" alt=""/>
+                                            <div class="sjc-person-info">
+                                                <div class="sjc-person-name" t-esc="person.name"/>
+                                                <div class="sjc-person-meta" t-if="person.assigned_by">
+                                                    <t t-esc="label('assigned_by')"/>: <t t-esc="person.assigned_by.name"/>
+                                                </div>
+                                            </div>
+                                            <span class="sjc-person-count" t-esc="person.email_count || 0"/>
+                                        </div>
+                                    </t>
+                                    <t t-if="!filterPeople(state.data.assignees).length">
+                                        <div class="sjc-sidebar-empty" t-esc="label('empty')"/>
+                                    </t>
+                                </div>
+                            </div>
+                        </aside>
+                    </div>
+                </t>
+            </div>
+
+            <t t-if="state.selectedTask">
+                <div class="sjc-modal-backdrop" t-on-click="onDetailBackdrop">
+                    <div class="sjc-modal" t-on-click.stop="() => {}">
+                        <div class="sjc-modal-head">
+                            <div>
+                                <div class="sjc-modal-kicker" t-esc="label('details')"/>
+                                <h3 class="sjc-modal-title" t-esc="state.selectedTask.name"/>
+                            </div>
+                            <button type="button" class="sjc-modal-x" t-on-click="() => this.closeTaskDetail()">×</button>
+                        </div>
+                        <div class="sjc-modal-status">
+                            <span class="sjc-badge" t-att-class="'st-' + taskStatus(state.selectedTask)" t-esc="state.selectedTask.status_label"/>
+                        </div>
+                        <div class="sjc-modal-body">
+                            <t t-foreach="detailRows(state.selectedTask)" t-as="row" t-key="row.key">
+                                <div class="sjc-modal-row">
+                                    <div class="sjc-modal-label" t-esc="row.label"/>
+                                    <div class="sjc-modal-value" t-esc="row.value"/>
+                                </div>
+                            </t>
+                        </div>
+                        <div class="sjc-modal-actions">
+                            <button type="button" class="btn btn-secondary" t-on-click="() => this.closeTaskDetail()" t-esc="label('close')"/>
+                            <button type="button" class="btn btn-primary" t-on-click="() => this.goToRecord(state.selectedTask)" t-esc="label('go_to_record')"/>
+                            <button type="button" class="btn btn-primary sjc-btn-instruct"
+                                    t-if="canSendInstructions(state.selectedTask)"
+                                    t-on-click="() => this.openInstructionWizard(state.selectedTask)"
+                                    t-esc="label('send_instructions')"/>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </div>
+    </t>
+</templates>

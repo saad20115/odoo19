@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_saudi_arabia,saudi_arabia,model_saudi_arabia,base.group_user,1,1,1,1
+access_ao_section_samir,access.ao.section.samir,model_ao_section_samir,base.group_user,1,1,1,1
+access_ao_request_samir,access.ao.request.samir,model_ao_request_samir,base.group_user,1,1,1,1
+access_ao_exchange_samir,access.ao.exchange.samir,model_ao_exchange_samir,base.group_user,1,1,1,1
+access_ao_management_samir,access.ao.management.samir,model_ao_management_samir,base.group_user,1,1,1,1
+access_ao_state_samir,access.ao.state.samir,model_ao_state_samir,base.group_user,1,1,1,1

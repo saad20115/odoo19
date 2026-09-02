@@ -1,0 +1,18 @@
+[Unit]
+Description=Aboghalia Odoo 17 Employee Portal Beta
+After=network.target postgresql.service
+Wants=postgresql.service
+
+[Service]
+Type=simple
+User=odoo17-v2
+Group=odoo17-v2
+WorkingDirectory=/odoo17-v2-employee-beta
+ExecStart=/odoo17-v2-employee-beta/odoo17-v2-server/odoo-bin -c /etc/odoo17-v2-employee-beta.conf
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

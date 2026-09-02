@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- view -->
+    <record id="hr_attendance_view_kanban" model="ir.ui.view">
+        <field name="name">hr.attendance.kanban</field>
+        <field name="model">hr.attendance</field>
+        <field name="priority">15</field>
+        <field name="arch" type="xml">
+            <kanban class="o_hr_employee_kanban" create="false" edit="false" version="7.0">
+                <field name="id"/>
+                <field name="employee_id"/>
+                <field name="image_checkin"/>
+                <field name="check_in"/>
+                <field name="image_checkout"/>
+                <field name="check_out"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div class="oe_kanban_global_click">
+                            <div class="oe_kanban_details">
+                                <strong>
+                                    <field name="employee_id"/>
+                                </strong>
+                            </div>
+                            <div class="o_kanban_image" style="width:256px; float:right;">
+                                <img t-att-src="kanban_image('hr.attendance', 'image_checkin', record.id.value)" alt="Check-in image"/>
+                            </div>
+                            <ul>
+                                <li t-if="record.check_in.raw_value"><p>Check-in: <field name="check_in"/></p></li>
+                            </ul>
+                            <div class="o_kanban_image" style="width:256px; float:right;">
+                                <img t-att-src="kanban_image('hr.attendance', 'image_checkout', record.id.value)" alt="Check-out image"/>
+                            </div>
+                            <ul>
+                                <li t-if="record.check_out.raw_value"><p>Check-out: <field name="check_out"/></p></li>
+                            </ul>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+            
+        </field>
+    </record>
+    
+    <record id="hr_attendance_view_form_webcam" model="ir.ui.view">
+            <field name="name">hr.attendance.webcam.form</field>
+            <field name="model">hr.attendance</field>
+            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+            <field name="arch" type="xml">
+                <field name="check_out" position='after'>
+                    <field name="image_checkin" widget="image" groups="hr_attendance.group_hr_attendance_manager"/>
+                    <field name="image_checkout" widget="image" groups="hr_attendance.group_hr_attendance_manager"/>
+                </field>
+            </field>
+        </record>
+
+
+    <!-- action -->
+    <record id="hr_attendance_photos_action" model="ir.actions.act_window">
+        <field name="name">Photos</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="context">{"search_default_today":1}</field>
+        <field name="search_view_id" ref="hr_attendance.hr_attendance_view_filter" />
+    </record>
+
+
+    <!-- Menu -->
+    <menuitem id="menu_hr_attendance_view_attendance_images" name="Photos" parent="hr_attendance.menu_hr_attendance_manage_attendances" sequence="12" action="hr_attendance_photos_action" groups="hr_attendance.group_hr_attendance_manager"/>
+
+</odoo>

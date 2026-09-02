@@ -1,0 +1,660 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ohrms_service_request
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-08 19:01+0000\n"
+"PO-Revision-Date: 2024-07-08 19:01+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_needaction
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_needaction
+msgid "Action Needed"
+msgstr "الإجراءات اللازمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_ids
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_ids
+msgid "Activities"
+msgstr "أنشطة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_exception_decoration
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr "شاط استثناء الديكور"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_state
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_state
+msgid "Activity State"
+msgstr "حالة النشاط"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_type_icon
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_type_icon
+msgid "Activity Type Icon"
+msgstr "رمز نوع النشاط"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__service_type__adjust
+msgid "Adjustment"
+msgstr "تعديل"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+msgid "Approve"
+msgstr "يعتمد"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_execute__state_execute__approved
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__state__approved
+msgid "Approved"
+msgstr "موافقة"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+msgid "Assign"
+msgstr "تعيين"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_execute__state_execute__assign
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__state__assign
+msgid "Assigned"
+msgstr "تعيين"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_attachment_count
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_execute__state_execute__check
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__state__check
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_form
+msgid "Checked"
+msgstr "تدقيق"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__service_type__checking
+msgid "Checking"
+msgstr "تدقيق"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__client_id
+msgid "Client"
+msgstr "زبون"
+
+#. module: ohrms_service_request
+#: model_terms:ir.actions.act_window,help:ohrms_service_request.action_view_service_requests
+msgid "Create new Request"
+msgstr "إنشاء طلب جديد"
+
+#. module: ohrms_service_request
+#: model_terms:ir.actions.act_window,help:ohrms_service_request.action_view_service_approve
+#: model_terms:ir.actions.act_window,help:ohrms_service_request.service_execute_action
+msgid "Create new record"
+msgstr "نشاء سجل جديد"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__create_uid
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__create_uid
+msgid "Created by"
+msgstr "انشأ من قبل"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__create_date
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__create_date
+msgid "Created on"
+msgstr "تم إنشاؤها على"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__execute_date
+msgid "Date Of Reporting"
+msgstr "تاريخ التقرير"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__execute_date
+msgid "Date of reporting"
+msgstr "تاريخ الإبلاغ"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__display_name
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_execute__state_execute__draft
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__state__draft
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_search
+msgid "Draft"
+msgstr "مشروع"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+msgid "Drafted Execution"
+msgstr "تنفيذ المشروع"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__employee_id
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__employee_id
+msgid "Employee"
+msgstr "موظف"
+
+#. module: ohrms_service_request
+#: model_terms:ir.actions.act_window,help:ohrms_service_request.action_view_pivot
+msgid "Enter the target"
+msgstr "أدخل الهدف"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__executer_id
+msgid "Executer"
+msgstr "المنفذ"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+msgid "Executions"
+msgstr "عمليات المنفذ "
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_follower_ids
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_follower_ids
+msgid "Followers"
+msgstr "متابعون"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_partner_ids
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "(المتابعون (الشركاء"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__activity_type_icon
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_search
+msgid "Group By"
+msgstr "مجموعة من"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__has_message
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__has_message
+msgid "Has Message"
+msgstr "لديه رسالة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__id
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__id
+msgid "ID"
+msgstr "هوية شخصية"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_exception_icon
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_exception_icon
+msgid "Icon"
+msgstr "أيقونة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__activity_exception_icon
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ".أيقونة للإشارة إلى نشاط استثناء"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__message_needaction
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "إذا تم تحديد ذلك ، فإن الرسائل الجديدة تتطلب اهتمامك"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__message_has_error
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__message_has_sms_error
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__message_has_error
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "إذا تم التحقق ، فبعض الرسائل بها خطأ في التسليم"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__notes
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__internal_note
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+msgid "Internal Notes"
+msgstr "ملاحظات داخلية"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__notes
+msgid "Internal notes"
+msgstr "ملاحظات داخلية"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_is_follower
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_is_follower
+msgid "Is Follower"
+msgstr "هو تابع"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__issue
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__issue
+msgid "Issue"
+msgstr "القضية"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__service_product_id
+msgid "Item For Service"
+msgstr "البند للخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__write_uid
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__write_date
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث في"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_has_error
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_has_error
+msgid "Message Delivery error"
+msgstr "خطأ في تسليم الرسالة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_ids
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_ids
+msgid "Messages"
+msgstr "رسائل"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__my_activity_date_deadline
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr "الموعد النهائي لنشاطي"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__client_id
+msgid "Name of the client"
+msgstr "اسم العميل"
+
+#. module: ohrms_service_request
+#. odoo-python
+#: code:addons/ohrms_service_request/models/service_request.py:0
+#, python-format
+msgid "New"
+msgstr "جديد"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_calendar_event_id
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_calendar_event_id
+msgid "Next Activity Calendar Event"
+msgstr "حدث تقويم النشاط التالي"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_date_deadline
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr "خر نشاط الموعد النهائي"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_summary
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_summary
+msgid "Next Activity Summary"
+msgstr "ملخص النشاط التالي"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_type_id
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_type_id
+msgid "Next Activity Type"
+msgstr "نوع النشاط التالي"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_needaction_counter
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_needaction_counter
+msgid "Number of Actions"
+msgstr "عدد الإجراءات"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_has_error_counter
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_has_error_counter
+msgid "Number of errors"
+msgstr "عدد الاخطاء"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__message_needaction_counter
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "عدد الرسائل التي تتطلب اتخاذ إجراء"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__message_has_error_counter
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "عدد الرسائل مع خطأ التسليم"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__service_type__other
+msgid "Other"
+msgstr "آخر"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_pivot
+msgid "Pivot View"
+msgstr "عرض المحور"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__service_product_id
+msgid "Product you want to service"
+msgstr "المنتج الذي ترغب في خدمته"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__rating_ids
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__rating_ids
+msgid "Ratings"
+msgstr "التقييمات"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__read_only
+msgid "Readonly"
+msgstr "يقرأ فقط"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__service_name
+msgid "Reason For Service"
+msgstr "سبب الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__name
+msgid "Reference"
+msgstr "مرجع"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+msgid "Reject"
+msgstr "رفض"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_execute__state_execute__reject
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__state__reject
+msgid "Rejected"
+msgstr "مرفوض"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__service_type__repair
+msgid "Repair"
+msgstr "يصلح"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__service_type__replace
+msgid "Replace"
+msgstr "يحل محل"
+
+#. module: ohrms_service_request
+#: model:ir.ui.menu,name:ohrms_service_request.service_report
+msgid "Reporting"
+msgstr "التقارير"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_execute__state_execute__requested
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__state__requested
+msgid "Requested"
+msgstr "طلب"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__activity_user_id
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__activity_user_id
+msgid "Responsible User"
+msgstr "المستخدم المسؤول"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__message_has_sms_error
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطأ في تسليم الرسائل القصيرة"
+
+#. module: ohrms_service_request
+#. odoo-python
+#: code:addons/ohrms_service_request/models/service_request.py:0
+#, python-format
+msgid "Select Executer For the Requested Service"
+msgstr "حدد المنفذ للخدمة المطلوبة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__executer_id
+msgid "Select the Executer"
+msgstr "حدد المنفذ"
+
+#. module: ohrms_service_request
+#: model:ir.module.category,name:ohrms_service_request.module_service_execute
+msgid "Service"
+msgstr "الخدمات"
+
+#. module: ohrms_service_request
+#: model:ir.model,name:ohrms_service_request.model_service_execute
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_tree
+msgid "Service Execute"
+msgstr "تنفيذ الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__service_executer_id
+#: model:res.groups,name:ohrms_service_request.service_group_executer
+msgid "Service Executer"
+msgstr "تنفيذ الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.actions.act_window,name:ohrms_service_request.service_execute_action
+#: model:ir.ui.menu,name:ohrms_service_request.execute_service
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_form
+msgid "Service Execution"
+msgstr "تنفيذ الخدمة"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+msgid "Service Execution Approved"
+msgstr "تمت الموافقة على تنفيذ الخدمة"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+msgid "Service Execution Checked"
+msgstr "تم التحقق من تنفيذ الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__executer_product
+msgid "Service Item"
+msgstr "بند الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.ui.menu,name:ohrms_service_request.service_pivot
+msgid "Service Reporting"
+msgstr "خدمة التقارير"
+
+#. module: ohrms_service_request
+#: model:ir.model,name:ohrms_service_request.model_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_tree
+msgid "Service Request"
+msgstr "طلب خدمة"
+
+#. module: ohrms_service_request
+#: model:ir.actions.act_window,name:ohrms_service_request.action_view_service_requests
+#: model:ir.ui.menu,name:ohrms_service_request.service_requests
+msgid "Service Requests"
+msgstr "طلبات الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__type_service
+msgid "Service Type"
+msgstr "نوع الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__service_date
+msgid "Service date"
+msgstr "تاريخ الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__service_executer_id
+msgid "Service executer"
+msgstr "منفذ الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.actions.act_window,name:ohrms_service_request.action_view_service_approve
+#: model:ir.ui.menu,name:ohrms_service_request.service_approve
+msgid "Service for Approval"
+msgstr "خدمة الموافقة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__service_name
+msgid "Service name"
+msgstr "اسم الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__type_service
+msgid "Service type"
+msgstr "نوع الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.ui.menu,name:ohrms_service_request.service_root
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_search
+msgid "Services"
+msgstr "خدمات"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__state
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__state
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_search
+msgid "State"
+msgstr "حالة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__state_execute
+msgid "State Execute"
+msgstr "تنفيذ الدولة"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_execute_view_search
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_search
+msgid "Status"
+msgstr "الحالة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__activity_state
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+msgid "Submit"
+msgstr "إرسال"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__test_id
+msgid "Test"
+msgstr "اختبار"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__tester_ids
+msgid "Tester"
+msgstr "اختبار"
+
+#. module: ohrms_service_request
+#: model_terms:ir.ui.view,arch_db:ohrms_service_request.service_request_view_form
+msgid "Title For Service"
+msgstr "العنوان للخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__service_type
+msgid "Type Of Service"
+msgstr "نوع الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__service_type
+msgid "Type for the service request"
+msgstr "اكتب طلب الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__activity_exception_decoration
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr "نوع نشاط الاستثناء المسجل."
+
+#. module: ohrms_service_request
+#: model:ir.model.fields.selection,name:ohrms_service_request.selection__service_request__service_type__updation
+msgid "Updation"
+msgstr "تحديث"
+
+#. module: ohrms_service_request
+#: model:ir.actions.act_window,name:ohrms_service_request.action_view_pivot
+msgid "View Pivot"
+msgstr "عرض المحور"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__website_message_ids
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__website_message_ids
+#: model:ir.model.fields,help:ohrms_service_request.field_service_request__website_message_ids
+msgid "Website communication history"
+msgstr "سجل اتصالات الموقع"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__read_only
+msgid "check field"
+msgstr "تحقق الحقل"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__service_date
+msgid "date"
+msgstr "تاريخ"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__internal_note
+msgid "internal notes"
+msgstr "ملاحظات داخلية"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__executer_product
+msgid "service item"
+msgstr "عنصر الخدمة"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,help:ohrms_service_request.field_service_execute__state_execute
+msgid "state of the request"
+msgstr "حالة الطلب"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_execute__test_id
+msgid "test"
+msgstr "اختبار"
+
+#. module: ohrms_service_request
+#: model:ir.model.fields,field_description:ohrms_service_request.field_service_request__tester_ids
+msgid "tester"
+msgstr "اختبار"

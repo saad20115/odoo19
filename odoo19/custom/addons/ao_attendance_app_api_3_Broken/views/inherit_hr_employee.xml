@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="hr_employee_inherit" model="ir.ui.view">
+            <field name="name">hr.employee.inherit</field>
+            <field name="model">hr.employee</field>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='coach_id']" position="after">
+<!--                    <field name="image_table">-->
+<!--                            <tree>-->
+<!--                                <field name="create_date"/>-->
+<!--                                <field name="employee_id_rel" invisible="1"/>-->
+<!--                            <field name="images" widget="image" class="oe_avatar" options="{'size': [50, 50]}"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
+                    <field name="uuids" invisible="1"/>
+                    <field name="checked_toggle_flag" widget="boolean_toggle"/>
+                    <field name="uuid_ids" string="UUIDs Table">
+                            <tree>
+                                <field name="create_date"/>
+                                <field name="employee_id" column_invisible="1"/>
+                                <field name="uuid"/>
+                                <field name="approval_flag"/>
+                                <field name="approval_date"/>
+                                <field name="rejection_date"/>
+                        </tree>
+                    </field>
+                </xpath>
+        </field>
+    </record>
+
+    <record id="view_employee_tree_inherit_uuid_approve" model="ir.ui.view">
+        <field name="name">hr.employee.tree.inherit.uuid.approve</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>  <!-- Inherit Odoo's default list view -->
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='parent_id']" position="after">
+                <field name="checked_toggle_flag" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+<!--    <record id="action_accepted_uuid" model="ir.ui.view">-->
+<!--        <field name="name">hr.employee.inherit.form</field>-->
+<!--        <field name="model">hr.employee</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="Accept">-->
+<!--                <sheet>-->
+<!--                    <p>-->
+<!--                        Are you sure want to active accept condition for this employee?-->
+<!--                    </p>-->
+<!--                </sheet>-->
+<!--                <footer>-->
+<!--                    <button name="accept_checked_toggle_flag" type="object" string="Accept"-->
+<!--                            class="oe_highlight"/>-->
+<!--                    <button string="Cancel" special="cancel" class="btn-secondary"/>-->
+<!--                </footer>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+<!--    <record id="action_checked_uuid" model="ir.ui.view">-->
+<!--        <field name="name">hr.employee.inherit.form</field>-->
+<!--        <field name="model">hr.employee</field>-->
+<!--        <field name="arch" type="xml">-->
+<!--            <form string="Checked">-->
+<!--                <sheet>-->
+<!--                    <p>-->
+<!--                        Are you sure want to active check uuid from this employee?-->
+<!--                    </p>-->
+<!--                </sheet>-->
+<!--                <footer>-->
+<!--                    <button name="dont_accept_checked_toggle_flag" type="object" string="Accept"-->
+<!--                            class="oe_highlight"/>-->
+<!--                    <button string="Cancel" special="cancel" class="btn-secondary"/>-->
+<!--                </footer>-->
+<!--            </form>-->
+<!--        </field>-->
+<!--    </record>-->
+
+    <record id="multi_accept_uuid_employee_server_action" model="ir.actions.server">
+        <field name="name">Accept ALL UUID From Multi Employee</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="binding_model_id" ref="model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.accept_checked_toggle_flag()
+        </field>
+    </record>
+
+    <record id="multi_check_uuid_employee_server_action" model="ir.actions.server">
+        <field name="name">Don't Accept ALL UUID From Multi Employee</field>
+        <field name="model_id" ref="model_hr_employee"/>
+        <field name="binding_model_id" ref="model_hr_employee"/>
+        <field name="state">code</field>
+        <field name="code">
+            action = records.dont_accept_checked_toggle_flag()
+        </field>
+    </record>
+</odoo>
+

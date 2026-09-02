@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherited form view for project task -->
+    <record id="view_project_task_stages_form" model="ir.ui.view">
+        <field name="name">project.task.stages.form</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+             <xpath expr="//notebook" position="before">
+                 <group>
+                     <field name="task_type" string="نوع المهمة"/>
+                 </group>
+                 <group>
+                     <group>
+                         <field name="department_id" invisible="task_type != 'task'" string="القسم المسند له"/>
+                         <field name="assignment_date" string="تاريخ الاسناد"/>
+                         <field name="contractor_id" string="اسم المقاول"/>
+                         <field name="site_coordinates" string="إحداثيات الموقع" placeholder="e.g. https://www.google.com/maps/place/..."/>
+                         <field name="task_status" invisible="task_type != 'sub_task'" string="مرحلة المهمة"/>
+                     </group>
+                     <group>
+                         <field name="parent_department" invisible="task_type != 'task'" string="القسم الأب"/>
+                         <field name="task_order_number" string="رقم امر العمل"/>
+                         <label for="task_order_duration" string="مدة امر العمل"/>
+                         <div>
+                             <field name="task_order_duration" class="oe_inline"/>
+                             <field name="task_duration_every" class="oe_inline"/>
+                         </div>
+                         <field name="task_attachment_ids" widget="many2many_binary" string="المرفقات"/>
+                         <field name="finished_date" invisible="task_type != 'sub_task'" string="تاريخ الانتهاء"/>
+                     </group>
+                 </group>
+             </xpath>
+
+            <xpath expr="//notebook" position="inside">
+                <page name="exploratory_stage" string="مرحلة الكشفية" groups="project_task_stages.group_samir_exploratory_team">
+                    <header>
+                        <field name="exp_state" string="حالة الكشفية" widget="statusbar"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1" string="اسم المهمة"/>
+                            <field name="exp_redirect_to" string="إعادة توجيه إلى"/>
+                            <field name="exp_required_forms" widget="many2many_tags" string="النماذج المطلوبة"/>
+                            <field name="exp_description" string="الوصف"/>
+                        </group>
+                        <group>
+                            <field name="task_order_number" readonly="1" string="رقم امر العمل"/>
+                            <field name="exp_state" string="حالة الكشفية"/>
+                            <field name="exp_obstacles" invisible="exp_state != 'not_started'" string="العوائق"/>
+                            <field name="exp_permit_required" string="يتطلب تصريح"/>
+                            <field name="exp_attachment_ids" widget="many2many_binary" string="المرفقات"/>
+                        </group>
+                    </group>
+                </page>
+
+                <page name="execution_stage" string="مرحلة قيد التنفيذ" groups="project_task_stages.group_samir_execution_team">
+                    <header>
+                        <field name="exec_state" string="حالة التنفيذ" widget="statusbar"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1" string="اسم المهمة"/>
+                            <field name="exec_estimated_quantities" string="الكميات المقدرة"/>
+                            <field name="exec_inspection_status" string="حالة التفتيش"/>
+                            <field name="exec_image_attachment_ids" widget="many2many_binary" string="ارفاق صور"
+                                   invisible="exec_inspection_status != 'violation'"/>
+
+                            <field name="exec_redirect_to" string="إعادة توجيه إلى"/>
+                            <field name="exec_required_forms" widget="many2many_tags" string="النماذج المطلوبة"/>
+                            <field name="exec_recommendations" string="التوصيات"/>
+                        </group>
+                        <group>
+                            <field name="task_order_number" readonly="1" string="رقم امر العمل"/>
+                            <field name="exec_executed_quantities" string="الكميات المنفذة والنهائية"/>
+                            <field name="exec_state" string="حالة التنفيذ"/>
+                            <field name="exec_date" string="تاريخ التنفيذ"/>
+                            <field name="exec_procedure_203" string="اجراء 203"/>
+                            <field name="exec_attachment_ids" widget="many2many_binary" string="المرفقات"/>
+                        </group>
+                    </group>
+                </page>
+
+                <page name="closure_stage" string="مرحلة الاغلاق" groups="project_task_stages.group_samir_closure_team">
+                    <header>
+                        <field name="cls_state" string="حالة الاغلاق" widget="statusbar"/>
+                    </header>
+                    <group>
+                        <group>
+                            <field name="name" readonly="1" string="اسم المهمة"/>
+                            <field name="cls_redirect_to" string="إعادة توجيه إلى"/>
+                            <field name="cls_procedure_155" string="إجراء 155"/>
+                            <field name="cls_final_quantities_approved" string="اعتماد الكميات النهائية"/>
+                            <field name="cls_description" string="الوصف"/>
+                        </group>
+                        <group>
+                            <field name="task_order_number" readonly="1" string="رقم امر العمل"/>
+                            <field name="cls_state" string="حالة الاغلاق"/>
+                            <field name="cls_certificate_issued" string="إصدار الشهادة"/>
+                            <field name="cls_required_forms" widget="many2many_tags" string="النماذج المطلوبة"/>
+                            <field name="cls_attachment_ids" widget="many2many_binary" string="المرفقات"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inherited search view for project task -->
+    <record id="view_project_task_stages_search" model="ir.ui.view">
+        <field name="name">project.task.stages.search</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='stage']" position="after">
+                <filter name="filter_main_task" string="المهام الرئيسية" domain="[('task_type', '=', 'task')]"/>
+                <filter name="filter_sub_task" string="المهام الفرعية" domain="[('task_type', '=', 'sub_task')]"/>
+                <filter name="group_task_type" string="نوع المهمة" context="{'group_by':'task_type'}"/>
+                <filter name="group_task_status" string="مرحلة المهمة" context="{'group_by':'task_status'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Sub Tasks Action -->
+    <record id="action_project_sub_tasks" model="ir.actions.act_window">
+        <field name="name">المهام الفرعية</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+        <field name="context">
+            {'search_default_filter_sub_task': 1, 'group_by': 'task_status'}
+        </field>
+    </record>
+
+    <menuitem action="action_project_sub_tasks" id="menu_project_sub_tasks" parent="project.menu_project_management" sequence="3"/>
+
+
+    <!-- Main Tasks Action -->
+    <record id="action_project_main_tasks" model="ir.actions.act_window">
+        <field name="name">المهام الرئيسية</field>
+        <field name="res_model">project.task</field>
+        <field name="view_mode">kanban,tree,form,calendar,pivot,graph,activity</field>
+        <field name="context">
+            {'search_default_filter_main_task': 1, 'group_by': 'department_id'}
+        </field>
+    </record>
+
+    <menuitem action="action_project_main_tasks" id="menu_project_main_tasks" parent="project.menu_project_management" sequence="4"/>
+
+</odoo>

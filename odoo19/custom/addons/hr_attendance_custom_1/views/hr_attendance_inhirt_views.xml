@@ -1,0 +1,60 @@
+<odoo>
+    <record id="view_hr_attendance_form_inherit_auto_checkout" model="ir.ui.view">
+        <field name="name">hr.attendance.form.inherit.auto.checkout</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='check_out']" position="after">
+                <field name="auto_checkedout" readonly="1"/>
+                <field name="attendance_employee_department"/>
+                 <field name="holiday_warning"/>
+                <field name="expected_holiday_return_date"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_tree_inherit_auto_checkout" model="ir.ui.view">
+        <field name="name">hr.attendance.tree.inherit.auto.checkout</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='check_out']" position="after">
+                <field name="auto_checkedout" readonly="1"/>
+                <field name="attendance_employee_department"/>
+                <field name="holiday_warning"/>
+                <field name="expected_holiday_return_date"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="action_custom_hr_attendance" model="ir.actions.act_window">
+        <field name="name">Custom Attendance</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+    </record>
+    <!-- Automated Action -->
+
+    <odoo>
+    <data noupdate="1">
+        <record id="ir_cron_auto_checkout" model="ir.cron">
+            <field name="name">Auto Checkout Employees</field>
+            <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="state">code</field>
+            <field name="code">model.cron_auto_checkout()</field>
+            <field name="active" eval="True"/>
+            <field name="interval_number">8</field>
+            <field name="interval_type">hours</field>
+        </record>
+    </data>
+</odoo>
+
+
+    <menuitem id="custom_attendance_root_menu"
+              name="Custom Attendance"
+              sequence="10"
+    />
+    <menuitem id="menu_hr_attendance_custom"
+              name="Attendance11"
+              action="action_custom_hr_attendance"
+              parent="custom_attendance_root_menu"/>
+</odoo>

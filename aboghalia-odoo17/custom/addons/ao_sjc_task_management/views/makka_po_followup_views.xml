@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_makka_po_followup_tree_sjc" model="ir.ui.view">
+        <field name="name">makka.po.followup.tree.sjc</field>
+        <field name="model">makka.po.followup</field>
+        <field name="inherit_id" ref="ao_makka_po_followup.view_po_followup_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='disbursement']" position="after">
+                <field name="sjc_due_date" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

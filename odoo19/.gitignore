@@ -1,0 +1,12 @@
+.local/
+**/filestore/
+**/sessions/
+__pycache__/
+*.py[cod]
+*.log
+.idea/
+.vscode/
+venv/
+.venv/
+node_modules/
+*.egg-info/

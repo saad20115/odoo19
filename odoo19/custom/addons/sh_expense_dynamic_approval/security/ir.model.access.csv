@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sh_expense_approval_config_admin,access_sh_expense_approval_config_admin,model_sh_expense_approval_config,hr_expense.group_hr_expense_manager,1,1,1,1
+access_sh_expense_approval_config_user,access_sh_expense_approval_config_user,model_sh_expense_approval_config,base.group_user,1,0,0,0
+access_sh_expense_approval_line,access_sh_expense_approval_line,model_sh_expense_approval_line,base.group_user,1,1,1,1
+access_sh_approval_info,access_sh_approval_info,model_sh_approval_info,base.group_user,1,1,1,1
+access_sh_reject_reason_wizard,access_sh_reject_reason_wizard,model_sh_reject_reason_wizard,base.group_user,1,1,1,1

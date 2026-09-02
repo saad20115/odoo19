@@ -1,0 +1,26 @@
+name: Deploy Beta
+
+on:
+  push:
+    branches: [beta]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy beta via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            cd /odoo17-v2-beta
+            git fetch origin beta
+            git reset --hard origin/beta
+            systemctl restart odoo17-v2-beta-server
+            sleep 5
+            systemctl is-active odoo17-v2-beta-server

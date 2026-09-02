@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_project_department,project.department,model_project_department,,1,1,1,1
+access_project_task_form,project.task.form,model_project_task_form,,1,1,1,1

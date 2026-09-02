@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Add "Asset Category" to supplier invoices -->
+    <record model="ir.ui.view" id="view_invoice_asset_category">
+        <field name="name">account.invoice.supplier.form</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='account_id']"
+                   position="before">
+                <field string="Asset Category"
+                       column_invisible="parent.move_type != 'in_invoice'"
+                       name="asset_category_id"
+                       domain="[('type','=','purchase')]"
+                       context="{'default_type':'purchase'}"/>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/tree/field[@name='account_id']"
+                   position="after">
+                <field string="Asset Category" name="asset_category_id"
+                       invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_check_accounting_tree">
+        <field name="name">account.account.check..inherit</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']"
+                   position="after">
+                <field name="check_accounts_tree" string="للتحقق منه" widget="boolean_toggle" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_check_accounting_tree">
+        <field name="name">account.account.check..inherit</field>
+        <field name="model">account.account</field>
+        <field name="inherit_id" ref="account.view_account_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='company_id']"
+                   position="after">
+                <field name="check_accounts_tree" string="للتحقق منه" widget="boolean_toggle" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_check_accounting_tree_move_line_inherit">
+        <field name="name">account.move.line.check.inherit</field>
+        <field name="model">account.move.line</field>
+        <field name="inherit_id" ref="account.view_move_line_tax_audit_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='tax_base_amount']"
+                   position="after">
+                <field name="check_accounts_tree" string="للتحقق منه" widget="boolean_toggle" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="view_check_accounting_tree_move_line_inherit">
+        <field name="name">account.move.search.inherit</field>
+        <field name="model">account.move</field>
+        <field name="inherit_id" ref="account.view_account_move_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='journal_id']" position="after">
+                <field name="id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

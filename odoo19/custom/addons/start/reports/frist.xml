@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+   <data>
+    <record id="action_report_product_product" model="ir.actions.report" >
+        <field name="name">الشركة  الكهرباء</field>
+        <field name="model">account.move</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">start.report_product</field>
+        <field name="report_file">start.report_product</field>
+        <field name="binding_model_id" ref="account.model_account_move"/>
+        <field name="binding_type">report</field>
+        <field name= "print_report_name">object.name.split('/')[-1]</field>
+     </record>
+
+
+<template id="report_invoice_order_custom_header_ao" >
+	  <t t-if="not o" t-set="o" t-value="doc"/>
+	  <t t-if="not company">
+		<!--   Multicompany   -->
+		<t t-if="company_id">
+		  <t t-set="company" t-value="company_id"/>
+		</t>
+		<t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+		  <t t-set="company" t-value="o.company_id.sudo()"/>
+		</t>
+		<t t-else="else">
+		  <t t-set="company" t-value="res_company"/>
+		</t>
+	  </t>
+	  <div class="header mb4" t-att-style="report_header_style">
+		<style>td, tr, th{vertical-align: middle !important;border: 1px solid black !important;text-align: right !important; padding: 5px; word-wrap: break-word;}
+        th, td
+                      { border: 1px solid black;text-align: right; padding: 5px; word-wrap: break-word;font-family: 'Arial'; /*
+                      add this line */ }
+		</style>
+		<div style="padding-bottom: 10px;direction: ltr !important;">
+		  <div class="row">
+			<!-- <div class="col-6">
+
+			</div>
+			<div class="col-1">
+
+			</div>
+            <div class="col-5">
+			  <img src="/start/static/img/logo.png"
+				   style="max-width: 265px;max-height: 150px;"/>
+			</div> -->
+            <div class="col-12" style="direction: ltr !important;text-align:left !important;">
+                    <div style="text-align: right;"><img src="/start/static/img/logo.png" style="max-width: 250px;max-height: 140px;"/></div>
+
+
+
+                    <div style="position: absolute;top: 100px;direction: ltr !important;text-align:left !important;left: 0;">
+                        <img t-if="docs.l10n_sa_qr_code_str" style="display: block;margin-left: 55px;margin-top:2%;margin-bottom:15%;direction: ltr !important;text-align:left !important;" t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(docs.l10n_sa_qr_code_str), 140, 140)"/>
+                        <div class="text-center" style="color: black !important;margin-left: 55px;margin-top:5px !important;font-size: 15px !important;font-family: 'Arial' !important;">
+                        
+                            <div t-if="report_type == 'pdf'">
+                                <span class="page"/>
+                                /
+                                <span class="topage"/>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+
+                    <h5 align="center">
+                                                
+                                                                        <span t-if="docs.move_type == 'out_invoice' and docs.state == 'posted'">
+                                                                            <t t-if="docs.partner_id.vat">
+                                                                                <div style="font-family: 'Arial';font-weigth: bold;">فاتورة ضريبة</div>
+                                                                            </t>
+                                                                            <t t-else="">
+                                                                                <div style="font-family: 'Arial';font-weigth: bold;">فاتورة ضريبة مبسطة</div>
+                                                                            </t>
+                                                                        </span>                                                                                                                                             
+                                                                        <span t-if="docs.move_type == 'out_invoice' and docs.state == 'draft'" style="font-family: 'Arial';font-weigth: bold;">مسودة فاتورة</span>
+                                                                        <span t-if="docs.move_type == 'out_invoice' and docs.state == 'cancel'">فاتورة ملغاه</span>
+                                                                        <span t-if="docs.move_type == 'out_refund'" style="font-family: 'Arial';font-weigth: bold;">أشعار دائن</span>
+                                                                        <span t-if="docs.move_type == 'in_refund'" style="font-family: 'Arial';font-weigth: bold;">أشعار مدين</span> 
+                                                
+                                                                        <span t-if="docs.move_type == 'in_invoice'" style="font-family: 'Arial';font-weigth: bold;"> فاتورة المورد</span>
+                                                                    </h5>
+                                                            
+                                                                    
+                                                                    <div >
+                                                                    
+                                                                    <table class="table" style=" font-size:12px;float: right;width: 73%; border: 2px solid #000; margin-top:2%">
+
+                                                                        <tbody  >
+                                                                            <tr style="border: 2px solid #000;">
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.invoice_date"/></td>
+                                                                                <th style="width: 25% !important;">: تاريخ إصدار الفاتورة </th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.company_id.vat"/></td>
+                                                                                    <th>:الرقم الضريبي للمنشأة </th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.name.split('/')[-1]"/></td>
+                                                                                    <th>:رقم الفاتورة </th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.company_id.name"/></td>
+                                                                                    <th>:اسم الاستشاري</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.company_id.street"/></td>
+                                                                                    <th>:العنوان</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td ><t t-esc="docs.company_id.city"/></td>
+                                                                                    <th>: السجل التجاري</th>
+                                                                                </tr>
+                                                
+
+                                                                            </tr>
+                                                
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                    <table class="table" style=" font-size:12px; width: 95%; border: 2px solid #000; float: right">
+
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                <td align="right"><t t-esc="docs.partner_id.name"/></td>
+                                                                                <th style="width: 19.25% !important;">:اسم الشركة</th>
+                                                                            </tr>
+                                                                            <tr style="border: 2px solid #000;">
+                                                                                    <td align="right"><t t-esc="docs.partner_id.street"/></td>
+                                                                                    <th>:العنوان</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td align="right"><t t-esc="docs.partner_id.vat"/></td>
+                                                                                    <th>:الرقم الضريبي</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td ><t t-esc="docs.payment_reference"/></td>
+                                                                                    <!-- <td ><t t-esc="docs.partner_id.city"/></td> -->
+                                                                                    <th>:مرجع الشركة</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.partner_id.state_id.name"/></td>
+                                                                                    <th>:رقم العقد</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.payment_reference"/></td>
+                                                                                    <th>:رقم المستخلص </th>
+                                                                                </tr>
+                                                
+                                                                                
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+
+
+
+
+			</div>
+		  </div>
+		</div>
+	  </div>
+	  <div class="article o_report_layout_standard">
+		<t t-out="0"/>
+	  </div>
+	  <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+		<div class="text-center" style="border-top: 1px solid black;">
+		  <ul class="list-inline mb4">
+			<div t-field="company.report_footer"/>
+		  </ul>
+		  <div t-if="report_type == 'pdf'" class="text-muted">
+			Page:
+			<span class="page"/>
+			/
+			<span class="topage"/>
+		  </div>
+		  <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">
+			<span t-field="docs.name"/>
+		  </div>
+		</div>
+	  </div>
+	</template>
+
+
+
+
+
+
+
+
+          <template id="report_invoice_order_custom_header">
+            <t t-if="not o" t-set="o" t-value="doc"/>
+            <t t-if="not company">
+              <!--   Multicompany   -->
+              <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+              </t>
+              <t t-elif="o and 'company_id' in o and o.company_id.sudo()">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+              </t>
+              <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+              </t>
+            </t>
+
+
+
+            <div class="header" t-att-style="report_header_style">
+    
+
+
+                <div style="direction: ltr;">
+                            
+
+                    <div class="row">
+                    
+                    
+                        <div class="col-9">
+                        
+                                                                    <h2 align="right">
+                                                
+                                                                        <span t-if="docs.move_type == 'out_invoice' and docs.state == 'posted'">
+                                                                            <t t-if="docs.partner_id.vat">
+                                                                                <!-- If the customer has a tax number -->
+                                                                                <div>فاتورة ضريبة</div>
+                                                                            </t>
+                                                                            <t t-else="">
+                                                                                <!-- If the customer does not have a tax number -->
+                                                                                <div>فاتورة ضريبة مبسطة</div>
+                                                                            </t>
+                                                                        </span>                                                                                                                                             
+                                                                        <span t-if="docs.move_type == 'out_invoice' and docs.state == 'draft'">مسودة فاتورة</span>
+                                                                        <span t-if="docs.move_type == 'out_invoice' and docs.state == 'cancel'">فاتورة ملغاه</span>
+                                                                        <span t-if="docs.move_type == 'out_refund'">أشعار دائن</span>
+                                                                        <span t-if="docs.move_type == 'in_refund'">أشعار مدين</span> 
+                                                
+                                                                        <span t-if="docs.move_type == 'in_invoice'"> فاتورة المورد</span>
+                                                                        <!-- <span t-if="docs.name != '/'" t-field="docs.name"/> -->
+                                                                    </h2>
+                                                            
+                                                                    
+                                                                    <div >
+                                                                    
+                                                                    <!-- <h2 >Additional Details</h2> -->
+                                                                    <table class="table" style=" font-size:12px;float: right;width: 60%; border: 2px solid #000; margin-top:2%">
+                                                                        <!-- <thead>
+                                                                            <th align="center" colspan="3" style="background-color: #deeaf6;">Vendor Details
+                                                                                - بيانات المورد
+                                                                            </th>
+                                                                        </thead> -->
+                                                                        <tbody  >
+                                                                            <tr style="border: 2px solid #000;">
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.invoice_date"/></td>
+                                                                                <th>: تاريخ إصدار الفاتورة </th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.company_id.vat"/></td>
+                                                                                    <th>:الرقم الضريبي للمنشأة </th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.name.split('/')[-1]"/></td>
+                                                                                    <th>:رقم الفاتورة </th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.company_id.name"/></td>
+                                                                                    <th>:اسم الاستشاري</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.company_id.street"/></td>
+                                                                                    <th>:العنوان</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td ><t t-esc="docs.company_id.city"/></td>
+                                                                                    <th>: السجل التجاري</th>
+                                                                                </tr>
+                                                
+                                                                                <!-- <td>Data 1-2</td>
+                                                                                <td>Data 1-3</td> -->
+                                                                            </tr>
+                                                
+                                                                            <!-- Add more rows as needed -->
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                                    <table class="table" style=" font-size:12px; width: 95%; border: 2px solid #000; float: right">
+                                                                        <!-- <thead>
+                                                                            <th align="center" colspan="3" style="background-color: #deeaf6;">Customer Details
+                                                                                - بيانات العميل -
+                                                                            </th>
+                                                                            </thead> -->
+                                                                            <tbody>
+                                                                            <tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                <td align="right"><t t-esc="docs.partner_id.name"/></td>
+                                                                                <th >:اسم الشركة</th>
+                                                                            </tr>
+                                                                            <tr style="border: 2px solid #000;">
+                                                                                    <td align="right"><t t-esc="docs.partner_id.street"/></td>
+                                                                                    <th>:العنوان</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td align="right"><t t-esc="docs.partner_id.vat"/></td>
+                                                                                    <th>:الرقم الضريبي</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td ><t t-esc="docs.partner_id.city"/></td>
+                                                                                    <th>:مرجع الشركة</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.partner_id.state_id.name"/></td>
+                                                                                    <th>:رقم العقد</th>
+                                                                                </tr>
+                                                                                <tr style="border: 2px solid #000;">
+                                                                                    <td><t t-esc="docs.payment_reference"/></td>
+                                                                                    <th>:رقم المستخلص </th>
+                                                                                </tr>
+                                                
+                                                                                <!-- <td>Data 1-2</td>
+                                                                                <td>Data 1-3</td> -->
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                            </div>
+
+                        
+                        </div>
+                        <div class="col-3">
+                        
+                        
+                        
+                                                <img t-if="docs.l10n_sa_qr_code_str" style="display: block;margin-left: 55px;float: left; margin-top:2% " t-att-src="'/report/barcode/?barcode_type=%s&amp;value=%s&amp;width=%s&amp;height=%s'%('QR', quote_plus(docs.l10n_sa_qr_code_str), 160, 160)"/>
+
+
+                        
+                        
+                        </div>
+
+                    
+                    </div>
+
+            </div>
+	
+
+            <div class="article o_report_layout_standard">
+                <t t-out="0"/>
+            </div>
+
+
+        <div t-attf-class="footer o_standard_footer o_company_#{company.id}_layout">
+            <div class="text-center" style="border-top: 1px solid black;">
+                <ul class="list-inline mb4">
+                    <div t-field="company.report_footer"/>
+                </ul>
+                <div t-if="report_type == 'pdf'" class="text-muted">
+                    Page:
+                    <span class="page"/>
+                    /
+                    <span class="topage"/>
+                </div>
+                <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">
+                    <span t-field="o.name"/>
+                </div>
+            </div>
+	    </div>
+          </template>
+
+        <template id="report_product">
+            <t t-call="web.html_container">
+
+              <t t-foreach="docs" t-as="docs">
+
+                <div style="direction: ltr !important;">
+                    <t t-call="start.report_invoice_order_custom_header_ao">
+
+
+                        
+                  <div class="page">
+                  
+                                    
+                
+                    <head>
+                      <!--   add this style to define the page size and margins   -->
+                      <style>@page { size: A4 portrait; margin: 1cm;background-image: url('/start/static/img/foo.jpg');position:absolute;opacity:0.2;front-size:8em;width:100%;height:100%;margin-top: 150px;background-size: cover;background-position: center center;
+ }</style>
+                    </head>
+                    <style>table { border-collapse: collapse; table-layout: fixed; /* add this line */ } th, td
+                      { border: 1px solid black;padding: 5px; word-wrap: break-word; /*
+                      add this line */ } th{font-family: 'Arial' !important;font-weigth: 600 !important;} td{font-family: 'Arial' !important;}
+                    </style>
+                    <body style="font-family: 'Times New Roman', Times, serif;" >
+                    <!-- <div class="backgroundimage" style="position:absolute;opacity:1;width:230mm;height: 350mm;z-index:-1;">
+                        <img src="/start/static/img/foo.jpg" style="width:230mm;height: 350mm"/>
+                    </div> -->
+                        <div style="direction: ltr;">
+                        
+        
+                            <!-- <h1>Sale Quotation</h1>
+                            <p>Quotation Number: <span t-field="docs.name"/></p> -->
+                            <!-- <p>Quotation Date: <span t-field="docs.date"/></p> -->
+                            <table class="table" style="font-size:10px;float: left;width: 100%; border: 2px solid #000;">
+                                <thead>
+                                    <tr style="background-color:rgb(160, 255, 143)">
+                                        <th style="text-align: center !important;" >القيمة شامل الضريبة</th>
+                                        <th style="text-align: center !important;" >الحسومات</th>
+                                        <th style="text-align: center !important;" >مبلغ الضريبة</th>
+                                        <th style="text-align: center !important;">نسبة الضريبة </th>
+                                        <th style="text-align: center !important;" >قيمة أمر العمل</th>
+                                        <th style="text-align: center !important;">تاريخ إنجاز العمل</th>
+                                        <th style="width: 7% !important;text-align: center !important;">المتحمل</th>
+                                        <th style="text-align: center !important;" >نوع الخدمة</th>
+                                        <th style="width: 7% !important;text-align: center !important;" >النوع</th>
+                                        <th style="text-align: center !important;">رقم أمر العمل</th>
+                                        <th style="width: 5% !important;text-align: center !important;">م</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-set="seqCount" t-value="0" />
+                                    <t t-foreach="docs.invoice_line_ids" t-as="line">
+                                        <t t-set="seqCount" t-value="seqCount+1" />
+                                        <tr align="right">
+                                            <td style="text-align: center !important;"><t  t-esc="line.price_unit * line.quantity+line.amount_tax" t-options='{"widget": "float", "precision": 2}'/></td>
+                                            <td style="text-align: center !important;"><t t-esc="line.discount_value_f" t-options='{"widget": "float", "precision": 2}'/></td>
+                                            <!--مبلغ الضريبة -->
+                                            <td style="text-align: center !important;"><span t-field="line.amount_tax"/></td>
+                                            <td style="text-align: center !important;"><span t-field="line.tax_ids"/></td>
+                                            <td style="text-align: center !important;"><span t-field="line.price_unit"/></td>
+                                            <!-- تاريخ إنجاز العمل -->
+                                            <td><span t-field="line.the_value_work_orderdate" t-options='{"widget": "date","format": "dd-MM-yyyy"}' /></td>
+                                            <!--المتحمل  -->
+                                            <td style="width: 7% !important;"><span t-field="line.payer_"/></td>
+                                            <td><span t-esc="line.product_id.name"/></td>
+                                            <!-- النوع -->
+                                            <td style="width: 7% !important;"><span t-field="line.product_id.type_"/></td>
+                                            <td><span t-field="line.name"/></td>
+                                            <td style="text-align: center !important;"><span t-esc="seqCount"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <!-- </div> -->
+                            <!-- Table: Quotation Lines -->
+        
+                            <div style="page-break-inside: avoid;">
+                            <table class="table" style=" font-size:12px;float: right;width: 100%; border: 2px solid #000;page-break-inside: avoid;">
+                            <tbody>
+                                    <tr style="border: 2px solid #000;">
+                                        <td style="text-align: center !important;width: 20% !important;">						 
+                                             <t t-esc="docs.amount_discount + docs.amount_untaxed"
+                                            t-options='{"widget": "float", "precision": 2}'/></td>
+                                            <th style="width: 80% !important;text-align: right !important;">:الإجمالي بدون الضريبة بالريال السعودي</th>
+                                    </tr>
+                                    <tr style="border: 2px solid #000;">
+                                        <td style="text-align: center !important;"><t t-esc="docs.amount_tax" t-options='{"widget": "float", "precision": 2}'/></td>
+                                        <th style="text-align: right !important;">:ضريبة القيمة المضافة %15 بالريال السعودي</th>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: center !important;"><t t-esc="docs.amount_discount" t-options='{"widget": "float", "precision": 2}'/></td>
+                                        <th style="text-align: right !important;">:الحسومات</th>
+                                    </tr>
+                                    <tr style="border: 2px solid #000;">
+                                        <td style="text-align: center !important;"><t t-esc="docs.amount_untaxed" t-options='{"widget": "float", "precision": 2}'/></td>
+                                        <th style="text-align: right !important;">:إجمالي  قيمة الفاتورة بعد خصم الغرامة</th>
+                                    </tr>
+                                    <tr style="border: 2px solid #000;">
+                                        <td style="text-align: center !important;"><t t-esc="docs .amount_total" t-options='{"widget": "float", "precision": 2}'/></td>
+                                        <th style="text-align: right !important;">:إجمالي قيمة الفاتورة شامل ضريبة القيمة المضافة %15 بالريال السعودي</th>
+                                    </tr>
+        
+                                        <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+        
+        
+                            <table class="table" style="margin-bottom: 10%; font-size:15px;float: left;width: 50%;page-break-inside: avoid;">
+                                <thead>
+                                    <!-- <tr> -->
+                                        <tr align="right" style="border-style:hidden;margin: 0;padding: 0;">
+                                            <th style="margin: 0;padding: 0;">/الاستشاري</th>
+                                        </tr>
+                                        <tr align="right" style="border-style:hidden;margin: 0;padding: 0;">
+                                            <th style="margin: 0;padding: 0;">/التوقيع</th>
+                                        </tr>
+                                        <tr align="right" style="border-style:hidden;margin: 0;padding: 0;">
+                                            <th style="margin: 0;padding: 0;">/الختم</th>
+                                        </tr>
+                                        
+            
+                                    <!-- </tr> -->
+                                    <!-- Add more rows as needed -->
+                                </thead>
+                            </table>
+                            </div>
+                        </div>
+                                          <div style="text-align: right; margin-top: 500px;">
+                  </div>
+                            <div t-attf-class="footer" style="direction: ltr !important;">
+                                <div style="font-family: 'Arial' !important;text-align: right !important;">        
+                                    <span>Printed On: <span t-esc="time.strftime('%d/%m/%Y')"/></span><span style="margin-left: 100px !important;">Time: <span t-esc="time.strftime('%H:%M:%S')"/></span>
+                                </div>
+                                <div class="text-center">        
+                                    <img src="/start/static/img/footer.png" style="max-width: 100%;max-height: 230px;"/>
+                                </div>
+                            </div>    
+                            
+                                                        <!-- <div t-attf-class="footer">
+		<div class="text-center" style="border-top: 1px solid black;">
+		  <ul class="list-inline mb4">
+		  </ul>
+		  <div t-if="report_type == 'pdf'" class="text-muted">
+			Page:
+			<span class="page"/>
+			/
+			<span class="topage"/>
+		  </div>
+		  <div t-if="report_type == 'pdf' and display_name_in_footer" class="text-muted">
+			<span t-field="docs.name"/>
+		  </div>
+		</div>
+	  </div> -->
+
+
+
+
+
+
+
+
+
+
+      
+                    </body>
+                  </div>
+                </t>
+                </div>
+              </t>
+            </t>
+
+          </template>
+
+  <!-- <template id="report_idddddd" inherit_id="start.report_product">
+    <xpath expr="//div[@class='header mb4']" position="attributes">
+        <attribute name="style">background-image: url('/start/static/img/foo.jpg');</attribute>
+    </xpath>
+</template> -->
+
+
+
+        </data>
+</odoo>

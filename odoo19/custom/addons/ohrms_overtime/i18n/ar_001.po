@@ -1,0 +1,753 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ohrms_overtime
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-07-07 11:28+0000\n"
+"PO-Revision-Date: 2024-07-07 11:28+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_contract_view_form
+msgid "<span>/day</span>"
+msgstr "<span>/يوم</span>"
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_contract_view_form
+msgid "<span>/hour</span>"
+msgstr "<span>/ساعة</span>"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_needaction
+msgid "Action Needed"
+msgstr "الإجراءات اللازمة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__cash_day_amount
+msgid "Amount for overtime based on days"
+msgstr "مبلغ العمل الإضافي على أساس الأيام"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__cash_hrs_amount
+msgid "Amount for overtime based on hours"
+msgstr "مبلغ العمل الإضافي على أساس الساعات"
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Approve"
+msgstr "يعتمد"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__state__approved
+msgid "Approved"
+msgstr "موافقة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__attchd_copy
+msgid "Attach A File"
+msgstr "إرفاق ملف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_attachment_count
+msgid "Attachment Count"
+msgstr "عدد المرفقات"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__attchd_copy
+msgid "Attachment file for the overtime request"
+msgstr "الملف المرفق لطلب العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__attendance_ids
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Attendance"
+msgstr "حضور"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__attendance_ids
+msgid "Attendance records associated with the overtime request."
+msgstr "سجلات الحضور المرتبطة بطلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__is_current_user
+msgid ""
+"Boolean field indicating weather the current user is associated with the "
+"overtime request."
+msgstr ""
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__type__cash
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__overtime_type__type__cash
+msgid "Cash"
+msgstr "نقدي"
+
+#. module: ohrms_overtime
+#: model_terms:ir.actions.act_window,help:ohrms_overtime.hr_overtime_type_action
+msgid "Click to create new Approval Type."
+msgstr "انقر لإنشاء نوع موافقة جديد."
+
+#. module: ohrms_overtime
+#: model_terms:ir.actions.act_window,help:ohrms_overtime.hr_overtime_action
+msgid "Click to create new Pre Approval Overtime Request."
+msgstr "انقر لإنشاء طلب عمل إضافي جديد للموافقة المسبقة."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type__leave_compute_ids
+msgid ""
+"Computed field storing the availableleave types associated with the overtime"
+" type."
+msgstr ""
+
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__contract_id
+msgid "Contract"
+msgstr "عقد"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__contract_id
+msgid "Contract of the employee"
+msgstr "عقد الموظف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__create_uid
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__create_uid
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__create_uid
+msgid "Created by"
+msgstr "انشأ من قبل"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__create_date
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__create_date
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__create_date
+msgid "Created on"
+msgstr "تم إنشاؤها في"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__current_user_id
+msgid "Current User"
+msgstr "المستخدم الحالي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__is_current_user
+msgid "Current User "
+msgstr "المستخدم الحالي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_contract__over_day
+msgid "Daily wage for overtime"
+msgstr "الأجر اليومي للعمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__date_from
+msgid "Date From"
+msgstr "التاريخ من"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__date_to
+msgid "Date to"
+msgstr "تاريخ الي"
+
+#. module: ohrms_overtime
+#. odoo-python
+#: code:addons/ohrms_overtime/models/hr_overtime.py:0
+#, python-format
+msgid "Day Overtime Needs Day Wage in Employee Contract."
+msgstr "العمل الإضافي اليومي يحتاج إلى أجر يومي في عقد الموظف."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_contract__over_day
+msgid "Day Wage"
+msgstr "الأجر اليومي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__duration_type__days
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__overtime_type__duration_type__days
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Days"
+msgstr "أيام"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__department_id
+msgid "Department"
+msgstr "قسم"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__department_id
+msgid "Department of the employee."
+msgstr "قسم الموظف ."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__desc
+msgid "Description"
+msgstr "وصف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__desc
+msgid "Description of the overtime request."
+msgstr "وصف طلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__display_name
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__display_name
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__display_name
+msgid "Display Name"
+msgstr "اسم العرض"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__duration_type
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__duration_type
+msgid "Duration Type"
+msgstr "نوع المدة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type__duration_type
+msgid "Duration type of the overtime, whether in hours or days."
+msgstr "نوع مدة العمل الإضافي سواء بالساعات أو الأيام."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__employee_id
+msgid "Employee"
+msgstr "موظف"
+
+#. module: ohrms_overtime
+#: model:ir.model,name:ohrms_overtime.model_hr_contract
+msgid "Employee Contract"
+msgstr "عقد الموظف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__employee_id
+msgid "Employee for whom the overtime request is made"
+msgstr "الموظف الذي تم تقديم طلب العمل الإضافي له"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__date_to
+msgid "End date and time of the overtime request."
+msgstr "تاريخ ووقت انتهاء طلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type_rule__to_hrs
+msgid "End hour threshold for the overtime rule."
+msgstr "حد ساعة النهاية لقاعدة العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__attchd_copy_name
+msgid "File Name"
+msgstr "اسم الملف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_follower_ids
+msgid "Followers"
+msgstr "متابعون"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_partner_ids
+msgid "Followers (Partners)"
+msgstr "المتابعون (الشركاء)"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__from_hrs
+msgid "From"
+msgstr "من"
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Global Leaves"
+msgstr "الأوراق العالمية"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__global_leaves_ids
+msgid "Global Time Off"
+msgstr "التوقف العالمي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__global_leaves_ids
+msgid "Global leaves of the employee"
+msgstr "الإجازات العالمية للموظف"
+
+#. module: ohrms_overtime
+#: model:ir.model,name:ohrms_overtime.model_hr_overtime
+msgid "HR Overtime"
+msgstr "العمل الإضافي للموارد البشرية"
+
+#. module: ohrms_overtime
+#: model:ir.model,name:ohrms_overtime.model_overtime_type
+msgid "HR Overtime Type"
+msgstr "نوع العمل الإضافي للموارد البشرية"
+
+#. module: ohrms_overtime
+#: model:ir.model,name:ohrms_overtime.model_overtime_type_rule
+msgid "HR Overtime Type Rule"
+msgstr "قاعدة نوع العمل الإضافي للموارد البشرية"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__has_message
+msgid "Has Message"
+msgstr "لديه رسالة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__duration_type__hours
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__overtime_type__duration_type__hours
+msgid "Hour"
+msgstr "ساعة"
+
+#. module: ohrms_overtime
+#. odoo-python
+#: code:addons/ohrms_overtime/models/hr_overtime.py:0
+#, python-format
+msgid "Hour Overtime Needs Hour Wage in Employee Contract."
+msgstr "ساعة العمل الإضافي تحتاج إلى أجر ساعة في عقد الموظف."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_contract__over_hour
+msgid "Hour Wage"
+msgstr "أجر الساعة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_contract__over_hour
+msgid "Hourly wage for overtime"
+msgstr "الأجر بالساعة مقابل العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__days_no_tmp
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Hours"
+msgstr "ساعات"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__id
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__id
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__id
+msgid "ID"
+msgstr "بطاقة تعريف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr "إذا تم تحديدها، فإن الرسائل الجديدة تتطلب انتباهك."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__message_has_error
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr "إذا تم تحديده، فإن بعض الرسائل تحتوي على خطأ في التسليم."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__public_holiday
+msgid "Indicates if there are public holidays in the overtime request period"
+msgstr "يشير إلى ما إذا كانت هناك أيام عطلات رسمية في فترة طلب العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__is_payslip_paid
+msgid "Indicates whether the overtime is paid in the payslip."
+msgstr "يشير إلى ما إذا كان يتم دفع العمل الإضافي في كشف الراتب."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_is_follower
+msgid "Is Follower"
+msgstr "هو تابع"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__job_id
+msgid "Job"
+msgstr "وظيفة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__job_id
+msgid "Job position of the employee."
+msgstr "الموقف الوظيفي للموظف."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__write_uid
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__write_uid
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__write_uid
+msgid "Last Updated by"
+msgstr "آخر تحديث بواسطة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__write_date
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__write_date
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__write_date
+msgid "Last Updated on"
+msgstr "آخر تحديث بتاريخ"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__type__leave
+msgid "Leave"
+msgstr "يترك"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__overtime_type__type__leave
+msgid "Leave "
+msgstr "يترك"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__leave_compute_ids
+msgid "Leave Compute"
+msgstr "اترك الحساب"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__leave_id
+msgid "Leave ID"
+msgstr "ترك معرف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__leave_type_id
+msgid "Leave Type"
+msgstr "نوع الإجازة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__leave_id
+msgid "Leave associated with the overtime request."
+msgstr "الإجازة المرتبطة بطلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type__leave_type_id
+msgid ""
+"Leave type associated with the overtime when the duration type is 'days'."
+msgstr ""
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__manager_id
+msgid "Manager"
+msgstr "مدير"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__manager_id
+msgid "Manager of the employee."
+msgstr "مدير الموظف ."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__project_manager_id
+msgid "Manager of the project associated with the overtime request."
+msgstr "مدير المشروع المرتبط بطلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_has_error
+msgid "Message Delivery error"
+msgstr "خطأ في تسليم الرسالة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_ids
+msgid "Messages"
+msgstr "رسائل"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__name
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__name
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__name
+msgid "Name"
+msgstr "اسم"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__attchd_copy_name
+msgid "Name of the attached file"
+msgstr "اسم الملف المرفق"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__name
+msgid "Name of the overtime request."
+msgstr "اسم طلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type_rule__name
+msgid "Name of the overtime rule."
+msgstr "اسم قاعدة العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type__name
+msgid "Name of the overtime type."
+msgstr "اسم نوع العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__days_no
+msgid "No. of Days"
+msgstr "عدد الأيام"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_needaction_counter
+msgid "Number of Actions"
+msgstr "عدد الإجراءات"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__days_no
+msgid "Number of days for the overtime request."
+msgstr "عدد الأيام لطلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_has_error_counter
+msgid "Number of errors"
+msgstr "عدد الأخطاء"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr "عدد الرسائل التي تتطلب اتخاذ إجراء"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr "عدد الرسائل التي بها خطأ في التسليم"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__type_line_id
+msgid "Over Time Type"
+msgstr "النوع بمرور الوقت"
+
+#. module: ohrms_overtime
+#: model:hr.salary.rule,name:ohrms_overtime.hr_salary_rule_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_payslip__overtime_ids
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_contract_view_form
+msgid "Overtime"
+msgstr "متأخر , بعد فوات الوقت"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__cash_day_amount
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__cash_hrs_amount
+msgid "Overtime Amount"
+msgstr "مبلغ العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.actions.act_window,name:ohrms_overtime.hr_overtime_action
+#: model:ir.ui.menu,name:ohrms_overtime.hr_overtime_menu
+#: model:ir.ui.menu,name:ohrms_overtime.hr_overtime_menu_root
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_tree
+msgid "Overtime Request"
+msgstr "طلب العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__overtime_type_id
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.overtime_type_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.overtime_type_view_tree
+msgid "Overtime Type"
+msgstr "نوع العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.actions.act_window,name:ohrms_overtime.hr_overtime_type_action
+#: model:ir.ui.menu,name:ohrms_overtime.overtime_type_menu
+msgid "Overtime Types"
+msgstr "أنواع العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_payslip__overtime_ids
+msgid "Overtime records associated with thispayslip."
+msgstr "سجلات العمل الإضافي المرتبطة بقسيمة الدفع هذه."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__is_payslip_paid
+msgid "Paid in Payslip"
+msgstr "تدفع في قسيمة الدفع"
+
+#. module: ohrms_overtime
+#: model:ir.model,name:ohrms_overtime.model_hr_payslip
+msgid "Pay Slip"
+msgstr "قسيمة الدفع"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__project_id
+msgid "Project"
+msgstr "مشروع"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__project_manager_id
+msgid "Project Manager"
+msgstr "مدير المشروع"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__project_id
+msgid "Project associated with the overtime request."
+msgstr "المشروع المرتبط بطلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__public_holiday
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Public Holiday"
+msgstr "إجازة عامة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__hrs_amount
+msgid "Rate"
+msgstr "معدل"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type_rule__hrs_amount
+msgid "Rate of pay for the overtime rule."
+msgstr "معدل الأجر لقاعدة العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__rating_ids
+msgid "Ratings"
+msgstr "التقييمات"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__cancel_reason
+msgid "Reason for refusing the overtime request."
+msgstr "سبب رفض طلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.overtime_type_view_form
+msgid "Reference ...."
+msgstr "مرجع ...."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type_rule__type_line_id
+msgid "Reference to the HR Overtime Type associated with this rule."
+msgstr "إشارة إلى نوع العمل الإضافي للموارد البشرية المرتبط بهذه القاعدة."
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Refuse"
+msgstr "رفض"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__cancel_reason
+msgid "Refuse Reason"
+msgstr "سبب الرفض"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__state__refused
+msgid "Refused"
+msgstr "رفض"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__rule_line_ids
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.overtime_type_view_form
+msgid "Rules"
+msgstr "قواعد"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type__rule_line_ids
+msgid "Rules associated with the overtime type."
+msgstr "القواعد المرتبطة بنوع العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr "خطأ في تسليم الرسائل القصيرة"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__date_from
+msgid "Start date and time of the overtime request."
+msgstr "تاريخ ووقت بدء طلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type_rule__from_hrs
+msgid "Start hour threshold for the overtime rule."
+msgstr "عتبة ساعة البداية لقاعدة العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__state
+msgid "State of the overtime request."
+msgstr "حالة طلب العمل الإضافي."
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Submit To Finance"
+msgstr "تقديم إلى المالية"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__days_no_tmp
+msgid ""
+"Temporary field to store the calculated hours for the overtime request."
+msgstr ""
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type_rule__to_hrs
+msgid "To"
+msgstr "إلى"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__type
+#: model:ir.model.fields,field_description:ohrms_overtime.field_overtime_type__type
+msgid "Type"
+msgstr "يكتب"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__duration_type
+msgid "Type of duration for the overtime request"
+msgstr "نوع المدة لطلب العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_overtime_type__type
+msgid "Type of overtime, whether in cash or leave."
+msgstr "نوع العمل الإضافي سواء كان نقداً أو إجازة."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__type
+msgid "Type of the overtime request"
+msgstr "نوع طلب العمل الإضافي"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__current_user_id
+msgid "User currently logged in."
+msgstr "قام المستخدم بتسجيل الدخول حاليا."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields.selection,name:ohrms_overtime.selection__hr_overtime__state__f_approve
+msgid "Waiting"
+msgstr "منتظر"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__website_message_ids
+msgid "Website Messages"
+msgstr "رسائل الموقع"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__website_message_ids
+msgid "Website communication history"
+msgstr "تاريخ اتصالات الموقع"
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Work Description"
+msgstr "وصف العمل"
+
+#. module: ohrms_overtime
+#: model_terms:ir.ui.view,arch_db:ohrms_overtime.hr_overtime_view_form
+msgid "Work Schedule"
+msgstr "جدول العمل"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,help:ohrms_overtime.field_hr_overtime__work_schedule_ids
+msgid "Work schedule of the employee"
+msgstr "جدول عمل الموظف"
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__work_schedule_ids
+msgid "Working Time"
+msgstr "وقت العمل"
+
+#. module: ohrms_overtime
+#. odoo-python
+#: code:addons/ohrms_overtime/models/hr_overtime.py:0
+#, python-format
+msgid "You can not have 2 Overtime requests that overlaps on same day!"
+msgstr "لا يمكنك الحصول على طلبين للعمل الإضافي يتداخلان في نفس اليوم!"
+
+#. module: ohrms_overtime
+#. odoo-python
+#: code:addons/ohrms_overtime/models/hr_overtime.py:0
+#, python-format
+msgid "You cannot delete TIL request which is not in draft state."
+msgstr "لا يمكنك حذف طلب TIL وهو ليس في حالة المسودة."
+
+#. module: ohrms_overtime
+#: model:ir.model.fields,field_description:ohrms_overtime.field_hr_overtime__state
+msgid "state"
+msgstr "حالة"
+

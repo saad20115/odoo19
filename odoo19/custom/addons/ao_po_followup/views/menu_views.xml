@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_po_followup_root"
+              name="PO Follow-up"
+              web_icon="ao_po_followup,static/description/icon.png"
+              sequence="28"
+              groups="ao_po_followup.group_po_followup_user"/>
+
+    <menuitem id="menu_po_followup"
+              name="PO Follow-up"
+              parent="menu_po_followup_root"
+              action="action_po_followup"
+              sequence="10"
+              groups="ao_po_followup.group_po_followup_user"/>
+
+    <menuitem id="menu_po_order"
+              name="PO Order"
+              parent="menu_po_followup_root"
+              action="action_po_order"
+              sequence="20"
+              groups="ao_po_followup.group_po_followup_user"/>
+
+    <menuitem id="menu_po_followup_configuration"
+              name="Configuration"
+              parent="menu_po_followup_root"
+              sequence="100"
+              groups="ao_po_followup.group_po_followup_manager"/>
+
+    <menuitem id="menu_po_followup_settings"
+              name="Settings"
+              parent="menu_po_followup_configuration"
+              action="action_po_followup_config_settings"
+              sequence="5"
+              groups="ao_po_followup.group_po_followup_manager"/>
+
+    <menuitem id="menu_po_contractor"
+              name="Contractors"
+              parent="menu_po_followup_configuration"
+              action="action_po_contractor"
+              sequence="10"
+              groups="ao_po_followup.group_po_followup_manager"/>
+
+    <menuitem id="menu_po_office"
+              name="Offices"
+              parent="menu_po_followup_configuration"
+              action="action_po_office"
+              sequence="15"
+              groups="ao_po_followup.group_po_followup_manager"/>
+
+    <menuitem id="menu_po_entity"
+              name="Entities"
+              parent="menu_po_followup_configuration"
+              action="action_po_entity"
+              sequence="20"
+              groups="ao_po_followup.group_po_followup_manager"/>
+</odoo>

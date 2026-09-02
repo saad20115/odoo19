@@ -1,0 +1,63 @@
+/* ====================================================================
+   Odoo 17 Backend Dynamic RTL / LTR Overrides (SCSS with rtl:ignore)
+   ==================================================================== */
+
+html[dir="rtl"],
+html[dir="rtl"] body,
+html[dir="rtl"] body.o_web_client,
+html[dir="rtl"] .o_web_client,
+html[dir="rtl"] .o_action_manager,
+html[dir="rtl"] .o_content,
+html[dir="rtl"] .o_view_controller,
+html[dir="rtl"] .o_main_navbar,
+html[dir="rtl"] .o_control_panel,
+html[dir="rtl"] .o_control_panel_main,
+html[dir="rtl"] .o_kanban_view,
+html[dir="rtl"] .o_list_renderer,
+html[dir="rtl"] .o_list_table,
+html[dir="rtl"] .o_form_view,
+body.o_rtl,
+body.o_rtl.o_web_client,
+body.o_rtl .o_web_client,
+body.o_rtl .o_action_manager,
+body.o_rtl .o_content,
+body.o_rtl .o_view_controller,
+body.o_rtl .o_main_navbar,
+body.o_rtl .o_control_panel,
+body.o_rtl .o_control_panel_main,
+body.o_rtl .o_kanban_view,
+body.o_rtl .o_list_renderer,
+body.o_rtl .o_list_table,
+body.o_rtl .o_form_view {
+    /*rtl:ignore*/
+    direction: rtl !important;
+    /*rtl:ignore*/
+    text-align: right !important;
+}
+
+
+/* Navbar: Odoo 17 handles RTL natively; do NOT override flex-direction or order */
+
+/* --------------------------------------------------------------------
+   ENGLISH / LTR OVERRIDES
+   -------------------------------------------------------------------- */
+html[dir="ltr"],
+html[dir="ltr"] body,
+html[dir="ltr"] body.o_web_client,
+html[dir="ltr"] .o_web_client,
+html[dir="ltr"] .o_action_manager,
+html[dir="ltr"] .o_content,
+html[dir="ltr"] .o_view_controller,
+html[dir="ltr"] .o_main_navbar,
+html[dir="ltr"] .o_control_panel,
+html[dir="ltr"] .o_list_table {
+    /*rtl:ignore*/
+    direction: ltr !important;
+    /*rtl:ignore*/
+    text-align: left !important;
+}
+
+html[dir="ltr"] .o_main_navbar {
+    /*rtl:ignore*/
+    flex-direction: row !important;
+}

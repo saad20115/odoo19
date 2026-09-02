@@ -1,0 +1,31 @@
+name: Deploy Live
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy live via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            set -e
+            cd /odoo17-v2
+            git fetch origin main
+            git reset --hard origin/main
+            # Free :8068 without pkill -f (pkill -f can kill this SSH script).
+            systemctl stop odoo17-v2-server || true
+            fuser -k 8068/tcp 2>/dev/null || true
+            sleep 2
+            systemctl start odoo17-v2-server
+            sleep 5
+            systemctl is-active odoo17-v2-server
+            ss -tlnp | grep 8068

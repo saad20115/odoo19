@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="ao_makka_po_followup.ListView" t-inherit="web.ListView" t-inherit-mode="primary">
+        <xpath expr="//t[@t-component='props.Renderer']" position="replace">
+            <div class="ao_makka_po_followup_wrap">
+                <div class="ao_po_kpi_banner">
+                    <div class="ao_po_kpi_card ao_po_kpi_po">
+                        <div class="ao_po_kpi_title">Total Orders</div>
+                        <div class="ao_po_kpi_row">
+                            <span class="ao_po_kpi_label">Count</span>
+                            <span class="ao_po_kpi_value" t-esc="formatInt(kpi.po_count)"/>
+                        </div>
+                        <div class="ao_po_kpi_row">
+                            <span class="ao_po_kpi_label">Value</span>
+                            <span class="ao_po_kpi_value" t-esc="formatAmount(kpi.po_value)"/>
+                        </div>
+                    </div>
+                    <div class="ao_po_kpi_card ao_po_kpi_invoicing">
+                        <div class="ao_po_kpi_title">Total Invoicing</div>
+                        <div class="ao_po_kpi_row">
+                            <span class="ao_po_kpi_label">Count</span>
+                            <span class="ao_po_kpi_value" t-esc="formatInt(kpi.invoicing_count)"/>
+                        </div>
+                        <div class="ao_po_kpi_row">
+                            <span class="ao_po_kpi_label">Value</span>
+                            <span class="ao_po_kpi_value" t-esc="formatAmount(kpi.invoicing_value)"/>
+                        </div>
+                    </div>
+                    <div class="ao_po_kpi_card ao_po_kpi_expenditure">
+                        <div class="ao_po_kpi_title">Total Expenditure</div>
+                        <div class="ao_po_kpi_row">
+                            <span class="ao_po_kpi_label">Count</span>
+                            <span class="ao_po_kpi_value" t-esc="formatInt(kpi.expenditure_count)"/>
+                        </div>
+                        <div class="ao_po_kpi_row">
+                            <span class="ao_po_kpi_label">Value</span>
+                            <span class="ao_po_kpi_value" t-esc="formatAmount(kpi.expenditure_value)"/>
+                        </div>
+                    </div>
+                    <div class="ao_po_kpi_card ao_po_kpi_invoicing_pct">
+                        <div class="ao_po_kpi_title">Invoicing Completion</div>
+                        <div class="ao_po_kpi_percentage_value">
+                            <t t-esc="formatPercent(kpi.invoicing_percentage)"/>%
+                        </div>
+                    </div>
+                    <div class="ao_po_kpi_card ao_po_kpi_expenditure_pct">
+                        <div class="ao_po_kpi_title">Expenditure Completion</div>
+                        <div class="ao_po_kpi_percentage_value">
+                            <t t-esc="formatPercent(kpi.expenditure_percentage)"/>%
+                        </div>
+                    </div>
+                </div>
+                <div class="ao_makka_po_followup_list_body">
+                    <t t-component="props.Renderer"
+                        list="model.root"
+                        activeActions="activeActions"
+                        archInfo="archInfo"
+                        allowSelectors="props.allowSelectors"
+                        editable="editable"
+                        onOpenFormView="onOpenFormView"
+                        openRecord.bind="openRecord"
+                        noContentHelp="props.info.noContentHelp"
+                        onAdd.bind="createRecord"
+                        onOptionalFieldsChanged.bind="onOptionalFieldsChanged"
+                        evalViewModifier.bind="evalViewModifier"
+                    />
+                </div>
+            </div>
+        </xpath>
+    </t>
+</templates>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_leave_pwa_balance_import" model="ir.sequence">
+        <field name="name">PWA Balance Import</field>
+        <field name="code">leave.pwa.balance.import</field>
+        <field name="prefix">PWA-BAL/%(year)s/</field>
+        <field name="padding">4</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

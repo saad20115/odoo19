@@ -1,0 +1,20 @@
+[Unit]
+Description=SJC Leaves PWA Proxy (Beta) — port 8095 → Odoo beta 8070
+After=network.target odoo17-v2-beta-server.service
+Wants=odoo17-v2-beta-server.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/odoo17-v2-beta
+Environment=LEAVE_PWA_HOST=127.0.0.1
+Environment=LEAVE_PWA_PORT=8095
+Environment=ODOO_UPSTREAM=http://127.0.0.1:8070
+ExecStart=/usr/bin/python3 /odoo17-v2-beta/scripts/leave_pwa_proxy.py
+Restart=on-failure
+RestartSec=3
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

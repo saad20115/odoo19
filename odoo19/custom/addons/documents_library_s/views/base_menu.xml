@@ -1,0 +1,84 @@
+<odoo>
+    <data>
+    <record id="property_view_tree" model="ir.ui.view">
+        <field name="name">property tree</field>
+        <field name="model">property</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name" string="الاسم"/>
+                <field name="ministrey" string="الوزراة/الجهة"/>
+                <field name="special_number" string="الرقم المميز"/>
+                <field name="addition_number" string="الرقم الاضافي"/>
+                <field name="company" string="الشركة/المؤسسة"/>
+                <field name="responsible_employee" string="الموظف المسؤول"/>
+                <field name="expire_date" string="تاريخ الانتهاء"/>
+                <field name="way_to_renew" string="طريقة التجديد"/>
+                <field name="date_version" string="تاريخ الاصدار"/>
+
+
+            </tree>
+        </field>
+    </record>
+    <record id="property_view_form" model="ir.ui.view">
+        <field name="name">property form</field>
+        <field name="model">property</field>
+        <field name="arch" type="xml">
+            <form>
+                <Sheet>
+                    <group>
+                        <group>
+                            <field name="name" string="الاسم"/>
+                            <field name="ministrey" string="الوزراة/الجهة"/>
+                            <field name="special_number" string="الرقم المميز"/>
+                            <field name="addition_number" string="الرقم الاضافي"/>
+                            <field name="company" string="الشركة/المؤسسة"/>
+
+                        </group>
+                        <group>
+                            <field name="responsible_employee" string="الموظف المسؤول"/>
+                            <field name="expire_date" string="تاريخ الانتهاء"/>
+                            <field name="way_to_renew" string="طريقة التجديد"/>
+                            <field name="date_version" string="تاريخ الاصدار"/>
+                            <field name="attachment_id"/>
+
+
+                            
+                        </group>
+
+                    </group>
+
+
+                </Sheet>
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+                
+            </form>
+        </field>
+    </record>
+
+    <record id="property_action" model= "ir.actions.act_window">
+        <field name="name">مكتبة الوثائق</field>
+        <field name="res_model">property</field>
+
+
+</record>
+
+<menuitem 
+    id="This_Is_Our_Library"
+    name="مكتبة الوثائق"
+    action= "property_action"
+
+/>
+<menuitem
+  id="This_Is_Our_Library_Two" 
+  name="مكتبة الوثائق" 
+  parent="This_Is_Our_Library"
+  action= "property_action"
+
+/>
+
+</data>
+</odoo>

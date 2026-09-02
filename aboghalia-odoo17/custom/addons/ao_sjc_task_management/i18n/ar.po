@@ -1,0 +1,463 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* ao_sjc_task_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-08-26 17:00+0000\n"
+"PO-Revision-Date: 2026-08-26 17:00+0000\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_root
+msgid "SJC+"
+msgstr "SJC+"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_dashboard
+#: model:ir.actions.client,name:ao_sjc_task_management.action_sjc_dashboard
+msgid "Dashboard"
+msgstr "لوحة التحكم"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_po_makka
+#: model:ir.actions.client,name:ao_sjc_task_management.action_sjc_po_makka
+msgid "PO - Makka Tasks"
+msgstr "مهام PO مكة"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_po_madina
+#: model:ir.actions.client,name:ao_sjc_task_management.action_sjc_po_madina
+msgid "PO - Madina Tasks"
+msgstr "مهام PO المدينة"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_emails
+#: model:ir.actions.client,name:ao_sjc_task_management.action_sjc_emails
+msgid "Emails Tasks"
+msgstr "مهام البريد"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_config
+msgid "Configuration"
+msgstr "التهيئة"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_settings
+msgid "Settings"
+msgstr "الإعدادات"
+
+#. module: ao_sjc_task_management
+#: model:res.groups,name:ao_sjc_task_management.group_sjc_employee
+msgid "Employee"
+msgstr "موظف"
+
+#. module: ao_sjc_task_management
+#: model:res.groups,name:ao_sjc_task_management.group_sjc_project_manager
+msgid "Project Manager"
+msgstr "مدير مشروع"
+
+#. module: ao_sjc_task_management
+#: model:res.groups,name:ao_sjc_task_management.group_sjc_management
+msgid "Management"
+msgstr "الإدارة"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_res_users__sjc_team
+msgid "SJC Team"
+msgstr "فريق SJC"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_po_followup__disbursement
+msgid "الصرف"
+msgstr "الصرف"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_po_followup__sjc_due_date
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_makka_po_followup__sjc_due_date
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_incoming_mail__sjc_due_date
+msgid "SJC Due Date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_incoming_mail__sjc_assigned_by_id
+msgid "Last Assigned By"
+msgstr "آخر من أسند"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_po_order__sjc_assigned_by_id
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_makka_po_order__sjc_assigned_by_id
+msgid "Assigned By"
+msgstr "أُسند بواسطة"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_res_config_settings__sjc_grace_days
+msgid "Overdue Grace Days"
+msgstr "أيام مهلة التأخير"
+
+#. module: ao_sjc_task_management
+msgid "Accounting team"
+msgstr "فريق المحاسبة"
+
+#. module: ao_sjc_task_management
+msgid "Portal technicians"
+msgstr "فنيين البورتال"
+
+#. module: ao_sjc_task_management
+msgid "Done"
+msgstr "مكتمل"
+
+#. module: ao_sjc_task_management
+msgid "Under processing"
+msgstr "قيد المعالجة"
+
+#. module: ao_sjc_task_management
+msgid "Late"
+msgstr "متأخر"
+
+#. module: ao_sjc_task_management
+msgid "New"
+msgstr "جديد"
+
+#. module: ao_sjc_task_management
+msgid "Total"
+msgstr "الإجمالي"
+
+#. module: ao_sjc_task_management
+msgid "All"
+msgstr "الكل"
+
+#. module: ao_sjc_task_management
+msgid "Tasks"
+msgstr "المهام"
+
+#. module: ao_sjc_task_management
+msgid "Grace days after due date"
+msgstr "مهلة الأيام بعد تاريخ الاستحقاق"
+
+#. module: ao_sjc_task_management
+msgid "No data"
+msgstr "لا توجد بيانات"
+
+#. module: ao_sjc_task_management
+msgid "Team members"
+msgstr "أعضاء الفريق"
+
+#. module: ao_sjc_task_management
+msgid "Employees who sent to Accounting"
+msgstr "من أرسل للمحاسبة"
+
+#. module: ao_sjc_task_management
+msgid "POs sent"
+msgstr "أوامر مرسلة"
+
+#. module: ao_sjc_task_management
+msgid "Assigned POs"
+msgstr "أوامر مسندة"
+
+#. module: ao_sjc_task_management
+msgid "Assigned by"
+msgstr "أُسند بواسطة"
+
+#. module: ao_sjc_task_management
+msgid "Loading..."
+msgstr "جاري التحميل..."
+
+#. module: ao_sjc_task_management
+msgid "Overview"
+msgstr "نظرة عامة"
+
+#. module: ao_sjc_task_management
+msgid "Makka"
+msgstr "مكة"
+
+#. module: ao_sjc_task_management
+msgid "Madina"
+msgstr "المدينة"
+
+#. module: ao_sjc_task_management
+msgid "Mailboxes"
+msgstr "صناديق البريد"
+
+#. module: ao_sjc_task_management
+msgid "Incoming mail staff"
+msgstr "مسؤولو البريد الوارد"
+
+#. module: ao_sjc_task_management
+msgid "Assigned to employees"
+msgstr "تم إسنادها للموظفين"
+
+#. module: ao_sjc_task_management
+msgid "Employees with assigned emails"
+msgstr "الموظفون المعيَّن لهم بريد"
+
+#. module: ao_sjc_task_management
+msgid "Emails"
+msgstr "الرسائل"
+
+#. module: ao_sjc_task_management
+msgid "Recent emails"
+msgstr "أحدث الرسائل"
+
+#. module: ao_sjc_task_management
+msgid "Open inbox"
+msgstr "فتح صندوق الوارد"
+
+#. module: ao_sjc_task_management
+msgid "late tasks need attention"
+msgstr "مهام متأخرة تحتاج متابعة"
+
+#. module: ao_sjc_task_management
+#: model:ir.actions.act_window,name:ao_sjc_task_management.action_sjc_po_instruction_wizard
+#: model_terms:ir.ui.view,arch_db:ao_sjc_task_management.view_sjc_po_instruction_wizard_form
+msgid "Send your instructions"
+msgstr "أرسل تعليماتك"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_sjc_po_instruction_wizard__message
+#: model_terms:ir.ui.view,arch_db:ao_sjc_task_management.view_sjc_po_instruction_wizard_form
+msgid "Instructions"
+msgstr "التعليمات"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_sjc_po_instruction_wizard__user_ids
+msgid "Employees"
+msgstr "الموظفون"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_sjc_po_instruction_wizard__po_number
+msgid "PO Number"
+msgstr "رقم أمر الشراء"
+
+#. module: ao_sjc_task_management
+#: model_terms:ir.ui.view,arch_db:ao_sjc_task_management.view_sjc_po_instruction_wizard_form
+msgid "Send"
+msgstr "إرسال"
+
+#. module: ao_sjc_task_management
+#: model_terms:ir.ui.view,arch_db:ao_sjc_task_management.view_sjc_po_instruction_wizard_form
+msgid "Cancel"
+msgstr "إلغاء"
+
+#. module: ao_sjc_task_management
+#: model_terms:ir.ui.view,arch_db:ao_sjc_task_management.view_sjc_po_instruction_wizard_form
+msgid "Select one or more employees"
+msgstr "اختر موظفاً أو أكثر"
+
+#. module: ao_sjc_task_management
+msgid "Please follow the instructions below for this PO"
+msgstr "يرجى اتباع التعليمات أدناه لهذا الأمر"
+
+#. module: ao_sjc_task_management
+msgid "Please select at least one employee."
+msgstr "يرجى اختيار موظف واحد على الأقل."
+
+#. module: ao_sjc_task_management
+msgid "Please write the instructions before sending."
+msgstr "يرجى كتابة التعليمات قبل الإرسال."
+
+#. module: ao_sjc_task_management
+msgid "Invalid PO model."
+msgstr "نموذج أمر الشراء غير صالح."
+
+#. module: ao_sjc_task_management
+msgid "PO record was not found."
+msgstr "لم يتم العثور على سجل أمر الشراء."
+
+#. module: ao_sjc_task_management
+msgid "Open PO"
+msgstr "فتح أمر الشراء"
+
+#. module: ao_sjc_task_management
+msgid "From"
+msgstr "من"
+
+#. module: ao_sjc_task_management
+msgid "Instructions sent"
+msgstr "تم إرسال التعليمات"
+
+#. module: ao_sjc_task_management
+msgid "Message sent to %s employee(s)."
+msgstr "تم إرسال الرسالة إلى %s موظف."
+
+#. module: ao_sjc_task_management
+msgid "Sent to Accounting By"
+msgstr "أُرسل للمحاسبة بواسطة"
+
+#. module: ao_sjc_task_management
+msgid "Unknown mailbox"
+msgstr "صندوق بريد غير معروف"
+
+#. module: ao_sjc_task_management
+msgid "No Subject"
+msgstr "بدون موضوع"
+
+#. module: ao_sjc_task_management
+msgid "PO"
+msgstr "أمر شراء"
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_admin_comms
+#: model:ir.actions.client,name:ao_sjc_task_management.action_sjc_admin_comms
+msgid "Administrative Communications"
+msgstr "الاتصالات الإدارية"
+
+#. module: ao_sjc_task_management
+msgid "Companies"
+msgstr "الشركات"
+
+#. module: ao_sjc_task_management
+msgid "Created by"
+msgstr "أنشئ بواسطة"
+
+#. module: ao_sjc_task_management
+msgid "Responsible employees"
+msgstr "الموظف المسؤول"
+
+#. module: ao_sjc_task_management
+msgid "Records"
+msgstr "عدد السجلات"
+
+#. module: ao_sjc_task_management
+msgid "Transaction type"
+msgstr "نوع المعاملة"
+
+#. module: ao_sjc_task_management
+msgid "Company"
+msgstr "الشركة"
+
+#. module: ao_sjc_task_management
+msgid "Department"
+msgstr "القسم"
+
+#. module: ao_sjc_task_management
+msgid "End date"
+msgstr "تاريخ النهاية"
+
+#. module: ao_sjc_task_management
+msgid "Transaction Number"
+msgstr "رقم المعاملة"
+
+#. module: ao_sjc_task_management
+msgid "Please follow the instructions below for this request"
+msgstr "يرجى اتباع التعليمات أدناه لهذه المعاملة"
+
+#. module: ao_sjc_task_management
+msgid "Open record"
+msgstr "فتح السجل"
+
+#. module: ao_sjc_task_management
+msgid "Reference"
+msgstr "المرجع"
+
+#. module: ao_sjc_task_management
+msgid "Request"
+msgstr "معاملة"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_res_config_settings__sjc_admin_due_field
+msgid "Admin Comms Due Date Field"
+msgstr "حقل تاريخ الاستحقاق للاتصالات الإدارية"
+
+#. module: ao_sjc_task_management
+msgid "PO"
+msgstr "أمر شراء"
+
+#. module: ao_sjc_task_management
+msgid "WO"
+msgstr "أمر عمل"
+
+#. module: ao_sjc_task_management
+msgid "Due date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: ao_sjc_task_management
+msgid "Assignee"
+msgstr "المسند إليه"
+
+#. module: ao_sjc_task_management
+msgid "Responsible"
+msgstr "المسؤول"
+
+#. module: ao_sjc_task_management
+msgid "Load more"
+msgstr "عرض المزيد"
+
+#. module: ao_sjc_task_management
+msgid "Go to record"
+msgstr "الذهاب للسجل"
+
+#. module: ao_sjc_task_management
+msgid "Menus summary"
+msgstr "ملخص القوائم"
+
+#. module: ao_sjc_task_management
+msgid "Conclusion"
+msgstr "الخلاصة"
+
+#. module: ao_sjc_task_management
+msgid "Employees"
+msgstr "الموظفون"
+
+#. module: ao_sjc_task_management
+msgid "Search employees..."
+msgstr "بحث عن موظف..."
+
+#. module: ao_sjc_task_management
+#: model:ir.ui.menu,name:ao_sjc_task_management.menu_sjc_expenses
+#: model:ir.actions.client,name:ao_sjc_task_management.action_sjc_expenses
+msgid "Expenses"
+msgstr "المصروفات"
+
+#. module: ao_sjc_task_management
+msgid "Departments"
+msgstr "الأقسام"
+
+#. module: ao_sjc_task_management
+msgid "Assigned to managers"
+msgstr "مسند للمدير"
+
+#. module: ao_sjc_task_management
+msgid "Sent to manager by"
+msgstr "من أرسل للمدير"
+
+#. module: ao_sjc_task_management
+msgid "Amount"
+msgstr "المبلغ"
+
+#. module: ao_sjc_task_management
+msgid "Status"
+msgstr "الحالة"
+
+#. module: ao_sjc_task_management
+msgid "Archived"
+msgstr "مؤرشف"
+
+#. module: ao_sjc_task_management
+msgid "Expense"
+msgstr "مصروف"
+
+#. module: ao_sjc_task_management
+msgid "Please follow the instructions below for this expense"
+msgstr "يرجى اتباع التعليمات أدناه لهذا المصروف"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_hr_expense__sjc_due_date
+msgid "SJC Due Date"
+msgstr "تاريخ الاستحقاق"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_hr_expense__sjc_sent_to_manager_by_id
+msgid "Sent to Manager By"
+msgstr "أُرسل للمدير بواسطة"
+
+#. module: ao_sjc_task_management
+#: model:ir.model.fields,field_description:ao_sjc_task_management.field_res_config_settings__sjc_expense_due_field
+msgid "Expenses Due Date Field"
+msgstr "حقل تاريخ الاستحقاق للمصروفات"

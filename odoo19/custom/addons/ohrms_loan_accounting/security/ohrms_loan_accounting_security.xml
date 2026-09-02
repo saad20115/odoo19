@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <delete model="ir.rule" id="hr_loan_rule_manager"/>
+    </data>
+</odoo>

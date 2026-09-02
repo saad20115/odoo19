@@ -1,0 +1,44 @@
+/* ====================================================================
+   Odoo 17 Backend Dynamic RTL / LTR Overrides with rtlcss:raw directive
+   ==================================================================== */
+
+/*rtl:raw:
+html[dir="rtl"] body,
+html[dir="rtl"] body.o_web_client,
+html[dir="rtl"] .o_web_client,
+html[dir="rtl"] .o_main_navbar,
+html[dir="rtl"] .o_action_manager,
+html[dir="rtl"] .o_content,
+html[dir="rtl"] .o_view_controller,
+html[dir="rtl"] .o_control_panel,
+html[dir="rtl"] .o_kanban_view,
+html[dir="rtl"] .o_list_renderer,
+html[dir="rtl"] .o_form_view,
+body.o_rtl,
+body.o_rtl.o_web_client,
+body.o_rtl .o_web_client,
+body.o_rtl .o_main_navbar,
+body.o_rtl .o_action_manager,
+body.o_rtl .o_content,
+body.o_rtl .o_view_controller,
+body.o_rtl .o_control_panel,
+body.o_rtl .o_kanban_view,
+body.o_rtl .o_list_renderer,
+body.o_rtl .o_form_view {
+    direction: rtl !important;
+}
+
+html[dir="rtl"] .o_main_navbar,
+body.o_rtl .o_main_navbar {
+    display: flex !important;
+    flex-direction: row-reverse !important;
+}
+*/
+
+/* Normal CSS fallback */
+html[dir="rtl"] body.o_web_client,
+html[dir="rtl"] .o_web_client,
+body.o_rtl.o_web_client,
+body.o_rtl .o_web_client {
+    direction: rtl !important;
+}

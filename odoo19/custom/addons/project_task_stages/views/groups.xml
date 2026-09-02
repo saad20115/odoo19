@@ -1,0 +1,23 @@
+<odoo>
+    <data noupdate="1">
+        <record id="module_category_samir_stages" model="ir.module.category">
+            <field name="name">Stage permissions</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_samir_exploratory_team" model="res.groups">
+            <field name="name">مرحلة الكشفية</field>
+            <field name="category_id" ref="module_category_samir_stages"/>
+        </record>
+
+        <record id="group_samir_execution_team" model="res.groups">
+            <field name="name">مرحلة قيد التنفيذ</field>
+            <field name="category_id" ref="module_category_samir_stages"/>
+        </record>
+
+        <record id="group_samir_closure_team" model="res.groups">
+            <field name="name">مرحلة الإغلاق</field>
+            <field name="category_id" ref="module_category_samir_stages"/>
+        </record>
+    </data>
+</odoo>

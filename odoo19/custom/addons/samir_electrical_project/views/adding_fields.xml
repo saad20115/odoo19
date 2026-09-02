@@ -1,0 +1,1598 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<record id="project_project_new_inherit_ao" model="ir.ui.view">
+            <field name="name">project.project.new.inherit.ao</field>
+            <field name="model">project.project</field>
+            <field name="inherit_id" ref="project.project_project_view_form_simplified"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='alias_domain_id']" position="replace">
+                    <br />
+                    <label for="project_type" string="Project Type"/>
+                    <field name="project_type"/>
+                    <br />
+                    <br />
+                    <label for="task_stages" string="Task Stages"/>
+                    <field name="task_stages"  widget="many2many_tags"/>
+                    <br />
+
+                </xpath>
+
+                
+            </field>
+        </record>
+<record id="project_task_new_inherit_ao" model="ir.ui.view">
+            <field name="name">project.task.new.inherit.ao</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                
+        <xpath expr="//notebook/page" position="before">
+  
+       
+       
+        <page name="assignment_team" string="Assignment Team" groups="samir_electrical_project.group_samir_assignment_team" sequence="-10" >
+            <group>
+                <field name="scouting_the_site" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                <field name="x_scout_date" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="presence_of_barriers" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="s_procedure" invisible="presence_of_barriers !='option2'" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="declaration" optional="hide" groups="samir_electrical_project.group_samir_assignment_team">
+                         <tree>    
+
+                            <field name="x_permit_number"/>
+
+                            <field name="x_start_date"/>
+
+                            <field name="x_end_date"/>
+
+                            <field name="x_duration_of_the_permit"/>
+
+                        </tree>
+
+                    </field>
+                <field name="x_attachments" groups="samir_electrical_project.group_samir_assignment_team">
+                        <tree>    
+                            <field name="task_id" string="رقم امر العمل"/>
+
+                            <field name="name"/>
+
+                            <field name="file"/>
+
+                            <field name="upload_date"/>
+
+                            <field name="comment"/>
+
+                            <field name="status"/>
+
+                        </tree>
+
+                    </field>
+                <field name="x_comments" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                    <!-- <field name="x_declaration_attachments" groups="samir_electrical_project.group_samir_assignment_team">
+                        <tree>    
+                            <field name="task_id" string="رقم امر العمل"/>
+
+                            <field name="name"/>
+
+                            <field name="file"/>
+
+                            <field name="upload_date"/>
+
+                            <field name="comment"/>
+
+                            <field name="status"/>
+
+                        </tree>
+
+                    </field> -->
+            </group>
+        </page>
+        <page name="map" string="الخريطة" groups="samir_electrical_project.group_samir_map" >
+            <group>
+                <field name="maps_code" widget="html" options="{'codeview': true}" groups="samir_electrical_project.group_samir_excution_team"/>
+            </group>
+        </page>
+        <page name="issuing_permits" string="اصدار التصاريح" groups="samir_electrical_project.group_samir_issuing_permits" >
+            <group>
+
+            </group>
+        </page>
+        <page name="excution_team" string="مرحلة التنفيذ" groups="samir_electrical_project.group_samir_excution_team" >
+            <group>
+                <field name="x_actual_start_date" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="implementation_status" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="repositioning" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="x_completion_rate" widget="percentage" optional="hide" groups="samir_electrical_project.group_samir_excution_team"/>
+                <field name="x_program_date" widget="percentage" optional="hide" groups="samir_electrical_project.group_samir_excution_team"/>
+                <field name="x_actual_end_date" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="x_duration_of_implementation" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="x_duration_of_delay" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="x_actual_duration" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="procedure203" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="x_attachments_2" optional="hide" groups="samir_electrical_project.group_samir_assignment_team">
+                    <tree>    
+                        <field name="task_id" string="رقم امر العمل"/>
+
+                        <field name="name"/>
+
+                        <field name="file"/>
+
+                        <field name="upload_date"/>
+
+                        <field name="comment"/>
+
+                        <field name="status"/>
+
+                    </tree>
+                </field>
+                <field name="notes" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+
+
+            </group>
+        </page>
+
+        <page name="closing_team" string="Closing Team" groups="samir_electrical_project.group_samir_closing_team" >
+            <group>  
+                <field name="x_proof_of_status" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                <field name="x_entering_a_note_into_the_system" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                <field name="issuing_a_certificate_of_completion" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                <field name="final_planning_approval" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="approval_of_final_quantities" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="x_modify_implementation_data" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="x_approval_initial_planning" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="x_attach_technical_report" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="procedure155" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                <field name="procedure155_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team"/>
+                <field name="x_procedure155_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team"/>
+                <field name="notes" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                <field name="x_attachments_3" optional="hide" groups="samir_electrical_project.group_samir_assignment_team">
+                    <tree>    
+                        <field name="task_id" string="رقم امر العمل"/>
+
+                        <field name="name"/>
+
+                        <field name="file"/>
+
+                        <field name="upload_date"/>
+
+                        <field name="comment"/>
+
+                        <field name="status"/>
+
+                    </tree>
+                </field>
+                <!-- <field name="final_closure" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" /> -->
+            </group>
+        </page>
+        <page name="invoicing_team" string="مرحلة الفوتره" groups="samir_electrical_project.group_samir_invoicing_team" >
+            <group>
+                <field name="x_abstract_number" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" />
+                <field name="x_tax_invoice" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" />
+                <field name="x_abstract_value" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" />
+                <field name="x_abstract_status" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" />
+                <field name="x_attachments_4" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" >
+                    <tree>    
+                        <field name="task_id" string="رقم امر العمل"/>
+
+                        <field name="name"/>
+
+                        <field name="file"/>
+
+                        <field name="upload_date"/>
+
+                        <field name="comment"/>
+
+                        <field name="status"/>
+
+                    </tree>
+                </field>
+                <field name="x_attachments_5" string="مرفق المستخلص" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" >
+                    <tree>    
+                        <field name="task_id" string="رقم امر العمل"/>
+
+                        <field name="name"/>
+
+                        <field name="file"/>
+
+                        <field name="upload_date"/>
+
+                        <field name="comment"/>
+
+                        <field name="status"/>
+
+                    </tree>
+                </field>
+                <field name="x_attachments_6" string="مرفق الفاتورة" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" >
+                    <tree>    
+                        <field name="task_id" string="رقم امر العمل"/>
+
+                        <field name="name"/>
+
+                        <field name="file"/>
+
+                        <field name="upload_date"/>
+
+                        <field name="comment"/>
+
+                        <field name="status"/>
+
+                    </tree>
+                </field>
+                <field name="notes" optional="hide"  groups="samir_electrical_project.group_samir_invoicing_team" />
+               
+            </group>
+        </page>
+        </xpath>
+            </field>
+        </record>
+    <record id="x_arcgis_contractor_tree" model="ir.ui.view">
+        <field name="name">arcgis.contractor.tree</field>
+        <field name="model">arcgis.contractor</field>
+        <field name="arch" type="xml">
+            <tree string="Contractors">  
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    <record id="arcgis_work_duration_type_tree" model="ir.ui.view">
+        <field name="name">arcgis.work.duration.type.tree</field>
+        <field name="model">arcgis.work.duration.type</field>
+        <field name="arch" type="xml">
+            <tree string="Contractors">  
+                <field name="x_work_type"/>
+                <field name="x_consultant_code"/>
+                <field name="x_job_description"/>
+                <!-- <field name="x_section"/> -->
+                <field name="x_job_duration"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="x_arcgis_work_type_tree" model="ir.ui.view">
+        <field name="name">arcgis.work.type.tree</field>
+        <field name="model">arcgis.work.type</field>
+        <field name="arch" type="xml">
+            <tree string="work_types">  
+                <field name="name"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="arcgis_consultant_tree" model="ir.ui.view">
+        <field name="name">arcgis.consultant.tree</field>
+        <field name="model">arcgis.consultant</field>
+        <field name="arch" type="xml">
+            <tree string="Consultant">  
+                <field name="name"/>
+
+            </tree>
+        </field>
+        
+    </record>
+    <record id="arcgis_job_description_tree" model="ir.ui.view">
+        <field name="name">arcgis.job.description.tree</field>
+        <field name="model">arcgis.job.description</field>
+        <field name="arch" type="xml">
+            <tree string="Consultant">  
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="arcgis_section_tree" model="ir.ui.view">
+        <field name="name">arcgis.section.tree</field>
+        <field name="model">arcgis.section</field>
+        <field name="arch" type="xml">
+            <tree string="Section">  
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+
+    <record id="arcgis_attachment_names_tree" model="ir.ui.view">
+        <field name="name">arcgis.attachment.names.tree</field>
+        <field name="model">arcgis.attachment.names</field>
+        <field name="arch" type="xml">
+            <tree string="اسم المرفق">  
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+    
+    <record id="work_order_type_tree" model="ir.ui.view">
+        <field name="name">نوع امر العمل</field>
+        <field name="model">arcgis.work.order.type</field>
+        <field name="arch" type="xml">
+                <tree string="نوع امر العمل"> 
+                    <field name="name"/>
+                </tree>
+        </field>
+    </record>
+    <record id="arcgis_x_sector_tree" model="ir.ui.view">
+        <field name="name">القطاع</field>
+        <field name="model">arcgis.x.sector</field>
+        <field name="arch" type="xml">
+                <tree string="القطاع"> 
+                    <field name="name"/>
+                </tree>
+        </field>
+    </record>
+    <record id="arcgis_x_area_tree" model="ir.ui.view">
+        <field name="name">المنطقة</field>
+        <field name="model">arcgis.x.area</field>
+        <field name="arch" type="xml">
+                <tree string="المنطقة"> 
+                    <field name="name"/>
+                </tree>
+        </field>
+    </record>
+    <record id="arcgis_classification_of_work_model_tree" model="ir.ui.view">
+        <field name="name">تصنيف العمل</field>
+        <field name="model">arcgis.classification.of.work.model</field>
+        <field name="arch" type="xml">
+                <tree string="تصنيف العمل"> 
+                    <field name="name"/>
+                </tree>
+        </field>
+    </record>
+    <record id="arcgis_x_website_tree" model="ir.ui.view">
+        <field name="name">الموقع</field>
+        <field name="model">arcgis.x.website</field>
+        <field name="arch" type="xml">
+                <tree string="الموقع"> 
+                    <field name="name"/>
+                </tree>
+        </field>
+    </record>
+
+     <!-- <record id="arcgis_selection_tree" model="ir.ui.view">
+        <field name="name">arcgis.selection.tree</field>
+        <field name="model">arcgis.selection</field>
+        <field name="arch" type="xml">
+            <tree string="Selectionorder">  
+                    <field name="x_area" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                    <field name="work_order_number" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                    <field name="station_number" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                    <field name="work_order_duration_date" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                    <field name="x_sectors" optional="hide"  groups="samir_electrical_project.group_samir_assignment_team"/>
+                    <field name="scouting_the_site" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                    <field name="presence_of_barriers" optional="hide" groups="samir_electrical_project.group_samir_assignment_team"/>
+                    <field name="excution_start_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="excution_end_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="implementation_status" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="repositioning" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="procedure203" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="final_planning_approval" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="approval_of_final_quantities" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="procedure155" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    <field name="procedure155_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team"/>
+                    <field name="final_closure" optional="hide" groups="samir_electrical_project.group_samir_closing_team" />
+                    <field name="entering_a_note_into_the_system" optional="hide" groups="samir_electrical_project.group_samir_closing_team" />
+                    <field name="issuing_a_certificate_of_completion" optional="hide" groups="samir_electrical_project.group_samir_closing_team"  />
+                    <field name="extract" optional="hide" groups="samir_electrical_project.group_samir_closing_team" />
+                    <field name="site_photos" optional="hide" groups="samir_electrical_project.group_samir_closing_team" />
+                    <field name="download_files" optional="hide" groups="samir_electrical_project.group_samir_closing_team" />
+                    <field name="notes" optional="hide" groups="samir_electrical_project.group_samir_closing_team"/>
+            </tree>
+        </field>
+    </record>
+     <record id="arcgis_selection_form" model="ir.ui.view">
+        <field name="name">arcgis.selection.form</field>
+        <field name="model">arcgis.selection</field>
+        <field name="arch" type="xml">
+            <form string="Selectionorder">  
+                <group>
+                    <group>
+                            <field name="x_area" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                            <field name="work_order_number" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                            <field name="station_number" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                            <field name="work_order_duration_date" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                            <field name="x_sectors" optional="hide"  groups="samir_electrical_project.group_samir_assignment_team"/>
+                            <field name="scouting_the_site" optional="hide" groups="samir_electrical_project.group_samir_assignment_team" />
+                            <field name="presence_of_barriers" optional="hide"  groups="samir_electrical_project.group_samir_assignment_team"/>
+                            <field name="excution_start_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="excution_end_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="implementation_status" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="repositioning" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                    </group>
+                    <group>
+                            <field name="procedure203" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="final_planning_approval" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="approval_of_final_quantities" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="procedure155" optional="hide" groups="samir_electrical_project.group_samir_excution_team" />
+                            <field name="procedure155_date" optional="hide" groups="samir_electrical_project.group_samir_excution_team"/>
+                            <field name="final_closure" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                            <field name="entering_a_note_into_the_system" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                            <field name="issuing_a_certificate_of_completion" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                            <field name="extract" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                            <field name="site_photos" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                            <field name="download_files" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                            <field name="notes" optional="hide"  groups="samir_electrical_project.group_samir_closing_team" />
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record> -->
+
+
+
+    <record id="arcgis_contractor_action_overview" model="ir.actions.act_window">
+        <field name="name">Contractors</field>
+        <field name="res_model">arcgis.contractor</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="arcgis_work_type_action_overview" model="ir.actions.act_window">
+        <field name="name">Work Types</field>
+        <field name="res_model">arcgis.work.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="arcgis_consultant_action_overview" model="ir.actions.act_window">
+        <field name="name">Consultant</field>
+        <field name="res_model">arcgis.consultant</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    
+     <record id="arcgis_job_description_action_overview" model="ir.actions.act_window">
+        <field name="name">Job Description</field>
+        <field name="res_model">arcgis.job.description</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <!-- <record id="arcgis_selection_action_overview" model="ir.actions.act_window">
+        <field name="name">Selection</field>
+        <field name="res_model">arcgis.selection</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record> -->
+    <record id="arcgis_region_action_overview" model="ir.actions.act_window">
+        <field name="name">Region</field>
+        <field name="res_model">arcgis.region</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="arcgis_section_action_overview" model="ir.actions.act_window">
+        <field name="name">Section</field>
+        <field name="res_model">arcgis.section</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="arcgis_attachments_overview" model="ir.actions.act_window">
+        <field name="name">Attachments</field>
+        <field name="res_model">arcgis.attachments</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <record id="arcgis_attachment_names_overview" model="ir.actions.act_window">
+        <field name="name">Attachment Names</field>
+        <field name="res_model">arcgis.attachment.names</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    <record id="arcgis_work_duration_type_overview" model="ir.actions.act_window">
+        <field name="name">Work Duration Type</field>
+        <field name="res_model">arcgis.work.duration.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    <record id="arcgis_work_order_type_overview" model="ir.actions.act_window">
+        <field name="name">نوع امر العمل</field>
+        <field name="res_model">arcgis.work.order.type</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    <record id="arcgis_x_sector_overview" model="ir.actions.act_window">
+        <field name="name">القطاع</field>
+        <field name="res_model">arcgis.x.sector</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    <record id="arcgis_x_area_overview" model="ir.actions.act_window">
+        <field name="name">المنطقة</field>
+        <field name="res_model">arcgis.x.area</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    <record id="arcgis_classification_of_work_model_overview" model="ir.actions.act_window">
+        <field name="name">تصنيف العمل</field>
+        <field name="res_model">arcgis.classification.of.work.model</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+    <record id="arcgis_x_website_overview" model="ir.actions.act_window">
+        <field name="name">الموقع</field>
+        <field name="res_model">arcgis.x.website</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No records to display
+            </p><p>
+                Your records will be displayed here.
+            </p>
+        </field>
+    </record>
+
+    <!-- <record id="break_time_view_search" model="ir.ui.view">
+        <field name="name">attendance.breaktime.search</field>
+        <field name="model">attendance.breaktime</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Employee" name="employee_id" context="{'group_by': 'employee_id'}"/>
+                    <filter string="Date" name="break_start" context="{'group_by': 'break_start'}"/>
+                </group>
+            </search>
+        </field>
+    </record> -->
+    <!-- <record id="pos_analytic_inherit_view" model="ir.ui.view">
+            <field name="name">pos analytic</field>
+            <field name="model">account.analytic.distribution.model</field>
+            <field name="inherit_id" ref="analytic.account_analytic_distribution_model_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='sales_team']" position="after">
+                                <field name="pos_shop" />
+                </xpath>
+            </field>
+    </record> -->
+    <!-- <record id="pos_order_line_analytic_inherit_view" model="ir.ui.view">
+            <field name="name">pos order line analytic</field>
+            <field name="model">account.analytic.distribution.model</field>
+            <field name="inherit_id" ref="analytic.account_analytic_distribution_model_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='lines']" position="inside">
+                                <field name="pos_shop" />
+                </xpath>
+            </field>
+    </record> -->
+
+
+
+
+    <!-- <record id="view_project_task_tree_total_inherit" model="ir.ui.view">
+            <field name="name">project.task.tree.date.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='date_deadline']" position="after">
+                    <group>    
+                            <field name="job_type"/>
+                        <br />
+                        <br />
+                            <field name="job_description"/>
+                        <br />
+                        <br />
+                            <field name="y_start_date"/>
+                        <br />
+                        <br />
+                            <field name="the_elapsed_period"/>
+                        <br />
+                        <br />
+                            <field name="x_consultant_code" string="كود الاستشاري"/>
+                        <br />
+                        <br />
+                            <field name="x_section" string="القسم"/>
+                        <br />
+                        <br />
+                            <field name="the_remaining_period"/>
+                        <br />
+                        <br />
+                    </group>
+    
+                </xpath>
+            </field>
+    </record> -->
+
+
+    <record id="view_project_task_tree_user_ids_inherit" model="ir.ui.view">
+            <field name="name">project.task.tree.user.ids.inherit</field>
+            <field name="model">project.task</field>
+            <field name="inherit_id" ref="project.view_task_form2"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='user_ids']" position="replace">
+                
+                </xpath>
+                <xpath expr="//field[@name='tag_ids']" position="replace">
+                
+                </xpath>
+                <xpath expr="//field[@name='partner_id']" position="after">
+               
+                    <field name="user_ids" string="المهندس المشرف" widget="many2many_tags"/>
+                 
+                </xpath>
+                <!-- <xpath expr="//group[1]" position="after">
+                    <group>
+                        <field name="x_job_description" string="وصف العمل"/>   
+                    </group>                 
+                </xpath> -->
+
+                <xpath expr="//field[@name='name']" position="replace">
+
+                </xpath>
+                <xpath expr="//field[@name='project_id']" position="replace">
+                        <group>
+                
+                            <field name="x_area"/>
+
+                            <field name="x_work_order_type"/>
+                
+                            <field name="name" string="رقم أمر العمل"/>
+
+                            <field name="project_id"/>
+
+                            <field name="x_work_type"/>
+                                                            
+                            <field name="x_consultant_code" string="كود الاستشاري"/>
+                    
+                            <field name="x_classification_of_work"/>
+                            
+                            <field name="x_job_description" string="وصف العمل"/>   
+
+                        </group>     
+                </xpath>
+                
+                <xpath expr="//group" position="after">
+
+                    <group string="دخول محططات 110" groups="samir_electrical_project.group_samir_enter_stations_team"  invisible= "x_work_order_type != 22 ">
+                            <field name="x_station_name"/>  
+
+                            <field name="x_cell_number"/> 
+                                                                                
+                            <field name="x_section_number"/>
+
+                            <field name="x_RMU"/>  
+
+                            <field name="x_issuing_security"/>  
+
+                            <field name="x_scout_work"/> 
+
+                            <field name="x_contractor_drilling_permits"/> 
+
+                            <field name="x_request_to_specify"/>  
+
+                            <field name="x_request_a_calibration"/> 
+
+                            <field name="x_cables_entering_station"/> 
+
+                            <field name="x_painting_and_arranging_cables"/>   
+
+                            <field name="x_submit_as_built_program"/>          
+
+                            <field name="x_test_cables"/>       
+
+                            <field name="x_transport_delivery"/>       
+
+                            <field name="x_Request_an_isolation_program"/>      
+                        </group>
+
+                        <group string="استبدالات المنطقة المركزيه" groups="samir_electrical_project.group_samir_central_area_replacements_team" invisible= "x_work_order_type != 20 " >
+                            <field name="x_station_location"/>  
+
+                            <field name="x_nature_of_the_site"/>
+                                                                                
+                            <field name="x_number_of_low_voltage_cables"/>
+
+                            <field name="x_painting_category"/>  
+
+                            <field name="x_transformer_capacity"/>  
+
+                            <field name="x_exchange_status"/> 
+
+                            <field name="x_number_of_loop_unit"/> 
+
+                            <field name="x_contractors_notes"/>  
+
+                            <field name="x_consultant_notes"/> 
+
+                            <field name="x_programming_date"/>     
+                        </group>
+                        <group string="الجهات اخارجية" groups="samir_electrical_project.group_samir_third_parties_team"  invisible= "x_work_order_type != 24 ">
+                            <field name="x_site"/>  
+
+                            <field name="x_attribution_date"/>
+                                                                                
+                            <field name="x_type"/>
+
+                            <field name="x_overlapping_front"/>  
+
+                            <field name="x_interference_type"/>  
+
+                            <field name="x_action_taken"/> 
+
+                            <field name="x_follow_up"/>  
+                        </group>
+                        <group string="اوامر محولة" groups="samir_electrical_project.group_samir_transferred_orders_team" invisible= "x_work_order_type != 26 " >
+                            <field name="x_former_contractor"/>  
+
+                            <field name="x_current_contractor"/>
+                                                                                
+                            <field name="x_receiving_materials_in_report"/>
+
+                            <field name="x_transfer_report"/>  
+
+                            <field name="x_send_email_electricity"/>  
+
+                            <field name="x_transfer_to_system"/> 
+                        </group>
+                        <group string="صيانة الضوئيات" groups="samir_electrical_project.group_samir_photonics_maintenance_team" invisible= "x_work_order_type != 23 " >
+                            <field name="x_task_number"/>  
+
+                            <field name="x_subscription_number"/>
+                                                                                
+                            <field name="x_almashear"/>
+
+                            <field name="x_implementation_date"/>  
+
+                            <field name="x_working_condition"/>  
+
+                            <field name="x_restore_the_situation"/> 
+
+                            <field name="x_quantities"/> 
+
+                            <field name="x_end_notes"/>  
+
+                            <field name="x_receiving"/> 
+
+                            <field name="x_documents"/>
+                                 
+                            <field name="x_extracts"/> 
+
+                            <field name="x_contractors_extract_number"/>  
+
+                            <field name="x_submit_documents_to_electricity"/>  
+
+                            <field name="x_po_version"/>  
+
+                            <field name="x_certificate_billing"/>  
+                               
+                            <field name="x_implementation_photos"/>  
+
+                            <field name="x_execution_quantities"/>   
+
+                            <field name="x_abstract_number"/>   
+
+                            <field name="x_documents"/>   
+
+                            <field name="x_documents"/>     
+                        </group>
+                        <group string="البرامج" groups="samir_electrical_project.group_samir_programes_team"  invisible= "x_work_order_type != 25 ">
+                            <field name="x_program_date"/>  
+
+                            <!-- <field name="x_sector"/> -->
+                                                                                
+                            <field name="x_program_time"/>
+
+                            <field name="x_request_for_isolation"/>  
+
+                            <field name="x_isolation_time"/>  
+
+                            <field name="x_run_request"/> 
+
+                            <field name="x_duration_of_implementation"/>  
+
+                            <field name="x_operating_time"/>  
+
+                            <field name="x_send_email"/> 
+
+                            <field name="x_admin"/> 
+                        </group>
+                        <group string="مشاريع الربط" groups="samir_electrical_project.group_samir_connectivity_projects_team" invisible= "x_work_order_type != 21 " >
+                            
+                            <group>
+
+                                <field name="x_attribution_date"/>
+
+                                <field name="y_end_date"/>
+                                                                                    
+                                <field name="x_project_stages"/>
+
+                                <field name="x_description_of_stage"/>  
+
+                                <field name="scouting_the_site"/> 
+
+                                <field name="x_permits"/>  
+
+                                <field name="x_actual_start_date"/>  
+
+                                <field name="x_actual_end_date"/>
+                            </group>
+
+
+                            <group string="المواد">
+
+                                <field name="x_quality"/> 
+                                <field name="x_exchange"/> 
+
+                            </group>
+
+                            <group string="التنفيذ (50%)">
+
+                                <field name="x_scheme"/> 
+                                <field name="x_port"/> 
+                                <field name="x_completion_rate" widget="percentage"/> 
+                                
+                            </group>
+
+                            <group string="التمديد (45%)">
+
+                                <field name="x_scheme"/> 
+                                <field name="x_port"/> 
+                                <field name="x_completion_rate" widget="percentage"/> 
+                                
+                            </group>
+
+                            <group string="اعادة وضع و تشغيل (5%)">
+
+                                <field name="x_done" widget="percentage"/> 
+                                <field name="x_not_done" widget="percentage"/> 
+                                
+                            </group>
+                            <group>
+
+                                <field name="x_stage_completion_rate" widget="percentage"/>
+
+                                <field name="x_overall_completion_rate" widget="percentage"/> 
+
+                                <field name="notes"/>  
+
+                            </group>
+
+                        </group>
+                        <!-- <group string="توصيلات المشاعر" groups="samir_electrical_project.group_samir_connections_feelings_team"  invisible= "x_work_order_type != 4 ">
+                                                                                
+                            <field name="station_number"/>  
+
+                            <field name="job_type"/>  
+
+                            <field name="job_description"/> 
+
+                            <field name="x_attribution_date"/>  
+
+                            <field name="x_sectors"/> 
+
+                            <field name="x_admin"/>  
+                                                                                
+                            <field name="excution_start_date"/>
+
+                            <field name="excution_end_date"/>  
+
+                            <field name="x_duration_of_implementation"/>  
+
+                            <field name="implementation_status"/> 
+
+                            <field name="repositioning"/>  
+
+                            <field name="rent_rate"/>  
+
+                            <field name="procedure203"/> 
+
+                            <field name="final_planning_approval"/> 
+
+                            <field name="approval_of_final_quantities"/> 
+
+                            <field name="procedure155"/>  
+
+                            <field name="procedure155_date"/>
+                                                                                
+                            <field name="x_procedure155_date"/>
+
+                            <field name="notes"/> 
+                        </group> -->
+
+                        <!-- <group string="التوصيلات" groups="samir_electrical_project.group_samir_connections_team"  invisible= "x_work_order_type != 5 ">
+
+                            <field name="scouting_the_site"/>  
+
+                            <field name="presence_of_barriers"/>
+                                                                                
+                            <field name="excution_start_date"/>
+
+                            <field name="excution_end_date"/>  
+
+                            <field name="x_duration_of_implementation"/>  
+
+                            <field name="implementation_status"/> 
+
+                            <field name="repositioning"/>  
+
+                            <field name="rent_rate"/>  
+
+                            <field name="procedure203"/> 
+
+                            <field name="final_planning_approval"/> 
+
+                            <field name="approval_of_final_quantities"/> 
+
+                            <field name="procedure155"/>  
+
+                            <field name="procedure155_date"/>
+                                                                                
+                            <field name="x_procedure155_date"/>
+
+                            <field name="x_warning_to_make_case_report"/> 
+
+                            <field name="notes"/> 
+                        </group> -->
+
+                        <!-- <group string="المشاريع" groups="samir_electrical_project.group_samir_x_projects_team"  invisible= "x_work_order_type != 2 ">
+
+                            <field name="x_attribution_order_history"/>  
+
+                            <field name="the_elapsed_period"/> 
+
+                            <field name="x_sectors"/> 
+
+                            <field name="x_admin"/>
+
+                            <field name="scouting_the_site"/>  
+
+                            <field name="presence_of_barriers"/>
+
+                            <field name="x_disbursement_of_materials"/>
+                                                                                
+                            <field name="x_program"/>  
+
+                            <field name="excution_start_date"/>  
+
+                            <field name="excution_end_date"/> 
+
+                            <field name="x_duration_of_implementation"/>  
+
+                            <field name="implementation_status"/> 
+
+                            <field name="repositioning"/>  
+
+                            <field name="rent_rate"/>  
+
+                            <field name="x_duration_of_delay"/> 
+
+                            <field name="notes"/> 
+                        </group> -->
+                        
+                        <group string="مشاريع المشارع" groups="samir_electrical_project.group_samir_project_projects_team"  invisible= "x_work_order_type != 8 ">
+
+                            <!-- <field name="station_number"/>   -->
+
+                            <field name="x_attribution_order_history"/>  
+
+                            <field name="scouting_the_site"/>  
+
+                            <field name="presence_of_barriers"/>
+                                                                                
+                            <field name="x_program"/>  
+
+                            <field name="excution_start_date"/>  
+
+                            <field name="excution_end_date"/> 
+
+                            <field name="x_duration_of_implementation"/>  
+
+                            <field name="implementation_status"/> 
+
+                            <field name="repositioning"/>  
+
+                            <field name="rent_rate"/>  
+
+                            <field name="x_duration_of_delay"/> 
+
+                            <field name="notes"/> 
+                        </group>
+                        <group string="الصيانة في المشاعر" groups="samir_electrical_project.group_samir_maintenance_of_feelings_team"  invisible= "x_work_order_type != 12 ">
+
+                            <field name="x_task_number"/>  
+
+                            <field name="x_sap_number"/>  
+
+                            <field name="work_order_number"/>  
+
+                            <field name="x_po_number"/> 
+
+                            <field name="x_source_with_feeder"/>  
+                                                            
+                            <field name="x_area_of_square"/>
+
+                            <field name="x_cable_length"/>
+
+                            <field name="x_coordinates"/>
+
+                            <field name="x_subscription_number"/>  
+
+                            <field name="x_site"/>  
+
+                            <field name="x_attribution_date"/>  
+
+                            <field name="job_type"/>  
+                            
+                            <field name="x_scheduling_date"/>  
+
+                            <field name="excution_start_date"/>  
+
+                            <field name="excution_end_date"/> 
+
+                            <field name="x_duration_of_implementation"/> 
+
+                            <field name="implementation_status"/> 
+                            
+                            <field name="rent_rate"/>  
+
+                            <field name="repositioning"/>  
+
+                            <field name="x_approval_of_final_quantities"/> 
+
+                            <field name="notes"/>
+
+                            <field name="x_submit_documents_to_electricity"/>
+
+                            <field name="x_po_version"/> 
+
+                            <field name="x_certificate_billing"/> 
+
+                            <field name="x_contractors_extract_number"/> 
+
+                            <field name="x_consultant_extract_number"/> 
+                        </group>
+                        <group string="تأهيل غرف العدادات بمنى" groups="samir_electrical_project.group_samir_qualification_rooms_team"  invisible= "x_work_order_type != 13 ">
+
+                            <!-- <group>
+                                <field name="station_number"/>
+
+                                <field name="x_contractor"/>
+                                                                                    
+                                <field name="x_removing_and_transporting"/>
+
+                                <field name="x_supply_and_spread"/>
+                            </group> -->
+
+                            <group string="مباني جدران">
+
+                                <field name="x_requires"/> 
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="لياسة">
+
+                                <field name="x_requires"/> 
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="دهان">
+
+                                <field name="x_requires"/> 
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+                            <group>
+                                <field name="notes"/>
+
+                                <field name="x_end_notes"/>
+
+                                <field name="x_receiving"/>
+
+                                <field name="x_documents"/> 
+
+                                <field name="x_extracts"/> 
+
+                                <field name="x_contractors_extract_number"/> 
+
+                                <field name="x_contractor_value"/>
+
+                                <field name="x_approximate_value"/> 
+                            </group>
+
+                        </group>
+                        <group string="غرف محولات عرفات" groups="samir_electrical_project.group_samir_arafat_transformer_rooms_team"  invisible= "x_work_order_type != 16 ">
+
+                            <!-- <group>
+
+                                <field name="station_number"/>
+
+                                <field name="x_contractor"/>
+                               
+                            </group> -->
+
+                            <group string="مقاسات الغرفة (م)">
+
+                                <field name="x_left_wall"/> 
+                                <field name="x_back_wall"/> 
+                                <field name="x_right_wall"/> 
+                                <field name="x_hieght"/> 
+
+                            </group>
+
+
+                            <group>
+
+                                <field name="x_removing_and_transporting"/> 
+                                <field name="x_supply_and_spread_new_sand"/> 
+                                <field name="x_supply_and_spread"/> 
+
+                            </group>
+
+
+                            <group string="مباني جدران">
+
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="لياسة">
+
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="دهان">
+
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="ترقيم محطة/وحدة حلقية">
+
+                                <field name="x_room"/> 
+                                <field name="x_RMU"/> 
+                                <field name="x_TRA"/> 
+
+                            </group>
+
+
+                            <group>
+                                <field name="notes"/>
+
+                                <field name="x_end_notes"/>
+
+                                <field name="x_receiving"/>
+
+                                <field name="x_documents"/> 
+
+                                <field name="x_extracts"/> 
+
+                                <field name="x_contractors_extract_number"/> 
+
+                                <field name="x_contractor_value"/>
+
+                                <field name="x_approximate_value"/> 
+                            </group>
+
+                        </group>
+                        <group string="اعاده تأهيل غرف المحطات" groups="samir_electrical_project.group_samir_rehabilitation_of_station_rooms_team"  invisible= "x_work_order_type != 14 ">
+
+                            <!-- <group>
+
+                                <field name="station_number"/>
+                                <field name="x_contractor"/>
+                                <field name="x_removing_and_transporting"/> 
+                                <field name="x_supply_and_spread"/> 
+
+                            </group> -->
+
+
+                            <group string="توريد بحص">
+
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="تنظيف الغرفة">
+
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+                            <group string="دهان">
+
+                                <field name="x_quantities"/> 
+
+                            </group>
+
+
+
+                            <group>
+
+                                <field name="x_removing_and_transporting"/> 
+                                <field name="x_supply_and_spread_new_sand"/> 
+                                <field name="x_supply_and_spread"/> 
+
+                            </group>
+
+
+                            <group string="مباني جدران">
+
+                                <field name="x_quantities"/> 
+                                <field name="x_requires"/> 
+
+                            </group>
+
+
+                            <group string="لياسة">
+
+                                <field name="x_quantities"/> 
+                                <field name="x_requires"/> 
+
+                            </group>
+
+
+                            <group string="دهان">
+
+                                <field name="x_quantities"/> 
+                                <field name="x_requires"/> 
+
+                            </group>
+
+
+                            <group>
+                                <field name="notes"/>
+
+                                <field name="x_end_notes"/>
+
+                                <field name="x_receiving"/>
+
+                                <field name="x_documents"/> 
+
+                                <field name="x_extracts"/> 
+
+                                <field name="x_contractors_extract_number"/> 
+
+                                <field name="x_contractor_value"/>
+
+                                <field name="x_approximate_value"/> 
+                            </group>
+
+                        </group>
+                        <group string="محولات الزايدي" groups="samir_electrical_project.group_samir_zaidi_transformers_team"  invisible= "x_work_order_type != 27 ">
+
+                            <!-- <group>
+
+                                <field name="station_number"/>
+
+                                <field name="x_contractor"/>
+                               
+                            </group> -->
+
+                            <group string="مقاسات الغرفة (م)">
+
+                                <field name="x_left_wall"/> 
+                                <field name="x_back_wall"/> 
+                                <field name="x_right_wall"/> 
+                                <field name="x_hieght"/> 
+
+                            </group>
+
+
+                            <group>
+
+                                <field name="x_manual_drilling"/> 
+                                <field name="x_locking_slots"/> 
+                                <field name="x_equipment_paint"/> 
+                                <field name="x_painting_station"/> 
+                                <field name="x_removing_and_transporting"/> 
+                                <field name="x_supply_and_spread"/> 
+
+                            </group>
+
+
+                            <group string="مباني جدران">
+
+                                <field name="x_quantities"/> 
+                                <field name="x_requires"/> 
+
+                            </group>
+
+
+                            <group string="لياسة">
+
+                                <field name="x_quantities"/> 
+                                <field name="x_requires"/> 
+
+                            </group>
+
+
+                            <group string="دهان">
+
+                                <field name="x_quantities"/> 
+                                <field name="x_requires"/> 
+
+                            </group>
+
+
+                            <group string="ترقيم محطة/وحدة حلقية">
+
+                                <field name="x_room"/> 
+                                <field name="x_RMU"/> 
+                                <field name="x_TRA"/> 
+
+                            </group>
+
+
+                            <group>
+
+                                <field name="x_contractor_value"/>
+                                <field name="x_approximate_value"/> 
+
+                            </group>
+
+                        </group>
+
+                </xpath> 
+                <xpath expr="//label[@for='date_deadline']" position="replace">
+                    
+                        <field name="station_number"  widget="char"/>
+
+                        <field name="x_website"/>
+                            
+                        <field name="x_sectors" string="القطاع"/>                 
+                                        
+                        <field name="x_attribution_date"/>
+
+                        <field name="work_order_duration_date"/>
+
+                        <field name="the_elapsed_period"/>
+                                                
+                         
+                </xpath>
+                <xpath expr="//field[@name='allocated_hours']" position="attributes">
+                    <attribute name="invisible">1</attribute>          
+                </xpath>
+                <xpath expr="//field[@name='milestone_id']" position="attributes"> 
+                    <attribute name="invisible">1</attribute>          
+                </xpath>
+                
+                    
+                
+                <xpath expr="//field[@name='name']" position="attributes">
+                    <attribute name="placeholder">رقم امر العمل </attribute>
+                </xpath>
+            </field>
+    </record>
+
+
+
+
+
+
+     <record id="view_task_tree_inherited" model="ir.ui.view">
+        <field name="name">project.task.list.inherited</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <tree>
+                <!-- <field name="work_order_number" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="x_site" optional="show"/> -->
+                <field name="station_number" optional="show"/>
+                <field name="job_type" optional="show"/>
+                <field name="x_consultant_code" optional="show"/>
+                <field name="job_description" optional="show"/>
+                <field name="x_attribution_date" optional="show"/>
+                <!-- <field name="work_order_duration_date" optional="show"/>
+                <field name="the_elapsed_period" optional="show"/>
+                <field name="x_sectors" optional="show"/>
+                <field name="x_admin" optional="show"/>
+                <field name="scouting_the_site" optional="show"/>
+                <field name="presence_of_barriers" optional="show"/>
+                <field name="declaration" optional="show"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_task_tree_inherited_2" model="ir.ui.view">
+        <field name="name">project.task.list.inherited</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_tree2"/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="declaration" optional="show"/>
+                <field name="x_disbursement_of_materials" optional="show"/>
+                <field name="presence_of_barriers" optional="show"/>
+                <field name="scouting_the_site" optional="show"/>
+                <field name="x_admin" optional="show"/>
+                <field name="x_sectors" optional="show"/>
+                <field name="the_elapsed_period" optional="show"/>
+                <field name="work_order_duration_date" optional="show"/>
+                <field name="x_job_description" optional="show"/>
+                <field name="x_section" optional="show"/>
+                <field name="x_work_type" optional="show"/>
+                <field name="station_number" optional="show"/>
+                <field name="x_site" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="work_order_number" optional="show"/>
+            </tree>
+            <xpath expr="//field[@name='name']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+             <xpath expr="//field[@name='project_id']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+             <xpath expr="//field[@name='user_ids']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+             <xpath expr="//field[@name='effective_hours']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+            <xpath expr="//field[@name='progress']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+            <xpath expr="//field[@name='activity_ids']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+            <xpath expr="//field[@name='tag_ids']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+            <xpath expr="//field[@name='stage_id']" position="attributes"> 
+                    <attribute name="optional">hide</attribute>          
+            </xpath>
+        </field>
+    </record>
+
+
+    <!-- <record id="view_task_tree_inherited_3" model="ir.ui.view">
+        <field name="name">project.task.list.inherited</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref=""/>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="work_order_number" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="x_site" optional="show"/>
+                <field name="station_number" optional="show"/>
+                <field name="job_type" optional="show"/>
+                <field name="x_consultant_code" optional="show"/>
+                <field name="x_job_description" optional="show"/>
+                <field name="x_attribution_date" optional="show"/>
+                <field name="work_order_duration_date" optional="show"/>
+                <field name="x_sectors" optional="show"/>
+                <field name="x_admin" optional="show"/>
+                <field name="scouting_the_site" optional="show"/>
+                <field name="presence_of_barriers" optional="show"/>
+                <field name="declaration" optional="show"/>
+                <field name="excution_start_date" optional="show"/>
+                <field name="excution_end_date" optional="show"/>
+                <field name="implementation_status" optional="show"/>
+                <field name="repositioning" optional="show"/>
+                <field name="rent_rate" optional="show"/>
+                <field name="procedure203" optional="show"/>
+                <field name="final_planning_approval" optional="show"/>
+                <field name="approval_of_final_quantities" optional="show"/>
+                <field name="procedure155" optional="show"/>
+                <field name="procedure155_date" optional="show"/>
+                <field name="x_procedure155_date" optional="show"/>
+                <field name="notes" optional="show"/>
+                <field name="final_closure" optional="show"/>
+                <field name="x_entering_a_note_into_the_system" optional="show"/>
+                <field name="issuing_a_certificate_of_completion" optional="show"/>
+                <field name="extract" optional="show"/>
+                <field name="x_permits" optional="show"/>
+                <field name="x_implementation_photos" optional="show"/>
+                <field name="x_execution_quantities" optional="show"/>
+            </tree>
+            
+        </field>
+    </record> -->
+    <record id="seq_work_order" model="ir.sequence">
+            <field name="name">Work Order Sequence</field>
+            <field name="code">work.order</field>
+            <field name="padding">5</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+
+</odoo>

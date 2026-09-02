@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <record id="view_attendance_tree_inherit_quick_return" model="ir.ui.view">
+    <field name="name">hr.attendance.tree.inherit.working.hours</field>
+    <field name="model">hr.attendance</field>
+    <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+    <field name="arch" type="xml">
+        <xpath expr="//field[@name='check_out']" position="after">
+            <field name="required_hours_today"
+                   string="Required Hours"
+                   readonly="1"
+                   widget="float_time"
+                   optional="hide"/>
+            <field name="worked_hours_today"
+                   string="Actual Hours"
+                   readonly="1"
+                   widget="float_time"
+                   optional="hide"/>
+            <field name="is_less_than_required_hours"
+                   string="Less Than Required"
+                   widget="boolean_toggle"
+                   optional="show"/>
+        </xpath>
+        <xpath expr="//tree" position="attributes">
+            <attribute name="decoration-danger">is_less_than_required_hours == True</attribute>
+            <attribute name="decoration-success">worked_hours_today &gt;= required_hours_today</attribute>
+        </xpath>
+    </field>
+</record>
+
+        <!--        <record id="view_attendance_form_inherit_quick_return" model="ir.ui.view">-->
+        <!--            <field name="name">hr.attendance.form.inherit.quick.return</field>-->
+        <!--            <field name="model">hr.attendance</field>-->
+        <!--            <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>-->
+        <!--            <field name="arch" type="xml">-->
+        <!--                <xpath expr="//sheet" position="inside">-->
+        <!--                    <field name="required_hours_today"-->
+        <!--                           string="ساعات العمل المطلوبة"-->
+        <!--                           readonly="1"-->
+        <!--                           widget="float_time"-->
+        <!--                           optional="hide"/>-->
+
+        <!--                    <field name="worked_hours_today"-->
+        <!--                           string="ساعات العمل الفعلية"-->
+        <!--                           readonly="1"-->
+        <!--                           widget="float_time"-->
+        <!--                           optional="hide"/>-->
+
+        <!--                    <field name="is_less_than_required_hours"-->
+        <!--                           string="ساعات أقل"-->
+        <!--                           widget="boolean_toggle"-->
+        <!--                           decoration-danger="is_less_than_required_hours == True"-->
+        <!--                           optional="show"/>-->
+
+
+        <!--                </xpath>-->
+        <!--            </field>-->
+        <!--        </record>-->
+
+    </data>
+</odoo>

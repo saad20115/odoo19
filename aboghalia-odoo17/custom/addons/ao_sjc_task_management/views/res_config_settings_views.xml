@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_sjc" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.sjc</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app string="SJC+" name="ao_sjc_task_management"
+                     groups="ao_sjc_task_management.group_sjc_management">
+                    <block title="Dashboard overdue rules">
+                        <setting string="Grace days after due date"
+                                 help="A task is overdue when today is after the due date plus these days, and it is not completed.">
+                            <field name="sjc_grace_days"/>
+                        </setting>
+                        <setting string="Administrative communications due date"
+                                 help="Which date on الاتصالات الإدارية is used with grace days to mark Late.">
+                            <field name="sjc_admin_due_field"/>
+                        </setting>
+                        <setting string="Expenses due date"
+                                 help="Which date on Expenses is used with grace days to mark Late. تمت الموافقه = Under processing.">
+                            <field name="sjc_expense_due_field"/>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_sjc_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ao_sjc_task_management'}</field>
+    </record>
+</odoo>
