@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_employee_request_tree" model="ir.ui.view">
+        <field name="name">employee.request.tree</field>
+        <field name="model">employee.request</field>
+        <field name="arch" type="xml">
+            <tree string="Transactions Requests">
+                <field name="serial_number" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="partner_id" optional="show"/>
+                <field name="department" optional="show"/>
+                <field name="request_topic" optional="show"/>
+                <field name="incoming_number" optional="show"/>
+                <field name="created_by" optional="show"/>
+                <field name="employee_ids" widget="many2many_tags" optional="show"/>
+                <field name="transaction_type" optional="show"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="status" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_employee_request_form" model="ir.ui.view">
+        <field name="name">employee.request.form</field>
+        <field name="model">employee.request</field>
+        <field name="arch" type="xml">
+            <form string="Transactions Request" archivable="true">
+                <!-- <field name="sequence" readonly="1" nolabel="1"/> -->
+                <sheet>
+
+                       <div class="oe_button_box" name="button_box">
+
+                          <button name="action_open_whatsapp"
+                          type="object"
+                          string="whats app"
+                          icon="fa-whatsapp"
+                          class="btn btn-success"
+                         invisible="partner_phone==False" />
+                       </div>
+                      <header>
+
+
+                    <button name="action_start" type="object" string="بدء" class="oe_highlight btn-primary" invisible="status != 'new'"/>
+                    <button name="action_in_progress" type="object" string="قيد الاجراء" class="btn-secondary" invisible="status != 'new'"/>
+                    <button name="action_overdue" type="object" string="متأخر" class="btn-danger" invisible="status != 'in_progress'"/>
+                    <button name="action_done" type="object" string="منتهى" class="btn-success" invisible="status not in ('in_progress', 'overdue')"/>
+                    <field name="status" widget="statusbar" statusbar_visible="new,in_progress,overdue,done"/>
+                </header>
+                    <group cols="2">
+                        <group>
+                            <field name="serial_number" />
+                            <field name="company_id"  edit="false" options="{'no_create': True, 'no_open': True}" widget="selection"/>
+                            <field name="partner_id"  edit="false" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="partner_phone" />
+                            <!-- <field name="customer_id"/>  -->
+                            <field name="department"/>
+                            <field name="incoming_number"/>
+                            <field name="created_by"/>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                            <field name="transaction_type"/>
+                        </group>
+                        <group>
+                            <field name="qr_code" widget="image" class="oe_avatar" filename="qr_code_filename"/>
+                            <!-- <button name="action_share_request"
+                                type="object"
+                                icon="fa-share-alt"
+                                string="Share"
+                                class="oe_highlight"/> -->
+                            
+                            <field name="request_topic" />
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="active" invisible="1"/>
+
+
+
+
+                        </group>
+                    </group>
+                    <group>
+                            <field name="description" widget="html"/>
+                    </group>
+
+
+
+
+
+
+                    <!-- <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook> -->
+
+
+
+                </sheet>
+                 <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+       <!-- Search View -->
+    <record id="view_employee_request_search" model="ir.ui.view">
+        <field name="name">employee.request.search</field>
+        <field name="model">employee.request</field>
+        <field name="arch" type="xml">
+            <search string="Employee Requests">
+                <field name="serial_number"/>
+                <field name="partner_id"/>
+                <field name="transaction_type"/>
+                <field name="status"/>
+                <field name="request_topic" />
+                <field name="start_date"/>
+                <field name="end_date"/>
+                <field name="employee_ids"/>
+                <field name="department"/>
+                <field name="company_id"/>
+                <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+
+                <filter name="filter_new" string="جديد" domain="[('status','=','new')]"/>
+                <filter name="filter_done" string="منتهى" domain="[('status','=','done')]"/>
+                <field name="tag_ids"/>
+
+                <group expand="1" string="Group By">
+                    <filter name="group_by_status" string="الحالة" context="{'group_by':'status'}"/>
+                    <filter name="group_by_tags" string="Tags" context="{'group_by':'tag_ids'}"/>
+                    <filter name="group_by_employee" string="الموظف" context="{'group_by':'employee_ids'}"/>
+                    <filter name="group_by_department" string="القسم" context="{'group_by':'department'}"/>
+                    <filter name="archived" string="مؤرشف" domain="[('active','=',False)]"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_employee_request_analysis_pivot_main_clean" model="ir.ui.view">
+        <field name="name">employee.request.analysis.pivot.main.clean</field>
+        <field name="model">employee.request.analysis</field>
+        <field name="arch" type="xml">
+            <pivot string="التحليل الرئيسي">
+                <field name="status" type="row"/>
+                <field name="transaction_type_name" type="row"/>
+                <field name="company_name" type="col"/>
+                <field name="duration_days" type="measure" string="متوسط المدة"/>
+                <field name="days_overdue" type="measure" string="متوسط التأخير"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_employee_request_pivot_main" model="ir.ui.view">
+        <field name="name">employee.request.pivot.main</field>
+        <field name="model">employee.request</field>
+        <field name="arch" type="xml">
+            <pivot string="تحليل المعاملات">
+                <field name="status" type="row"/>
+                <field name="transaction_type" type="row"/>
+                <field name="company_id" type="col"/>
+            </pivot>
+        </field>
+    </record>
+    <!--    Graph View-->
+
+    <record id="view_employee_request_graph" model="ir.ui.view">
+    <field name="name">employee.request.graph</field>
+    <field name="model">employee.request</field>
+    <field name="arch" type="xml">
+        <graph string="تحليل بياني">
+            <field name="transaction_type" type="row"/>
+            <field name="status" type="col"/>
+            <field name="id" type="measure"/>
+        </graph>
+    </field>
+</record>
+<!--    Calendar View-->
+<record id="view_employee_request_calendar" model="ir.ui.view">
+    <field name="name">employee.request.calendar</field>
+    <field name="model">employee.request</field>
+    <field name="arch" type="xml">
+        <calendar string="جدول المواعيد"
+                  date_start="start_date"
+                  date_stop="end_date"
+                  color="employee_ids">
+            <field name="serial_number"/>
+        </calendar>
+    </field>
+</record>
+
+    <!-- Action -->
+    <record id="action_employee_request" model="ir.actions.act_window">
+        <field name="name">Employee Requests</field>
+        <field name="res_model">employee.request</field>
+        <field name="view_mode">tree,form,pivot,graph,calendar</field>
+        <field name="search_view_id" ref="view_employee_request_search"/>
+        <field name="help" type="html">
+            <p>Create and track employee requests here.</p>
+        </field>
+    </record>
+
+     <!-- Menu Item -->
+   <menuitem id="menu_employee_request"
+             name="الاتصالات الإدارية"
+             action="action_employee_request"
+             sequence="1"/>
+
+
+
+     <record id="module_category_employee_request" model="ir.module.category">
+            <field name="name">Employee Request</field>
+            <field name="description">Manage employee requests and access rights</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <!-- User Group -->
+        <record id="group_employee_request_user" model="res.groups">
+            <field name="name">Employee Request User</field>
+            <field name="category_id" ref="module_category_employee_request"/>
+            <field name="comment">Can view and manage own employee requests or requests assigned to them</field>
+        </record>
+
+        <!-- Admin Group -->
+        <record id="group_employee_request_admin" model="res.groups">
+            <field name="name">Employee Request Administrator</field>
+            <field name="category_id" ref="module_category_employee_request"/>
+            <field name="implied_ids" eval="[(4, ref('group_employee_request_user'))]"/>
+            <field name="comment">Full access to all employee requests</field>
+        </record>
+
+         <record id="employee_request_rule_user" model="ir.rule">
+            <field name="name">Employee Request User Rule</field>
+            <field name="model_id" ref="model_employee_request"/>
+            <field name="domain_force">[
+                '|',
+                ('created_by', '=', user.id),
+                ('employee_ids.user_id', '=', user.id)
+            ]</field>
+            <field name="groups" eval="[(4, ref('group_employee_request_user'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="False"/>
+        </record>
+
+        <!-- Record Rule for Admins: Can see all requests -->
+        <record id="employee_request_rule_admin" model="ir.rule">
+            <field name="name">Employee Request Admin Rule</field>
+            <field name="model_id" ref="model_employee_request"/>
+            <field name="domain_force">[(1, '=', 1)]</field>
+            <field name="groups" eval="[(4, ref('group_employee_request_admin'))]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="True"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_unlink" eval="True"/>
+        </record>
+</odoo>

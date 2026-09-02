@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="group_hr_salary_manager" model="res.groups">
+        <field name="name">Salary Manager</field>
+        <field name="category_id" ref="hr_payroll_community.module_category_hr_payroll_community"/>
+        <field name="implied_ids" eval="[(4, ref('hr_contract.group_hr_contract_manager'))]"/>
+    </record>
+
+    <!-- Ensure Payroll Manager users keep all-employee Open Contract visibility -->
+    <record id="group_hr_payroll_community_manager" model="res.groups">
+        <field name="implied_ids" eval="[(4, ref('hr_payroll_community.group_hr_salary_manager'))]"/>
+    </record>
+</odoo>

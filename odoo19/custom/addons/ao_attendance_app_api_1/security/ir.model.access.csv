@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_image_model,image_model,model_image_model,,1,1,1,1
+access_uuid_model,uuid_model,model_uuid_model,,1,1,1,1
+access_leap_accept_employee_uuid,leap_accept_employee_uuid,model_leap_accept_employee_uuid,,1,1,1,1
+

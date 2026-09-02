@@ -1,0 +1,1069 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* sh_whatsapp_integration
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 15.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-06-02 10:58+0000\n"
+"PO-Revision-Date: 2022-06-02 10:58+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__purchase_display_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__display_in_message
+msgid " Display in Chatter Message?"
+msgstr "在聊天消息中顯示？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__purchase_order_information_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__order_information_in_message
+msgid " Order Information in message?"
+msgstr "在消息中訂購信息？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__purchase_product_detail_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__order_product_detail_in_message
+msgid " Order Product details in message?"
+msgstr "訂購消息中的產品詳細信息？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__po_send_pdf_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__send_pdf_in_message
+msgid " Send Report URL in message?"
+msgstr "在消息中發送報告URL？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__purchase_signature
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__signature
+msgid " Signature?"
+msgstr "簽名？"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/controllers/main.py:0
+#, python-format
+msgid "%s is not the reference of a report"
+msgstr "%s 不是報告的參考"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,body_html:sh_whatsapp_integration.mail_template_data_payment_receipt_custom
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"\t\t            <ul style=\"list-style-type: none;\">\n"
+"\t\t                Dear *<t t-out=\"object.partner_id.name or ''\"/>* ,%0A%0AHere is the Payment\n"
+"\t\t                *<t t-out=\"object.name or ''\"/>* from\n"
+"\t\t                <t t-out=\"object.company_id.name or ''\"/>\n"
+"\t\t                %0A%0A<t t-if=\"object.company_id.invoice_order_information_in_message\">Following is your Payment details. %0A%0A\n"
+"\t                    <t t-if=\"object.payment_type == 'inbound'\">We received</t>\n"
+"\t                    <t t-else=\"\">We paid</t>\n"
+"\t                    payment of *<t t-out=\"format_amount(object.amount, object.currency_id) or ''\"/>* by *<t t-out=\"object.journal_id.name or ''\"/>.* %0A%0AThank You.%0A%0A\n"
+"\t\t                </t>\n"
+"\t\t                \n"
+"\t\t                <t t-if=\"object.company_id.inv_send_pdf_in_message\">*Click here to download Report* : %20 <t t-out=\"object.payment_url or ''\"/>%0A%0A</t>\n"
+"\t\t                <br/>\n"
+"\t\t                <t t-if=\"object.company_id.invoice_signature and object.env.user.sign\">\n"
+"\t\t                    <t t-out=\"object.env.user.sign or ''\"/> %0A%0A\n"
+"\t\t                </t>\n"
+"\t\t            </ul>\n"
+"\t\t        </div>\n"
+"\t\t\t\t\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"\t\t            <ul style=\"list-style-type: none;\">\n"
+"\t\t                親愛的 *<t t-out=\"object.partner_id.name or ''\"/>* ,%0A%0A這是付款\n"
+"\t\t                *<t t-out=\"object.name or ''\"/>* 從\n"
+"\t\t                <t t-out=\"object.company_id.name or ''\"/>\n"
+"\t\t                %0A%0A<t t-if=\"object.company_id.invoice_order_information_in_message\">以下是您的付款詳細信息。 %0A%0A\n"
+"\t                    <t t-if=\"object.payment_type == 'inbound'\">我們收到了</t>\n"
+"\t                    <t t-else=\"\">我們付款</t>\n"
+"\t                    付款 *<t t-out=\"format_amount(object.amount, object.currency_id) or ''\"/>* 經過 *<t t-out=\"object.journal_id.name or ''\"/>.* %0A%0A謝謝你。%0A%0A\n"
+"\t\t                </t>\n"
+"\t\t                \n"
+"\t\t                <t t-if=\"object.company_id.inv_send_pdf_in_message\">*單擊此處下載報告* : %20 <t t-out=\"object.payment_url or ''\"/>%0A%0A</t>\n"
+"\t\t                <br/>\n"
+"\t\t                <t t-if=\"object.company_id.invoice_signature and object.env.user.sign\">\n"
+"\t\t                    <t t-out=\"object.env.user.sign or ''\"/> %0A%0A\n"
+"\t\t                </t>\n"
+"\t\t            </ul>\n"
+"\t\t        </div>\n"
+"\t\t\t\t\n"
+"            "
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,body_html:sh_whatsapp_integration.email_template_edi_crm_custom
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"\n"
+"\n"
+"                   Hello <t t-out=\"object.partner_id.name\"/>,%0A%0A\n"
+"\n"
+"                   Your Opportunity <t t-out=\"object.name or ''\"/> has been won in   $<t t-out=\"object.expected_revenue or ''\"/> at <t t-out=\"object.probability or ''\"/>  %.\n"
+"\n"
+"                   %0A%0A Do not hesitate to contact us if you have any questions.\n"
+"\n"
+"                   %0A%0A\n"
+"                   Thank You.\n"
+"                </div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"\n"
+"\n"
+"                   你好 <t t-out=\"object.partner_id.name\"/>,%0A%0A\n"
+"\n"
+"                   你的機會 <t t-out=\"object.name or ''\"/> 已獲勝   $<t t-out=\"object.expected_revenue or ''\"/> 在 <t t-out=\"object.probability or ''\"/>  %.\n"
+"\n"
+"                   %0A%0A 如果您有任何疑問，請隨時與我們聯繫。\n"
+"\n"
+"                   %0A%0A\n"
+"                   謝謝你。\n"
+"                </div>\n"
+"            "
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,body_html:sh_whatsapp_integration.email_template_edi_invoice_custom
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <t t-if=\"object.company_id.invoice_order_information_in_message\">\n"
+"                        <ul style=\"list-style-type: none;\">\n"
+"                            Dear *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                        </ul>\n"
+"                        <t t-if=\"object.name and object.state != 'draft'\"> Here is the your invoice *<t t-out=\"object.name or ''\"/>*. </t>\n"
+"                        <t t-else=\"\">\n"
+"                            Here is your invoice *<t t-out=\"object.name or ''\"/>* amounting in\n"
+"\n"
+"                            *<t t-out=\"object.amount_total or ''\"/>\n"
+"                            <t t-out=\"object.currency_id.symbol or ''\"/>*\n"
+"                            from\n"
+"\n"
+"                            <t t-out=\"object.company_id.name or ''\"/>\n"
+"                            \n"
+"                        </t>\n"
+"                        <t t-if=\"object.payment_state == 'paid'\">This invoice is already paid. %0A%0A</t>\n"
+"                        <t t-else=\"\">Please remit payment at your earliest convenience. %0A%0A</t>\n"
+"                    </t>\n"
+"                    <t t-if=\"object.company_id.invoice_product_detail_in_message\">\n"
+"                       *Following is your invoice details.* %0A%0A\n"
+"                        <t t-foreach=\"object.invoice_line_ids\" t-as=\"line\">\n"
+"                            <t t-if=\"line.name\">\n"
+"                                *<t t-out=\"line.product_id.name or ''\"/>* %0A\n"
+"                                *Qty:*%20<t t-out=\"line.quantity or ''\"/>\n"
+"                                %0A *Price:*%20<t t-out=\"line.price_unit or ''\"/><t t-out=\"object.currency_id.symbol or ''\"/>\n"
+"                                %0A ________________________ %0A%0A\n"
+"                            </t>\n"
+"                        </t>\n"
+"                        %0A\n"
+"                        *Total Amount:*\n"
+"\n"
+"                        <t t-out=\"object.amount_total or ''\"/><t t-out=\"object.currency_id.symbol or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.inv_send_pdf_in_message\">\n"
+"                        *Click here to download Report  :* \n"
+"\n"
+"                        <t t-out=\"object.invoice_url or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.invoice_signature and object.env.user.sign\">\n"
+"                        %20\n"
+"\n"
+"                        <t t-out=\"object.env.user.sign or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                </div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <t t-if=\"object.company_id.invoice_order_information_in_message\">\n"
+"                        <ul style=\"list-style-type: none;\">\n"
+"                            親愛的 *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                        </ul>\n"
+"                        <t t-if=\"object.name and object.state != 'draft'\"> 這是您的發票 *<t t-out=\"object.name or ''\"/>*. </t>\n"
+"                        <t t-else=\"\">\n"
+"                            這是你的發票 *<t t-out=\"object.name or ''\"/>* 總計\n"
+"\n"
+"                            *<t t-out=\"object.amount_total or ''\"/>\n"
+"                            <t t-out=\"object.currency_id.symbol or ''\"/>*\n"
+"                            從\n"
+"\n"
+"                            <t t-out=\"object.company_id.name or ''\"/>\n"
+"                            \n"
+"                        </t>\n"
+"                        <t t-if=\"object.payment_state == 'paid'\">該發票已經支付。 %0A%0A</t>\n"
+"                        <t t-else=\"\">請儘早匯出付款。 %0A%0A</t>\n"
+"                    </t>\n"
+"                    <t t-if=\"object.company_id.invoice_product_detail_in_message\">\n"
+"                       *以下是您的發票詳細信息。* %0A%0A\n"
+"                        <t t-foreach=\"object.invoice_line_ids\" t-as=\"line\">\n"
+"                            <t t-if=\"line.name\">\n"
+"                                *<t t-out=\"line.product_id.name or ''\"/>* %0A\n"
+"                                *數量:*%20<t t-out=\"line.quantity or ''\"/>\n"
+"                                %0A *價格:*%20<t t-out=\"line.price_unit or ''\"/><t t-out=\"object.currency_id.symbol or ''\"/>\n"
+"                                %0A ________________________ %0A%0A\n"
+"                            </t>\n"
+"                        </t>\n"
+"                        %0A\n"
+"                        *總金額:*\n"
+"\n"
+"                        <t t-out=\"object.amount_total or ''\"/><t t-out=\"object.currency_id.symbol or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.inv_send_pdf_in_message\">\n"
+"                        *單擊此處下載報告  :* \n"
+"\n"
+"                        <t t-out=\"object.invoice_url or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.invoice_signature and object.env.user.sign\">\n"
+"                        %20\n"
+"\n"
+"                        <t t-out=\"object.env.user.sign or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                </div>\n"
+"            "
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,body_html:sh_whatsapp_integration.email_template_edi_sale_custom
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <ul style=\"list-style-type: none;\">\n"
+"                        <t t-if=\"object.company_id.order_information_in_message\">\n"
+"                            <ul style=\"list-style-type: none;\">\n"
+"                                Dear *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                            </ul>\n"
+"                            Here is the your Order *<t t-out=\"object.name or ''\"/>* amounting in %20 *<t t-out=\"object.amount_total or ''\"/> <t t-out=\"object.currency_id.symbol or ''\"/>* from\n"
+"                            <t t-out=\"object.company_id.name or ''\"/>\n"
+"                            %0A%0A\n"
+"                        </t>\n"
+"                        <t t-if=\"object.company_id.order_product_detail_in_message\">\n"
+"                            Following is your order details. %0A%0A\n"
+"                            <t t-foreach=\"object.order_line\" t-as=\"line\">\n"
+"                                *<t t-out=\"line.product_id.name or ''\"/>*%0A\n"
+"                                *Qty:*%20<t t-out=\"line.product_uom_qty or ''\"/>%0A \n"
+"                                *Price:*%20<t t-out=\"line.price_unit or ''\"/> <t t-out=\"object.currency_id.symbol or ''\"/> %0A ________________________ %0A%0A\n"
+"                            </t>\n"
+"                            <br/>\n"
+"\n"
+"                            *Total Amount :*\n"
+"                            <t t-out=\"object.amount_total or ''\"/>\n"
+"                            <t t-out=\"object.currency_id.symbol or ''\"/>%0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.send_pdf_in_message\">\n"
+"                            *Click here to download Report* :\n"
+"                            <t t-out=\"object.sale_url or ''\"/>%0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.signature and object.env.user.sign\">\n"
+"                            %20\n"
+"                            <t t-out=\"object.env.user.sign or ''\"/>%0A%0A\n"
+"                        </t>\n"
+"                    </ul>\n"
+"                </div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <ul style=\"list-style-type: none;\">\n"
+"                        <t t-if=\"object.company_id.order_information_in_message\">\n"
+"                            <ul style=\"list-style-type: none;\">\n"
+"                                親愛的 *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                            </ul>\n"
+"                            這是你的訂單 *<t t-out=\"object.name or ''\"/>* 總計 %20 *<t t-out=\"object.amount_total or ''\"/> <t t-out=\"object.currency_id.symbol or ''\"/>* 從\n"
+"                            <t t-out=\"object.company_id.name or ''\"/>\n"
+"                            %0A%0A\n"
+"                        </t>\n"
+"                        <t t-if=\"object.company_id.order_product_detail_in_message\">\n"
+"                            以下是您的訂單詳細信息。 %0A%0A\n"
+"                            <t t-foreach=\"object.order_line\" t-as=\"line\">\n"
+"                                *<t t-out=\"line.product_id.name or ''\"/>*%0A\n"
+"                                *數量:*%20<t t-out=\"line.product_uom_qty or ''\"/>%0A \n"
+"                                *價格:*%20<t t-out=\"line.price_unit or ''\"/> <t t-out=\"object.currency_id.symbol or ''\"/> %0A ________________________ %0A%0A\n"
+"                            </t>\n"
+"                            <br/>\n"
+"\n"
+"                            *總金額 :*\n"
+"                            <t t-out=\"object.amount_total or ''\"/>\n"
+"                            <t t-out=\"object.currency_id.symbol or ''\"/>%0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.send_pdf_in_message\">\n"
+"                            *單擊此處下載報告* :\n"
+"                            <t t-out=\"object.sale_url or ''\"/>%0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.signature and object.env.user.sign\">\n"
+"                            %20\n"
+"                            <t t-out=\"object.env.user.sign or ''\"/>%0A%0A\n"
+"                        </t>\n"
+"                    </ul>\n"
+"                </div>\n"
+"            "
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,body_html:sh_whatsapp_integration.mail_template_data_stock_picking_custom
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <ul style=\"list-style-type: none;\">\n"
+"                        <ul style=\"list-style-type: none;\">\n"
+"                            Dear *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                        </ul>\n"
+"                        Here is the Stock Transfer *<t t-out=\"object.name or ''\"/>* from\n"
+"                        <t t-out=\"object.company_id.name or ''\"/>\n"
+"                        %0A%0A\n"
+"\n"
+"                        <t t-if=\"object.company_id.inventory_information_in_message\">\n"
+"                            Following is your Transfer details. %0A%0A\n"
+"                            <t t-foreach=\"object.move_ids_without_package\" t-as=\"line\">\n"
+"                                <t t-if=\"line.quantity_done\">\n"
+"                                    *<t t-out=\"line.name or ''\"/>* %0A \n"
+"                                    *Required Qty:* <t t-out=\"line.product_uom_qty or ''\"/> %0A \n"
+"                                    *Delivery Qty:* %20<t t-out=\"line.quantity_done or ''\"/> %0A %0A\n"
+"                                    ________________________ %0A%0A\n"
+"                                </t>\n"
+"                                <t t-else=\"\"> *<t t-out=\"line.name or ''\"/>* %0A\n"
+"                                 *Qty:* <t t-out=\"line.product_uom_qty or ''\"/> %0A\n"
+"                                 *Required Qty:* <t t-out=\"line.product_uom_qty or ''\"/> %0A ________________________ %0A%0A </t>\n"
+"                            </t>\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.stock_send_pdf_in_message\">\n"
+"                            *Click here to download Report* :\n"
+"                            <t t-out=\"object.stock_url or ''\"/> %0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.inventory_signature and object.env.user.sign\">\n"
+"                            %20\n"
+"                            <t t-out=\"object.env.user.sign or ''\"/> %0A%0A\n"
+"                        </t>\n"
+"                    </ul>\n"
+"                </div>\n"
+"\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                    <ul style=\"list-style-type: none;\">\n"
+"                        <ul style=\"list-style-type: none;\">\n"
+"                            親愛的 *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                        </ul>\n"
+"                        這是股票轉移 *<t t-out=\"object.name or ''\"/>* 從\n"
+"                        <t t-out=\"object.company_id.name or ''\"/>\n"
+"                        %0A%0A\n"
+"\n"
+"                        <t t-if=\"object.company_id.inventory_information_in_message\">\n"
+"                            以下是您的轉移詳細信息。 %0A%0A\n"
+"                            <t t-foreach=\"object.move_ids_without_package\" t-as=\"line\">\n"
+"                                <t t-if=\"line.quantity_done\">\n"
+"                                    *<t t-out=\"line.name or ''\"/>* %0A \n"
+"                                    *必需的數量:* <t t-out=\"line.product_uom_qty or ''\"/> %0A \n"
+"                                    *交貨數量:* %20<t t-out=\"line.quantity_done or ''\"/> %0A %0A\n"
+"                                    ________________________ %0A%0A\n"
+"                                </t>\n"
+"                                <t t-else=\"\"> *<t t-out=\"line.name or ''\"/>* %0A\n"
+"                                 *數量:* <t t-out=\"line.product_uom_qty or ''\"/> %0A\n"
+"                                 *必需的數量:* <t t-out=\"line.product_uom_qty or ''\"/> %0A ________________________ %0A%0A </t>\n"
+"                            </t>\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.stock_send_pdf_in_message\">\n"
+"                            *單擊此處下載報告* :\n"
+"                            <t t-out=\"object.stock_url or ''\"/> %0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        <t t-if=\"object.company_id.inventory_signature and object.env.user.sign\">\n"
+"                            %20\n"
+"                            <t t-out=\"object.env.user.sign or ''\"/> %0A%0A\n"
+"                        </t>\n"
+"                    </ul>\n"
+"                </div>\n"
+"\n"
+"            "
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,body_html:sh_whatsapp_integration.email_template_edi_purchase_custom
+msgid ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                <ul style=\"list-style-type: none;\">\n"
+"                    <t t-if=\"object.company_id.purchase_order_information_in_message\">\n"
+"                        <ul style=\"list-style-type: none;\">\n"
+"                            Dear *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                        </ul>\n"
+"\n"
+"                        Here is the your Order *<t t-out=\"object.name or ''\"/>* amounting in %20\n"
+"                        *<t t-out=\"object.amount_total or ''\"/>\n"
+"                        <t t-out=\"object.currency_id.symbol or ''\"/>* \n"
+"                        from \n"
+"                        <t t-out=\"object.company_id.name or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                    <t t-if=\"object.company_id.purchase_product_detail_in_message\">\n"
+"                        Following is your order details. %0A%0A\n"
+"                        <t t-foreach=\"object.order_line\" t-as=\"line\">\n"
+"                            *<t t-out=\"line.product_id.name or ''\"/>* %0A *Qty:* <t t-out=\"line.product_uom_qty or ''\"/> %0A *Price:* <t t-out=\"line.price_unit or ''\"/> <t t-out=\"object.currency_id.symbol or ''\"/> %0A ________________________ %0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        *Total Amount :* \n"
+"                        <t t-out=\"object.amount_total or ''\"/>\n"
+"                        <t t-out=\"object.currency_id.symbol or ''\"/> %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.po_send_pdf_in_message\">\n"
+"                        *Click here to download Report* :\n"
+"                        <t t-out=\"object.purchase_url or ''\"/> %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.purchase_signature and object.env.user.sign\">\n"
+"                        %20\n"
+"                        <t t-out=\"object.env.user.sign or ''\"/> %0A%0A\n"
+"                    </t>\n"
+"                </ul>\n"
+"            </div>\n"
+"            "
+msgstr ""
+"<div style=\"margin: 0px; padding: 0px;\">\n"
+"                <ul style=\"list-style-type: none;\">\n"
+"                    <t t-if=\"object.company_id.purchase_order_information_in_message\">\n"
+"                        <ul style=\"list-style-type: none;\">\n"
+"                            親愛的 *<t t-out=\"object.partner_id.name or ''\"/>*,%0A%0A\n"
+"                        </ul>\n"
+"\n"
+"                        這是你的訂單 *<t t-out=\"object.name or ''\"/>* 總計 %20\n"
+"                        *<t t-out=\"object.amount_total or ''\"/>\n"
+"                        <t t-out=\"object.currency_id.symbol or ''\"/>* \n"
+"                        從 \n"
+"                        <t t-out=\"object.company_id.name or ''\"/>\n"
+"                        %0A%0A\n"
+"                    </t>\n"
+"                    <t t-if=\"object.company_id.purchase_product_detail_in_message\">\n"
+"                        以下是您的訂單詳細信息。 %0A%0A\n"
+"                        <t t-foreach=\"object.order_line\" t-as=\"line\">\n"
+"                            *<t t-out=\"line.product_id.name or ''\"/>* %0A *數量:* <t t-out=\"line.product_uom_qty or ''\"/> %0A *價格:* <t t-out=\"line.price_unit or ''\"/> <t t-out=\"object.currency_id.symbol or ''\"/> %0A ________________________ %0A%0A\n"
+"                        </t>\n"
+"                        <br/>\n"
+"                        *總金額 :* \n"
+"                        <t t-out=\"object.amount_total or ''\"/>\n"
+"                        <t t-out=\"object.currency_id.symbol or ''\"/> %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.po_send_pdf_in_message\">\n"
+"                        *單擊此處下載報告* :\n"
+"                        <t t-out=\"object.purchase_url or ''\"/> %0A%0A\n"
+"                    </t>\n"
+"                    <br/>\n"
+"                    <t t-if=\"object.company_id.purchase_signature and object.env.user.sign\">\n"
+"                        %20\n"
+"                        <t t-out=\"object.env.user.sign or ''\"/> %0A%0A\n"
+"                    </t>\n"
+"                </ul>\n"
+"            </div>\n"
+"            "
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_message_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_form
+msgid ""
+"<strong>Note:</strong><br/>\n"
+"                            1) Use *text* to make text bold.<br/>\n"
+"                            2) Use _text_ to make text italic.<br/>\n"
+"                            3) Use %0A after/before Text if you want to add blank line.<br/>\n"
+"                            4) use %20 after/before any Text if you want to give space.<br/>\n"
+"                            5) go to users =&gt; preferences to add signature."
+msgstr ""
+"<strong>筆記:</strong><br/>\n"
+"                            1) 利用 *text* 使文本粗體。<br/>\n"
+"                            2) 利用 _text_ 使文字發表意見。<br/>\n"
+"                            3) 利用 %0A 在短信之後/之前，如果要添加空白行。<br/>\n"
+"                            4) 利用 %20 在任何文本之後，如果您想給出空間。<br/>\n"
+"                            5) 去找用戶 =&gt; 添加簽名的偏好。"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_bank_statement_line__report_token
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_move__report_token
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_payment__report_token
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_purchase_order__report_token
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sale_order__report_token
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_stock_picking__report_token
+msgid "Access Token"
+msgstr "訪問令牌"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__account_invoice_id
+msgid "Account Invoice"
+msgstr "帳戶發票"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__account_payment_id
+msgid "Account Payment"
+msgstr "帳戶付款"
+
+#. module: sh_whatsapp_integration
+#: model:res.groups,name:sh_whatsapp_integration.group_account_whatsapp_feature
+msgid "Account Whatsapp Feature"
+msgstr "帳戶WhatsApp功能"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__attachment_ids
+msgid "Attachments"
+msgstr "附件"
+
+#. module: sh_whatsapp_integration
+#: model:res.groups,name:sh_whatsapp_integration.group_crm_whatsapp_msg_feature
+msgid "CRM Whatsapp Feature"
+msgstr "CRM WhatsApp功能"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,name:sh_whatsapp_integration.email_template_edi_crm_custom
+msgid "CRM Whatsapp: Send by email"
+msgstr "CRM WhatsApp：通過電子郵件發送"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_message_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_form
+msgid "Cancel"
+msgstr "取消"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_res_company
+msgid "Companies"
+msgstr "公司"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/models/purchase_order_inherit.py:0
+#, python-format
+msgid "Compose Email"
+msgstr "寫郵件"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_res_config_settings
+msgid "Config Settings"
+msgstr "配置設置"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_res_partner
+msgid "Contact"
+msgstr "接觸"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__create_uid
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__create_uid
+msgid "Created by"
+msgstr "由...製作"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__create_date
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__create_date
+msgid "Created on"
+msgstr "創建於"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__display_name
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__display_name
+msgid "Display Name"
+msgstr "顯示名稱"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__invoice_display_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__invoice_display_in_message
+msgid "Display in Chatter Message ?"
+msgstr "在聊天消息中顯示？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__crm_lead_display_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__crm_lead_display_in_message
+msgid "Display in Chatter Message ? "
+msgstr "在聊天消息中顯示？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__inventory_display_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__inventory_display_in_message
+msgid "Display in Chatter Message?"
+msgstr "在聊天消息中顯示？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__display_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__purchase_display_in_message
+msgid "Display in Chatter Message? "
+msgstr "在聊天消息中顯示？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_mail_compose_message
+msgid "Email composition wizard"
+msgstr "電子郵件組成嚮導"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__id
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/controllers/main.py:0
+#, python-format
+msgid "Invalid report type: %s"
+msgstr "無效報告類型: %s"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,name:sh_whatsapp_integration.email_template_edi_invoice_custom
+msgid "Invoice: Send by email"
+msgstr "發票：通過電子郵件發送"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_invoice_send__is_wp
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_mail_compose_message__is_wp
+msgid "Is whatsapp ?"
+msgstr "WhatsApp是嗎？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_account_move
+msgid "Journal Entry"
+msgstr "日記條目"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard____last_update
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard____last_update
+msgid "Last Modified on"
+msgstr "最後修改"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__write_uid
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__write_uid
+msgid "Last Updated by"
+msgstr "最後更新"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__write_date
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__write_date
+msgid "Last Updated on"
+msgstr "最後更新"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__crm_lead_id
+msgid "Lead"
+msgstr "帶領"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_crm_lead
+msgid "Lead/Opportunity"
+msgstr "領導/機會"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_bank_statement_line__text_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_move__text_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_payment__text_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_purchase_order__text_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sale_order__text_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_stock_picking__text_message
+msgid "Message"
+msgstr "信息"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__invoice_order_information_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__invoice_order_information_in_message
+msgid "Order Information in message ?"
+msgstr "在消息中訂購信息？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__inventory_information_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__inventory_information_in_message
+msgid "Order Information in message?"
+msgstr "在消息中訂購信息？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__order_information_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__purchase_order_information_in_message
+msgid "Order Information in message? "
+msgstr "在消息中訂購信息？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__invoice_product_detail_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__invoice_product_detail_in_message
+msgid "Order Product details in message ?"
+msgstr "訂購消息中的產品詳細信息？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__order_product_detail_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__purchase_product_detail_in_message
+msgid "Order Product details in message? "
+msgstr "訂購消息中的產品詳細信息？"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/models/account_payment_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/customer_invoice_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/purchase_order_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/sale_order_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/stock_picking_inherit.py:0
+#: code:addons/sh_whatsapp_integration/wizard/send_whatsapp_message.py:0
+#, python-format
+msgid "Partner Mobile Number Not Exist"
+msgstr "合作夥伴手機號碼不存在"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/models/account_payment_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/crm_lead_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/customer_invoice_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/sale_order_inherit.py:0
+#: code:addons/sh_whatsapp_integration/models/stock_picking_inherit.py:0
+#, python-format
+msgid "Partner Mobile Number Not Exist !"
+msgstr "合作夥伴手機號碼不存在！"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,name:sh_whatsapp_integration.mail_template_data_payment_receipt_custom
+msgid "Payment Receipt: Send by email"
+msgstr "付款收據：通過電子郵件發送"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_account_payment
+msgid "Payments"
+msgstr "付款"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/wizard/send_whatsapp_number.py:0
+#, python-format
+msgid "Please Select Recipients"
+msgstr "請選擇收件人"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/models/purchase_order_inherit.py:0
+#: model:ir.model,name:sh_whatsapp_integration.model_purchase_order
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__purchase_order_id
+#, python-format
+msgid "Purchase Order"
+msgstr "採購訂單"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,name:sh_whatsapp_integration.email_template_edi_purchase_custom
+msgid "Purchase Order Whatsapp: Send by email"
+msgstr "採購訂單WhatsApp：通過電子郵件發送"
+
+#. module: sh_whatsapp_integration
+#: model:res.groups,name:sh_whatsapp_integration.group_purchase_whatsapp_feature
+msgid "Purchase Whatsapp Feature"
+msgstr "購買WhatsApp功能"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,report_name:sh_whatsapp_integration.email_template_edi_purchase_custom
+msgid "RFQ_{{(object.name or '').replace('/','_')}}"
+msgstr "RFQ_{{(object.name or '').replace('/','_')}}"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__partner_ids
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__partner_ids
+msgid "Recipients"
+msgstr "收件人"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/models/purchase_order_inherit.py:0
+#, python-format
+msgid "Request for Quotation"
+msgstr "請求報價"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__sale_order_id
+msgid "Sale Order"
+msgstr "銷售訂單"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_sale_order
+msgid "Sales Order"
+msgstr "銷售訂單"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,name:sh_whatsapp_integration.email_template_edi_sale_custom
+msgid "Sales Order Whatsapp: Send by email"
+msgstr "銷售訂單WhatsApp：通過電子郵件發送"
+
+#. module: sh_whatsapp_integration
+#: model:res.groups,name:sh_whatsapp_integration.group_sales_whatsapp_feature
+msgid "Sales Whatsapp Feature"
+msgstr "銷售WhatsApp功能"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_message_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_form
+msgid "Send"
+msgstr "發送"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.invoice_form_inherit_custom
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.purchase_order_inherit_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_email_compose_form_mass_mailing
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_account_payment_inherit_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_crm_lead_order_inherit_custom_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_order_inherit_custom_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_picking_inherit_custom_form
+msgid "Send By Whatsapp"
+msgstr "通過WhatsApp發送"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.invoice_form_inherit_custom
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.purchase_order_inherit_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_account_payment_inherit_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_order_inherit_custom_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.view_picking_inherit_custom_form
+msgid "Send By Whatsapp Direct"
+msgstr "通過WhatsApp Direct發送"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_inventory_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_invoice_bill_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_purchase_res_config_settings
+msgid "Send Report URL in Message"
+msgstr "在消息中發送報告URL"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__inv_send_pdf_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__inv_send_pdf_in_message
+msgid "Send Report URL in message ?"
+msgstr "在消息中發送報告URL？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__stock_send_pdf_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__stock_send_pdf_in_message
+msgid "Send Report URL in message?"
+msgstr "在消息中發送報告URL？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__send_pdf_in_message
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__po_send_pdf_in_message
+msgid "Send Report URL in message? "
+msgstr "在消息中發送報告URL？"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_sales_res_config_settings
+msgid "Send Report Url in Message"
+msgstr "在消息中發送報告URL"
+
+#. module: sh_whatsapp_integration
+#: model:ir.ui.menu,name:sh_whatsapp_integration.menu_subwhatsapp_number
+#: model:ir.ui.menu,name:sh_whatsapp_integration.menu_whatsapp_number
+#: model:ir.ui.menu,name:sh_whatsapp_integration.submenu_whatsapp_number
+msgid "Send Whatsapp"
+msgstr "發送WhatsApp"
+
+#. module: sh_whatsapp_integration
+#: model:ir.actions.act_window,name:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_message_action
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_partner_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_message_form
+msgid "Send Whatsapp Message"
+msgstr "發送WhatsApp消息"
+
+#. module: sh_whatsapp_integration
+#: model:res.groups,name:sh_whatsapp_integration.group_send_whatsapp_quick
+msgid "Send Whatsapp Quick"
+msgstr "快速發送WhatsApp"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_sh_send_whatsapp_message_wizard
+#: model:ir.model,name:sh_whatsapp_integration.model_sh_send_whatsapp_number_wizard
+msgid "Send whatsapp message wizard"
+msgstr "發送WhatsApp消息嚮導"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_inventory_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_invoice_bill_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_res_config_settings_view_crm_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_purchase_res_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_sales_res_config_settings
+msgid "Show Message in Chatter"
+msgstr "在聊天中顯示消息"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_inventory_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_invoice_bill_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_purchase_res_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_sales_res_config_settings
+msgid "Show Order Information in message"
+msgstr "在消息中顯示訂單信息"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_invoice_bill_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_purchase_res_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_sales_res_config_settings
+msgid "Show Order Product details in message"
+msgstr "在消息中顯示訂單產品詳細信息"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_inventory_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_invoice_bill_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_res_config_settings_view_crm_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_purchase_res_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_sales_res_config_settings
+msgid "Show Signature"
+msgstr "顯示簽名"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_users__sign
+msgid "Signature"
+msgstr "簽名"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__invoice_signature
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__invoice_signature
+msgid "Signature ?"
+msgstr "簽名 ？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__crm_lead_signature
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__crm_lead_signature
+msgid "Signature ? "
+msgstr "簽名 ？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__inventory_signature
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__inventory_signature
+msgid "Signature?"
+msgstr "簽名？"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_company__signature
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_res_config_settings__purchase_signature
+msgid "Signature? "
+msgstr "簽名？"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/controllers/main.py:0
+#, python-format
+msgid "Sorry, you are not allowed to access this document."
+msgstr "抱歉，您不允許您訪問此文檔。"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_message_wizard__stock_picking_id
+msgid "Stock Picking"
+msgstr "採摘股票"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,name:sh_whatsapp_integration.mail_template_data_stock_picking_custom
+msgid "Stock Transfer: Send by email"
+msgstr "股票轉移：通過電子郵件發送"
+
+#. module: sh_whatsapp_integration
+#: model:res.groups,name:sh_whatsapp_integration.group_stock_whatsapp_feature
+msgid "Stock Whatsapp Feature"
+msgstr "庫存WhatsApp功能"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/controllers/main.py:0
+#, python-format
+msgid "This document does not exist."
+msgstr "該文檔不存在。"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_stock_picking
+msgid "Transfer"
+msgstr "轉移"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_payment__payment_url
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_crm_lead__crm_url
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_purchase_order__purchase_url
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sale_order__sale_url
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_stock_picking__stock_url
+msgid "Url"
+msgstr "URL"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_bank_statement_line__invoice_url
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_move__invoice_url
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_account_payment__invoice_url
+msgid "Url "
+msgstr "URL"
+
+#. module: sh_whatsapp_integration
+#: model:ir.model,name:sh_whatsapp_integration.model_res_users
+msgid "Users"
+msgstr "用戶"
+
+#. module: sh_whatsapp_integration
+#: code:addons/sh_whatsapp_integration/models/purchase_order_inherit.py:0
+#, python-format
+msgid "Vendor Mobile Number Not Exist !"
+msgstr "供應商手機號碼不存在！"
+
+#. module: sh_whatsapp_integration
+#: model:ir.actions.act_window,name:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_action
+#: model:ir.model.fields,field_description:sh_whatsapp_integration.field_sh_send_whatsapp_number_wizard__whatsapp_mobile
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.crm_case_form_inherit_custom_view_leads
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_whatsapp_integration_send_whatsapp_number_form
+msgid "Whatsapp Number"
+msgstr "WhatsApp號碼"
+
+#. module: sh_whatsapp_integration
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_inventory_config_settings_view_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_invoice_bill_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_res_config_settings_view_crm_form
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_purchase_res_config_settings
+#: model_terms:ir.ui.view,arch_db:sh_whatsapp_integration.sh_show_whatsapp_send_sales_res_config_settings
+msgid "Whatsapp send"
+msgstr "WhatsApp發送"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,report_name:sh_whatsapp_integration.mail_template_data_payment_receipt_custom
+#: model:mail.template,report_name:sh_whatsapp_integration.mail_template_data_stock_picking_custom
+msgid "{{(object.name or '').replace('/','-')}}"
+msgstr "{{(object.name or '').replace('/','-')}}"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,report_name:sh_whatsapp_integration.email_template_edi_crm_custom
+#: model:mail.template,report_name:sh_whatsapp_integration.email_template_edi_sale_custom
+msgid "{{(object.name or '').replace('/','_')}}"
+msgstr "{{(object.name or '').replace('/','_')}}"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,subject:sh_whatsapp_integration.email_template_edi_invoice_custom
+msgid "{{object.company_id.name}} Invoice (Ref {{object.name or 'n/a'}})"
+msgstr "{{object.company_id.name}} 發票 (Ref {{object.name or 'n/a'}})"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,subject:sh_whatsapp_integration.mail_template_data_payment_receipt_custom
+msgid ""
+"{{object.company_id.name}} Payment Receipt (Ref {{object.name or 'n/a' }})"
+msgstr ""
+"{{object.company_id.name}} 付款收據 (Ref {{object.name or 'n/a' }})"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,subject:sh_whatsapp_integration.mail_template_data_stock_picking_custom
+msgid ""
+"{{object.company_id.name}} Stock Transfer (Ref {{object.name or 'n/a' }})"
+msgstr ""
+"{{object.company_id.name}} 股票轉移 (Ref {{object.name or 'n/a' }})"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,subject:sh_whatsapp_integration.email_template_edi_crm_custom
+msgid ""
+"{{object.company_id.name}} {{object.stage_id.name in ('draft', 'sent') and "
+"'Quotation' or 'Order'}} (Ref {{object.name or 'n/a' }})"
+msgstr ""
+"{{object.company_id.name}} {{object.stage_id.name in ('draft', 'sent') and "
+"'Quotation' or 'Order'}} (Ref {{object.name or 'n/a' }})"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,subject:sh_whatsapp_integration.email_template_edi_sale_custom
+msgid ""
+"{{object.company_id.name}} {{object.state in ('draft', 'sent') and "
+"'Quotation' or 'Order'}} (Ref {{object.name or 'n/a' }})"
+msgstr ""
+"{{object.company_id.name}} {{object.state in ('draft', 'sent') and "
+"'Quotation' or 'Order'}} (Ref {{object.name or 'n/a' }})"
+
+#. module: sh_whatsapp_integration
+#: model:mail.template,subject:sh_whatsapp_integration.email_template_edi_purchase_custom
+msgid ""
+"{{object.company_id.name}} {{object.state in ('draft', 'sent') and 'Request "
+"For Quotation' or 'Order'}} (Ref {{object.name or 'n/a' }})"
+msgstr ""
+"{{object.company_id.name}} {{object.state in ('draft', 'sent') and 'Request "
+"For Quotation' or 'Order'}} (Ref {{object.name or 'n/a' }})"

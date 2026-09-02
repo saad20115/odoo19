@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_root_arcgis"  name="Arcgis" sequence="10" action="arcgis_contractor_action_overview"/>
+    <menuitem id="menu_contractor"  name="Contractor" sequence="-1" parent="menu_root_arcgis" action="arcgis_contractor_action_overview"/>
+    <menuitem id="menu_work_type"    name="Work type" sequence="10" parent="menu_root_arcgis" action="arcgis_work_type_action_overview"/>
+    <menuitem id="menu_consultant_code" name="Consultant Code" sequence="10" parent="menu_root_arcgis" action="arcgis_consultant_action_overview"/>
+    <menuitem id="menu_job_description" name="Job Description" sequence="10" parent="menu_root_arcgis" action="arcgis_job_description_action_overview"/>
+    <!-- <menuitem id="arcgis_selection" name="Selectionorder" sequence="10" parent="menu_root_arcgis" action="arcgis_selection_action_overview"/> -->
+    <menuitem id="arcgis_region" name="Region" sequence="10" parent="menu_root_arcgis" action="arcgis_region_action_overview"/>
+    <!-- <menuitem id="menu_idle_time" name="Idle Time" sequence="10" parent="menu_time_management" action="idle_time_action_overview"/> -->
+    <menuitem id="menu_attachment_names" name="Attachment Names" sequence="10" parent="menu_root_arcgis" action="arcgis_attachment_names_overview"/>
+    <menuitem id="menu_attachments" name="Attachments" sequence="10" parent="menu_root_arcgis" action="arcgis_attachments_overview"/>
+    <menuitem id="menu_work_duration_type" name="Work Duration Type" sequence="10" parent="menu_root_arcgis" action="arcgis_work_duration_type_overview"/>
+    <menuitem id="menu_work_order_type_" name="Work Order Type" sequence="10" parent="menu_root_arcgis" action="arcgis_work_order_type_overview"/>
+    <menuitem id="menu_x_sector" name="القطاع" sequence="10" parent="menu_root_arcgis" action="arcgis_x_sector_overview"/>
+    <menuitem id="menu_x_area" name="المنطقة" sequence="10" parent="menu_root_arcgis" action="arcgis_x_area_overview"/>
+    <menuitem id="menu_classification_of_work_model" name="تصنيف العمل" sequence="10" parent="menu_root_arcgis" action="arcgis_classification_of_work_model_overview"/>
+    <menuitem id="menu_x_website" name="الموقع" sequence="10" parent="menu_root_arcgis" action="arcgis_x_website_overview"/>
+    
+</odoo>
+
+<!-- parent="hr_attendance.menu_hr_attendance_root" -->

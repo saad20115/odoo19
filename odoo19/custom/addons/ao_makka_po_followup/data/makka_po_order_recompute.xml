@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <function model="makka.po.order" name="_recompute_status_for_all"/>
+    <function model="makka.po.order" name="_fix_po_order_form_views"/>
+    <function model="makka.po.followup" name="_recompute_value_with_tax_all"/>
+</odoo>

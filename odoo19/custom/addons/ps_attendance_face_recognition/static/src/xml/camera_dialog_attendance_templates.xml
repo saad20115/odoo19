@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Camera dialog box template-->
+<templates xml:space="preserve">
+<t t-name="ps_attendance_face_recognition.camera_dialog_attendance" owl="1">
+    <Dialog size="'md'" title="props.title" modalRef="modalRef">
+        <div class="camera-container">
+            <video t-ref="video" width="100%" height="100%" autoplay="true" playsinline="true" class="video-preview"/>
+            <img t-ref="image" width="100%" height="100%" class="d-none captured-image"/>
+
+            <!-- Flash effect for capture -->
+            <div t-ref="flashOverlay" class="flash-overlay d-none"></div>
+
+            <!-- Scanning overlay -->
+            <div t-ref="scanOverlay" class="scan-overlay"></div>
+        </div>
+
+        <t t-set-slot="footer" owl="1">
+            <button class="btn btn-secondary" t-on-click="_cancel">Close</button>
+        </t>
+    </Dialog>
+</t>
+</templates>

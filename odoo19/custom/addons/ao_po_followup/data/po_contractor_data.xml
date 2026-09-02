@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Unique contractors extracted from Google Sheet (duplicates / spelling variants merged) -->
+    <record id="po_contractor_faisal_alalawi" model="po.contractor">
+        <field name="name">فيصل العلوي</field>
+    </record>
+    <record id="po_contractor_almiyal" model="po.contractor">
+        <field name="name">الميال</field>
+    </record>
+    <record id="po_contractor_manhal_alkhair" model="po.contractor">
+        <field name="name">منهل الخير</field>
+    </record>
+    <record id="po_contractor_alqadiri" model="po.contractor">
+        <field name="name">القديري</field>
+    </record>
+    <record id="po_contractor_alfasil" model="po.contractor">
+        <field name="name">الفسيل</field>
+    </record>
+    <record id="po_contractor_adwaa_alkhalil" model="po.contractor">
+        <field name="name">اضواء الخليل</field>
+    </record>
+    <record id="po_contractor_alam_almasiya" model="po.contractor">
+        <field name="name">اعلام الماسية</field>
+    </record>
+    <record id="po_contractor_tayel" model="po.contractor">
+        <field name="name">طايل</field>
+    </record>
+    <record id="po_contractor_nasr_aljazeera" model="po.contractor">
+        <field name="name">نسر الجزيرة</field>
+    </record>
+    <record id="po_contractor_fawasel" model="po.contractor">
+        <field name="name">فواصل</field>
+    </record>
+    <record id="po_contractor_mansour_almusaed" model="po.contractor">
+        <field name="name">منصور المساعد</field>
+    </record>
+    <record id="po_contractor_alajimi" model="po.contractor">
+        <field name="name">العجيمي</field>
+    </record>
+</odoo>

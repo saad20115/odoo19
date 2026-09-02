@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem 
+        id="hr_attendance_settings_redefinition_menu"
+        name="Configuration"
+        parent="hr_attendance.menu_hr_attendance_settings"
+        sequence="100"
+        action="hr_attendance.action_hr_attendance_settings"
+        groups="hr_attendance.group_hr_attendance_manager"/>  
+    
+    <record id="hr_attendance_reasons_tree_view" model="ir.ui.view">
+        <field name="name">Attendance Reasons</field>
+        <field name="model">hr.attendance.reasons</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Reasons">
+                <field name="name"/>
+                <field name="attendance_state"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_reasons" model="ir.actions.act_window">
+        <field name="name">Attendance Reasons</field>
+        <field name="type">ir.actions.act_window</field>
+         <field name="view_mode">tree,form</field>
+        <field name="res_model">hr.attendance.reasons</field>
+        <field name="view_id" ref="hr_attendance_reasons_tree_view"/>
+    </record>
+
+    <record id="hr_attendance_reasons_form_view" model="ir.ui.view">
+        <field name="name">Attendance Reasons</field>
+        <field name="model">hr.attendance.reasons</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Reasons">
+                <group>
+                    <group>
+                        <field name="name"/>        
+                        <field name="attendance_state"/>
+                    </group>
+                </group>
+            </form>
+        </field>
+    </record>  
+
+    <menuitem 
+        id="hr_attendance_reasons_menu" 
+        name="Reasons"
+        parent="hr_attendance.menu_hr_attendance_settings"
+        action="action_hr_attendance_reasons"
+        sequence="111"
+        groups="hr_attendance.group_hr_attendance_manager"/>
+
+</odoo>

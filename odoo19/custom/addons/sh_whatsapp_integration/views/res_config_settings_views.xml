@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<odoo>
+    <!-- Purchase Order -->
+    <record id="sh_show_whatsapp_send_purchase_res_config_settings" model="ir.ui.view">
+        <field name="name">Purchase Whatsapp send</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="purchase.res_config_settings_view_form_purchase" />
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='purchase']//block[@name='purchase_setting_container']"
+                position="after">
+                <block title="Whatsapp Send Message Configurations"
+                    groups="sh_whatsapp_integration.group_purchase_whatsapp_feature">
+                    <setting company_dependent="1" help="Show Order Information in message">
+                        <field name="purchase_order_information_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Order Product details in message">
+                        <field name="purchase_product_detail_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Signature">
+                        <field name="purchase_signature" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Message in Chatter">
+                        <field name="purchase_display_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Send Report URL in Message">
+                        <field name="po_send_pdf_in_message" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- 	Sale Order -->
+    <record id="sh_show_whatsapp_send_sales_res_config_settings" model="ir.ui.view">
+        <field name="name">Whatsapp send</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="sale.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath expr="//app[@name='sale_management']//block[@name='catalog_setting_container']" position="after">
+                <block title="Whatsapp Send Message Configurations"
+                    groups="sh_whatsapp_integration.group_sales_whatsapp_feature">
+                    <setting company_dependent="1" help="Show Order Information in message">
+                        <field name="order_information_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Order Product details in message">
+                        <field name="order_product_detail_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Signature">
+                        <field name="signature" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Message in Chatter">
+                        <field name="display_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Send Report URL in Message">
+                        <field name="send_pdf_in_message" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Invoice / Bills -->
+    <record id="sh_show_whatsapp_invoice_bill_config_settings" model="ir.ui.view">
+        <field name="name">Whatsapp send Show Taxes Config Settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="account.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+
+            <xpath
+                expr="//app[@name='account']//block[@name='fiscal_localization_setting_container']" position="after">
+                <block title="Whatsapp Send Message Configurations"
+                    groups="sh_whatsapp_integration.group_account_whatsapp_feature">
+                    <setting company_dependent="1" help="Show Order Information in message">
+                        <field name="invoice_order_information_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Order Product details in message">
+                        <field name="invoice_product_detail_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Signature">
+                        <field name="invoice_signature" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Message in Chatter">
+                        <field name="invoice_display_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Send Report URL in Message">
+                        <field name="inv_send_pdf_in_message" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Inventory -->
+    <record id="sh_show_whatsapp_inventory_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.stock</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="stock.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//app[@name='stock']//block[@name='operations_setting_container']" position="after">
+                <block title="Whatsapp Send Message Configurations"
+                    groups="sh_whatsapp_integration.group_stock_whatsapp_feature">
+                    <setting company_dependent="1" help="Show Order Information in message">
+                        <field name="inventory_information_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Signature">
+                        <field name="inventory_signature" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Message in Chatter">
+                        <field name="inventory_display_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Send Report URL in Message">
+                        <field name="stock_send_pdf_in_message" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+    
+    <!-- CRM -->
+    <record id="sh_show_whatsapp_res_config_settings_view_crm_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.crm.form.inherit</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="crm.res_config_settings_view_form" />
+        <field name="arch" type="xml">
+            <xpath
+                expr="//app[@name='crm']//block[@name='convert_visitor_setting_container']"
+                position="before">
+                <block title="Whatsapp Send Message Configurations"
+                    groups="sh_whatsapp_integration.group_crm_whatsapp_msg_feature">
+                    <setting company_dependent="1" help="Show Message in Chatter">
+                        <field name="crm_lead_display_in_message" />
+                    </setting>
+                    <setting company_dependent="1" help="Show Signature">
+                        <field name="crm_lead_signature" />
+                    </setting>
+                </block>
+            </xpath>
+        </field>
+    </record>
+</odoo>

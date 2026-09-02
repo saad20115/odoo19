@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_leave_pwa_employee_balance_tree" model="ir.ui.view">
+        <field name="name">leave.pwa.employee.balance.tree</field>
+        <field name="model">leave.pwa.employee.balance</field>
+        <field name="arch" type="xml">
+            <tree string="PWA Leave Balances">
+                <field name="employee_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="year"/>
+                <field name="remaining_days"/>
+                <field name="effective_date"/>
+                <field name="import_id"/>
+                <field name="active"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_leave_pwa_employee_balance_form" model="ir.ui.view">
+        <field name="name">leave.pwa.employee.balance.form</field>
+        <field name="model">leave.pwa.employee.balance</field>
+        <field name="arch" type="xml">
+            <form string="PWA Leave Balance">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="year"/>
+                        </group>
+                        <group>
+                            <field name="remaining_days"/>
+                            <field name="effective_date"/>
+                            <field name="import_id" readonly="1"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_leave_pwa_employee_balance_search" model="ir.ui.view">
+        <field name="name">leave.pwa.employee.balance.search</field>
+        <field name="model">leave.pwa.employee.balance</field>
+        <field name="arch" type="xml">
+            <search string="PWA Leave Balances">
+                <field name="employee_id"/>
+                <field name="year"/>
+                <filter string="Active" name="active" domain="[('active', '=', True)]"/>
+                <group expand="0" string="Group By">
+                    <filter string="Year" name="group_year" context="{'group_by': 'year'}"/>
+                    <filter string="Company" name="group_company" context="{'group_by': 'company_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_leave_pwa_employee_balance" model="ir.actions.act_window">
+        <field name="name">PWA Leave Balances</field>
+        <field name="res_model">leave.pwa.employee.balance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                No imported balances yet.
+            </p>
+            <p>
+                HR can upload employee remaining leave days via
+                <strong>Import PWA Balances</strong>.
+            </p>
+        </field>
+    </record>
+
+    <record id="view_leave_pwa_balance_import_tree" model="ir.ui.view">
+        <field name="name">leave.pwa.balance.import.tree</field>
+        <field name="model">leave.pwa.balance.import</field>
+        <field name="arch" type="xml">
+            <tree string="Balance Imports">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="effective_date"/>
+                <field name="line_count"/>
+                <field name="matched_count"/>
+                <field name="error_count"/>
+                <field name="state"/>
+                <field name="create_date"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_leave_pwa_balance_import_form" model="ir.ui.view">
+        <field name="name">leave.pwa.balance.import.form</field>
+        <field name="model">leave.pwa.balance.import</field>
+        <field name="arch" type="xml">
+            <form string="Import PWA Balances">
+                <header>
+                    <button name="action_parse_file" type="object" string="Parse File"
+                            class="btn-primary"
+                            invisible="state not in ('draft', 'parsed', 'error')"/>
+                    <button name="action_apply" type="object" string="Apply Balances"
+                            class="btn-primary"
+                            invisible="state != 'parsed'"/>
+                    <button name="action_reset_to_draft" type="object" string="Reset to Draft"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,parsed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box"/>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="effective_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="filename" invisible="1"/>
+                            <field name="file_data" filename="filename"/>
+                            <field name="line_count"/>
+                            <field name="matched_count"/>
+                            <field name="error_count"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Import Lines" name="lines">
+                            <field name="line_ids" readonly="1">
+                                <tree decoration-success="state == 'matched'"
+                                      decoration-danger="state in ('not_found', 'invalid', 'duplicate')">
+                                    <field name="row_number"/>
+                                    <field name="raw_name"/>
+                                    <field name="raw_remaining"/>
+                                    <field name="remaining_days"/>
+                                    <field name="employee_id"/>
+                                    <field name="state"/>
+                                    <field name="message"/>
+                                </tree>
+                            </field>
+                        </page>
+                        <page string="Log" name="log">
+                            <field name="log" nolabel="1" readonly="1"/>
+                        </page>
+                        <page string="File Format" name="help">
+                            <div class="alert alert-info" role="alert">
+                                <p><strong>CSV file format</strong> (save Excel as CSV UTF-8):</p>
+                                <ul>
+                                    <li>Column A: Employee name (or employee ID)</li>
+                                    <li>Column B: Remaining paid leave days for the rest of the year</li>
+                                </ul>
+                                <p>Supported headers (optional):</p>
+                                <ul>
+                                    <li>Name: <code>employee_name</code>, <code>name</code>, <code>اسم الموظف</code></li>
+                                    <li>Remaining: <code>remaining_days</code>, <code>الرصيد</code>, <code>المتبقي</code></li>
+                                </ul>
+                                <p>
+                                    After upload, click <strong>Parse File</strong>, review matched rows,
+                                    then <strong>Apply Balances</strong>. The mobile app uses these values
+                                    from the effective date forward.
+                                </p>
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_leave_pwa_balance_import" model="ir.actions.act_window">
+        <field name="name">Import PWA Balances</field>
+        <field name="res_model">leave.pwa.balance.import</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Upload employee remaining leave days.
+            </p>
+            <p>
+                Upload a CSV file with employee names and remaining days, then apply
+                to update the mobile app balances.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_leave_pwa_balance_root"
+              name="PWA Balances"
+              parent="hr_holidays.menu_hr_holidays_configuration"
+              sequence="90"
+              groups="hr_holidays.group_hr_holidays_manager"/>
+
+    <menuitem id="menu_leave_pwa_balance_import"
+              name="Import PWA Balances"
+              parent="menu_leave_pwa_balance_root"
+              action="action_leave_pwa_balance_import"
+              sequence="10"
+              groups="hr_holidays.group_hr_holidays_manager"/>
+
+    <menuitem id="menu_leave_pwa_employee_balance"
+              name="Employee PWA Balances"
+              parent="menu_leave_pwa_balance_root"
+              action="action_leave_pwa_employee_balance"
+              sequence="20"
+              groups="hr_holidays.group_hr_holidays_manager"/>
+
+</odoo>

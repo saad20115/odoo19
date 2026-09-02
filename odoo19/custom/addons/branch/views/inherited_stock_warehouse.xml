@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_warehouse_inherit_branch" model="ir.ui.view">
+            <field name="name">view.warehouse.inherit.branch</field>
+            <field name="model">stock.warehouse</field>
+            <field name="inherit_id" ref="stock.view_warehouse"/>
+            <field name="arch" type="xml">
+                <field name="code" position="after">
+                    <field name="branch_id"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_picking_type_form_inherit_branch" model="ir.ui.view">
+            <field name="name">view.stock.picking.type.inherit.branch</field>
+            <field name="model">stock.picking.type</field>
+            <field name="inherit_id" ref="stock.view_picking_type_form"/>
+            <field name="arch" type="xml">
+                <field name="warehouse_id" position="after">
+                    <field name="branch_id" invisible="1"/>
+                </field>
+            </field>
+        </record>
+
+        <!--        valuation stock-->
+        <record id="stock_valuation_layer_form_inherit" model="ir.ui.view">
+            <field name="name">stock.valuation.form.inherit</field>
+            <field name="model">stock.valuation.layer</field>
+            <field name="inherit_id" ref="stock_account.stock_valuation_layer_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@name='other_info']//field[@name='company_id']" position="after">
+                    <field name="branch_id" options="{'no_create': True}"/>
+                </xpath>
+            </field>
+        </record>
+
+            <record id="stock_valuation_layer_tree_inherit" model="ir.ui.view">
+            <field name="name">stock.valuation.tree.inherit</field>
+            <field name="model">stock.valuation.layer</field>
+            <field name="inherit_id" ref="stock_account.stock_valuation_layer_tree"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//field[@name='company_id']" position="after">
+                        <field name="branch_id"/>
+                    </xpath>
+                </field>
+        </record>
+
+        <record id="view_inventory_valuation_search_inherit" model="ir.ui.view">
+            <field name="name">stock.valuation.search.inherit</field>
+            <field name="model">stock.valuation.layer</field>
+            <field name="inherit_id" ref="stock_account.view_inventory_valuation_search"/>
+                <field name="arch" type="xml">
+                    <xpath expr="//search/group" position="inside">
+					    <filter string="Branch" name="Branch" context="{'group_by':'branch_id'}"/>
+				    </xpath>
+                </field>
+        </record>
+    </data>
+</odoo>

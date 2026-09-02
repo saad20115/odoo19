@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_po_contractor_user,po.contractor.user,model_po_contractor,group_po_followup_user,1,1,1,0
+access_po_contractor_manager,po.contractor.manager,model_po_contractor,group_po_followup_manager,1,1,1,1
+access_po_office_user,po.office.user,model_po_office,group_po_followup_user,1,1,1,0
+access_po_office_manager,po.office.manager,model_po_office,group_po_followup_manager,1,1,1,1
+access_po_entity_user,po.entity.user,model_po_entity,group_po_followup_user,1,1,1,0
+access_po_entity_manager,po.entity.manager,model_po_entity,group_po_followup_manager,1,1,1,1
+access_po_followup_user,po.followup.user,model_po_followup,group_po_followup_user,1,1,1,1
+access_po_followup_manager,po.followup.manager,model_po_followup,group_po_followup_manager,1,1,1,1
+access_po_order_user,po.order.user,model_po_order,group_po_followup_user,1,1,1,0
+access_po_order_manager,po.order.manager,model_po_order,group_po_followup_manager,1,1,1,1
+access_po_order_assign_wizard_user,po.order.assign.wizard.user,model_po_order_assign_wizard,group_po_followup_user,1,1,1,1
+access_po_order_assign_wizard_manager,po.order.assign.wizard.manager,model_po_order_assign_wizard,group_po_followup_manager,1,1,1,1

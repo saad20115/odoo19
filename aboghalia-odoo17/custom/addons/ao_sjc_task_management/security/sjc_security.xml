@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_sjc" model="ir.module.category">
+        <field name="name">SJC+ Task Management</field>
+        <field name="sequence">34</field>
+    </record>
+
+    <record id="group_sjc_employee" model="res.groups">
+        <field name="name">Employee</field>
+        <field name="category_id" ref="module_category_sjc"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        <field name="comment">Sees only records assigned to them on the SJC dashboard.</field>
+    </record>
+
+    <record id="group_sjc_project_manager" model="res.groups">
+        <field name="name">Project Manager</field>
+        <field name="category_id" ref="module_category_sjc"/>
+        <field name="implied_ids" eval="[(4, ref('group_sjc_employee'))]"/>
+        <field name="comment">Sees Makka or Madina team tasks based on SJC Team on the user.</field>
+    </record>
+
+    <record id="group_sjc_management" model="res.groups">
+        <field name="name">Management</field>
+        <field name="category_id" ref="module_category_sjc"/>
+        <field name="implied_ids" eval="[(4, ref('group_sjc_project_manager'))]"/>
+        <field name="comment">Sees all PO Madina, PO Makka, and Incoming Mail statistics.</field>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+</odoo>

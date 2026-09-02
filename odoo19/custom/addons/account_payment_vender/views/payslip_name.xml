@@ -1,0 +1,25 @@
+<odoo>
+  <data>
+
+    <record id="view_payslip_search_inherit_hr_payslip_select" model="ir.ui.view">
+      <field name="name">payslip.search.inherit.for.payroll</field>
+      <field name="model">hr.payslip</field>
+      <field name="inherit_id" ref="hr_payroll_community.hr_payslip_search"/>
+      <field name="arch" type="xml">
+
+        <xpath expr="//group" position="inside">
+           
+                <filter string="Payslip Names" name="name" context="{'group_by':'name'}"/>
+
+        </xpath>
+      
+        
+
+      </field>
+
+    </record>
+
+    
+
+  </data>
+</odoo>

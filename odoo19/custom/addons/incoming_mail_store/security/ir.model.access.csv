@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_incoming_mail_user,incoming.mail.user,model_incoming_mail,incoming_mail_store.group_incoming_mail_user,1,1,1,0
+access_incoming_mail_shared,incoming.mail.shared,model_incoming_mail,base.group_user,1,1,0,0
+access_incoming_mail_manager,incoming.mail.manager,model_incoming_mail,base.group_system,1,1,1,1
+access_fetchmail_fetch_wizard,fetchmail.fetch.wizard,model_fetchmail_fetch_wizard,incoming_mail_store.group_incoming_mail_user,1,1,1,1
+access_fetchmail_fetch_wizard_manager,fetchmail.fetch.wizard.manager,model_fetchmail_fetch_wizard,base.group_system,1,1,1,1
+access_fetchmail_fetch_job_user,fetchmail.fetch.job.user,model_fetchmail_fetch_job,incoming_mail_store.group_incoming_mail_user,1,0,0,0
+access_fetchmail_fetch_job_manager,fetchmail.fetch.job.manager,model_fetchmail_fetch_job,base.group_system,1,1,1,1
+access_incoming_mail_reply_wizard,incoming.mail.reply.wizard,model_incoming_mail_reply_wizard,incoming_mail_store.group_incoming_mail_user,1,1,1,1
+access_incoming_mail_reply_wizard_manager,incoming.mail.reply.wizard.manager,model_incoming_mail_reply_wizard,base.group_system,1,1,1,1
+access_incoming_mail_assign_wizard,incoming.mail.assign.wizard,model_incoming_mail_assign_wizard,incoming_mail_store.group_incoming_mail_user,1,1,1,1
+access_incoming_mail_assign_wizard_manager,incoming.mail.assign.wizard.manager,model_incoming_mail_assign_wizard,base.group_system,1,1,1,1
+access_fetchmail_server_incoming_user,fetchmail.server.incoming.user,model_fetchmail_server,incoming_mail_store.group_incoming_mail_user,1,0,0,0

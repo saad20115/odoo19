@@ -1,0 +1,880 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* samir_etislate
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0-20250428\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-05-21 19:01+0000\n"
+"PO-Revision-Date: 2025-05-21 19:01+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_needaction
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_needaction
+msgid "Action Needed"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__active
+msgid "Active"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_ids
+msgid "Activities"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_exception_decoration
+msgid "Activity Exception Decoration"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_state
+msgid "Activity State"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_type_icon
+msgid "Activity Type Icon"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__money_amount
+msgid "Amount"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__vacation_type__annual
+msgid "Annual"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_employee__approvals_count
+msgid "Approvals"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__cover_letter_language__ar
+msgid "Arabic"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_attachment_count
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_attachment_count
+msgid "Attachment Count"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__money_payment_method__bank_transfer
+msgid "Bank Transfer"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__6
+msgid "Black"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__money_payment_method__cash
+msgid "Cash"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__request_type__money
+msgid "Cash Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__color
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__color
+msgid "Color"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__color_selection
+msgid "Color Selection"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.actions.act_window,name:samir_etislate.communication_management_action
+msgid "Communication Management"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_hr_employee__approvals_count
+msgid "Count of Approvals"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_hr_employee__tasks_count
+msgid "Count of Tasks"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__request_type__cover_letter
+msgid "Cover Letter Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model_terms:ir.actions.act_window,help:samir_etislate.communication_management_action
+msgid "Create Your First Record !"
+msgstr ""
+
+#. module: samir_etislate
+#: model_terms:ir.actions.act_window,help:samir_etislate.action_employee_request
+msgid "Create and track employee requests here."
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__created_by
+msgid "Created By"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__create_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__create_date
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__currency_id
+msgid "Currency"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__customer_id
+msgid "Customer"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__customer_id
+msgid "Customer Name"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__1
+msgid "Dark Blue"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__department
+msgid "Department"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__description
+msgid "Description"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__cover_letter_destination
+msgid "Destination Company"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__display_name
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__state__done
+msgid "Done"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_hr_employee
+msgid "Employee"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_employee_request
+msgid "Employee Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_employee_request_tag
+msgid "Employee Request Tag"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.actions.act_window,name:samir_etislate.action_employee_request
+msgid "Employee Requests"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__cover_letter_language__en
+msgid "English"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__request_type__equipment
+msgid "Equipment Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__equipment_type
+msgid "Equipment Type"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_hr_expense
+msgid "Expense"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_follower_ids
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_follower_ids
+msgid "Followers"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_partner_ids
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_partner_ids
+msgid "Followers (Partners)"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__activity_type_icon
+msgid "Font awesome icon e.g. fa-tasks"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__has_message
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__has_message
+msgid "Has Message"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_urgency__high
+#: model:ir.model.fields.selection,name:samir_etislate.selection__hr_expense__priority__2
+msgid "High"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__id
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__id
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__id
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__id
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__id
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__id
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__request_id
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__id
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__id
+msgid "ID"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_exception_icon
+msgid "Icon"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__activity_exception_icon
+msgid "Icon to indicate an exception activity."
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__message_needaction
+#: model:ir.model.fields,help:samir_etislate.field_saudi_arabia__message_needaction
+msgid "If checked, new messages require your attention."
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__message_has_error
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__message_has_sms_error
+#: model:ir.model.fields,help:samir_etislate.field_saudi_arabia__message_has_error
+#: model:ir.model.fields,help:samir_etislate.field_saudi_arabia__message_has_sms_error
+msgid "If checked, some messages have a delivery error."
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__state__in_progress
+msgid "In Progress"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__incoming_number
+msgid "Incoming Number"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_is_follower
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_is_follower
+msgid "Is Follower"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__equipment_justification
+msgid "Justification"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_type__laptop
+msgid "Laptop"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__write_uid
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__write_date
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__cover_letter_language
+msgid "Letter Language"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__loan_amount
+msgid "Loan Amount"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__loan_check
+msgid "Loan Check"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__loan_reason
+msgid "Loan Reason"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__request_type__loan
+msgid "Loan Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__loan_start_date
+msgid "Loan Start Date"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_urgency__low
+#: model:ir.model.fields.selection,name:samir_etislate.selection__hr_expense__priority__0
+msgid "Low"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_employee__message_main_attachment_id
+msgid "Main Attachment"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__manager
+msgid "Manager"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__3
+msgid "Maximum Blue Green"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_urgency__medium
+msgid "Medium"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_has_error
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_has_error
+msgid "Message Delivery error"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_ids
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_ids
+msgid "Messages"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_type__mobile
+msgid "Mobile"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_type__monitor
+msgid "Monitor"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__my_activity_date_deadline
+msgid "My Activity Deadline"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_date_deadline
+msgid "Next Activity Deadline"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_summary
+msgid "Next Activity Summary"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_type_id
+msgid "Next Activity Type"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__0
+msgid "None"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__hr_expense__priority__1
+msgid "Normal"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__state__not_started
+msgid "Not Started"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_needaction_counter
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_needaction_counter
+msgid "Number of Actions"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__loan_installments
+msgid "Number of Installments"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__vacation_days
+msgid "Number of Vacation Days"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_has_error_counter
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_has_error_counter
+msgid "Number of errors"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__message_needaction_counter
+#: model:ir.model.fields,help:samir_etislate.field_saudi_arabia__message_needaction_counter
+msgid "Number of messages requiring action"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__message_has_error_counter
+#: model:ir.model.fields,help:samir_etislate.field_saudi_arabia__message_has_error_counter
+msgid "Number of messages with delivery error"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__state_other
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__equipment_type__other
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__money_payment_method__other
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__state__other
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__vacation_type__other
+msgid "Other"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__money_payment_method
+msgid "Payment Method"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__money_payment_purpose
+msgid "Payment Purpose"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__state__pending
+msgid "Pending"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__5
+msgid "Platinum"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__state__postponed
+msgid "Postponed"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__cover_letter_purpose
+msgid "Purpose of Cover Letter"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__qr_code
+msgid "QR Code"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__rating_ids
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__rating_ids
+msgid "Ratings"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.ui.menu,name:samir_etislate.menu_employee_request
+msgid "Reports"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.constraint,message:samir_etislate.constraint_employee_request_request_id_uniq
+msgid "Request ID must be unique!"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__activity_user_id
+msgid "Responsible User"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__message_has_sms_error
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__message_has_sms_error
+msgid "SMS Delivery error"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_saudi_arabia
+msgid "Samir library"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.ui.menu,name:samir_etislate.menu_communication_management_root
+msgid "Saudi Arabia"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__vacation_type__sick
+msgid "Sick"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__4
+msgid "Skobeloff"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__state
+msgid "Status"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__activity_state
+msgid ""
+"Status based on activities\n"
+"Overdue: Due date is already passed\n"
+"Today: Activity date is today\n"
+"Planned: Future activities."
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request_tag__name
+msgid "Tag Name"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__tag_ids
+msgid "Tags"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__ao_section_samir__color__2
+msgid "Tan"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_employee__tasks_count
+msgid "Tasks"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__employee_id
+msgid "The Responsible Employee"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__training_course
+msgid "Training Course Name"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__training_end_date
+msgid "Training End Date"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__training_provider
+msgid "Training Provider"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__request_type__training
+msgid "Training Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__training_start_date
+msgid "Training Start Date"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__sequence
+msgid "Transaction Number"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__request_type
+msgid "Transaction Type"
+msgstr ""
+
+#. module: samir_etislate
+#: model_terms:ir.ui.view,arch_db:samir_etislate.view_employee_request_form
+msgid "Transactions Request"
+msgstr ""
+
+#. module: samir_etislate
+#: model_terms:ir.ui.view,arch_db:samir_etislate.view_employee_request_tree
+msgid "Transactions Requests"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__activity_exception_decoration
+msgid "Type of the exception activity on record."
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__employee_request__vacation_type__unpaid
+msgid "Unpaid"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__equipment_urgency
+msgid "Urgency Level"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__vacation_end_date
+msgid "Vacation End Date"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__vacation_start_date
+msgid "Vacation Start Date"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__vacation_type
+msgid "Vacation Type"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields.selection,name:samir_etislate.selection__hr_expense__priority__3
+msgid "Very High"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_employee_request__website_message_ids
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__website_message_ids
+msgid "Website Messages"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,help:samir_etislate.field_employee_request__website_message_ids
+#: model:ir.model.fields,help:samir_etislate.field_saudi_arabia__website_message_ids
+msgid "Website communication history"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_ao_exchange_samir
+msgid "ao.exchange.samir"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_ao_management_samir
+msgid "ao.management.samir"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_ao_request_samir
+msgid "ao.request.samir"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_ao_section_samir
+msgid "ao.section.samir"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model,name:samir_etislate.model_ao_state_samir
+msgid "ao.state.samir"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_exchange_samir__name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_management_samir__name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_request_samir__name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_section_samir__name
+#: model:ir.model.fields,field_description:samir_etislate.field_ao_state_samir__name
+msgid "name"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__referred_to
+msgid "احالة الي"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__another
+msgid "اخرى"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__customer_name
+msgid "اسم العميل/الجهه"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__project_name
+msgid "اسم المشروع"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__x_management_approval
+msgid "اعتماد اإلدارة"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__priority
+msgid "الأولوية"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__x_state
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__status
+msgid "الحالة"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__acc_no_from_partner_bank
+msgid "الحساب البنكي"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__x_responses
+msgid "الردود"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__y_section
+msgid "القسم"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__x_notes
+msgid "الملاحظات"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__responsible_empolyee
+msgid "الموظف المسؤل"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__date
+msgid "الوقت و التاريخ"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__export_number
+msgid "رقم الصادر"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__transaction_number
+msgid "رقم المعاملة"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__import_number
+msgid "رقم الوارد"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__x_exchange_method
+msgid "طريقة الصرف"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__transaction_subject
+msgid "موضوع المعاملة/الجهه"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__state_convent
+msgid "موقف التصفية"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_hr_expense__x_request_type
+msgid "نوع الطلب"
+msgstr ""
+
+#. module: samir_etislate
+#: model:ir.model.fields,field_description:samir_etislate.field_saudi_arabia__transaction_type
+msgid "نوع المعاملة"
+msgstr ""

@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- payslip -->
+    <record id="hr_payslip_view_tree" model="ir.ui.view">
+        <field name="name">hr.payslip.view.tree</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <tree decoration-info="state in ('confirm','hr_check','accont_check')"
+                  decoration-muted="state == 'cancel'" string="Payslips" multi_edit="1">
+                <field name="company_currency_id" optional="hide" invisible="1"/>
+                <field name="number" optional="hide"/>
+                <!-- <field name="x_total" optional="hide"/> -->
+                <field name="employee_id" optional="show"/>
+                <field name="name" optional="hide"/>
+                <field name="date_from" optional="hide"/>
+                <field name="date_to" optional="hide"/>
+                <field name="state" optional="hide"/>
+                <field name="payslip_run_id" invisible="1" optional="hide"/>
+                <field name="company_id" groups="base.group_multi_company"
+                       options="{'no_create': True}"/>
+                <field name="x_department" optional="hide"/>
+                <field name="x_job" optional="hide"/>
+                <field name="o_wage" optional="hide" sum="Total Wage"/>
+                <field name="o_hra" optional="hide" sum="Total Hra"/>
+                <field name="o_other_allowance" optional="hide" sum="Total Allowance"/>
+                <field name="x_total_salary" optional="hide" sum="Total Salary"/>
+                <field name="x_number_of_absence_days" optional="hide" sum="Total Absence Days"/>
+                <field name="x_absence" optional="hide" sum="Total Absence"/>
+                <field name="x_penalties" optional="hide" sum="Total Penalties"/>
+                <field name="x_other_discounts" optional="hide" sum="Total discounts"/>
+                <field name="social_insurance" string="التأمينات الاجتماعية" optional="hide"
+                       sum="Total Social Insurance"/>
+                <field name="traffic_violations" string="المخالفات المرورية" optional="hide"
+                       sum="Total Traffic Violations"/>
+                <field name="x_other_addons" string="إضافات أخري" optional="hide" sum="Total Additions"/>
+                <field name="payslip_gross" optional="hide" sum="Total Gross"/>
+                <field name="payslip_loan" optional="hide" sum="Total Loans"/>
+                <field name="payslip_net" optional="hide" sum="Total Net Salary"/>
+
+
+            </tree>
+
+        </field>
+    </record>
+    <!-- Payslip kanban view -->
+    <record id="hr_payslip_view_kanban" model="ir.ui.view">
+        <field name="name">hr.payslip.view.kanban</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_mobile">
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_content oe_kanban_global_click">
+                            <div class="row">
+                                <div class="col-6">
+                                    <strong>
+                                        <field name="employee_id"/>
+                                    </strong>
+                                </div>
+                                <div class="col-6">
+                                    <span class="float-right badge badge-secondary">
+                                        <field name="state"/>
+                                    </span>
+                                </div>
+                                <div class="col-12">
+                                    <span>
+                                        <field name="date_from"/>
+                                        -
+                                        <field name="date_to"/>
+                                    </span>
+                                </div>
+                                <div class="col-12">
+                                    <span>
+                                        <field name="name"/>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <record id="hr_payslip_search" model="ir.ui.view">
+        <field name="name">hr.payslip.select</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <search string="Search Payslips">
+                <field name="name" string="Payslips"
+                       filter_domain="['|',('name','ilike',self),('number','ilike',self)]"/>
+                <field name="date_from"/>
+                <filter string="Draft" name="draft"
+                        domain="[('state','=','draft')]" help="Draft Slip"/>
+                <filter string="Done" name="done"
+                        domain="[('state','=','done')]" help="Done Slip"/>
+                <field name="employee_id"/>
+                <field name="x_department"/>
+                <field name="payslip_run_id"/>
+                <group expand="0" string="Group By">
+                    <filter string="Department" name="group_by_x_department"
+                            context="{'group_by':'x_department'}"/>
+                    <filter string="Employees" name="employee_id"
+                            context="{'group_by':'employee_id'}"/>
+                    <filter string="PaySlip Batch" name="payslip_run_id"
+                            context="{'group_by':'payslip_run_id'}"/>
+                    <filter string="Companies" name="company_id"
+                            groups="base.group_multi_company"
+                            context="{'group_by':'company_id'}"/>
+                    <filter string="States" name="state"
+                            context="{'group_by':'state'}"/>
+                    <!-- <filter name="active_payslips"
+                    string="Active Payslips"
+                    domain="[('state', '=', 'active')]" /> -->
+                    <filter name="archived"
+                            string="Archived"
+                            domain="[('active', '=', False)]"/>
+                    <filter name="show_archived_active"
+                            string="Show Archived &amp; Active"
+                            domain="['|',('active', '=', False),('active', '=', True)]"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="hr_payslip_action" model="ir.actions.act_window">
+        <field name="name">Employee Payslips</field>
+        <field name="res_model">hr.payslip</field>
+        <field name="view_mode">tree,kanban,form,pivot</field>
+        <field name="context">{'search_default_group_by_x_department': 1}</field>
+        <field name="search_view_id" ref="hr_payslip_search"/>
+    </record>
+
+    <menuitem action="hr_payslip_action" id="menu_department_tree" parent="menu_hr_payroll_community_root"
+              groups="hr_payroll_community.group_hr_payroll_community_user"/>
+    <record id="action_hr_payslip" model="ir.actions.act_window">
+        <field name="res_model">hr.payslip</field>
+        <field name="name">Payslips</field>
+        <field name="view_mode">tree,form,kanban,pivot</field>
+        <field name="context">{'search_default_employee_id': [active_id],
+            'default_employee_id': active_id, 'search_default_group_by_x_department': 1}
+        </field>
+    </record>
+    <record id="hr_employee_view_form" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.inherit.hr.payroll.community</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='bank_account_id']" position="after">
+
+                <field name="beneficiary_id"/>
+                <field name="beneficiar_bank"/>
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_pivot_hr_payslip" model="ir.ui.view">
+        <field name="name">hr.payslip.pivot.view</field>
+        <field name="model">hr.payslip</field>
+        <field name="arch" type="xml">
+            <pivot string="Payslip Analysis">
+                <field name="number"/>
+                <field name="date_from" type="row"/>
+                <field name="date_to" type="row"/>
+                <field name="employee_id" type="col"/>
+                <field name="company_id" type="col"/>
+                <field name="payslip_run_id" type="col"/>
+                <field name="state"/>
+                <field name="x_number_of_penalty_days" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+
+
+</odoo>
+ 

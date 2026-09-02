@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sjc_po_instruction_wizard_form" model="ir.ui.view">
+        <field name="name">sjc.po.instruction.wizard.form</field>
+        <field name="model">sjc.po.instruction.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send your instructions">
+                <group>
+                    <field name="followup_model" invisible="1"/>
+                    <field name="followup_id" invisible="1"/>
+                    <field name="display_name_po" invisible="1"/>
+                    <field name="po_number" readonly="1"/>
+                    <field name="user_ids" widget="many2many_tags"
+                             options="{'no_create': True, 'no_open': True}"
+                             placeholder="Select one or more employees"/>
+                </group>
+                <group string="Instructions">
+                    <field name="message" nolabel="1" colspan="2"/>
+                </group>
+                <footer>
+                    <button name="action_send" type="object" string="Send" class="btn-primary"/>
+                    <button string="Cancel" special="cancel" class="btn-secondary"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_sjc_po_instruction_wizard" model="ir.actions.act_window">
+        <field name="name">Send your instructions</field>
+        <field name="res_model">sjc.po.instruction.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="view_id" ref="view_sjc_po_instruction_wizard_form"/>
+    </record>
+</odoo>

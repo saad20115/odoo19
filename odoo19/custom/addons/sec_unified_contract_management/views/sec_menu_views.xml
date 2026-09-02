@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Actions -->
+    <record id="action_sec_unified_project" model="ir.actions.act_window">
+        <field name="name">المشاريع والعقود الموحدة</field>
+        <field name="res_model">sec.unified.project</field>
+        <field name="view_mode">kanban,tree,form</field>
+    </record>
+
+    <record id="action_sec_work_order_all" model="ir.actions.act_window">
+        <field name="name">كافة أوامر العمل</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+    </record>
+
+    <!-- Specific Sequential Stages Actions -->
+    <record id="action_sec_stage_1_draft" model="ir.actions.act_window">
+        <field name="name">1. الإسناد</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'draft')]</field>
+    </record>
+
+    <record id="action_sec_stage_2_survey" model="ir.actions.act_window">
+        <field name="name">2. الكشفية والتصاريح</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'survey')]</field>
+    </record>
+
+    <record id="action_sec_stage_3_execution" model="ir.actions.act_window">
+        <field name="name">3. التنفيذ الميداني</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">kanban,tree,form</field>
+        <field name="domain">[('state', '=', 'execution')]</field>
+    </record>
+
+    <record id="action_sec_stage_4_closing" model="ir.actions.act_window">
+        <field name="name">4. الإغلاق والتسليم</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'closing')]</field>
+    </record>
+
+    <record id="action_sec_stage_5_invoicing" model="ir.actions.act_window">
+        <field name="name">5. الفوترة والمستخلصات</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'invoicing')]</field>
+    </record>
+
+    <record id="action_sec_stage_6_collection" model="ir.actions.act_window">
+        <field name="name">6. التحصيل المالي</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'collection')]</field>
+    </record>
+
+    <record id="action_sec_stage_7_done" model="ir.actions.act_window">
+        <field name="name">7. المكتمل والمؤرشف</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'done')]</field>
+    </record>
+
+    <record id="action_sec_stage_cancelled" model="ir.actions.act_window">
+        <field name="name">أوامر العمل الملغية</field>
+        <field name="res_model">sec.work.order</field>
+        <field name="view_mode">tree,kanban,form</field>
+        <field name="domain">[('state', '=', 'cancelled')]</field>
+    </record>
+
+    <!-- Menus Structure -->
+    <menuitem id="menu_sec_root" name="العقود الموحدة (الكهرباء)" sequence="10"/>
+
+    <menuitem id="menu_sec_projects" name="المشاريع الرئيسية" parent="menu_sec_root" action="action_sec_unified_project" sequence="10"/>
+
+    <menuitem id="menu_sec_work_orders" name="أوامر العمل" parent="menu_sec_root" sequence="20"/>
+    <menuitem id="menu_sec_wo_all" name="كافة أوامر العمل" parent="menu_sec_work_orders" action="action_sec_work_order_all" sequence="10"/>
+
+    <menuitem id="menu_sec_stages" name="السلاسل والمراحل المتتابعة" parent="menu_sec_root" sequence="30"/>
+    <menuitem id="menu_sec_s1" name="1. الإسناد" parent="menu_sec_stages" action="action_sec_stage_1_draft" sequence="10"/>
+    <menuitem id="menu_sec_s2" name="2. الكشفية والتصاريح" parent="menu_sec_stages" action="action_sec_stage_2_survey" sequence="20"/>
+    <menuitem id="menu_sec_s3" name="3. التنفيذ الميداني" parent="menu_sec_stages" action="action_sec_stage_3_execution" sequence="30"/>
+    <menuitem id="menu_sec_s4" name="4. الإغلاق والتسليم" parent="menu_sec_stages" action="action_sec_stage_4_closing" sequence="40"/>
+    <menuitem id="menu_sec_s5" name="5. الفوترة والمستخلصات" parent="menu_sec_stages" action="action_sec_stage_5_invoicing" sequence="50"/>
+    <menuitem id="menu_sec_s6" name="6. التحصيل المالي" parent="menu_sec_stages" action="action_sec_stage_6_collection" sequence="60"/>
+    <menuitem id="menu_sec_s7" name="7. المكتمل والمؤرشف" parent="menu_sec_stages" action="action_sec_stage_7_done" sequence="70"/>
+    
+    <menuitem id="menu_sec_s_canc" name="أوامر العمل الملغية" parent="menu_sec_root" action="action_sec_stage_cancelled" sequence="80"/>
+</odoo>

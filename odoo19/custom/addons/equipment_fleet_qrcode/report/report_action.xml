@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+<!--        report action for partner-->
+        <record id="equipment_fleet_qrcode.print_qr" model="ir.actions.report">
+            <field name="name"> QR code</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">equipment_fleet_qrcode.customer_qr_template</field>
+            <field name="report_file">equipment_fleet_qrcode.customer_qr_template</field>
+            <field name="paperformat_id"  ref="equipment_fleet_qrcode.customer_badge_paperformat"/>
+            <field name="print_report_name">'%s - Badge' % object.name</field>
+            <field name="binding_model_id" ref="model_fleet_vehicle"/>
+            <field name="binding_type">report</field>
+        </record>
+<!--        report action for product-->
+        <record id="equipment_fleet_qrcode.print_qr1" model="ir.actions.report">
+            <field name="name">QR code</field>
+            <field name="model">maintenance.equipment</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">equipment_fleet_qrcode.customer_qr_template</field>
+            <field name="report_file">equipment_fleet_qrcode.customer_qr_template</field>
+            <field name="paperformat_id"  ref="equipment_fleet_qrcode.customer_badge_paperformat"/>
+            <field name="print_report_name">'%s - Badge' % object.name</field>
+            <field name="binding_model_id" ref="model_maintenance_equipment"/>
+            <field name="binding_type">report</field>
+        </record>
+    </data>
+</odoo>

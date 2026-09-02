@@ -1,0 +1,31 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <!-- Project Task Form Tree View -->
+    <record model="ir.ui.view" id="project_task_form_tree">
+        <field name="name">Project Task Forms</field>
+        <field name="model">project.task.form</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string='Project Forms' editable="bottom">
+                <field name="name" string="اسم النموذج"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Project Task Form Action -->
+    <record id="action_project_task_form" model="ir.actions.act_window">
+        <field name="name">النماذج</field>
+        <field name="res_model">project.task.form</field>
+        <field name="view_mode">tree</field>
+        <field name="domain">[]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Click to add a new task form records.
+            </p>
+        </field>
+    </record>
+
+    <menuitem action="action_project_task_form" id="menu_project_task_form" parent="project.menu_project_config" sequence="5"/>
+
+</odoo>

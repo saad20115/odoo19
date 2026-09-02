@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-inherit="ao_work_entries.hr_attendance_grid_template" t-inherit-mode="extension" owl="1">
+
+        <xpath expr="//div[contains(@class,'o_attendance_controls')]" position="inside">
+            <span class="d-none ao_attendance_grid_ctx"
+                  t-att-data-year="state.currentYear"
+                  t-att-data-month="state.currentMonth"
+                  t-att-data-month-name="state.currentMonthName"
+                  t-att-data-filter-department="state.selectedDepartmentId || ''"
+                  t-att-data-filter-employee="state.searchEmployeeName || ''"
+                  t-att-data-filter-status="state.selectedStatusFilter || ''"
+                  t-att-data-page="state.pagination.currentPage"
+                  t-att-data-page-size="state.pagination.pageSize"
+                  t-att-data-total-pages="state.pagination.totalPages"
+                  t-att-data-total-count="state.pagination.totalCount"
+                  t-att-data-employee-ids="state.employees.map((employee) => employee.id).join(',')"/>
+        </xpath>
+
+        <!-- PDF Button -->
+        <xpath expr="//button[contains(@class,'btn') and contains(@class,'btn-info') and contains(@t-on-click, &quot;exportData('xlsx')&quot;)]" position="after">
+            <button class="btn btn-danger me-2 ao_print_pdf_btn"
+                    t-att-disabled="state.isLoading">
+                <i class="fa fa-file-pdf-o me-1"/> Print PDF
+            </button>
+        </xpath>
+
+    </t>
+</templates>

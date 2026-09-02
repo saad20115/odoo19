@@ -1,0 +1,60 @@
+<odoo>
+    <record id="view_hr_attendance_edit_request_form" model="ir.ui.view">
+        <field name="name">hr.attendance.edit.request.form</field>
+        <field name="model">hr.attendance.edit.request</field>
+        <field name="arch" type="xml">
+            <form string="Attendance Edit Request">
+                <sheet>
+                    <header>
+                        <button name="action_approve" type="object" string="Approve" invisible="state != 'pending'"
+                                class="btn-primary"/>
+                        <button name="action_reject" type="object" string="Reject" invisible="state != 'pending'"
+                                class="btn-secondary"/>
+                        <button string="Close" class="btn-secondary" special="cancel"/>
+                    </header>
+                    <group>
+                        <field name="employee_id" readonly="state=='approved'"/>
+                        <field name="attendance_id" readonly="state=='approved'"/>
+                        <field name="check_in_new" readonly="state=='approved'"/>
+                        <field name="check_out_new" readonly="state=='approved'"/>
+                        <field name="state" readonly="1"/>
+                        <field name="approved_by" invisible="state!= 'approved'" />
+
+
+                    </group>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_hr_attendance_edit_request_tree" model="ir.ui.view">
+        <field name="name">hr.attendance.edit.request.tree</field>
+        <field name="model">hr.attendance.edit.request</field>
+        <field name="arch" type="xml">
+            <tree string="Attendance Edit Requests">
+                <field name="employee_id"/>
+                <field name="attendance_id"/>
+                <field name="check_in_new"/>
+                <field name="check_out_new"/>
+                <field name="state"/>
+
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_attendance_edit_request" model="ir.actions.act_window">
+        <field name="name">Attendance Edit Requests</field>
+        <field name="res_model">hr.attendance.edit.request</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="request_attendance_root_menu"
+              name="Custom Attendance Request"
+              sequence="10"
+    />
+    <menuitem id="menu_request_attendance_custom"
+              name="Attendance Request"
+              action="action_hr_attendance_edit_request"
+              parent="request_attendance_root_menu"/>
+</odoo>

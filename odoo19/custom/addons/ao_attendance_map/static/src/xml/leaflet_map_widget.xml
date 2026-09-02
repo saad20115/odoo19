@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<template id="template" xml:space="preserve">
+    <t t-name="hr_attendance_maps.LeafletMapTemplate">
+        <div class="o_leaflet_map_widget">
+            <div t-ref="mapContainer" class="leaflet-map-container" style="height: 350px; width: 100%; border: 1px solid #ddd; border-radius: 4px; background-color: #f8f9fa;">
+                <div style="display: flex; align-items: center; justify-content: center; height: 100%; color: #666;">
+                    <div style="text-align: center;">
+                        <i class="fa fa-spinner fa-spin" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <div>Loading map...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>

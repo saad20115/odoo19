@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Quick whatsapp message Send -->
+    <record id="group_send_whatsapp_quick" model="res.groups">
+        <field name="name">Send Whatsapp Quick</field>
+        <field name="users" eval="[Command.link(ref('base.user_root')), Command.link(ref('base.user_admin'))]" />
+    </record>
+
+    <!-- Quick Sales whatsapp message Send -->
+    <record id="group_sales_whatsapp_feature" model="res.groups">
+        <field name="name">Sales Whatsapp Feature</field>
+        <field name="users" eval="[Command.link(ref('base.user_root')), Command.link(ref('base.user_admin'))]" />
+    </record>
+
+    <!-- Quick Purchase whatsapp message Send -->
+    <record id="group_purchase_whatsapp_feature" model="res.groups">
+        <field name="name">Purchase Whatsapp Feature</field>
+        <field name="users" eval="[Command.link(ref('base.user_root')), Command.link(ref('base.user_admin'))]" />
+    </record>
+
+    <!-- Quick Stock whatsapp message Send -->
+    <record id="group_stock_whatsapp_feature" model="res.groups">
+        <field name="name">Stock Whatsapp Feature</field>
+        <field name="users" eval="[Command.link(ref('base.user_root')), Command.link(ref('base.user_admin'))]" />
+    </record>
+
+    <!-- Quick Account whatsapp message Send -->
+    <record id="group_account_whatsapp_feature" model="res.groups">
+        <field name="name">Account Whatsapp Feature</field>
+        <field name="users" eval="[Command.link(ref('base.user_root')), Command.link(ref('base.user_admin'))]" />
+    </record>
+
+    <!-- Quick CRM whatsapp message Send -->
+    <record id="group_crm_whatsapp_msg_feature" model="res.groups">
+        <field name="name">CRM Whatsapp Feature</field>
+        <field name="users" eval="[Command.link(ref('base.user_root')), Command.link(ref('base.user_admin'))]" />
+    </record>
+</odoo>

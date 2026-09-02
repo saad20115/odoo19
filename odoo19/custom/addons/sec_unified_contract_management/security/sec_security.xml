@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_sec_unified_contract_category" model="ir.module.category">
+        <field name="name">مشاريع العقود الموحدة (شركة الكهرباء)</field>
+        <field name="description">إدارة مشاريع وأوامر عمل العقود الموحدة لشركة الكهرباء السعودية</field>
+        <field name="sequence">15</field>
+    </record>
+
+    <record id="group_sec_field_user" model="res.groups">
+        <field name="name">مسؤول ميداني / مهندس موقع</field>
+        <field name="category_id" ref="module_sec_unified_contract_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_sec_office_user" model="res.groups">
+        <field name="name">مسؤول مكتبي / منسق عقود</field>
+        <field name="category_id" ref="module_sec_unified_contract_category"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <record id="group_sec_manager" model="res.groups">
+        <field name="name">مدير مشروع / مشرف عام</field>
+        <field name="category_id" ref="module_sec_unified_contract_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_sec_field_user')), (4, ref('group_sec_office_user'))]"/>
+    </record>
+
+    <record id="group_sec_admin" model="res.groups">
+        <field name="name">مدير النظام (كامل الصلاحيات)</field>
+        <field name="category_id" ref="module_sec_unified_contract_category"/>
+        <field name="implied_ids" eval="[(4, ref('group_sec_manager'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- Multi-company Rules -->
+    <record id="sec_project_company_rule" model="ir.rule">
+        <field name="name">SEC Project Multi-Company</field>
+        <field name="model_id" ref="model_sec_unified_project"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="sec_work_order_company_rule" model="ir.rule">
+        <field name="name">SEC Work Order Multi-Company</field>
+        <field name="model_id" ref="model_sec_work_order"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

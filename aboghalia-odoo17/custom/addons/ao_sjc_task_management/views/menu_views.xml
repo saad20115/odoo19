@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_sjc_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">sjc_dashboard</field>
+        <field name="target">current</field>
+        <field name="context">{'sjc_page': 'dashboard'}</field>
+    </record>
+
+    <record id="action_sjc_po_makka" model="ir.actions.client">
+        <field name="name">PO - Makka Tasks</field>
+        <field name="tag">sjc_dashboard</field>
+        <field name="target">current</field>
+        <field name="context">{'sjc_page': 'po_makka'}</field>
+    </record>
+
+    <record id="action_sjc_po_madina" model="ir.actions.client">
+        <field name="name">PO - Madina Tasks</field>
+        <field name="tag">sjc_dashboard</field>
+        <field name="target">current</field>
+        <field name="context">{'sjc_page': 'po_madina'}</field>
+    </record>
+
+    <record id="action_sjc_emails" model="ir.actions.client">
+        <field name="name">Emails Tasks</field>
+        <field name="tag">sjc_dashboard</field>
+        <field name="target">current</field>
+        <field name="context">{'sjc_page': 'emails'}</field>
+    </record>
+
+    <record id="action_sjc_admin_comms" model="ir.actions.client">
+        <field name="name">Administrative Communications</field>
+        <field name="tag">sjc_dashboard</field>
+        <field name="target">current</field>
+        <field name="context">{'sjc_page': 'admin_comms'}</field>
+    </record>
+
+    <record id="action_sjc_expenses" model="ir.actions.client">
+        <field name="name">Expenses</field>
+        <field name="tag">sjc_dashboard</field>
+        <field name="target">current</field>
+        <field name="context">{'sjc_page': 'expenses'}</field>
+    </record>
+
+    <menuitem id="menu_sjc_root"
+              name="SJC+"
+              sequence="8"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <menuitem id="menu_sjc_dashboard"
+              name="Dashboard"
+              parent="menu_sjc_root"
+              action="action_sjc_dashboard"
+              sequence="1"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <menuitem id="menu_sjc_po_makka"
+              name="PO - Makka Tasks"
+              parent="menu_sjc_root"
+              action="action_sjc_po_makka"
+              sequence="10"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <menuitem id="menu_sjc_po_madina"
+              name="PO - Madina Tasks"
+              parent="menu_sjc_root"
+              action="action_sjc_po_madina"
+              sequence="20"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <menuitem id="menu_sjc_admin_comms"
+              name="Administrative Communications"
+              parent="menu_sjc_root"
+              action="action_sjc_admin_comms"
+              sequence="25"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <menuitem id="menu_sjc_expenses"
+              name="Expenses"
+              parent="menu_sjc_root"
+              action="action_sjc_expenses"
+              sequence="28"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <menuitem id="menu_sjc_emails"
+              name="Emails Tasks"
+              parent="menu_sjc_root"
+              action="action_sjc_emails"
+              sequence="30"
+              groups="ao_sjc_task_management.group_sjc_employee"/>
+
+    <!-- Keep legacy XML ids inactive (hide from UI, safe on upgrade) -->
+    <menuitem id="menu_sjc_supervision"
+              name="Supervision"
+              parent="menu_sjc_root"
+              sequence="200"
+              groups="ao_sjc_task_management.group_sjc_project_manager"
+              active="False"/>
+    <menuitem id="menu_sjc_branches"
+              name="Branches"
+              parent="menu_sjc_supervision"
+              action="action_sjc_dashboard"
+              sequence="10"
+              active="False"/>
+    <menuitem id="menu_sjc_departments"
+              name="Departments"
+              parent="menu_sjc_supervision"
+              action="action_sjc_dashboard"
+              sequence="20"
+              active="False"/>
+    <menuitem id="menu_sjc_projects"
+              name="Projects"
+              parent="menu_sjc_supervision"
+              action="action_sjc_dashboard"
+              sequence="30"
+              active="False"/>
+    <menuitem id="menu_sjc_field"
+              name="Field Check"
+              parent="menu_sjc_supervision"
+              action="action_sjc_dashboard"
+              sequence="40"
+              active="False"/>
+    <menuitem id="menu_sjc_gis"
+              name="GIS Map"
+              parent="menu_sjc_supervision"
+              action="action_sjc_dashboard"
+              sequence="50"
+              active="False"/>
+    <menuitem id="menu_sjc_personal"
+              name="Personal"
+              parent="menu_sjc_root"
+              sequence="210"
+              groups="ao_sjc_task_management.group_sjc_employee"
+              active="False"/>
+    <menuitem id="menu_sjc_my_tasks"
+              name="My Tasks"
+              parent="menu_sjc_personal"
+              action="action_sjc_dashboard"
+              sequence="10"
+              active="False"/>
+    <menuitem id="menu_sjc_incoming"
+              name="Incoming Requests"
+              parent="menu_sjc_personal"
+              action="action_sjc_dashboard"
+              sequence="20"
+              active="False"/>
+    <menuitem id="menu_sjc_leave"
+              name="Leave Requests"
+              parent="menu_sjc_personal"
+              action="action_sjc_dashboard"
+              sequence="30"
+              active="False"/>
+    <menuitem id="menu_sjc_reports"
+              name="Reports"
+              parent="menu_sjc_root"
+              sequence="220"
+              groups="ao_sjc_task_management.group_sjc_management"
+              active="False"/>
+    <menuitem id="menu_sjc_employee_month"
+              name="Employee of the Month"
+              parent="menu_sjc_reports"
+              action="action_sjc_dashboard"
+              sequence="10"
+              active="False"/>
+    <menuitem id="menu_sjc_honors"
+              name="Monthly Honors"
+              parent="menu_sjc_reports"
+              action="action_sjc_dashboard"
+              sequence="20"
+              active="False"/>
+    <menuitem id="menu_sjc_achievement"
+              name="Achievement"
+              parent="menu_sjc_reports"
+              action="action_sjc_dashboard"
+              sequence="30"
+              active="False"/>
+    <menuitem id="menu_sjc_letters"
+              name="Letters"
+              parent="menu_sjc_reports"
+              action="action_sjc_dashboard"
+              sequence="40"
+              active="False"/>
+
+    <menuitem id="menu_sjc_config"
+              name="Configuration"
+              parent="menu_sjc_root"
+              sequence="90"
+              groups="ao_sjc_task_management.group_sjc_management"/>
+
+    <menuitem id="menu_sjc_settings"
+              name="Settings"
+              parent="menu_sjc_config"
+              action="action_sjc_config_settings"
+              sequence="10"
+              groups="ao_sjc_task_management.group_sjc_management"/>
+</odoo>

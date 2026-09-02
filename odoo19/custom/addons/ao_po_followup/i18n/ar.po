@@ -1,0 +1,584 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# * ao_po_followup
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-07-27 00:00+0000\n"
+"PO-Revision-Date: 2026-07-27 00:00+0000\n"
+"Last-Translator: \n"
+"Language-Team: Arabic\n"
+"Language: ar\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#. module: ao_po_followup
+#: model:ir.module.module,shortdesc:ao_po_followup
+msgid "PO Follow-up"
+msgstr "متابعة PO"
+
+#. module: ao_po_followup
+#: model:ir.module.module,summary:ao_po_followup
+msgid "Spreadsheet-style PO follow-up tracking with dashboard totals."
+msgstr "متابعة أوامر الشراء بأسلوب الجداول مع إجماليات لوحة المؤشرات."
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_followup_root
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_followup
+#: model:ir.actions.act_window,name:ao_po_followup.action_po_followup
+#: model:ir.module.category,name:ao_po_followup.module_category_po_followup
+#: model:ir.model,name:ao_po_followup.model_po_followup
+msgid "PO Follow-up"
+msgstr "متابعة PO"
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_followup_configuration
+msgid "Configuration"
+msgstr "الإعدادات"
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_contractor
+#: model:ir.actions.act_window,name:ao_po_followup.action_po_contractor
+#: model:ir.model,name:ao_po_followup.model_po_contractor
+msgid "Contractors"
+msgstr "المقاول"
+
+#. module: ao_po_followup
+#: model:ir.model,name:ao_po_followup.model_po_contractor
+msgid "Contractor"
+msgstr "المقاول"
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_office
+#: model:ir.actions.act_window,name:ao_po_followup.action_po_office
+msgid "Offices"
+msgstr "المكتب"
+
+#. module: ao_po_followup
+#: model:ir.model,name:ao_po_followup.model_po_office
+msgid "Office"
+msgstr "المكتب"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__office_id
+msgid "Office"
+msgstr "المكتب"
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_entity
+#: model:ir.actions.act_window,name:ao_po_followup.action_po_entity
+msgid "Entities"
+msgstr "الجهة"
+
+#. module: ao_po_followup
+#: model:ir.model,name:ao_po_followup.model_po_entity
+msgid "Entity"
+msgstr "الجهة"
+
+#. module: ao_po_followup
+#: model_terms:ir.actions.act_window,help:ao_po_followup.action_po_office
+msgid "Create your first office"
+msgstr "أنشئ أول مكتب"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__po_number
+msgid "PO"
+msgstr "PO"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__work_order_number
+msgid "Work Order Number"
+msgstr "رقم امر العمل"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_tree
+msgid "Work Order"
+msgstr "رقم امر العمل"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_tree
+msgid "Cloud Files"
+msgstr "ملفات السحابة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_tree
+msgid "Estimation"
+msgstr "تاريخ المقايسة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_tree
+msgid "On System"
+msgstr "رفع على النظام"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_tree
+msgid "Value + Tax"
+msgstr "القيمة بالضريبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__contractor_id
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_contractor__name
+msgid "Contractor"
+msgstr "المقاول"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__entity_id
+msgid "Entity"
+msgstr "الجهة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__description
+msgid "Description"
+msgstr "وصف العمل"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__technical_files_uploaded
+msgid "Technical Files Cloud Upload"
+msgstr "رفع الملفات الفنية على السحابة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__tax_invoice
+msgid "Tax Invoice"
+msgstr "فاتورة ضريبية"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__invoice_number
+msgid "Invoice Number"
+msgstr "رقم الفاتورة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__invoice_date
+msgid "Invoice Date"
+msgstr "تاريخ الفوترة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__estimation_date
+msgid "Estimation Date"
+msgstr "تاريخ المقايسة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__uploaded_to_system
+msgid "Uploaded to System"
+msgstr "رفع على النظام"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__expenditure
+msgid "Expenditure"
+msgstr "الصرف"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__value
+msgid "Value"
+msgstr "القيمة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__value_with_tax
+msgid "Value with Tax"
+msgstr "القيمة بالضريبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__attention
+msgid "Attention"
+msgstr "تنبيه"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__sequence
+msgid "#"
+msgstr "م"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__name
+msgid "Display Name"
+msgstr "الاسم"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_contractor__name
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_entity__name
+msgid "Name"
+msgstr "الاسم"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,selection:ao_po_followup.selection__po_followup__technical_files_uploaded__yes
+#: model:ir.model.fields,selection:ao_po_followup.selection__po_followup__tax_invoice__yes
+#: model:ir.model.fields,selection:ao_po_followup.selection__po_followup__uploaded_to_system__yes
+msgid "Yes"
+msgstr "تم"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,selection:ao_po_followup.selection__po_followup__technical_files_uploaded__no
+#: model:ir.model.fields,selection:ao_po_followup.selection__po_followup__tax_invoice__no
+#: model:ir.model.fields,selection:ao_po_followup.selection__po_followup__uploaded_to_system__no
+msgid "No"
+msgstr "لا"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,help:ao_po_followup.field_po_followup__attention
+msgid "Highlight this row (e.g. needs follow-up)."
+msgstr "تمييز هذا الصف (مثل الحاجة للمتابعة)."
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Total Orders"
+msgstr "اجمالي الاوامر"
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Total Invoicing"
+msgstr "اجمالي الفوترة"
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Total Expenditure"
+msgstr "اجمالي الصرف"
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Invoicing Completion"
+msgstr "نسبة انجاز الفوترة"
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Expenditure Completion"
+msgstr "نسبة انجاز الصرف"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__is_fully_done
+msgid "Fully Done"
+msgstr "مكتمل"
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Count"
+msgstr "العدد"
+
+#. module: ao_po_followup
+#. odoo-javascript
+#: code:addons/ao_po_followup/static/src/xml/po_followup_list.xml:0
+msgid "Value"
+msgstr "القيمة"
+
+#. module: ao_po_followup
+#: model:res.groups,name:ao_po_followup.group_po_followup_user
+msgid "User"
+msgstr "مستخدم"
+
+#. module: ao_po_followup
+#: model:res.groups,name:ao_po_followup.group_po_followup_manager
+msgid "Administrator"
+msgstr "مدير"
+
+#. module: ao_po_followup
+#: model_terms:ir.actions.act_window,help:ao_po_followup.action_po_followup
+msgid "Start tracking your first PO"
+msgstr "ابدأ بمتابعة أول PO"
+
+#. module: ao_po_followup
+#: model_terms:ir.actions.act_window,help:ao_po_followup.action_po_contractor
+msgid "Create your first contractor"
+msgstr "أنشئ أول مقاول"
+
+#. module: ao_po_followup
+#: model_terms:ir.actions.act_window,help:ao_po_followup.action_po_entity
+msgid "Create your first entity"
+msgstr "أنشئ أول جهة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Tax Invoice Done"
+msgstr "فاتورة ضريبية تمت"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Uploaded to System"
+msgstr "رفع على النظام"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Technical Files Uploaded"
+msgstr "رفع الملفات الفنية"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Attention"
+msgstr "تنبيه"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Has Expenditure"
+msgstr "يوجد صرف"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Invoice Date"
+msgstr "تاريخ الفوترة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Estimation Date"
+msgstr "تاريخ المقايسة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Contractor"
+msgstr "المقاول"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Office"
+msgstr "المكتب"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Entity"
+msgstr "الجهة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__state
+msgid "Status"
+msgstr "الحالة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields.selection,name:ao_po_followup.selection__po_followup__state__draft
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields.selection,name:ao_po_followup.selection__po_followup__state__assigned
+msgid "Assigned to Accounting"
+msgstr "محال للمحاسبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields.selection,name:ao_po_followup.selection__po_followup__state__sent_to_portal
+msgid "Sent to Portal"
+msgstr "مرسل للبوابة"
+
+#. module: ao_po_followup
+#: model:ir.actions.server,name:ao_po_followup.action_server_assign_to_accounting
+msgid "Assign to Accounting"
+msgstr "إحالة للمحاسبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__remote_invoice_name
+msgid "Remote Invoice"
+msgstr "فاتورة المحاسبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__assign_error
+msgid "Assign Error"
+msgstr "خطأ الإحالة"
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_followup_settings
+#: model:ir.actions.act_window,name:ao_po_followup.action_po_followup_config_settings
+msgid "Settings"
+msgstr "الإعدادات"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Draft"
+msgstr "مسودة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Assigned to Accounting"
+msgstr "محال للمحاسبة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Sent to Portal"
+msgstr "مرسل للبوابة"
+
+#. module: ao_po_followup
+#: model:ir.ui.menu,name:ao_po_followup.menu_po_order
+#: model:ir.actions.act_window,name:ao_po_followup.action_po_order
+#: model:ir.model,name:ao_po_followup.model_po_order
+msgid "PO Order"
+msgstr "PO ORDER"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__name
+msgid "PO"
+msgstr "الوصف"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__document
+msgid "File"
+msgstr "تحديد الملف"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__user_id
+msgid "Assigned To"
+msgstr "مسند إلى"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__status
+msgid "Status"
+msgstr "الحالة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields.selection,name:ao_po_followup.selection__po_order__status__unassigned
+msgid "Unassigned"
+msgstr "غير مسند"
+
+#. module: ao_po_followup
+#: model:ir.model.fields.selection,name:ao_po_followup.selection__po_order__status__assigned
+msgid "Assigned"
+msgstr "مسند"
+
+#. module: ao_po_followup
+#: model:ir.model.fields.selection,name:ao_po_followup.selection__po_order__status__done
+msgid "Done"
+msgstr "منتهي"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__is_done
+msgid "Done"
+msgstr "منتهي"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__received_from_accounting
+msgid "Received from Accounting"
+msgstr "مستلم من المحاسبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__remote_invoice_name
+msgid "Remote Invoice"
+msgstr "فاتورة المحاسبة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_form
+msgid "Assign to me"
+msgstr "إسناد لي"
+
+#. module: ao_po_followup
+msgid "PO %(po)s is already assigned to %(user)s."
+msgstr "أمر الشراء %(po)s مسند بالفعل إلى %(user)s."
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_form
+msgid "Mark Done"
+msgstr "تعيين كمنتهي"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_tree
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_search
+msgid "Description"
+msgstr "الوصف"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_tree
+msgid "Select File"
+msgstr "تحديد الملف"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_tree
+msgid "Invoice"
+msgstr "الفاتورة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_form
+msgid "Accounting"
+msgstr "المحاسبة"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_form
+msgid "File"
+msgstr "الملف"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_search
+msgid "My PO Orders"
+msgstr "أوامري"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_search
+msgid "To Do"
+msgstr "قيد التنفيذ"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_search
+msgid "Unassigned"
+msgstr "غير مسند"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_search
+msgid "Done"
+msgstr "منتهي"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_order_search
+msgid "From Accounting"
+msgstr "من المحاسبة"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_order__followup_id
+msgid "PO Follow-up"
+msgstr "متابعة PO"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_res_config_settings__po_order_api_login
+msgid "Incoming PO Order API Login"
+msgstr "اسم مستخدم API لاستلام PO Order"
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_res_config_settings__po_order_api_password
+msgid "Incoming PO Order API Password"
+msgstr "كلمة مرور API لاستلام PO Order"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.res_config_settings_view_form_po_followup
+msgid "Set PO Follow-up as home for all Users"
+msgstr "تعيين متابعة PO كالشاشة الرئيسية لكل المستخدمين"
+
+#. module: ao_po_followup
+msgid "Work Order Number \"%(number)s\" already exists on PO %(po)s."
+msgstr "رقم أمر العمل \"%(number)s\" موجود بالفعل على أمر الشراء %(po)s."
+
+#. module: ao_po_followup
+#: model:ir.model.fields,field_description:ao_po_followup.field_po_followup__is_fully_done
+msgid "All Triple Yes"
+msgstr "الثلاثة نعم"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "All Triple Yes"
+msgstr "الثلاثة نعم"
+
+#. module: ao_po_followup
+#: model_terms:ir.ui.view,arch_db:ao_po_followup.view_po_followup_search
+msgid "Not All Triple Yes"
+msgstr "ليس الثلاثة نعم"
+
+#. module: ao_po_followup
+msgid ""
+"Work Order Number is required before Assign to Accounting.\n"
+"Missing on:\n%s"
+msgstr ""
+"رقم أمر العمل مطلوب قبل الإحالة إلى المحاسبة.\n"
+"ناقص في:\n%s"
+
+#. module: ao_po_followup
+msgid "Accounting invoice: %s"
+msgstr "فاتورة المحاسبة: %s"
+
+#. module: ao_po_followup
+msgid "Archived after Accounting Register Payment."
+msgstr "تمت الأرشفة بعد تسجيل الدفع في المحاسبة."
+
+#. module: ao_po_followup
+msgid "Updated from Accounting Send to Portal."
+msgstr "تم التحديث من إرسال المحاسبة إلى البوابة."
+
+#. module: ao_po_followup
+msgid "Created from Accounting Send to Portal."
+msgstr "تم الإنشاء من إرسال المحاسبة إلى البوابة."

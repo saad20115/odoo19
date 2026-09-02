@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Runs after menus/actions exist: set SJC+ Dashboard as login Home Action. -->
+    <function model="res.users" name="_ao_sjc_apply_home_action_all"/>
+</odoo>

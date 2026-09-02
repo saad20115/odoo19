@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_po_followup" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.makka.po.followup</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="PO Follow-up Makka"
+                     string="PO Follow-up Makka"
+                     name="ao_makka_po_followup"
+                     groups="ao_makka_po_followup.group_makka_po_followup_manager">
+                    <block title="Accounting Odoo Connection">
+                        <setting string="Accounting API"
+                                 help="Must match Accounting (8071) Settings → Unified Contract → Incoming API Login/Password. Not the Incoming Makka PO Order fields below.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="makka_po_accounting_url" class="col-lg-3 o_light_label"/>
+                                    <field name="makka_po_accounting_url" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="makka_po_accounting_db" class="col-lg-3 o_light_label"/>
+                                    <field name="makka_po_accounting_db" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="makka_po_accounting_login" class="col-lg-3 o_light_label"/>
+                                    <field name="makka_po_accounting_login" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="makka_po_accounting_password" class="col-lg-3 o_light_label"/>
+                                    <field name="makka_po_accounting_password" password="True" class="col-lg-6"/>
+                                </div>
+                                <div class="mt8">
+                                    <button name="action_test_makka_accounting_connection"
+                                            type="object"
+                                            string="Test Accounting Connection"
+                                            class="btn-secondary"
+                                            icon="fa-plug"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Makka PO Order Incoming API">
+                        <setting string="Send to Portal credentials"
+                                 help="Accounting Aboghalia uses these credentials when calling Send to Portal.">
+                            <div class="content-group">
+                                <div class="row mt16">
+                                    <label for="makka_po_order_api_login" class="col-lg-3 o_light_label"/>
+                                    <field name="makka_po_order_api_login" class="col-lg-6"/>
+                                </div>
+                                <div class="row">
+                                    <label for="makka_po_order_api_password" class="col-lg-3 o_light_label"/>
+                                    <field name="makka_po_order_api_password" password="True" class="col-lg-6"/>
+                                </div>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Home Screen">
+                        <setting string="Default app for contract users"
+                                 help="After login, users in PO Follow-up Makka group open PO Follow-up Makka directly.">
+                            <div class="mt8">
+                                <button name="action_set_makka_po_followup_home_for_users"
+                                        type="object"
+                                        string="Set PO Follow-up Makka as home for all Users"
+                                        class="btn-primary"
+                                        icon="fa-home"/>
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_po_followup_config_settings" model="ir.actions.act_window">
+        <field name="name">Settings</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'ao_makka_po_followup'}</field>
+    </record>
+</odoo>

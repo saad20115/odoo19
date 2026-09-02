@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Tree View -->
+    <record id="view_employee_request_tree" model="ir.ui.view">
+        <field name="name">employee.request.tree</field>
+        <field name="model">employee.request</field>
+        <field name="arch" type="xml">
+            <tree string="Transactions Requests">
+                <field name="serial_number" optional="show"/>
+                <field name="company_id" optional="show"/>
+                <field name="department" optional="show"/>
+                <field name="incoming_number" optional="show"/>
+                <field name="created_by" optional="show"/>
+                <field name="employee_ids" optional="show"/>
+                <field name="transaction_type" optional="show"/>
+                <field name="tag_ids" optional="show"/>
+                <field name="start_date" optional="show"/>
+                <field name="end_date" optional="show"/>
+                <field name="status" optional="show"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Form View -->
+    <record id="view_employee_request_form" model="ir.ui.view">
+        <field name="name">employee.request.form</field>
+        <field name="model">employee.request</field>
+        <field name="arch" type="xml">
+            <form string="Transactions Request">
+                <header>
+                    <button name="action_start" type="object" string="بدء" class="oe_highlight btn-primary" invisible="status != 'new'"/>
+                    <button name="action_in_progress" type="object" string="قيد الاجراء" class="btn-secondary" invisible="status != 'new'"/>
+                    <button name="action_overdue" type="object" string="متأخر" class="btn-danger" invisible="status != 'in_progress'"/>
+                    <button name="action_done" type="object" string="منتهى" class="btn-success" invisible="status not in ('in_progress', 'overdue')"/>
+                    <field name="status" widget="statusbar" statusbar_visible="new,in_progress,overdue,done"/>
+                </header>
+
+
+                <!-- <field name="sequence" readonly="1" nolabel="1"/> -->
+                    
+                <sheet>
+                    <group cols="2">
+                        <group>
+                            <field name="serial_number" />
+                            <field name="company_id"/>
+                            <!-- <field name="customer_id"/>  -->
+                            <field name="department"/>
+                            <field name="incoming_number"/>
+                            <field name="created_by"/>
+                            <field name="employee_ids" widget="many2many_tags"/>
+                            <field name="transaction_type"/>
+                        </group>
+                        <group>
+                            <field name="qr_code" widget="image" class="oe_avatar" filename="qr_code_filename"/>
+                            <!-- <button name="action_share_request"
+                                type="object"
+                                icon="fa-share-alt"
+                                string="Share"
+                                class="oe_highlight"/> -->
+                            <field name="tag_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+
+                            
+
+                        </group>     
+                    </group>
+                    <group>
+                            <field name="description" widget="html"/>
+                    </group>
+
+                </sheet>
+
+
+                    
+
+                    <!-- <notebook>
+                        <page string="Description">
+                            <field name="description"/>
+                        </page>
+                    </notebook> -->
+
+
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!-- Action -->
+    <record id="action_employee_request" model="ir.actions.act_window">
+        <field name="name">Employee Requests</field>
+        <field name="res_model">employee.request</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p>Create and track employee requests here.</p>
+        </field>
+    </record>
+
+     <!-- Menu Item -->
+    <menuitem id="menu_employee_request" name="Reports"
+             
+              action="action_employee_request" sequence="1"/>
+</odoo>

@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_leave_pwa_subscription_user,leave.pwa.subscription user,model_leave_pwa_subscription,base.group_user,1,0,0,0
+access_leave_pwa_subscription_system,leave.pwa.subscription system,model_leave_pwa_subscription,base.group_system,1,1,1,1
+access_leave_pwa_employee_balance_manager,leave.pwa.employee.balance manager,model_leave_pwa_employee_balance,hr_holidays.group_hr_holidays_manager,1,1,1,1
+access_leave_pwa_balance_import_manager,leave.pwa.balance.import manager,model_leave_pwa_balance_import,hr_holidays.group_hr_holidays_manager,1,1,1,1
+access_leave_pwa_balance_import_line_manager,leave.pwa.balance.import.line manager,model_leave_pwa_balance_import_line,hr_holidays.group_hr_holidays_manager,1,1,1,1

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_po_order_tree" model="ir.ui.view">
+        <field name="name">po.order.tree</field>
+        <field name="model">po.order</field>
+        <field name="arch" type="xml">
+            <tree string="PO Order"
+                  class="ao_po_order_tree"
+                  create="1"
+                  delete="1"
+                  decoration-warning="status == 'unassigned'"
+                  decoration-info="status == 'assigned'"
+                  decoration-success="status == 'done'">
+                <field name="name" string="Description"/>
+                <field name="status" string="Status"/>
+                <field name="user_id" string="Assigned To"/>
+                <field name="document" filename="document_filename" string="Select File"/>
+                <field name="document_filename" column_invisible="1"/>
+                <field name="remote_invoice_name" string="Invoice" optional="show"/>
+                <field name="is_done" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_po_order_form" model="ir.ui.view">
+        <field name="name">po.order.form.followup</field>
+        <field name="model">po.order</field>
+        <field name="priority" eval="1"/>
+        <field name="arch" type="xml">
+            <form string="PO Order">
+                <header>
+                    <button name="action_assign_to_me"
+                            type="object"
+                            string="Assign to me"
+                            class="btn-primary"
+                            invisible="user_id == uid"/>
+                    <button name="action_mark_done"
+                            type="object"
+                            string="Mark Done"
+                            class="btn-primary"
+                            invisible="is_done"/>
+                    <field name="status"
+                            widget="statusbar"
+                            statusbar_visible="unassigned,assigned,done"/>
+                    <field name="user_id" invisible="1"/>
+                    <field name="is_done" invisible="1"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" required="1"/>
+                            <field name="followup_id"/>
+                            <field name="received_from_accounting" readonly="1"/>
+                            <field name="remote_invoice_name" invisible="1"/>
+                            <field name="document" invisible="1"/>
+                            <field name="document_filename" invisible="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_po_order_search" model="ir.ui.view">
+        <field name="name">po.order.search</field>
+        <field name="model">po.order</field>
+        <field name="arch" type="xml">
+            <search string="PO Order">
+                <field name="name"/>
+                <field name="user_id"/>
+                <field name="status"/>
+                <filter string="My PO Orders" name="my_po_orders" domain="[('user_id', '=', uid)]"/>
+                <filter string="Unassigned" name="unassigned" domain="[('status', '=', 'unassigned')]"/>
+                <filter string="To Do" name="todo" domain="[('status', '!=', 'done')]"/>
+                <filter string="Done" name="done" domain="[('status', '=', 'done')]"/>
+                <group>
+                    <filter string="Status" name="group_status" context="{'group_by': 'status'}"/>
+                    <filter string="Assigned To" name="group_user" context="{'group_by': 'user_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_po_order" model="ir.actions.act_window">
+        <field name="name">PO Order</field>
+        <field name="res_model">po.order</field>
+        <field name="view_mode">tree,form</field>
+        <field name="view_id" ref="view_po_order_tree"/>
+        <field name="search_view_id" ref="view_po_order_search"/>
+        <field name="context">{}</field>
+    </record>
+
+    <record id="action_po_order_view_tree" model="ir.actions.act_window.view">
+        <field name="sequence" eval="1"/>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="view_po_order_tree"/>
+        <field name="act_window_id" ref="action_po_order"/>
+    </record>
+
+    <record id="action_po_order_view_form" model="ir.actions.act_window.view">
+        <field name="sequence" eval="2"/>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_po_order_form"/>
+        <field name="act_window_id" ref="action_po_order"/>
+    </record>
+</odoo>

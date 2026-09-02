@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sec_project_all,sec.unified.project.all,model_sec_unified_project,base.group_user,1,1,1,1
+access_sec_work_order_all,sec.work.order.all,model_sec_work_order,base.group_user,1,1,1,1
+access_sec_execution_step_all,sec.work.order.execution.step.all,model_sec_work_order_execution_step,base.group_user,1,1,1,1
+access_sec_attachment_check_all,sec.work.order.attachment.check.all,model_sec_work_order_attachment_check,base.group_user,1,1,1,1

@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_attendance_form_with_maps" model="ir.ui.view">
+        <field name="name">hr.attendance.form.with.maps</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <notebook>
+                    <page string="Location Maps" invisible="not check_in">
+                        <group>
+                            <group string="Check In Location" invisible="not in_latitude or not in_longitude">
+                                <!-- Check-in map widget -->
+                                <widget name="leaflet_map_checkin"/>
+                            </group>
+                            <group string="Check Out Location" invisible="not out_latitude or not out_longitude">
+                                <!-- Check-out map widget -->
+                                <widget name="leaflet_map_checkout"/>
+                            </group>
+                        </group>
+                    </page>
+                </notebook>
+            </xpath>
+        </field>
+    </record>
+</odoo>

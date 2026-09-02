@@ -1,0 +1,622 @@
+<odoo>
+
+<!-- <record id="samir_project_action_id_1" model="ir.actions.act_window">
+            <field name="name">اﻹسناد</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+            <field name="context">context</field>
+        </record>
+<menuitem id="menu_samir_project_1" parent="project.menu_main_pm" name="اﻹسناد" action="samir_project_action_id_1" groups="samir_electrical_project.group_samir_assignment_team" /> -->
+
+<!-- <record id="samir_project_action_id_2" model="ir.actions.act_window">
+            <field name="name">التنفيذ</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+            <field name="context">context</field>
+        </record>
+<menuitem id="menu_samir_project_2" parent="project.menu_main_pm" name="التنفيذ" action="samir_project_action_id_2" groups="samir_electrical_project.group_samir_assignment_team"/>
+<menuitem id="menu_samir_project_2" parent="project.menu_main_pm" name="التنفيذ" action="samir_project_action_id_2" groups="samir_electrical_project.group_samir_excution_team"/>
+ -->
+
+
+<!-- <record id="samir_project_action_id_3" model="ir.actions.act_window">
+            <field name="name">اﻹغلاق</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+            <field name="context">context</field>
+        </record>
+<menuitem id="menu_samir_project_3" parent="project.menu_main_pm" name="اﻹغلاق" action="samir_project_action_id_3" groups="samir_electrical_project.group_samir_assignment_team"/>
+<menuitem id="menu_samir_project_3" parent="project.menu_main_pm" name="اﻹغلاق" action="samir_project_action_id_3" groups="samir_electrical_project.group_samir_excution_team"/>
+<menuitem id="menu_samir_project_3" parent="project.menu_main_pm" name="اﻹغلاق" action="samir_project_action_id_3" groups="samir_electrical_project.group_samir_closing_team"/> -->
+
+
+
+<!-- <record id="samir_project_action_id_4" model="ir.actions.act_window"> 
+            <field name="name">الفوترة</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+            <field name="context">context</field>
+        </record>
+
+<menuitem id="menu_samir_project_4" parent="project.menu_main_pm" name="الفوترة" action="samir_project_action_id_4" groups="samir_electrical_project.group_samir_assignment_team"/>
+<menuitem id="menu_samir_project_4" parent="project.menu_main_pm" name="الفوترة" action="samir_project_action_id_4" groups="samir_electrical_project.group_samir_excution_team"/>
+<menuitem id="menu_samir_project_4" parent="project.menu_main_pm" name="الفوترة" action="samir_project_action_id_4" groups="samir_electrical_project.group_samir_closing_team"/> 
+<menuitem id="menu_samir_project_4" parent="project.menu_main_pm" name="الفوترة" action="samir_project_action_id_4" groups="samir_electrical_project.group_samir_invoicing_team"/>
+ -->
+
+
+ <record id="project_task_view_tree_connections" model="ir.ui.view">
+            <field name="name">project.task.view.tree.connections</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+                <tree string="التوصيلات" editable="bottom">
+                    <field name="is_late_f1" />
+                    <field name="x_axis" />
+                    <field name="y_axis" />
+                    <field name="name" options="{&quot;fg_color&quot;: &quot;white: is_late_f1 == True&quot;&quot;bg_color&quot;: &quot;red: is_late_f1 == True&quot;}" string=" امر العمل"/>
+                    <!-- <field name="work_order_number" options="{&quot;fg_color&quot;: &quot;white: is_late_f1 == True&quot;&quot;bg_color&quot;: &quot;red: is_late_f1 == True&quot;}" optional="show"/> -->
+                    <field name="x_contractor" string="المقاول" options="{&quot;fg_color&quot;: &quot;white: is_late_f1 == True&quot;&quot;bg_color&quot;: &quot;red: is_late_f1 == True&quot;}" optional="show"/>
+                    <field name="x_website" string="الموقع" options="{&quot;fg_color&quot;: &quot;white: is_late_f1 == True&quot;&quot;bg_color&quot;: &quot;red: is_late_f1 == True&quot;}" optional="show"/>
+                    <field name="station_number" widget="char" optional="show"/>
+                    <field name="x_work_type" optional="show"/>
+                    <field name="x_consultant_code" optional="show" string="كود اﻷستشاري"/>
+                    <field name="x_job_description" optional="show" string="وصف العمل"/>
+                    <field name="x_attribution_date" optional="show"/>
+                    <field name="work_order_duration_date" optional="show"/>
+                    <field name="the_elapsed_period" optional="show"/>
+                    <field name="x_sectors" optional="show"/>
+                    <field name="x_admin_new" widget="many2many_tags" optional="show"/>
+                    <field name="scouting_the_site" optional="show"/>
+                     <field name="seq" optional="show"/>
+                    <field name="presence_of_barriers" optional="show"/>
+                    <field name="x_declaration" optional="show"/>
+                    <field name="excution_start_date" optional="show"/>
+                    <field name="excution_end_date" optional="show"/>
+                    <field name="execution_duration_cell" optional="show"/>
+                    <field name="implementation_status" optional="show"/>
+                    <field name="x_restore_the_situation" optional="show"/>
+                    <field name="rent_rate" optional="show" widget="percentage" string="(%)نسبة الانجاز" />
+                    <field name="x_receiving"  optional="show"/>
+                    <field name="procedure203"  optional="show"/>
+
+                    <!-- <field name="s_procedure" optional="show"/> -->
+                    <field name="x_final_planning_approval" optional="show"/>
+                    <field name="x_approval_of_final_quantities" optional="show"/>
+                    <field name="procedure155" optional="show"/>
+                    <field name="procedure155_date" optional="show"/>
+                    <field name="x_procedure155_date" optional="show"/>
+                    <field name="notes" optional="show"/>
+                    <field name="final_closure" optional="show"/>
+                    <field name="x_entering_a_note_into_the_system" optional="show"/>
+                    <field name="issuing_a_certificate_of_completion" optional="show"/>
+                    <field name="x_approximate_value" optional="show"/>
+                    <field name="extract" optional="show"/>
+                    <field name="x_permits" optional="show"/>
+                    <field name="x_implementation_photos" optional="show"/>
+                    <field name="x_execution_quantities" options="{&quot;fg_color&quot;: &quot;white: is_late_f1 == True&quot;&quot;bg_color&quot;: &quot;red: is_late_f1 == True&quot;}" optional="show"/>
+
+                </tree>
+            </field>
+        </record>
+
+
+
+
+<record id="samir_project_action_id_connections" model="ir.actions.act_window"> 
+            <field name="name">التوصيلات</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+            <field name="context">{'default_x_project_type': 'التوصيلات'}</field>
+            <field name="view_id" ref="project_task_view_tree_connections" />
+</record>
+
+
+<menuitem id="menu_samir_project_connections" parent="project.menu_main_pm" name="التوصيلات" action="samir_project_action_id_connections" />
+
+
+<record id="samir_project_action_id_projects" model="ir.actions.act_window"> 
+            <field name="name">المشاريع</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+</record>
+
+<menuitem id="menu_samir_project_projects" parent="project.menu_main_pm" name="المشاريع" action="samir_project_action_id_projects" />
+
+<record id="project_task_view_tree_projects" model="ir.ui.view">
+    <field name="name">project.task.view.tree.projects</field>
+    <field name="model">project.task</field>
+    <field name="arch" type="xml">
+        <tree string="المشاريع" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+            <field name="work_order_number"/>
+            <field name="x_implementation_photos"/>
+            <field name="x_permits"/>
+            <field name="x_abstract_number"/>
+            <field name="issuing_a_certificate_of_completion"/>
+            <field name="x_procedure155_date"/>
+            <field name="procedure155_on_the_system"/>
+            <field name="final_planning_approval"/>
+            <field name="x_date_of_approval"/>
+            <field name="notes"/>
+            <field name="x_duration_of_delay"/>
+            <field name="x_restore_the_situation"/>
+            <field name="x_send_email"/>
+            <field name="x_program_implementation"/>
+            <field name="implementation_status"/>    
+            <field name="x_duration_of_implementation"/>
+            <field name="excution_end_date"/>
+            <field name="excution_start_date"/>
+            <field name="x_program"/>
+            <field name="declaration"/>
+            <field name="x_disbursement_of_materials"/>
+            <field name="presence_of_barriers"/>
+            <field name="scouting_the_site"/>
+            <field name="x_admin"/>
+            <field name="x_sector"/>
+            <field name="the_elapsed_period"/>
+            <field name="work_order_duration_date"/>
+            <field name="x_attribution_order_history"/>
+            <field name="job_description"/>
+            <field name="x_section"/>
+            <field name="x_consultant_code"/>
+            <field name="x_work_type"/>
+            <field name="station_number"/>
+            <field name="x_site"/>
+        </tree>
+    </field>
+</record>
+
+
+    <record id="samir_project_action_id_mashaer_connections" model="ir.actions.act_window"> 
+    <field name="name">توصيلات المشاعر</field>
+    <field name="res_model">project.task</field>
+    <field name="domain">[]</field>
+    </record>
+
+    <menuitem id="menu_samir_project_mashaer_connections" parent="project.menu_main_pm" name="توصيلات المشاعر" action="samir_project_action_id_mashaer_connections"/>
+
+        <record id="project_task_view_tree_mashaer_connections" model="ir.ui.view">
+        <field name="name">project.task.view.tree.mashaer.projects</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+    <tree string="توصيلات المشاعر" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+            <field name="work_order_number"/>
+            <field name="x_implementation_photos"/>
+            <field name="x_permits"/>
+            <field name="x_abstract_number"/>
+            <field name="issuing_a_certificate_of_completion"/>
+            <field name="x_procedure155_date"/>
+            <field name="procedure155_on_the_system"/>
+            <field name="final_planning_approval"/>
+            <field name="x_date_of_approval"/>
+            <field name="notes"/>
+            <field name="x_duration_of_delay"/>
+            <field name="x_restore_the_situation"/>
+            <field name="x_send_email"/>
+            <field name="x_program_implementation"/>
+            <field name="implementation_status"/>    
+            <field name="x_duration_of_implementation"/>
+            <field name="excution_end_date"/>
+            <field name="excution_start_date"/>
+            <field name="x_program"/>
+            <field name="declaration"/>
+            <field name="x_disbursement_of_materials"/>
+            <field name="presence_of_barriers"/>
+            <field name="scouting_the_site"/>
+            <field name="x_admin"/>
+            <field name="x_sector"/>
+            <field name="the_elapsed_period"/>
+            <field name="work_order_duration_date"/>
+            <field name="x_attribution_order_history"/>
+            <field name="job_description"/>
+            <field name="x_section"/>
+            <field name="x_consultant_code"/>
+            <field name="x_work_type"/>
+            <field name="station_number"/>
+            <field name="x_site"/>
+    </tree>
+    </field>
+    </record>
+
+
+
+    <record id="samir_project_action_id_mashaer_projects" model="ir.actions.act_window"> 
+        <field name="name">مشاريع المشاعر</field>
+        <field name="res_model">project.task</field>
+        <field name="domain">[]</field>
+        </record>
+    
+    <menuitem id="menu_samir_project_mashaer_projects" parent="project.menu_main_pm" name=" مشاريع المشاعر " action="samir_project_action_id_mashaer_projects"/>
+    
+    <record id="project_task_view_tree_mashaer_projects" model="ir.ui.view">
+            <field name="name">project.task.view.tree.mashaer.projects</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+        <tree string=" مشاريع المشاعر " editable="bottom">
+                <field name="name" string="نوع امر العمل"/>
+                <field name="work_order_number"/>
+            <field name="x_implementation_photos"/>
+            <field name="x_permits"/>
+            <field name="x_abstract_number"/>
+            <field name="issuing_a_certificate_of_completion"/>
+            <field name="x_procedure155_date"/>
+            <field name="procedure155_on_the_system"/>
+            <field name="final_planning_approval"/>
+            <field name="x_date_of_approval"/>
+            <field name="notes"/>
+            <field name="x_duration_of_delay"/>
+            <field name="x_restore_the_situation"/>
+            <field name="x_send_email"/>
+            <field name="x_program_implementation"/>
+            <field name="implementation_status"/>    
+            <field name="x_duration_of_implementation"/>
+            <field name="excution_end_date"/>
+            <field name="excution_start_date"/>
+            <field name="x_program"/>
+            <field name="declaration"/>
+            <field name="x_disbursement_of_materials"/>
+            <field name="presence_of_barriers"/>
+            <field name="scouting_the_site"/>
+            <field name="x_admin"/>
+            <field name="x_sector"/>
+            <field name="the_elapsed_period"/>
+            <field name="work_order_duration_date"/>
+            <field name="x_attribution_order_history"/>
+            <field name="job_description"/>
+            <field name="x_section"/>
+            <field name="x_consultant_code"/>
+            <field name="x_work_type"/>
+            <field name="station_number"/>
+            <field name="x_site"/>
+        </tree>
+        </field>
+        </record>
+
+    <record id="samir_project_action_id_maintenance_of_mashaer" model="ir.actions.act_window"> 
+            <field name="name"> صيانة المشاعر</field>
+            <field name="res_model">project.task</field>
+            <field name="domain">[]</field>
+            </record>
+        
+    <menuitem id="menu_samir_project_maintenance_of_mashaer" parent="project.menu_main_pm" name= "صيانة المشاعر" action="samir_project_action_id_maintenance_of_mashaer"/>
+        
+    <record id="project_task_view_tree_maintenance_of_mashaer" model="ir.ui.view">
+                <field name="name">project.task.view.tree.maintenance_of.mashaer</field>
+                <field name="model">project.task</field>
+                <field name="arch" type="xml">
+            <tree string=" صيانة المشاعر" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+            <field name="work_order_number"/>
+            <field name="x_implementation_photos"/>
+            <field name="x_permits"/>
+            <field name="x_abstract_number"/>
+            <field name="issuing_a_certificate_of_completion"/>
+            <field name="x_procedure155_date"/>
+            <field name="procedure155_on_the_system"/>
+            <field name="final_planning_approval"/>
+            <field name="x_date_of_approval"/>
+            <field name="notes"/>
+            <field name="x_duration_of_delay"/>
+            <field name="x_restore_the_situation"/>
+            <field name="x_send_email"/>
+            <field name="x_program_implementation"/>
+            <field name="implementation_status"/>    
+            <field name="x_duration_of_implementation"/>
+            <field name="excution_end_date"/>
+            <field name="excution_start_date"/>
+            <field name="x_program"/>
+            <field name="declaration"/>
+            <field name="x_disbursement_of_materials"/>
+            <field name="presence_of_barriers"/>
+            <field name="scouting_the_site"/>
+            <field name="x_admin"/>
+            <field name="x_sector"/>
+            <field name="the_elapsed_period"/>
+            <field name="work_order_duration_date"/>
+            <field name="x_attribution_order_history"/>
+            <field name="job_description"/>
+            <field name="x_section"/>
+            <field name="x_consultant_code"/>
+            <field name="x_work_type"/>
+            <field name="station_number"/>
+            <field name="x_site"/>
+            </tree>
+            </field>
+            </record>      
+            
+            
+
+    <record id="samir_project_action_id_centralized_zone_replacements" model="ir.actions.act_window"> 
+                <field name="name">استبدلات المنطقة المركزية </field>
+                <field name="res_model">project.task</field>
+                <field name="domain">[]</field>
+                </record>
+            
+    <menuitem id="menu_samir_project_centralized_zone_replacements" parent="project.menu_main_pm" name= " استبدلات المنطقة المركزية " action="samir_project_action_id_centralized_zone_replacements"/>
+            
+    <record id="project_task_view_tree_centralized_zone_replacements" model="ir.ui.view">
+                    <field name="name">project.task.view.tree.centralized_zone_replacements</field>
+                    <field name="model">project.task</field>
+                    <field name="arch" type="xml">
+                <tree string=" استبدلات المنطقة المركزية " editable="bottom">
+                        <field name="name" string="نوع امر العمل"/>
+                        <field name="x_programming_date"/>
+                        <field name="x_consultant_notes"/>
+                        <field name="x_contractors_notes"/>
+                        <field name="x_nature_of_the_site"/>
+                        <field name="x_station_location"/>
+                        <field name="station_number"/>
+                </tree>
+                </field>
+                </record> 
+                
+                
+
+            
+    <record id="samir_project_action_id_transformer_room_rehabilitation" model="ir.actions.act_window"> 
+                    <field name="name">  تاهيل غرفة المحولات </field>
+                    <field name="res_model">project.task</field>
+                    <field name="domain">[]</field>
+                    </record>
+                
+    <menuitem id="menu_samir_project_transformer_room_rehabilitation" parent="project.menu_main_pm" name= "تاهيل غرفة المحولات" action="samir_project_action_id_transformer_room_rehabilitation"/>
+                
+    <record id="project_task_view_tree_transformer_room_rehabilitation" model="ir.ui.view">
+                        <field name="name">project.task.view.tree.transformer.room.rehabilitation</field>
+                        <field name="model">project.task</field>
+                        <field name="arch" type="xml">
+                    <tree string="تاهيل غرفة المحولات" editable="bottom">
+                            <field name="name" string="نوع امر العمل"/>
+                    </tree>
+    </field>
+    </record>
+    
+<record id="samir_project_action_id_meter_room_rehabilitation" model="ir.actions.act_window"> 
+        <field name="name">تاهيل غرفة العدادات </field>
+        <field name="res_model">project.task</field>
+        <field name="domain">[]</field>
+        </record>
+    
+<menuitem id="menu_samir_project_meter_room_rehabilitation" parent="project.menu_main_pm" name= "تاهيل غرف العدادات" action="samir_project_action_id_meter_room_rehabilitation"/>
+    
+<record id="project_task_view_tree_meter_room_rehabilitation" model="ir.ui.view">
+            <field name="name">project.task.view.tree.meter.room.rehabilitation</field>
+            <field name="model">project.task</field>
+            <field name="arch" type="xml">
+        <tree string="تاهيل غرف العدادات" editable="bottom">
+                <field name="name" string="نوع امر العمل"/>
+                <field name="x_execution_quantities"/>
+                <field name="x_implementation_photos"/>
+                <field name="x_abstract_number"/>
+                <field name="x_certificate_billing"/>
+                <field name="x_po_version"/>
+                <field name="x_submit_documents_to_electricity"/>
+                <field name="x_approximate_value"/>
+                <field name="x_contractor_value"/>
+                <field name="x_contractors_extract_number"/>
+                <field name="x_extracts"/>
+                <field name="x_documents"/>
+                <field name="x_receiving"/>
+                <field name="x_end_notes"/>
+                <field name="x_quantities"/>
+                <field name="x_supply_and_spread"/>
+                <field name="x_removing_and_transporting"/>
+                <field name="station_number"/>
+        </tree>
+</field>
+</record>
+
+
+<record id="samir_project_action_id_khalis_connections" model="ir.actions.act_window"> 
+    <field name="name">توصيلات خليص</field>
+    <field name="res_model">project.task</field>
+    <field name="domain">[]</field>
+    </record>
+
+<menuitem id="menu_samir_project_khalis_connections" parent="project.menu_main_pm" name= "توصيلات خليص" action="samir_project_action_id_khalis_connections"/>
+
+<record id="project_task_view_tree_khalis_connections" model="ir.ui.view">
+        <field name="name">project.task.view.tree.khalis.connections</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+    <tree string="توصيلات خليص" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+            <field name="x_execution_quantities" optional="show"/>
+            <field name="work_order_number" optional="show"/>
+            <field name="x_current_contractor" optional="show"/>
+            <field name="x_site" optional="show"/>
+            <field name="station_number" optional="show"/>
+            <field name="x_work_type" optional="show"/>
+            <field name="x_consultant_code" optional="show" string="كود اﻷستشاري"/>
+            <field name="job_description" optional="show"/>
+            <field name="x_attribution_date" optional="show"/>
+            <field name="work_order_duration_date" optional="show"/>
+            <field name="x_sectors" optional="show"/>
+            <field name="x_admin" optional="show"/>
+            <field name="scouting_the_site" optional="show"/>
+            <field name="declaration" optional="show"/>
+            <field name="excution_start_date" optional="show"/>
+            <field name="excution_end_date" optional="show"/>
+            <field name="implementation_status" optional="show"/>
+            <field name="rent_rate" optional="show"/>
+            <field name="s_procedure" optional="show"/>
+            <field name="x_final_planning_approval" optional="show"/>
+            <field name="x_approval_of_final_quantities" optional="show"/>
+            <field name="procedure155" optional="show"/>
+            <field name="procedure155_date" optional="show"/>
+            <field name="x_procedure155_date" optional="show"/>
+            <field name="notes" optional="show"/>
+            <field name="final_closure" optional="show"/>
+            <field name="x_entering_a_note_into_the_system" optional="show"/>
+            <field name="issuing_a_certificate_of_completion" optional="show"/>
+            <field name="extract" optional="show"/>
+            <field name="x_permits" optional="show"/>
+            <field name="x_implementation_photos" optional="show"/>
+    </tree>
+</field>
+</record>
+
+
+<record id="samir_project_action_id_khalis_projects" model="ir.actions.act_window"> 
+    <field name="name">مشاريع خليص</field>
+    <field name="res_model">project.task</field>
+    <field name="domain">[]</field>
+    </record>
+
+<menuitem id="menu_samir_project_khalis_projects" parent="project.menu_main_pm" name= "مشاريع خليص" action="samir_project_action_id_khalis_projects"/>
+
+<record id="project_task_view_tree_khalis_projects" model="ir.ui.view">
+        <field name="name">project.task.view.tree.khalis.projects</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+    <tree string="مشاريع خليص" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+            <field name="x_execution_quantities" optional="show"/>
+            <field name="work_order_number" optional="show"/>
+            <field name="x_current_contractor" optional="show"/>
+            <field name="x_site" optional="show"/>
+            <field name="station_number" optional="show"/>
+            <field name="x_work_type" optional="show"/>
+            <field name="x_consultant_code" optional="show" string="كود اﻷستشاري"/>
+            <field name="job_description" optional="show"/>
+            <field name="x_attribution_date" optional="show"/>
+            <field name="work_order_duration_date" optional="show"/>
+            <field name="x_sectors" optional="show"/>
+            <field name="x_admin" optional="show"/>
+            <field name="scouting_the_site" optional="show"/>
+            <field name="declaration" optional="show"/>
+            <field name="excution_start_date" optional="show"/>
+            <field name="excution_end_date" optional="show"/>
+            <field name="implementation_status" optional="show"/>
+            <field name="rent_rate" optional="show"/>
+            <field name="s_procedure" optional="show"/>
+            <field name="x_final_planning_approval" optional="show"/>
+            <field name="x_approval_of_final_quantities" optional="show"/>
+            <field name="procedure155" optional="show"/>
+            <field name="procedure155_date" optional="show"/>
+            <field name="x_procedure155_date" optional="show"/>
+            <field name="notes" optional="show"/>
+            <field name="final_closure" optional="show"/>
+            <field name="x_entering_a_note_into_the_system" optional="show"/>
+            <field name="issuing_a_certificate_of_completion" optional="show"/>
+            <field name="extract" optional="show"/>
+            <field name="x_permits" optional="show"/>
+            <field name="x_implementation_photos" optional="show"/>
+    </tree>
+</field>
+</record>
+
+
+
+<record id="samir_project_action_id_khalis_maintenance" model="ir.actions.act_window"> 
+    <field name="name">صيانة خليص</field>
+    <field name="res_model">project.task</field>
+    <field name="domain">[]</field>
+    </record>
+
+<menuitem id="menu_samir_project_khalis_maintenance" parent="project.menu_main_pm" name= "صيانة خليص" action="samir_project_action_id_khalis_maintenance"/>
+
+<record id="project_task_view_tree_khalis_maintenance" model="ir.ui.view">
+        <field name="name">project.task.view.tree.khalis.maintenance</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+    <tree string="صيانة خليص" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+    </tree>
+</field>
+</record>
+
+
+
+<record id="samir_project_action_id_maintenance_and_emergencies" model="ir.actions.act_window"> 
+    <field name="name">الصيانة والطوارئ</field>
+    <field name="res_model">project.task</field>
+    <field name="domain">[]</field>
+    </record>
+
+<menuitem id="menu_samir_project_maintenance_and_emergencies" parent="project.menu_main_pm" name= "الصيانة والطوارئ" action="samir_project_action_id_maintenance_and_emergencies"/>
+
+<record id="project_task_view_tree_maintenance_and_emergencies" model="ir.ui.view">
+        <field name="name">project.task.view.tree.maintenance.and.emergencies</field>
+        <field name="model">project.task</field>
+        <field name="arch" type="xml">
+    <tree string="الصيانة والطوارئ" editable="bottom">
+            <field name="name" string="نوع امر العمل"/>
+            <field name="x_po_version" optional="show"/>
+            <field name="notes" optional="show"/>
+            <field name="x_implementation_date" optional="show"/>
+            <field name="x_approval_of_final_quantities" optional="show"/>
+            <field name="x_work_type" optional="show"/>
+           
+    </tree>
+</field>
+</record>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+
+
+
+    
+                
+                
+        
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</odoo>

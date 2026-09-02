@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_po_followup_tree" model="ir.ui.view">
+        <field name="name">makka.po.followup.tree</field>
+        <field name="model">makka.po.followup</field>
+        <field name="arch" type="xml">
+            <tree string="PO Follow-up Makka"
+                  js_class="makka_po_followup_list"
+                  class="ao_makka_po_followup_tree"
+                  editable="bottom"
+                  decoration-success="is_fully_done == True"
+                  decoration-danger="attention == True"
+                  decoration-muted="state == 'sent_to_portal'"
+                  decoration-info="state == 'assigned'"
+                  create="1"
+                  delete="1">
+                <header>
+                    <button name="%(ao_makka_po_followup.action_makka_po_import_fix_wizard)d"
+                            type="action"
+                            string="Fix Import File"
+                            display="always"
+                            class="btn-secondary"
+                            icon="fa-wrench"/>
+                </header>
+                <!-- Excel order: م | po | تاريخ التنفيذ | رقم أمر العمل | المقاول | تاريخ الادخال | الموظف | الجهة | وصف العمل | فاتورة ضريبية | رقم الفاتورة | تاريخ الفوترة | رفع على النظام | الصرف | القيمة | القيمة بالضريبة -->
+                <field name="sequence" string="م" width="40px"/>
+                <field name="po_number" string="po" required="1" width="100px"/>
+                <field name="execution_date" string="تاريخ التنفيذ" widget="makka_en_us_date" width="95px"/>
+                <field name="work_order_number" string="رقم أمر العمل" width="100px"/>
+                <field name="contractor_id" string="المقاول" options="{'no_create_edit': False}" width="110px"/>
+                <field name="entry_date" string="تاريخ الادخال" widget="makka_en_us_date" width="95px"/>
+                <field name="employee_name" string="الموظف" width="100px"/>
+                <field name="office_id" string="الجهة" options="{'no_create_edit': False}" width="90px"/>
+                <field name="description" string="وصف العمل" width="120px"/>
+                <field name="tax_invoice" string="فاتورة ضريبية" width="95px"/>
+                <field name="invoice_number" string="رقم الفاتورة" width="100px"/>
+                <field name="invoice_date" string="تاريخ الفوترة" widget="makka_en_us_date" width="95px"/>
+                <field name="uploaded_to_system" string="رفع على النظام" width="95px"/>
+                <field name="disbursement" string="الصرف" width="80px"/>
+                <field name="value" string="القيمة" sum="Total Value" width="90px"/>
+                <field name="value_with_tax" string="القيمة بالضريبة" sum="Total Value with Tax" width="110px" readonly="1"/>
+
+                <!-- Secondary / not in Excel sheet — hidden by default -->
+                <field name="state" readonly="1" widget="badge" optional="hide" width="120px"
+                        decoration-info="state == 'assigned'"
+                        decoration-success="state == 'sent_to_portal'"
+                        decoration-muted="state == 'draft'"/>
+                <field name="entity_id" optional="hide" options="{'no_create_edit': False}" width="100px"/>
+                <field name="technical_files_uploaded" string="Cloud Files" optional="hide" width="90px"/>
+                <field name="estimation_date" string="Estimation" optional="hide" widget="makka_en_us_date" width="90px"/>
+                <field name="expenditure" string="Expenditure Amount" sum="Total Expenditure" optional="hide" width="90px"/>
+                <field name="remote_invoice_name" string="Acc. Invoice" optional="hide" readonly="1" width="110px"/>
+                <field name="is_fully_done" column_invisible="1"/>
+                <field name="assign_error" column_invisible="1" readonly="1"/>
+                <field name="attention" column_invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_po_followup_search" model="ir.ui.view">
+        <field name="name">makka.po.followup.search</field>
+        <field name="model">makka.po.followup</field>
+        <field name="arch" type="xml">
+            <search string="PO Follow-up Makka">
+                <field name="po_number"/>
+                <field name="work_order_number"/>
+                <field name="contractor_id"/>
+                <field name="office_id"/>
+                <field name="employee_name"/>
+                <field name="entity_id"/>
+                <field name="invoice_number"/>
+                <field name="description"/>
+                <field name="is_fully_done"/>
+                <filter string="Tax Invoice Done"
+                        name="tax_invoice_yes"
+                        domain="[('tax_invoice', '=', 'yes')]"/>
+                <filter string="Uploaded to System"
+                        name="uploaded_yes"
+                        domain="[('uploaded_to_system', '=', 'yes')]"/>
+                <filter string="Disbursement Done"
+                        name="disbursement_yes"
+                        domain="[('disbursement', '=', 'yes')]"/>
+                <filter string="Technical Files Uploaded"
+                        name="tech_files_yes"
+                        domain="[('technical_files_uploaded', '=', 'yes')]"/>
+                <filter string="All Triple Yes"
+                        name="all_triple_yes"
+                        domain="[('is_fully_done', '=', True)]"/>
+                <filter string="Not All Triple Yes"
+                        name="not_all_triple_yes"
+                        domain="[('is_fully_done', '=', False)]"/>
+                <filter string="Attention"
+                        name="attention"
+                        domain="[('attention', '=', True)]"/>
+                <filter string="Has Expenditure Amount"
+                        name="has_expenditure"
+                        domain="[('expenditure', '>', 0)]"/>
+                <separator/>
+                <filter string="Draft"
+                        name="state_draft"
+                        domain="[('state', '=', 'draft')]"/>
+                <filter string="Assigned to Accounting"
+                        name="state_assigned"
+                        domain="[('state', '=', 'assigned')]"/>
+                <filter string="Sent to Portal"
+                        name="state_sent_to_portal"
+                        domain="[('state', '=', 'sent_to_portal')]"/>
+                <separator/>
+                <filter string="تاريخ التنفيذ"
+                        name="filter_execution_date"
+                        date="execution_date"/>
+                <filter string="تاريخ الادخال"
+                        name="filter_entry_date"
+                        date="entry_date"/>
+                <filter string="تاريخ الفوترة"
+                        name="filter_invoice_date"
+                        date="invoice_date"/>
+                <filter string="Estimation Date"
+                        name="filter_estimation_date"
+                        date="estimation_date"/>
+                <group>
+                    <filter string="المقاول"
+                            name="group_contractor"
+                            context="{'group_by': 'contractor_id'}"/>
+                    <filter string="الجهة"
+                            name="group_office"
+                            context="{'group_by': 'office_id'}"/>
+                    <filter string="الموظف"
+                            name="group_employee"
+                            context="{'group_by': 'employee_name'}"/>
+                    <filter string="Entity"
+                            name="group_entity"
+                            context="{'group_by': 'entity_id'}"/>
+                    <filter string="تاريخ الفوترة"
+                            name="group_invoice_date"
+                            context="{'group_by': 'invoice_date'}"/>
+                    <filter string="Status"
+                            name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string="جاهز للاحاله الي المحاسبه"
+                            name="group_is_fully_done"
+                            context="{'group_by': 'is_fully_done'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_po_followup" model="ir.actions.act_window">
+        <field name="name">PO Follow-up Makka</field>
+        <field name="res_model">makka.po.followup</field>
+        <field name="view_mode">tree</field>
+        <field name="search_view_id" ref="view_po_followup_search"/>
+        <field name="context">{}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Start tracking your first PO
+            </p>
+            <p>
+                Add rows directly in the list — same columns as بيان PO Excel.
+            </p>
+        </field>
+    </record>
+</odoo>

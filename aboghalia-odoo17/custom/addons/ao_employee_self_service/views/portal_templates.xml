@@ -1,0 +1,2271 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Frontend (Portal) RTL/LTR direction on HTML tag -->
+    <template id="portal_frontend_direction" inherit_id="web.frontend_layout" priority="20">
+        <xpath expr="//html" position="attributes">
+            <attribute name="t-att-dir">request.env['res.lang']._lang_get_direction(request.env.lang) if request.env.lang else 'rtl'</attribute>
+            <attribute name="t-att-lang">request.env.lang and request.env.lang.replace('_', '-') or 'ar'</attribute>
+        </xpath>
+    </template>
+
+    <template id="employee_portal_template" name="Enterprise Electronic Web Portal">
+        <html lang="ar" dir="rtl">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+                <title>البوابة الإلكترونية | الخدمة الذاتية</title>
+                <!-- Bootstrap 5 RTL and FontAwesome 6 CDNs -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.rtl.min.css"/>
+                <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"/>
+                <link rel="stylesheet" href="/ao_employee_self_service/static/src/css/portal_self_service.css?v=2.5.0"/>
+                <style>
+                    @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&amp;display=swap');
+                    body.o_ess_portal_body {
+                        font-family: 'Cairo', system-ui, -apple-system, sans-serif !important;
+                        background: #f3f4f8 !important;
+                        color: #1e293b !important;
+                        direction: rtl;
+                        text-align: right;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    /* Header Bar */
+                    .ess-header-bar {
+                        background: #ffffff !important;
+                        border-bottom: 1px solid #eaedf3 !important;
+                        padding: 14px 32px !important;
+                        position: sticky;
+                        top: 0;
+                        z-index: 1020;
+                        box-shadow: 0 2px 12px rgba(0,0,0,0.03) !important;
+                        width: 100% !important;
+                    }
+                    .ess-header-inner {
+                        display: flex;
+                        justify-content: space-between;
+                        align-items: center;
+                        width: 100% !important;
+                    }
+                    .ess-logo-text {
+                        font-size: 22px !important;
+                        font-weight: 800 !important;
+                        color: #1e293b !important;
+                        display: flex;
+                        align-items: center;
+                        gap: 12px;
+                    }
+                    .ess-logo-text i {
+                        color: #b8253d !important;
+                    }
+                    .ess-user-nav {
+                        display: flex;
+                        align-items: center;
+                        gap: 14px;
+                    }
+                    /* (waffle grid button styles are in portal_self_service.css) */
+                    .ess-btn-logout {
+                        background: #f8fafc !important;
+                        color: #64748b !important;
+                        border: 1px solid #e2e8f0 !important;
+                        padding: 9px 18px !important;
+                        border-radius: 8px !important;
+                        text-decoration: none !important;
+                        font-weight: 700 !important;
+                        font-size: 14px !important;
+                        cursor: pointer !important;
+                    }
+                    .ess-btn-logout:hover {
+                        background: #fee2e2 !important;
+                        color: #dc2626 !important;
+                        border-color: #fca5a5 !important;
+                    }
+
+                    /* Landing Hub (Level 1) Container Full Width */
+                    .ess-hub-container {
+                        width: 100% !important;
+                        max-width: 100% !important;
+                        margin: 0 !important;
+                        padding: 28px 32px !important;
+                    }
+                    .ess-kpi-card {
+                        background: #ffffff !important;
+                        border: 1px solid #eaedf3 !important;
+                        border-radius: 16px !important;
+                        padding: 24px !important;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.02) !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        gap: 18px !important;
+                        transition: transform 0.2s ease !important;
+                    }
+                    .ess-kpi-card:hover {
+                        transform: translateY(-3px) !important;
+                    }
+                    .ess-kpi-icon {
+                        width: 22px !important;
+                        height: 22px !important;
+                        border-radius: 5px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        font-size: 11px !important;
+                        flex-shrink: 0 !important;
+                    }
+                    .ess-kpi-val {
+                        font-size: 22px !important;
+                        font-weight: 800 !important;
+                        color: #0f172a !important;
+                        line-height: 1.2;
+                    }
+                    .ess-kpi-lbl {
+                        font-size: 13px !important;
+                        color: #64748b !important;
+                        font-weight: 600 !important;
+                    }
+
+                    /* System Main Apps Grid (Level 1 Hub) */
+                    .ess-main-apps-grid {
+                        display: grid !important;
+                        grid-template-columns: repeat(6, 1fr) !important;
+                        gap: 16px !important;
+                    }
+                    @media (max-width: 1400px) {
+                        .ess-main-apps-grid {
+                            grid-template-columns: repeat(4, 1fr) !important;
+                        }
+                    }
+                    @media (max-width: 992px) {
+                        .ess-main-apps-grid {
+                            grid-template-columns: repeat(3, 1fr) !important;
+                        }
+                    }
+                    @media (max-width: 768px) {
+                        .ess-main-apps-grid {
+                            grid-template-columns: repeat(2, 1fr) !important;
+                        }
+                    }
+                    .ess-app-card {
+                        background: #ffffff !important;
+                        border: 1.5px solid #eaedf3 !important;
+                        border-radius: 12px !important;
+                        padding: 14px 12px !important;
+                        text-align: center !important;
+                        cursor: pointer !important;
+                        transition: all 0.25s ease-in-out !important;
+                        height: 100% !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        justify-content: space-between !important;
+                        box-shadow: 0 2px 12px rgba(0,0,0,0.02) !important;
+                    }
+                    .ess-app-card:hover {
+                        border-color: #b8253d !important;
+                        transform: translateY(-3px) !important;
+                        box-shadow: 0 6px 18px rgba(184, 37, 61, 0.12) !important;
+                    }
+                    .ess-app-icon {
+                        width: 24px !important;
+                        height: 24px !important;
+                        border-radius: 6px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        font-size: 12px !important;
+                        margin-bottom: 6px !important;
+                    }
+                    .ess-app-title {
+                        font-size: 14px !important;
+                        font-weight: 800 !important;
+                        color: #0f172a !important;
+                        margin-bottom: 4px !important;
+                    }
+                    .ess-app-desc {
+                        font-size: 11.5px !important;
+                        color: #64748b !important;
+                        line-height: 1.4 !important;
+                        margin-bottom: 10px !important;
+                    }
+                    .ess-app-btn {
+                        width: 100% !important;
+                        padding: 6px 8px !important;
+                        border-radius: 6px !important;
+                        font-weight: 700 !important;
+                        font-size: 12px !important;
+                        border: none !important;
+                        transition: all 0.2s ease !important;
+                    }
+                    .ess-app-card-primary {
+                        border: 2px solid #b8253d !important;
+                        background: linear-gradient(180deg, #ffffff 0%, #fff5f5 100%) !important;
+                    }
+
+                    /* Service Tile Cards (Inside ESS Workspace) */
+                    .ess-service-tile-card {
+                        background: #ffffff !important;
+                        border: 1.5px solid #eaedf3 !important;
+                        border-radius: 14px !important;
+                        padding: 18px 16px !important;
+                        text-align: center !important;
+                        cursor: pointer !important;
+                        transition: all 0.25s ease-in-out !important;
+                        height: 100% !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        align-items: center !important;
+                        justify-content: space-between !important;
+                        box-shadow: 0 4px 16px rgba(0,0,0,0.02) !important;
+                    }
+                    .ess-service-tile-card:hover {
+                        border-color: #b8253d !important;
+                        transform: translateY(-3px) !important;
+                        box-shadow: 0 6px 20px rgba(184, 37, 61, 0.1) !important;
+                    }
+                    .ess-service-tile-icon {
+                        width: 18px !important;
+                        height: 18px !important;
+                        border-radius: 4px !important;
+                        display: flex !important;
+                        align-items: center !important;
+                        justify-content: center !important;
+                        font-size: 9px !important;
+                        margin-bottom: 6px !important;
+                    }
+
+                    /* ESS App Workspace (Level 2) Styling */
+                    .ess-app-wrapper {
+                        width: 100%;
+                        max-width: 100%;
+                        margin: 0;
+                        padding: 20px 24px !important;
+                        display: flex;
+                        flex-direction: row;
+                        gap: 24px;
+                        align-items: flex-start;
+                        min-height: calc(100vh - 90px);
+                    }
+                    .ess-sidebar {
+                        width: 280px !important;
+                        min-width: 280px !important;
+                        flex-shrink: 0 !important;
+                        background: #ffffff !important;
+                        border: 1px solid #eaedf3 !important;
+                        border-radius: 16px !important;
+                        padding: 20px 16px !important;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important;
+                        position: sticky !important;
+                        top: 85px !important;
+                        height: calc(100vh - 110px) !important;
+                        min-height: 620px !important;
+                        display: flex !important;
+                        flex-direction: column !important;
+                        justify-content: flex-start !important;
+                    }
+                    .ess-sidebar-menu {
+                        display: flex !important;
+                        flex-direction: column !important;
+                        gap: 10px !important;
+                        list-style: none !important;
+                        padding: 0 !important;
+                        margin: 0 !important;
+                    }
+                    .ess-nav-link {
+                        display: flex !important;
+                        align-items: center !important;
+                        gap: 12px !important;
+                        padding: 14px 16px !important;
+                        border-radius: 12px !important;
+                        color: #475569 !important;
+                        font-weight: 700 !important;
+                        font-size: 14px !important;
+                        text-decoration: none !important;
+                        transition: all 0.2s ease !important;
+                        cursor: pointer !important;
+                        border: 1.5px solid #eaedf3 !important;
+                        background: #ffffff !important;
+                    }
+                    .ess-nav-link i {
+                        font-size: 18px !important;
+                        width: 24px !important;
+                        text-align: center !important;
+                        color: #64748b !important;
+                    }
+                    .ess-nav-link:hover {
+                        background: #f8fafc !important;
+                        border-color: #cbd5e1 !important;
+                        color: #1e293b !important;
+                    }
+                    .ess-nav-link.active {
+                        background: #f0fdf4 !important;
+                        border: 2px solid #36b37e !important;
+                        color: #166534 !important;
+                        box-shadow: 0 4px 12px rgba(54, 179, 126, 0.12) !important;
+                    }
+                    .ess-nav-link.active i {
+                        color: #36b37e !important;
+                    }
+                    .ess-nav-badge {
+                        margin-right: auto !important;
+                        background: #e2e8f0 !important;
+                        color: #475569 !important;
+                        padding: 2px 9px !important;
+                        border-radius: 10px !important;
+                        font-size: 12px !important;
+                    }
+                    .ess-nav-link.active .ess-nav-badge {
+                        background: #36b37e !important;
+                        color: #ffffff !important;
+                    }
+                    .ess-main-content {
+                        flex: 1 !important;
+                        min-width: 0 !important;
+                    }
+                    .ess-tab-pane {
+                        display: none;
+                    }
+                    .ess-tab-pane.active {
+                        display: block !important;
+                    }
+                    .ess-section-card, .ess-profile-card {
+                        background: #ffffff !important;
+                        border: 1px solid #eaedf3 !important;
+                        border-radius: 14px !important;
+                        padding: 24px !important;
+                        box-shadow: 0 4px 20px rgba(0,0,0,0.03) !important;
+                        margin-bottom: 20px !important;
+                    }
+                    .btn-primary, .ess-btn-submit {
+                        background: #b8253d !important;
+                        border-color: #b8253d !important;
+                        color: #ffffff !important;
+                        font-weight: 700 !important;
+                        border-radius: 8px !important;
+                    }
+                    .btn-primary:hover, .ess-btn-submit:hover {
+                        background: #9e1c31 !important;
+                        border-color: #9e1c31 !important;
+                    }
+                </style>
+
+                <!-- BULLETPROOF STATE PERSISTENCE ON F5 PAGE RELOAD -->
+                <script type="text/javascript">
+                    function essOpenWorkspace(targetTab, moduleName) {
+                        var hub = document.getElementById('ess_level_hub');
+                        var ws = document.getElementById('ess_level_workspace');
+                        var headerTitle = document.getElementById('ess_top_header_title');
+                        
+                        if (hub) hub.style.display = 'none';
+                        if (ws) ws.style.display = 'flex';
+                        
+                        var tab = targetTab || 'tab_dashboard';
+                        var name = moduleName || localStorage.getItem('ess_module_title') || 'الخدمة الذاتية';
+                        
+                        if (headerTitle) {
+                            headerTitle.innerText = name;
+                        }
+                        
+                        if (tab === 'tab_dashboard' &amp;&amp; window.location.pathname === '/portal/self-service') {
+                            history.replaceState(null, null, window.location.pathname);
+                        } else {
+                            window.location.hash = tab;
+                        }
+                        
+                        localStorage.setItem('ess_module_title', name);
+                        localStorage.setItem('ess_active_level', 'workspace');
+                        
+                        essActivateTab(tab);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+
+                    function essOpenHub() {
+                        var hub = document.getElementById('ess_level_hub');
+                        var ws = document.getElementById('ess_level_workspace');
+                        var headerTitle = document.getElementById('ess_top_header_title');
+                        
+                        if (ws) ws.style.display = 'none';
+                        if (hub) hub.style.display = 'block';
+                        if (headerTitle) {
+                            headerTitle.innerText = 'البوابة الإلكترونية';
+                        }
+                        
+                        if (window.location.hash) {
+                            history.replaceState(null, null, ' ');
+                        }
+                        localStorage.setItem('ess_active_level', 'hub');
+                        localStorage.removeItem('ess_module_title');
+                        
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }
+
+                    function essActivateTab(targetTab) {
+                        var links = document.querySelectorAll('.ess-nav-link');
+                        var panes = document.querySelectorAll('.ess-tab-pane');
+                        links.forEach(function(l) {
+                            if (l.getAttribute('data-tab') === targetTab) {
+                                l.classList.add('active');
+                            } else {
+                                l.classList.remove('active');
+                            }
+                        });
+                        panes.forEach(function(p) {
+                            if (p.id === targetTab) {
+                                p.classList.add('active');
+                                p.style.display = 'block';
+                            } else {
+                                p.classList.remove('active');
+                                p.style.display = 'none';
+                            }
+                        });
+                        
+                        // Handle Dynamic Sidebars
+                        var defaultSidebar = document.getElementById('sidebar_menu_default');
+                        var ctsSidebar = document.getElementById('sidebar_menu_cts');
+                        if (targetTab === 'tab_communications') {
+                            if (defaultSidebar) defaultSidebar.style.setProperty("display", "none", "important");
+                            if (ctsSidebar) ctsSidebar.style.setProperty("display", "flex", "important");
+                            if (window.loadCtsTransactions) window.loadCtsTransactions('all');
+                        } else {
+                            if (defaultSidebar) defaultSidebar.style.setProperty("display", "flex", "important");
+                            if (ctsSidebar) ctsSidebar.style.setProperty("display", "none", "important");
+                        }
+                        if (targetTab === 'tab_dashboard' &amp;&amp; window.location.pathname === '/portal/self-service') {
+                            history.replaceState(null, null, window.location.pathname);
+                        } else {
+                            window.location.hash = targetTab;
+                        }
+                    }
+
+                    function essFilterCts(filterType, element) {
+                        if (filterType !== 'stats') {
+                            window.currentCtsFilter = filterType;
+                        }
+                        
+                        // Update active state in sidebar
+                        var ctsLinks = document.querySelectorAll('#sidebar_menu_cts .ess-nav-link');
+                        ctsLinks.forEach(function(l) {
+                            l.classList.remove('active');
+                        });
+                        if (element) {
+                            element.classList.add('active');
+                        }
+                        
+                        var dataView = document.getElementById('cts_data_view');
+                        var statsView = document.getElementById('cts_stats_view');
+                        
+                        if (filterType === 'stats') {
+                            if (dataView) dataView.style.display = 'none';
+                            if (statsView) statsView.style.display = 'block';
+                            // Reload stats specifically
+                            if (window.loadCtsTransactions) window.loadCtsTransactions(window.currentCtsFilter || 'all');
+                        } else {
+                            if (dataView) dataView.style.display = 'block';
+                            if (statsView) statsView.style.display = 'none';
+                            // Call data loading function
+                            if (window.loadCtsTransactions) {
+                                window.loadCtsTransactions(filterType);
+                            }
+                        }
+                    }
+
+                    function essRestoreStateOnLoad() {
+                        var hash = window.location.hash.replace('#', '');
+                        var level = localStorage.getItem('ess_active_level');
+                        var title = localStorage.getItem('ess_module_title') || 'الخدمة الذاتية';
+                        
+                        if (hash &amp;&amp; hash.indexOf('tab_') === 0) {
+                            essOpenWorkspace(hash, title);
+                        } else if (level === 'workspace' &amp;&amp; window.location.pathname === '/portal/self-service') {
+                            essOpenWorkspace('tab_dashboard', title);
+                        } else {
+                            essOpenHub();
+                        }
+                    }
+
+                    document.addEventListener('DOMContentLoaded', essRestoreStateOnLoad);
+                    window.addEventListener('hashchange', essRestoreStateOnLoad);
+                </script>
+                <script type="text/javascript" src="/ao_employee_self_service/static/src/js/portal_self_service.js?v=4.8"></script>
+            </head>
+
+            <body class="o_ess_portal_body">
+                <!-- Top Header Navbar - Odoo-style with App Switcher -->
+                <header class="ess-header-bar" style="background:#714B67 !important; border-bottom:none !important; padding:0 !important; position:sticky; top:0; z-index:1020; box-shadow:0 2px 8px rgba(0,0,0,0.15) !important; height:46px !important; min-height:46px !important;">
+                    <div style="display:flex !important; align-items:center !important; height:46px !important; width:100% !important; padding:0 16px !important; justify-content:space-between !important;">
+                        <!-- RIGHT SIDE (RTL): App Switcher + Logo -->
+                        <div style="display:flex !important; align-items:center !important; gap:0 !important;">
+                            <!-- App Switcher Button (Odoo-standard position) -->
+                            <div style="position:relative !important;">
+                                <button type="button" id="ess_btn_app_switcher" onclick="document.getElementById('ess_app_dropdown').classList.toggle('ess-dropdown-open')" style="display:inline-flex !important; align-items:center !important; justify-content:center !important; width:46px !important; height:46px !important; background:transparent !important; border:none !important; cursor:pointer !important; padding:0 !important; outline:none !important;">
+                                    <div style="display:grid !important; grid-template-columns:repeat(3,4px) !important; grid-template-rows:repeat(3,4px) !important; gap:3px !important;">
+                                        <span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/><span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/><span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/>
+                                        <span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/><span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/><span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/>
+                                        <span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/><span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/><span style="display:block !important;width:4px !important;height:4px !important;border-radius:50% !important;background:rgba(255,255,255,0.9) !important;"/>
+                                    </div>
+                                </button>
+                                <!-- App Switcher Dropdown Menu -->
+                                <div id="ess_app_dropdown" style="display:none; position:absolute; top:46px; right:0; width:320px; max-height:80vh; background:#ffffff; border-radius:0 0 8px 8px; box-shadow:0 8px 32px rgba(0,0,0,0.2); z-index:9999; overflow-y:auto; padding:12px;">
+                                    <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:4px;">
+                                        <!-- Dynamic menu items from backend -->
+                                        <t t-foreach="app_menus or []" t-as="app_menu">
+                                            <a t-att-href="'/web#menu_id=%s' % app_menu.get('id', '')" style="display:flex; flex-direction:column; align-items:center; padding:12px 6px; border-radius:8px; text-decoration:none !important; color:#1e293b; transition:background 0.15s;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                                                <div style="width:40px; height:40px; border-radius:8px; background:#714B67; display:flex; align-items:center; justify-content:center; margin-bottom:6px;">
+                                                    <t t-if="app_menu.get('web_icon_data')">
+                                                        <img t-att-src="'data:image/png;base64,%s' % app_menu['web_icon_data']" style="width:28px; height:28px; object-fit:contain;" alt=""/>
+                                                    </t>
+                                                    <t t-else="">
+                                                        <i class="fa fa-th" style="color:#fff; font-size:18px;"></i>
+                                                    </t>
+                                                </div>
+                                                <span style="font-size:11px; font-weight:600; text-align:center; line-height:1.2; max-width:90px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" t-esc="app_menu.get('name', '')"/>
+                                            </a>
+                                        </t>
+                                        <!-- Fallback: If no dynamic menus, show static links -->
+                                        <t t-if="not app_menus">
+                                            <a href="/web" style="display:flex; flex-direction:column; align-items:center; padding:12px 6px; border-radius:8px; text-decoration:none !important; color:#1e293b;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                                                <div style="width:40px; height:40px; border-radius:8px; background:#714B67; display:flex; align-items:center; justify-content:center; margin-bottom:6px;">
+                                                    <i class="fa fa-th-large" style="color:#fff; font-size:18px;"></i>
+                                                </div>
+                                                <span style="font-size:11px; font-weight:600;">لوحة التحكم</span>
+                                            </a>
+                                            <a href="/portal/self-service" style="display:flex; flex-direction:column; align-items:center; padding:12px 6px; border-radius:8px; text-decoration:none !important; color:#1e293b;" onmouseover="this.style.background='#f1f5f9'" onmouseout="this.style.background='transparent'">
+                                                <div style="width:40px; height:40px; border-radius:8px; background:#b8253d; display:flex; align-items:center; justify-content:center; margin-bottom:6px;">
+                                                    <i class="fa fa-globe" style="color:#fff; font-size:18px;"></i>
+                                                </div>
+                                                <span style="font-size:11px; font-weight:600;">البوابة</span>
+                                            </a>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Current Page Title -->
+                            <span id="ess_top_header_title" style="color:#ffffff !important; font-size:15px !important; font-weight:700 !important; margin-right:8px !important; white-space:nowrap !important;">البوابة الإلكترونية</span>
+                        </div>
+                        <!-- LEFT SIDE (RTL): User + Bell + Logout -->
+                        <div style="display:flex !important; align-items:center !important; gap:10px !important;">
+                            <span class="d-none d-md-inline" style="color:rgba(255,255,255,0.9) !important; font-size:13px !important; font-weight:600 !important;">
+                                <i class="fa-solid fa-user" style="margin-left:4px;"></i> <t t-esc="user.name"/>
+                            </span>
+                            <!-- Notification Bell -->
+                            <button type="button" id="ess_notification_bell" onclick="document.getElementById('ess_notif_panel').classList.toggle('ess-notif-open')" style="position:relative !important; display:inline-flex !important; align-items:center !important; justify-content:center !important; width:34px !important; height:34px !important; background:rgba(255,255,255,0.15) !important; border:1px solid rgba(255,255,255,0.2) !important; cursor:pointer !important; padding:0 !important; border-radius:6px !important;" onmouseover="this.style.background='rgba(255,255,255,0.25)'" onmouseout="this.style.background='rgba(255,255,255,0.15)'">
+                                <i class="fa-solid fa-bell" style="color:#ffffff !important; font-size:16px !important;"></i>
+                                <t t-if="portal_data.get('pending_leaves_count', 0) + portal_data.get('pending_tasks_count', 0) > 0">
+                                    <span style="position:absolute !important; top:-4px !important; left:-4px !important; min-width:18px !important; height:18px !important; background:#ef4444 !important; color:#fff !important; font-size:10px !important; font-weight:700 !important; border-radius:9px !important; display:flex !important; align-items:center !important; justify-content:center !important; padding:0 4px !important; line-height:1 !important; border:2px solid #714B67 !important;">
+                                        <t t-esc="portal_data.get('pending_leaves_count', 0) + portal_data.get('pending_tasks_count', 0)"/>
+                                    </span>
+                                </t>
+                            </button>
+                            <!-- Notification Dropdown -->
+                            <div id="ess_notif_panel" style="display:none; position:absolute; top:46px; left:60px; width:300px; background:#fff; border-radius:0 0 8px 8px; box-shadow:0 8px 24px rgba(0,0,0,0.18); z-index:9999; overflow:hidden;">
+                                <div style="padding:12px 16px; background:#f8fafc; border-bottom:1px solid #e2e8f0;">
+                                    <span style="font-weight:700; font-size:14px; color:#1e293b;">الإشعارات</span>
+                                </div>
+                                <div style="max-height:300px; overflow-y:auto;">
+                                    <t t-if="portal_data.get('pending_leaves_count', 0) > 0">
+                                        <a href="#" onclick="essOpenWorkspace('leaves'); document.getElementById('ess_notif_panel').classList.remove('ess-notif-open'); return false;" style="display:flex; align-items:center; gap:10px; padding:12px 16px; text-decoration:none; color:#1e293b; border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+                                            <div style="width:32px; height:32px; border-radius:8px; background:#fef2f2; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                <i class="fa-solid fa-calendar-xmark" style="color:#e11d48; font-size:14px;"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:13px; font-weight:600;">طلبات الإجازات</div>
+                                                <div style="font-size:11px; color:#64748b;"><t t-esc="portal_data.get('pending_leaves_count', 0)"/> طلب بانتظار الاعتماد</div>
+                                            </div>
+                                        </a>
+                                    </t>
+                                    <t t-if="portal_data.get('pending_tasks_count', 0) > 0">
+                                        <a href="#" onclick="essOpenWorkspace('tasks'); document.getElementById('ess_notif_panel').classList.remove('ess-notif-open'); return false;" style="display:flex; align-items:center; gap:10px; padding:12px 16px; text-decoration:none; color:#1e293b; border-bottom:1px solid #f1f5f9;" onmouseover="this.style.background='#f8fafc'" onmouseout="this.style.background='#fff'">
+                                            <div style="width:32px; height:32px; border-radius:8px; background:#eff6ff; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                                                <i class="fa-solid fa-list-check" style="color:#3b82f6; font-size:14px;"></i>
+                                            </div>
+                                            <div>
+                                                <div style="font-size:13px; font-weight:600;">المهام</div>
+                                                <div style="font-size:11px; color:#64748b;"><t t-esc="portal_data.get('pending_tasks_count', 0)"/> مهمة قيد التنفيذ</div>
+                                            </div>
+                                        </a>
+                                    </t>
+                                    <t t-if="portal_data.get('pending_leaves_count', 0) + portal_data.get('pending_tasks_count', 0) == 0">
+                                        <div style="padding:24px 16px; text-align:center; color:#94a3b8;">
+                                            <i class="fa-solid fa-circle-check" style="font-size:24px; display:block; margin-bottom:8px; color:#36b37e;"></i>
+                                            <span style="font-size:13px;">لا توجد إشعارات جديدة</span>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                            <a href="/web/session/logout" style="color:rgba(255,255,255,0.7) !important; font-size:13px !important; text-decoration:none !important; padding:4px 10px !important; border-radius:4px !important; border:1px solid rgba(255,255,255,0.25) !important;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+                                <i class="fa fa-sign-out" style="margin-left:4px;"></i> خروج
+                            </a>
+                        </div>
+                    </div>
+                </header>
+                <!-- Close dropdown when clicking outside -->
+                <script type="text/javascript">
+                    document.addEventListener('click', function(e) {
+                        var dd = document.getElementById('ess_app_dropdown');
+                        var btn = document.getElementById('ess_btn_app_switcher');
+                        if (dd &amp;&amp; btn &amp;&amp; !btn.contains(e.target) &amp;&amp; !dd.contains(e.target)) {
+                            dd.classList.remove('ess-dropdown-open');
+                        }
+                        var np = document.getElementById('ess_notif_panel');
+                        var nb = document.getElementById('ess_notification_bell');
+                        if (np &amp;&amp; nb &amp;&amp; !nb.contains(e.target) &amp;&amp; !np.contains(e.target)) {
+                            np.classList.remove('ess-notif-open');
+                        }
+                    });
+                </script>
+                <style>
+                    .ess-dropdown-open { display:block !important; }
+                    .ess-notif-open { display:block !important; }
+                    #ess_btn_app_switcher:hover { background:rgba(255,255,255,0.1) !important; border-radius:4px; }
+                </style>
+
+                <!-- LEVEL 1: MAIN ELECTRONIC PORTAL LANDING HUB (NO SIDEBAR) -->
+                <div id="ess_level_hub" class="ess-hub-container" style="display: block;">
+                    <!-- Top Work & Attendance Overview Statistics Cards Bar -->
+                    <div class="row g-3 mb-4">
+                        <!-- KPI 1: Attendance Status & Exact Check-In/Out Time -->
+                        <div class="col-md-3 col-sm-6">
+                            <div class="ess-kpi-card">
+                                <div t-attf-class="ess-kpi-icon #{'bg-success-subtle text-success' if portal_data.get('is_checked_in') else 'bg-secondary-subtle text-secondary'}">
+                                    <i t-attf-class="fa-solid #{'fa-user-check' if portal_data.get('is_checked_in') else 'fa-user-clock'}"></i>
+                                </div>
+                                <div>
+                                    <div class="ess-kpi-val fs-5">
+                                        <t t-if="portal_data.get('is_checked_in')">
+                                            <span class="text-success fw-bold">حاضر</span>
+                                            <small class="fs-6 text-muted ms-1" t-if="portal_data.get('last_check_in_time_str')">(منذ <t t-esc="portal_data.get('last_check_in_time_str')"/>)</small>
+                                        </t>
+                                        <t t-else="">
+                                            <span class="text-secondary fw-bold">منصرف</span>
+                                            <small class="fs-6 text-muted ms-1" t-if="portal_data.get('last_check_out_time_str')">(الساعة <t t-esc="portal_data.get('last_check_out_time_str')"/>)</small>
+                                        </t>
+                                    </div>
+                                    <div class="ess-kpi-lbl">حالة تسجيل الحضور والتوقيت</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI 2: Today's Work Hours -->
+                        <div class="col-md-3 col-sm-6">
+                            <div class="ess-kpi-card">
+                                <div class="ess-kpi-icon bg-primary-subtle text-primary">
+                                    <i class="fa-solid fa-business-time"></i>
+                                </div>
+                                <div>
+                                    <div class="ess-kpi-val"><t t-esc="portal_data.get('today_hours', 0.0)"/> س</div>
+                                    <div class="ess-kpi-lbl">إجمالي ساعات العمل اليوم</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI 3: Work & Tasks Overview -->
+                        <div class="col-md-3 col-sm-6">
+                            <div class="ess-kpi-card">
+                                <div class="ess-kpi-icon bg-warning-subtle text-warning">
+                                    <i class="fa-solid fa-list-check"></i>
+                                </div>
+                                <div>
+                                    <div class="ess-kpi-val"><t t-esc="portal_data.get('task_stats', {}).get('todo', 0) + portal_data.get('task_stats', {}).get('in_progress', 0)"/> مهمة</div>
+                                    <div class="ess-kpi-lbl">المهام المستحقة والجارية</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- KPI 4: Manager Team Statistics OR General Notifications -->
+                        <div class="col-md-3 col-sm-6">
+                            <t t-if="portal_data.get('is_manager')">
+                                <div class="ess-kpi-card" style="border: 1.5px solid #0d9488 !important; background: #f0fdf4 !important;">
+                                    <div class="ess-kpi-icon text-teal" style="background:#ccfbf1; color:#0d9488;">
+                                        <i class="fa-solid fa-users"></i>
+                                    </div>
+                                    <div>
+                                        <div class="ess-kpi-val fs-5 text-teal fw-bold">
+                                            <t t-esc="portal_data.get('team_stats', {}).get('present_members', 0)"/> / <t t-esc="portal_data.get('team_stats', {}).get('total_members', 0)"/> حاضرين
+                                        </div>
+                                        <div class="ess-kpi-lbl text-dark">
+                                            فريق العمل (<t t-esc="portal_data.get('team_stats', {}).get('pending_approvals', 0)"/> موافقات معلقة)
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="ess-kpi-card">
+                                    <div class="ess-kpi-icon bg-purple-subtle text-purple" style="background:#f3e8ff; color:#9333ea;">
+                                        <i class="fa-solid fa-bell"></i>
+                                    </div>
+                                    <div>
+                                        <div class="ess-kpi-val"><t t-esc="len(portal_data.get('pending_approvals', []))"/> طلبات</div>
+                                        <div class="ess-kpi-lbl">الإشعارات والاعتمادات المعلقة</div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+
+                    <!-- Main Section Header -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <h2 class="fw-bold fs-3 text-slate-800 m-0">
+                                <i class="fa-solid fa-grip text-danger me-2"></i> دليل الخدمات والتطبيقات الإلكترونية
+                            </h2>
+                            <p class="text-muted m-0 mt-1">اختر الخدمة المطلوبة للدخول إليها واستعراض أدواتها التفصيلية</p>
+                        </div>
+                        <span class="badge bg-white border text-dark fs-6 px-3 py-2 shadow-sm">12 خدمة إلكترونية مفعّلة</span>
+                    </div>
+
+                    <!-- Main Systems Grid (12 Independent Module Cards) -->
+                    <div class="ess-main-apps-grid mb-5">
+                        <!-- Card 1: Self Service -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_dashboard', 'الخدمة الذاتية')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-danger-subtle text-danger">
+                                        <i class="fa-solid fa-user-gear"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">الخدمة الذاتية</div>
+                                <div class="ess-app-desc text-start">
+                                    إدارة المهام الشخصية، الإجازات، تسجيل الحضور والانصراف، مشاهد الراتب والسلف.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_dashboard', 'الخدمة الذاتية');">
+                                دخول الخدمة الذاتية
+                            </button>
+                        </div>
+
+                        <!-- Card 2: Administrative Communications -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_communications', 'الاتصالات الإدارية')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-primary-subtle text-primary">
+                                        <i class="fa-solid fa-box-archive"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">الاتصالات الإدارية</div>
+                                <div class="ess-app-desc text-start">
+                                    إدارة وتتبع الصادر والوارد والمعاملات الإدارية والتوجيهات الرسمية.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_communications', 'الاتصالات الإدارية');">
+                                استعراض الاتصالات الإدارية
+                            </button>
+                        </div>
+
+                        <!-- Card 3: Digital Library -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_library', 'المكتبة الرقمية')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-info-subtle text-info">
+                                        <i class="fa-solid fa-folder-open"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">المكتبة الرقمية</div>
+                                <div class="ess-app-desc text-start">
+                                    الأرشيف الرقمي المركزي، التعاميم الإدارية والعقود واللوائح التنظيمية.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-info ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_library', 'المكتبة الرقمية');">
+                                فتح المكتبة الرقمية
+                            </button>
+                        </div>
+
+                        <!-- Card 4: Projects & Tasks -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_tasks', 'المشاريع والمهام')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-warning-subtle text-warning">
+                                        <i class="fa-solid fa-diagram-project"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">المشاريع والمهام</div>
+                                <div class="ess-app-desc text-start">
+                                    متابعة خطط العمل ومراحل الإنجاز وإدارة المهام الموكلة للشخص والفريق.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-warning text-dark ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_tasks', 'المشاريع والمهام');">
+                                استعراض المشاريع والمهام
+                            </button>
+                        </div>
+
+                        <!-- Card 5: Mail Management -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_mail', 'إدارة البريد')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon text-purple" style="background:#f3e8ff; color:#9333ea;">
+                                        <i class="fa-solid fa-envelope-open-text"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">إدارة البريد</div>
+                                <div class="ess-app-desc text-start">
+                                    المنظومة الذكية لمتابعة المراسلات الإلكترونية الرسمية، التعاميم، والرسائل الداخلية.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-secondary ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_mail', 'إدارة البريد');">
+                                دخول إدارة البريد
+                            </button>
+                        </div>
+
+                        <!-- Card 6: Unified Contract Projects -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_contracts', 'إدارة مشاريع العقد الموحد')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-success-subtle text-success">
+                                        <i class="fa-solid fa-file-contract"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">إدارة مشاريع العقد الموحد</div>
+                                <div class="ess-app-desc text-start">
+                                    متابعة كراسات الشروط، العقود الموحدة، النطاق الجغرافي ونسب إنجاز المشاريع.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-success ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_contracts', 'إدارة مشاريع العقد الموحد');">
+                                استعراض العقد الموحد
+                            </button>
+                        </div>
+
+                        <!-- Card 7: Maintenance & Custody Management -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_maintenance', 'إدارة الصيانة والعهد')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon text-orange" style="background:#ffedd5; color:#ea580c;">
+                                        <i class="fa-solid fa-screwdriver-wrench"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">إدارة الصيانة والعهد</div>
+                                <div class="ess-app-desc text-start">
+                                    تسجيل ومتابعة العهد العينية والشخصية، طلبات صيانة المعدات والأجهزة والأثاث.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-warning text-dark ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_maintenance', 'إدارة الصيانة والعهد');">
+                                إدارة الصيانة والعهد
+                            </button>
+                        </div>
+
+                        <!-- Card 8: Asset Management -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_assets', 'إدارة الأصول')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon text-teal" style="background:#ccfbf1; color:#0d9488;">
+                                        <i class="fa-solid fa-building-circle-check"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">إدارة الأصول</div>
+                                <div class="ess-app-desc text-start">
+                                    حصر وتتبع الأصول الثابتة، العُقد والممتلكات، وتقارير الإهلاك والجرد الدوري.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-teal ess-app-btn" style="border-color:#0d9488; color:#0d9488;" onclick="event.stopPropagation(); essOpenWorkspace('tab_assets', 'إدارة الأصول');">
+                                استعراض دليل الأصول
+                            </button>
+                        </div>
+
+                        <!-- Card 9: Technical Support & Tickets -->
+                        <div class="ess-app-card" onclick="essOpenWorkspace('tab_helpdesk', 'الدعم الفني وتذاكر الصيانة')">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-danger-subtle text-danger">
+                                        <i class="fa-solid fa-headset"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">الدعم الفني وتذاكر الصيانة</div>
+                                <div class="ess-app-desc text-start">
+                                    فتح ومتابعة تذاكر الدعم الفني، الأعطال التقنية والاستفسارات البرمجية وبلاغات الصيانة.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-danger ess-app-btn" onclick="event.stopPropagation(); essOpenWorkspace('tab_helpdesk', 'الدعم الفني وتذاكر الصيانة');">
+                                <i class="fa-solid fa-ticket me-1"></i> فتح تذكرة دعم فني
+                            </button>
+                        </div>
+
+                        <!-- Card 10: Sale Orders -->
+                        <div class="ess-app-card" onclick="window.location.href='/my/orders';">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-success-subtle text-success">
+                                        <i class="fa-solid fa-cart-shopping"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">أوامر البيع وعروض الأسعار</div>
+                                <div class="ess-app-desc text-start">
+                                    متابعة طلبات المبيعات، عروض الأسعار المسجلة والقيام بدفع المستحقات.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-success ess-app-btn" onclick="event.stopPropagation(); window.location.href='/my/orders';">
+                                <i class="fa-solid fa-file-invoice me-1"></i> استعراض أوامر البيع
+                            </button>
+                        </div>
+
+                        <!-- Card 11: Invoices & Bills -->
+                        <div class="ess-app-card" onclick="window.location.href='/my/invoices';">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-primary-subtle text-primary">
+                                        <i class="fa-solid fa-receipt"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">الفواتير والمدفوعات</div>
+                                <div class="ess-app-desc text-start">
+                                    استعراض وتحميل فواتير المبيعات، المشتريات وتنزيل نسخ PDF الرسمية.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-primary ess-app-btn" onclick="event.stopPropagation(); window.location.href='/my/invoices';">
+                                <i class="fa-solid fa-file-pdf me-1"></i> استعراض الفواتير
+                            </button>
+                        </div>
+
+                        <!-- Card 12: Purchase Orders & RFQs -->
+                        <div class="ess-app-card" onclick="window.location.href='/my/purchase';">
+                            <div class="w-100">
+                                <div class="d-flex justify-content-between align-items-start w-100 mb-1">
+                                    <div class="ess-app-icon bg-warning-subtle text-warning">
+                                        <i class="fa-solid fa-calculator"></i>
+                                    </div>
+                                </div>
+                                <div class="ess-app-title text-start">طلبات الأسعار والمشتريات</div>
+                                <div class="ess-app-desc text-start">
+                                    متابعة طلبات عروض الأسعار، المشتريات الموجهة وتأكيد الطلبيات.
+                                </div>
+                            </div>
+                            <button type="button" class="btn btn-outline-warning text-dark ess-app-btn" onclick="event.stopPropagation(); window.location.href='/my/purchase';">
+                                <i class="fa-solid fa-truck-ramp-box me-1"></i> استعراض المشتريات
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- LEVEL 2: EMPLOYEE SELF SERVICE WORKSPACE (ALL SERVICES INSIDE ESS WORKSPACE) -->
+                <div id="ess_level_workspace" class="ess-app-wrapper" style="display: none;">
+                    <t t-if="portal_data.get('has_employee')">
+                        <!-- Sidebar Navigation Menu -->
+                        <aside class="ess-sidebar">
+                            <div class="mb-3 pb-2 border-bottom">
+                                <button id="ess_btn_back_to_hub" class="btn btn-sm btn-outline-secondary w-100 text-start fw-bold" onclick="essOpenHub()">
+                                    <i class="fa-solid fa-chevron-right me-1"></i> العودة للبوابة الإلكترونية
+                                </button>
+                            </div>
+                            <ul id="sidebar_menu_default" class="ess-sidebar-menu">
+                                <li>
+                                    <a href="#" class="ess-nav-link active" data-tab="tab_dashboard" onclick="event.preventDefault(); essActivateTab('tab_dashboard');">
+                                        <i class="fa-solid fa-house"></i>
+                                        <span>الرئيسية (الخدمة الذاتية)</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-tab="tab_tasks" onclick="event.preventDefault(); essActivateTab('tab_tasks');">
+                                        <i class="fa-solid fa-list-check"></i>
+                                        <span>صندوق المهام</span>
+                                        <span class="ess-nav-badge" t-esc="portal_data.get('task_stats', {}).get('todo', 0) + portal_data.get('task_stats', {}).get('in_progress', 0)"/>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-tab="tab_requests" onclick="event.preventDefault(); essActivateTab('tab_requests');">
+                                        <i class="fa-solid fa-paper-plane"></i>
+                                        <span>طلباتي والإجازات</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-tab="tab_profile" onclick="event.preventDefault(); essActivateTab('tab_profile');">
+                                        <i class="fa-solid fa-id-card"></i>
+                                        <span>الملف الشخصي</span>
+                                    </a>
+                                </li>
+                                <t t-if="portal_data.get('is_manager')">
+                                    <li>
+                                        <a href="#" class="ess-nav-link" data-tab="tab_approvals" onclick="event.preventDefault(); essActivateTab('tab_approvals');">
+                                            <i class="fa-solid fa-square-check"></i>
+                                            <span>اعتمادات الفريق</span>
+                                            <span class="ess-nav-badge bg-warning text-dark" t-esc="len(portal_data.get('pending_approvals', []))"/>
+                                        </a>
+                                    </li>
+                                </t>
+                            </ul>
+
+                            <!-- CTS Dynamic Sidebar Menu (Administrative Communications) -->
+                            <ul id="sidebar_menu_cts" class="ess-sidebar-menu" style="display: none;">
+                                <div class="px-3 mb-2 mt-2">
+                                    <small class="text-muted fw-bold"><i class="fa-solid fa-filter me-1"></i> تصنيف المعاملات</small>
+                                </div>
+                                <li>
+                                    <a href="#" class="ess-nav-link active" data-filter="all" onclick="event.preventDefault(); essFilterCts('all', this);">
+                                        <i class="fa-solid fa-layer-group"></i>
+                                        <span>الكل</span>
+                                        <span class="ess-nav-badge bg-primary text-white" id="cts_badge_all">0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-filter="incoming" onclick="event.preventDefault(); essFilterCts('incoming', this);">
+                                        <i class="fa-solid fa-inbox text-success"></i>
+                                        <span>الوارد</span>
+                                        <span class="ess-nav-badge bg-success text-white" id="cts_badge_incoming">0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-filter="outgoing" onclick="event.preventDefault(); essFilterCts('outgoing', this);">
+                                        <i class="fa-solid fa-paper-plane text-warning"></i>
+                                        <span>الصادر</span>
+                                        <span class="ess-nav-badge bg-warning text-dark" id="cts_badge_outgoing">0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-filter="internal" onclick="event.preventDefault(); essFilterCts('internal', this);">
+                                        <i class="fa-solid fa-building text-info"></i>
+                                        <span>داخلي</span>
+                                        <span class="ess-nav-badge bg-info text-white" id="cts_badge_internal">0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-filter="my_tasks" onclick="event.preventDefault(); essFilterCts('my_tasks', this);">
+                                        <i class="fa-solid fa-thumbtack text-danger"></i>
+                                        <span>مهامي</span>
+                                        <span class="ess-nav-badge bg-danger text-white" id="cts_badge_my_tasks">0</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#" class="ess-nav-link" data-filter="stats" onclick="event.preventDefault(); essFilterCts('stats', this);">
+                                        <i class="fa-solid fa-chart-pie text-purple"></i>
+                                        <span>الإحصائيات</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </aside>
+
+                        <!-- Main Content Viewport inside ESS Workspace -->
+                        <main class="ess-main-content">
+                            <!-- TAB 1: ESS DASHBOARD (CONTAINS ALL SELF SERVICE CARDS & BUTTONS) -->
+                            <div id="tab_dashboard" class="ess-tab-pane active" style="display: block;">
+                                <!-- Employee Profile Hero Header -->
+                                <div class="ess-profile-card">
+                                    <div class="ess-profile-info">
+                                        <img t-att-src="portal_data.get('avatar_url')" class="ess-avatar-img" alt="Employee Avatar"/>
+                                        <div>
+                                            <h1 class="ess-emp-name" t-esc="portal_data.get('name')"/>
+                                            <div class="ess-emp-job">
+                                                <i class="fa-solid fa-briefcase me-1"></i>
+                                                <span t-esc="portal_data.get('job_title')"/>
+                                            </div>
+                                            <div class="ess-emp-meta">
+                                                <span><i class="fa-solid fa-sitemap me-1"></i> <t t-esc="portal_data.get('department')"/></span>
+                                                <span><i class="fa-solid fa-id-badge me-1"></i> الرقم: <t t-esc="portal_data.get('barcode')"/></span>
+                                                <t t-if="portal_data.get('parent_name')">
+                                                    <span><i class="fa-solid fa-user-tie me-1"></i> المدير: <t t-esc="portal_data.get('parent_name')"/></span>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="ess-profile-stats">
+                                        <div class="ess-stat-box text-center">
+                                            <div class="ess-stat-num" t-esc="portal_data.get('leave_balance', 0.0)"/>
+                                            <div class="ess-stat-lbl">رصيد الإجازات</div>
+                                        </div>
+                                        <div class="ess-stat-box text-center">
+                                            <div class="ess-stat-num" t-esc="portal_data.get('today_hours', 0.0)"/>
+                                            <div class="ess-stat-lbl">ساعات اليوم</div>
+                                        </div>
+                                        <div class="ess-stat-box text-center">
+                                            <span t-attf-class="ess-status-pill #{'checked-in' if portal_data.get('is_checked_in') else 'checked-out'}">
+                                                <i t-attf-class="fa-solid #{'fa-circle-check' if portal_data.get('is_checked_in') else 'fa-circle-dot'} me-1"></i>
+                                                <t t-if="portal_data.get('is_checked_in')">حاضر (Checked In)</t>
+                                                <t t-else="">منصرف (Checked Out)</t>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- ALL SELF SERVICE CARDS GRID (INSIDE ESS WORKSPACE) -->
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0">
+                                            <i class="fa-solid fa-grip text-danger me-2"></i> الخدمات الأساسية السريعة
+                                        </h2>
+                                        <span class="badge bg-light text-dark border px-3 py-2">6 خدمات ذاتية مفعلة</span>
+                                    </div>
+
+                                    <div class="row g-3">
+                                        <!-- Service 1: GPS Check-In / Check-Out -->
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="ess-service-tile-card" id="ess_btn_checkinout">
+                                                <div t-attf-class="ess-service-tile-icon #{'bg-danger-subtle text-danger' if portal_data.get('is_checked_in') else 'bg-success-subtle text-success'}">
+                                                    <i t-attf-class="fa-solid #{'fa-right-from-bracket' if portal_data.get('is_checked_in') else 'fa-fingerprint'}"></i>
+                                                </div>
+                                                <h6 class="fw-bold fs-5 m-0 mb-1">تسجيل الحضور / الانصراف</h6>
+                                                <small class="text-muted mb-3">
+                                                    <t t-if="portal_data.get('is_checked_in')">أنت حاضر حالياً، انقر لتسجيل الانصراف</t>
+                                                    <t t-else="">تسجيل الحضور الفوري مع التوثيق الجغرافي (GPS)</t>
+                                                </small>
+                                                <button t-attf-class="btn btn-sm w-100 fw-bold py-2 #{'btn-danger' if portal_data.get('is_checked_in') else 'btn-success'}">
+                                                    <t t-if="portal_data.get('is_checked_in')">تسجيل الانصراف الان</t>
+                                                    <t t-else="">تسجيل الحضور الان</t>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Service 2: Leave Request -->
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="ess-service-tile-card ess-open-leave-modal">
+                                                <div class="ess-service-tile-icon bg-info-subtle text-info">
+                                                    <i class="fa-solid fa-plane-departure"></i>
+                                                </div>
+                                                <h6 class="fw-bold fs-5 m-0 mb-1">طلب إجازة إلكترونية</h6>
+                                                <small class="text-muted mb-3">تقديم ومتابعة موافقات الإجازة الاعتيادية والمرضية</small>
+                                                <button class="btn btn-sm btn-info text-white w-100 fw-bold py-2">
+                                                    تقديم طلب إجازة
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Service 3: Salary Certificate -->
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="ess-service-tile-card ess-open-generic-modal" data-service-name="طلب شهادة تعريف بالراتب">
+                                                <div class="ess-service-tile-icon bg-purple-subtle text-purple" style="background:#f3e8ff; color:#9333ea;">
+                                                    <i class="fa-solid fa-file-invoice-dollar"></i>
+                                                </div>
+                                                <h6 class="fw-bold fs-5 m-0 mb-1">مشاهد وتعريف بالراتب</h6>
+                                                <small class="text-muted mb-3">إصدار الخطابات الرسمية الموجهة للجهات الحكومية والبنكية</small>
+                                                <button class="btn btn-sm btn-outline-primary w-100 fw-bold py-2">
+                                                    طلب شهادة تعريف
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Service 4: Exit Permit -->
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="ess-service-tile-card ess-open-generic-modal" data-service-name="طلب إذن خروج / استئذان">
+                                                <div class="ess-service-tile-icon bg-teal-subtle text-teal" style="background:#ccfbf1; color:#0d9488;">
+                                                    <i class="fa-solid fa-id-badge"></i>
+                                                </div>
+                                                <h6 class="fw-bold fs-5 m-0 mb-1">أذونات واستئذان خروج</h6>
+                                                <small class="text-muted mb-3">تقديم أدونات الخروج لأغراض شخصية أو مهام عمل خارجية</small>
+                                                <button class="btn btn-sm btn-outline-info w-100 fw-bold py-2">
+                                                    طلب إذن خروج
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Service 5: Financial Loans -->
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="ess-service-tile-card ess-open-generic-modal" data-service-name="طلب سلفة / قرض مالية">
+                                                <div class="ess-service-tile-icon bg-danger-subtle text-danger">
+                                                    <i class="fa-solid fa-hand-holding-dollar"></i>
+                                                </div>
+                                                <h6 class="fw-bold fs-5 m-0 mb-1">السلف والقروض المالية</h6>
+                                                <small class="text-muted mb-3">تقديم طلبات السلف المالية الشخصية وجدولة الأقساط</small>
+                                                <button class="btn btn-sm btn-outline-danger w-100 fw-bold py-2">
+                                                    تقديم طلب سلفة
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Service 6: Profile & Employee Records -->
+                                        <div class="col-md-4 col-sm-6">
+                                            <div class="ess-service-tile-card" onclick="essActivateTab('tab_profile')">
+                                                <div class="ess-service-tile-icon bg-secondary-subtle text-secondary">
+                                                    <i class="fa-solid fa-user-pen"></i>
+                                                </div>
+                                                <h6 class="fw-bold fs-5 m-0 mb-1">الملف الشخصي والبيانات</h6>
+                                                <small class="text-muted mb-3">تحديث البيانات الشخصية، أرقام الجوال للطوارئ والعنوان</small>
+                                                <button class="btn btn-sm btn-outline-secondary w-100 fw-bold py-2" onclick="event.stopPropagation(); essActivateTab('tab_profile');">
+                                                    تحديث الملف الشخصي
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tasks List inside ESS Dashboard -->
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h2 class="ess-section-title m-0">
+                                            <i class="fa-solid fa-list-check text-warning me-2"></i> قائمة المهام الموكلة
+                                        </h2>
+                                        <button class="btn btn-sm btn-primary ess-open-task-modal">
+                                            <i class="fa-solid fa-plus me-1"></i> مهمة جديدة
+                                        </button>
+                                    </div>
+                                    <t t-if="not portal_data.get('my_tasks')">
+                                        <div class="text-center py-4 text-muted">لا توجد مهام مسجلة حالياً.</div>
+                                    </t>
+                                    <t t-if="portal_data.get('my_tasks')">
+                                        <div class="table-responsive">
+                                            <table class="ess-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>عنوان المهمة</th>
+                                                        <th>النوع</th>
+                                                        <th>الأولوية</th>
+                                                        <th>تاريخ الاستحقاق</th>
+                                                        <th>الحالة</th>
+                                                        <th>إجراء</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-foreach="portal_data.get('my_tasks', [])[:5]" t-as="tsk">
+                                                        <tr>
+                                                            <td><strong t-esc="tsk['name']"/></td>
+                                                            <td>
+                                                                <span t-if="tsk['task_type'] == 'team'" class="badge bg-info text-dark">فريق</span>
+                                                                <span t-else="" class="badge bg-secondary">شخصية</span>
+                                                            </td>
+                                                            <td>
+                                                                <span t-if="tsk['priority'] == '3'" class="badge bg-danger">عاجلة جداً</span>
+                                                                <span t-elif="tsk['priority'] == '2'" class="badge bg-warning text-dark">عالية</span>
+                                                                <span t-else="" class="badge bg-light text-dark">عادية</span>
+                                                            </td>
+                                                            <td><span t-esc="tsk['date_deadline'] or '-'"/></td>
+                                                            <td>
+                                                                <span t-attf-class="badge #{'bg-success' if tsk['state'] == 'done' else 'bg-primary' if tsk['state'] == 'in_progress' else 'bg-secondary'}">
+                                                                    <t t-esc="tsk['state_display']"/>
+                                                                </span>
+                                                            </td>
+                                                            <td>
+                                                                <t t-if="tsk['state'] != 'done'">
+                                                                    <button class="btn btn-sm btn-success ess-btn-task-state" t-att-data-task-id="tsk['id']" data-target-state="done">
+                                                                        <i class="fa-solid fa-check"></i> إنجاز
+                                                                    </button>
+                                                                </t>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- TAB 2: TASKS BOX -->
+                            <div id="tab_tasks" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0">
+                                            <i class="fa-solid fa-list-check text-teal me-2"></i> صندوق إدارة المهام (Personal and Team Tasks)
+                                        </h2>
+                                        <button class="btn btn-primary ess-open-task-modal">
+                                            <i class="fa-solid fa-plus me-1"></i> إضافة مهمة جديدة
+                                        </button>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="ess-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>اسم المهمة</th>
+                                                    <th>النوع</th>
+                                                    <th>الأولوية</th>
+                                                    <th>تاريخ الاستحقاق</th>
+                                                    <th>الحالة الحالية</th>
+                                                    <th>إجراءات التغيير</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-if="not portal_data.get('my_tasks')">
+                                                    <tr>
+                                                        <td colspan="6" class="text-center py-4 text-muted">لا توجد مهام حالية في صندوقك.</td>
+                                                    </tr>
+                                                </t>
+                                                <t t-foreach="portal_data.get('my_tasks', [])" t-as="tsk">
+                                                    <tr>
+                                                        <td>
+                                                            <strong t-esc="tsk['name']"/><br/>
+                                                            <small class="text-muted" t-esc="tsk['description']"/>
+                                                        </td>
+                                                        <td>
+                                                            <span t-if="tsk['task_type'] == 'team'" class="badge bg-info text-dark">فريق عمل</span>
+                                                            <span t-else="" class="badge bg-secondary">شخصية</span>
+                                                        </td>
+                                                        <td>
+                                                            <span t-if="tsk['priority'] == '3'" class="badge bg-danger">عاجلة جداً</span>
+                                                            <span t-elif="tsk['priority'] == '2'" class="badge bg-warning text-dark">عالية</span>
+                                                            <span t-else="" class="badge bg-light text-dark">عادية</span>
+                                                        </td>
+                                                        <td><span t-esc="tsk['date_deadline'] or '-'"/></td>
+                                                        <td>
+                                                            <span t-attf-class="badge #{'bg-success' if tsk['state'] == 'done' else 'bg-primary' if tsk['state'] == 'in_progress' else 'bg-secondary'}">
+                                                                <t t-esc="tsk['state_display']"/>
+                                                            </span>
+                                                        </td>
+                                                        <td>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <button class="btn btn-outline-primary ess-btn-task-state" t-att-data-task-id="tsk['id']" data-target-state="in_progress">قيد التنفيذ</button>
+                                                                <button class="btn btn-outline-success ess-btn-task-state" t-att-data-task-id="tsk['id']" data-target-state="done">مكتملة</button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 3: MY REQUESTS AND LEAVES -->
+                            <div id="tab_requests" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0">
+                                            <i class="fa-solid fa-paper-plane text-purple me-2"></i> سجل طلباتي والإجازات المقدمة
+                                        </h2>
+                                        <button class="btn btn-primary ess-open-leave-modal">
+                                            <i class="fa-solid fa-plus me-1"></i> تقديم طلب إجازة
+                                        </button>
+                                    </div>
+
+                                    <div class="table-responsive">
+                                        <table class="ess-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>نوع الإجازة / الطلب</th>
+                                                    <th>من تاريخ</th>
+                                                    <th>إلى تاريخ</th>
+                                                    <th>عدد الأيام</th>
+                                                    <th>الحالة</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <t t-if="not portal_data.get('my_leaves')">
+                                                    <tr>
+                                                        <td colspan="5" class="text-center py-4 text-muted">لا توجد طلبات إجازة سابقة.</td>
+                                                    </tr>
+                                                </t>
+                                                <t t-foreach="portal_data.get('my_leaves', [])" t-as="lv">
+                                                    <tr>
+                                                        <td><strong t-esc="lv['holiday_type']"/></td>
+                                                        <td><span t-esc="lv['date_from']"/></td>
+                                                        <td><span t-esc="lv['date_to']"/></td>
+                                                        <td><strong t-esc="lv['number_of_days']"/> يوم</td>
+                                                        <td>
+                                                            <span t-attf-class="badge #{'bg-success' if lv['state'] == 'validate' else 'bg-warning text-dark' if lv['state'] == 'confirm' else 'bg-danger'}">
+                                                                <t t-esc="lv['state_display']"/>
+                                                            </span>
+                                                        </td>
+                                                    </tr>
+                                                </t>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TAB 4: PROFILE EDIT TAB -->
+                            <div id="tab_profile" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <h2 class="ess-section-title mb-4">
+                                        <i class="fa-solid fa-user-pen text-teal me-2"></i> تحديث بيانات الملف الشخصي
+                                    </h2>
+
+                                    <form id="ess_form_profile">
+                                        <div class="ess-profile-avatar-upload mb-4 text-center">
+                                            <img id="ess_profile_avatar_preview" t-att-src="portal_data.get('avatar_url')" class="ess-profile-preview rounded-circle border shadow-sm mb-2" style="width:100px; height:100px; object-fit:cover;" alt="Avatar Preview"/>
+                                            <div>
+                                                <label for="ess_profile_avatar_input" class="btn btn-sm btn-outline-primary">
+                                                    <i class="fa-solid fa-camera me-1"></i> تغيير الصورة الشخصية
+                                                </label>
+                                                <input type="file" id="ess_profile_avatar_input" accept="image/*" class="d-none"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">الاسم الكامل (غير قابل للتعديل)</label>
+                                                <input type="text" class="form-control bg-light" t-att-value="portal_data.get('name')" readonly="readonly"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">المسمى الوظيفي (غير قابل للتعديل)</label>
+                                                <input type="text" class="form-control bg-light" t-att-value="portal_data.get('job_title')" readonly="readonly"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">رقم الجوال الخاص</label>
+                                                <input type="text" id="ess_prof_mobile" class="form-control" t-att-value="portal_data.get('mobile_phone')" placeholder="مثال: 0501234567"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">هاتف العمل</label>
+                                                <input type="text" id="ess_prof_work_phone" class="form-control" t-att-value="portal_data.get('work_phone')" placeholder="رقم التحويلة أو هاتف المكتب"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">البريد الإلكتروني الشخصي</label>
+                                                <input type="email" id="ess_prof_email" class="form-control" t-att-value="portal_data.get('private_email')" placeholder="example@domain.com"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">جهة الاتصال عند الطوارئ (اسم الشخص)</label>
+                                                <input type="text" id="ess_prof_emg_name" class="form-control" t-att-value="portal_data.get('emergency_contact')" placeholder="اسم قريب/جهة الاتصال"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">رقم جوال الطوارئ</label>
+                                                <input type="text" id="ess_prof_emg_phone" class="form-control" t-att-value="portal_data.get('emergency_phone')" placeholder="05xxxxxxxx"/>
+                                            </div>
+                                            <div class="col-md-6 mb-3">
+                                                <label class="ess-form-label">المدينة / السكن</label>
+                                                <input type="text" id="ess_prof_city" class="form-control" t-att-value="portal_data.get('city')" placeholder="مثال: الرياض، مكة المكرمة"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label class="ess-form-label">العنوان التفصيلي / الشارع</label>
+                                            <input type="text" id="ess_prof_street" class="form-control" t-att-value="portal_data.get('street')" placeholder="الحي، اسم الشارع، رقم المبنى"/>
+                                        </div>
+
+                                        <button type="submit" class="ess-btn-submit w-100 py-2">
+                                            <i class="fa-solid fa-floppy-disk me-1"></i> حفظ التغييرات في الملف الشخصي
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- TAB 5: TEAM APPROVALS (MANAGERS ONLY) -->
+                            <t t-if="portal_data.get('is_manager')">
+                                <div id="tab_approvals" class="ess-tab-pane" style="display: none;">
+                                    <div class="ess-section-card">
+                                        <h2 class="ess-section-title mb-3 text-indigo">
+                                            <i class="fa-solid fa-square-check me-2"></i> طلبات في انتظار موافقتي كمدير
+                                        </h2>
+                                        <div class="table-responsive">
+                                            <table class="ess-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>اسم الموظف</th>
+                                                        <th>نوع الطلب</th>
+                                                        <th>التاريخ من - إلى</th>
+                                                        <th>الإجراء السريع</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <t t-if="not portal_data.get('pending_approvals')">
+                                                        <tr>
+                                                            <td colspan="4" class="text-center py-4 text-muted">لا توجد طلبات معلقة تتطلب موافقتك.</td>
+                                                        </tr>
+                                                    </t>
+                                                    <t t-foreach="portal_data.get('pending_approvals', [])" t-as="appr">
+                                                        <tr>
+                                                            <td><strong t-esc="appr['employee_name']"/></td>
+                                                            <td t-esc="appr['title']"/>
+                                                            <td><span t-esc="appr['date_from']"/> إلى <span t-esc="appr['date_to']"/></td>
+                                                            <td>
+                                                                <button class="btn btn-sm btn-success ess-btn-approve-leave me-1" t-att-data-leave-id="appr['id']" data-action-type="approve">
+                                                                    <i class="fa-solid fa-check me-1"></i> موافقة
+                                                                </button>
+                                                                <button class="btn btn-sm btn-danger ess-btn-approve-leave" t-att-data-leave-id="appr['id']" data-action-type="refuse">
+                                                                    <i class="fa-solid fa-xmark me-1"></i> رفض
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                    </t>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- MODULE 2 TAB: ADMINISTRATIVE COMMUNICATIONS (الاتصالات الإدارية) -->
+                            <div id="tab_communications" class="ess-tab-pane" style="display: none;">
+                                <div class="row g-4">
+                                    <!-- Main Table Area -->
+                                    <div class="col-md-12">
+                                        <div class="ess-section-card">
+                                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                                <h2 class="ess-section-title m-0 text-primary">
+                                                    <i class="fa-solid fa-box-archive me-2"></i> المعاملات الإدارية
+                                                </h2>
+                                                <button class="btn btn-primary shadow-sm" onclick="essOpenCtsModal()">
+                                                    <i class="fa-solid fa-plus me-1"></i> معاملة جديدة
+                                                </button>
+                                            </div>
+                                            <!-- Stats View (KPI Dashboard) -->
+                                            <div id="cts_stats_view" style="display: none;">
+                                                
+                                                <!-- Top Summary Cards -->
+                                                <div class="row g-3 mb-4">
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="p-3 border rounded bg-light text-center h-100 shadow-sm border-primary border-bottom border-3">
+                                                            <div class="text-primary mb-2"><i class="fa-solid fa-layer-group fs-3"></i></div>
+                                                            <h3 class="m-0 fw-bold" id="kpi_total_transactions">0</h3>
+                                                            <small class="text-muted fw-bold">إجمالي المعاملات</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="p-3 border rounded bg-light text-center h-100 shadow-sm border-info border-bottom border-3">
+                                                            <div class="text-info mb-2"><i class="fa-solid fa-clock-rotate-left fs-3"></i></div>
+                                                            <h3 class="m-0 fw-bold" id="kpi_avg_duration">0 <span class="fs-6">أيام</span></h3>
+                                                            <small class="text-muted fw-bold">متوسط مدة الإنجاز</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="p-3 border rounded bg-light text-center h-100 shadow-sm border-success border-bottom border-3">
+                                                            <div class="text-success mb-2"><i class="fa-solid fa-circle-check fs-3"></i></div>
+                                                            <h3 class="m-0 fw-bold" id="kpi_completed">0</h3>
+                                                            <small class="text-muted fw-bold">تم إنجازها</small>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3 col-6">
+                                                        <div class="p-3 border rounded bg-light text-center h-100 shadow-sm border-warning border-bottom border-3">
+                                                            <div class="text-warning mb-2"><i class="fa-solid fa-spinner fa-spin fs-3"></i></div>
+                                                            <h3 class="m-0 fw-bold" id="kpi_in_progress">0</h3>
+                                                            <small class="text-muted fw-bold">قيد التنفيذ</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Breakdown Section -->
+                                                <div class="row g-4 mb-4">
+                                                    <!-- Status Breakdown -->
+                                                    <div class="col-lg-6">
+                                                        <div class="card border-0 shadow-sm h-100">
+                                                            <div class="card-header bg-white border-bottom-0 pt-3 pb-0">
+                                                                <h6 class="fw-bold text-dark"><i class="fa-solid fa-chart-pie text-secondary me-2"></i> تحليل حالات المعاملات</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                
+                                                                <div class="mb-3">
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <small class="fw-bold text-secondary">مسودة (Draft)</small>
+                                                                        <small class="fw-bold" id="kpi_val_draft">0</small>
+                                                                    </div>
+                                                                    <div class="progress" style="height: 8px;">
+                                                                        <div class="progress-bar bg-secondary" id="kpi_bar_draft" role="progressbar" style="width: 0%"></div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <small class="fw-bold text-primary">تم التوجيه (Routed)</small>
+                                                                        <small class="fw-bold" id="kpi_val_routed">0</small>
+                                                                    </div>
+                                                                    <div class="progress" style="height: 8px;">
+                                                                        <div class="progress-bar bg-primary" id="kpi_bar_routed" role="progressbar" style="width: 0%"></div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <small class="fw-bold text-warning text-dark">قيد الإجراء (In Progress)</small>
+                                                                        <small class="fw-bold" id="kpi_val_in_progress">0</small>
+                                                                    </div>
+                                                                    <div class="progress" style="height: 8px;">
+                                                                        <div class="progress-bar bg-warning" id="kpi_bar_in_progress" role="progressbar" style="width: 0%"></div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-3">
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <small class="fw-bold text-danger">بانتظار رد خارجي (Pending)</small>
+                                                                        <small class="fw-bold" id="kpi_val_pending_external">0</small>
+                                                                    </div>
+                                                                    <div class="progress" style="height: 8px;">
+                                                                        <div class="progress-bar bg-danger" id="kpi_bar_pending_external" role="progressbar" style="width: 0%"></div>
+                                                                    </div>
+                                                                </div>
+
+                                                                <div class="mb-0">
+                                                                    <div class="d-flex justify-content-between mb-1">
+                                                                        <small class="fw-bold text-success">مكتملة ومغلقة (Completed/Closed)</small>
+                                                                        <small class="fw-bold" id="kpi_val_closed">0</small>
+                                                                    </div>
+                                                                    <div class="progress" style="height: 8px;">
+                                                                        <div class="progress-bar bg-success" id="kpi_bar_closed" role="progressbar" style="width: 0%"></div>
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Top Users Leaderboard -->
+                                                    <div class="col-lg-6">
+                                                        <div class="card border-0 shadow-sm h-100">
+                                                            <div class="card-header bg-white border-bottom-0 pt-3 pb-0">
+                                                                <h6 class="fw-bold text-dark"><i class="fa-solid fa-users text-purple me-2"></i> الأداء والمستخدمين</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link active btn-sm rounded-pill" id="pills-creators-tab" data-bs-toggle="pill" data-bs-target="#pills-creators" type="button" role="tab" aria-selected="true">أكثر من أنشأ (Creators)</button>
+                                                                    </li>
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link btn-sm rounded-pill" id="pills-responsible-tab" data-bs-toggle="pill" data-bs-target="#pills-responsible" type="button" role="tab" aria-selected="false">أكثر من أُسند إليه (Responsible)</button>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="tab-content" id="pills-tabContent">
+                                                                    <!-- Creators Tab -->
+                                                                    <div class="tab-pane fade show active" id="pills-creators" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_creators">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- Responsible Tab -->
+                                                                    <div class="tab-pane fade" id="pills-responsible" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_responsible">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- Companies and Departments -->
+                                                    <div class="col-lg-6 mt-4">
+                                                        <div class="card border-0 shadow-sm h-100">
+                                                            <div class="card-header bg-white border-bottom-0 pt-3 pb-0">
+                                                                <h6 class="fw-bold text-dark"><i class="fa-solid fa-building text-info me-2"></i> الشركات والأقسام</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="nav nav-pills mb-3 nav-justified" id="pills-comp-tab" role="tablist">
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link active btn-sm rounded-pill" id="pills-companies-tab" data-bs-toggle="pill" data-bs-target="#pills-companies" type="button" role="tab" aria-selected="true">الشركات</button>
+                                                                    </li>
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link btn-sm rounded-pill" id="pills-departments-tab" data-bs-toggle="pill" data-bs-target="#pills-departments" type="button" role="tab" aria-selected="false">الأقسام</button>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="tab-content" id="pills-comp-tabContent">
+                                                                    <div class="tab-pane fade show active" id="pills-companies" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_companies">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="pills-departments" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_departments">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Classifications -->
+                                                    <div class="col-lg-6 mt-4">
+                                                        <div class="card border-0 shadow-sm h-100">
+                                                            <div class="card-header bg-white border-bottom-0 pt-3 pb-0">
+                                                                <h6 class="fw-bold text-dark"><i class="fa-solid fa-tags text-success me-2"></i> تصنيفات المعاملات</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <ul class="nav nav-pills mb-3 nav-justified" id="pills-class-tab" role="tablist">
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link active btn-sm rounded-pill" id="pills-types-tab" data-bs-toggle="pill" data-bs-target="#pills-types" type="button" role="tab" aria-selected="true">الأنواع</button>
+                                                                    </li>
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link btn-sm rounded-pill" id="pills-priorities-tab" data-bs-toggle="pill" data-bs-target="#pills-priorities" type="button" role="tab" aria-selected="false">الأولويات</button>
+                                                                    </li>
+                                                                    <li class="nav-item" role="presentation">
+                                                                        <button class="nav-link btn-sm rounded-pill" id="pills-scopes-tab" data-bs-toggle="pill" data-bs-target="#pills-scopes" type="button" role="tab" aria-selected="false">النطاق</button>
+                                                                    </li>
+                                                                </ul>
+                                                                <div class="tab-content" id="pills-class-tabContent">
+                                                                    <div class="tab-pane fade show active" id="pills-types" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_types">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="pills-priorities" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_priorities">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="tab-pane fade" id="pills-scopes" role="tabpanel" tabindex="0">
+                                                                        <div class="list-group list-group-flush" id="kpi_list_scopes">
+                                                                            <div class="text-center text-muted py-3 small"><i class="fa-solid fa-spinner fa-spin"></i> جاري التحميل...</div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Data View -->
+                                            <div id="cts_data_view">
+                                                <!-- Search Bar and Filters -->
+                                                <div class="row mb-3 align-items-center">
+                                                    <div class="col-md-4 mb-2">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="fa-solid fa-search"></i></span>
+                                                            <input type="text" id="ess_cts_search" class="form-control border-start-0" placeholder="بحث برقم المعاملة، الموضوع، أو العميل..." onkeyup="if(event.keyCode === 13) { window.ctsCurrentPage = 1; window.loadCtsTransactions(window.currentCtsFilter); }"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-2 mb-2">
+                                                        <select id="ess_filter_status" class="form-select text-muted" onchange="window.ctsCurrentPage = 1; window.loadCtsTransactions(window.currentCtsFilter);">
+                                                            <option value="">كل الحالات</option>
+                                                            <option value="draft">مسودة</option>
+                                                            <option value="routed">تم التوجيه</option>
+                                                            <option value="in_progress">قيد الإجراء</option>
+                                                            <option value="pending_external">بانتظار رد خارجي</option>
+                                                            <option value="completed">مكتملة</option>
+                                                            <option value="closed">مغلقة</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2 mb-2">
+                                                        <select id="ess_filter_priority" class="form-select text-muted" onchange="window.ctsCurrentPage = 1; window.loadCtsTransactions(window.currentCtsFilter);">
+                                                            <option value="">كل الأولويات</option>
+                                                            <option value="normal">عادي</option>
+                                                            <option value="urgent">عاجل</option>
+                                                            <option value="very_urgent">عاجل جداً</option>
+                                                            <option value="instant">فوري / سري للغاية</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-md-2 mb-2">
+                                                        <input type="date" id="ess_filter_date_from" class="form-control text-muted" title="من تاريخ" onchange="window.ctsCurrentPage = 1; window.loadCtsTransactions(window.currentCtsFilter);" />
+                                                    </div>
+                                                    <div class="col-md-2 mb-2">
+                                                        <input type="date" id="ess_filter_date_to" class="form-control text-muted" title="إلى تاريخ" onchange="window.ctsCurrentPage = 1; window.loadCtsTransactions(window.currentCtsFilter);" />
+                                                    </div>
+                                                </div>
+                                                <!-- Table Container -->
+                                                <div class="table-responsive">
+                                                    <table class="ess-table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th data-col="serial_number" class="sortable cursor-pointer" onclick="window.ctsSort('serial_number')">رقم المعاملة <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="request_topic" class="sortable cursor-pointer" onclick="window.ctsSort('request_topic')">الموضوع <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="customer_name" class="sortable cursor-pointer" onclick="window.ctsSort('partner_id.name')">اسم العميل / الجهة <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="request_mode" class="sortable cursor-pointer" onclick="window.ctsSort('request_mode')">الاتجاه <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="creator_name" class="sortable cursor-pointer" onclick="window.ctsSort('create_uid')">المنشئ <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="assigned_user" class="sortable cursor-pointer" onclick="window.ctsSort('employee_ids')">الموظف المسؤول <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="priority" class="sortable cursor-pointer" onclick="window.ctsSort('priority')">الأولوية <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="state" class="sortable cursor-pointer" onclick="window.ctsSort('status')">الحالة <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="start_date" class="sortable cursor-pointer" onclick="window.ctsSort('start_date')">تاريخ البداية <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="end_date" class="sortable cursor-pointer" onclick="window.ctsSort('date_end')">تاريخ الاستحقاق <i class="sort-icon fa-solid fa-sort text-muted ms-1"></i></th>
+                                                                <th data-col="actions">
+                                                                    <div class="d-flex align-items-center justify-content-between">
+                                                                        إجراءات
+                                                                        <div class="dropdown">
+                                                                            <button class="btn btn-sm text-secondary p-0 ms-2 border-0 bg-transparent" type="button" data-bs-toggle="dropdown" aria-expanded="false" title="تخصيص الأعمدة">
+                                                                                <i class="fa-solid fa-table-columns fs-6"></i>
+                                                                            </button>
+                                                                            <ul class="dropdown-menu dropdown-menu-end p-2 shadow-sm" id="ess_cts_column_menu" style="min-width: 220px;" onclick="event.stopPropagation()">
+                                                                                <!-- JS populates checkboxes -->
+                                                                            </ul>
+                                                                        </div>
+                                                                    </div>
+                                                                </th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="cts_table_body">
+                                                            <!-- AJAX content will be loaded here -->
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                                <!-- Pagination Controls -->
+                                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                                    <span class="text-muted" id="cts_pagination_info">عرض 0 إلى 0 من 0 معاملة</span>
+                                                    <div class="btn-group">
+                                                        <button class="btn btn-outline-secondary" id="cts_btn_prev" onclick="window.ctsChangePage(-1)"><i class="fa-solid fa-chevron-right me-1"></i> السابق</button>
+                                                        <button class="btn btn-outline-secondary" id="cts_btn_next" onclick="window.ctsChangePage(1)">التالي <i class="fa-solid fa-chevron-left ms-1"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODULE 3 TAB: DIGITAL LIBRARY (المكتبة الرقمية) -->
+                            <div id="tab_library" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0 text-info">
+                                            <i class="fa-solid fa-folder-open me-2"></i> المكتبة الرقمية والأرشيف المركزي
+                                        </h2>
+                                        <button class="btn btn-info text-white" onclick="alert('سيتم استعراض التعاميم الإدارية');">
+                                            <i class="fa-solid fa-magnifying-glass me-1"></i> البحث في الأرشيف
+                                        </button>
+                                    </div>
+                                    <p class="text-muted fs-6">استعراض التعاميم الإدارية، العقود، الأدلة الإجرائية واللوائح التنظيمية الداخلية.</p>
+                                    <div class="alert alert-success d-flex align-items-center gap-3">
+                                        <i class="fa-solid fa-folder-tree fs-3"></i>
+                                        <div>
+                                            <strong>الأرشيف الرقمي الموحد:</strong> جميع المستندات والتعاميم محدثة ومتاحة للمعاينة والتنزيل.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODULE 5 TAB: MAIL MANAGEMENT (إدارة البريد) -->
+                            <div id="tab_mail" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0 text-purple">
+                                            <i class="fa-solid fa-envelope-open-text me-2"></i> منظومة إدارة البريد والمراسلات
+                                        </h2>
+                                        <button class="btn btn-secondary" onclick="alert('إنشاء رسالة رسمية جديدة');">
+                                            <i class="fa-solid fa-pen-to-square me-1"></i> كتابة رسالة
+                                        </button>
+                                    </div>
+                                    <p class="text-muted fs-6">صندوق المراسلات الإلكترونية الرسمية، التعاميم والرسائل الإدارية الداخلية.</p>
+                                    <div class="alert alert-purple d-flex align-items-center gap-3" style="background:#f3e8ff; color:#7e22ce;">
+                                        <i class="fa-solid fa-inbox fs-3"></i>
+                                        <div>
+                                            <strong>البريد الإلكتروني الموحد:</strong> يمكنك تتبع كافة التعاميم والتنبيهات البريدية مباشرة.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- MODULE 6 TAB: UNIFIED CONTRACT PROJECTS (إدارة مشاريع العقد الموحد) -->
+                            <div id="tab_contracts" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0 text-success">
+                                            <i class="fa-solid fa-file-contract me-2"></i> إدارة مشاريع العقد الموحد
+                                        </h2>
+                                        <button class="btn btn-success" onclick="alert('استعراض تفاصيل العقد الموحد');">
+                                            <i class="fa-solid fa-chart-line me-1"></i> مؤشرات الإنجاز
+                                        </button>
+                                    </div>
+                                    <p class="text-muted fs-6">متابعة كراسات الشروط، العقود الموحدة، النطاق الجغرافي ونسب إنجاز المشاريع الميدانية.</p>
+                                </div>
+                            </div>
+
+                            <!-- MODULE 7 TAB: MAINTENANCE & CUSTODY (إدارة الصيانة والعهد) -->
+                            <div id="tab_maintenance" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0 text-warning">
+                                            <i class="fa-solid fa-screwdriver-wrench me-2"></i> إدارة الصيانة والعهد العينية
+                                        </h2>
+                                        <button class="btn btn-warning text-dark" onclick="alert('تقديم طلب صيانة معدة / عهدة');">
+                                            <i class="fa-solid fa-wrench me-1"></i> طلب صيانة عهدة
+                                        </button>
+                                    </div>
+                                    <p class="text-muted fs-6">تسجيل ومتابعة العهد العينية والشخصية، طلبات صيانة المعدات والأجهزة والأثاث.</p>
+                                </div>
+                            </div>
+
+                            <!-- MODULE 8 TAB: ASSETS MANAGEMENT (إدارة الأصول) -->
+                            <div id="tab_assets" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0 text-teal">
+                                            <i class="fa-solid fa-building-circle-check me-2"></i> دليل وتتبع الأصول الثابتة
+                                        </h2>
+                                        <button class="btn btn-outline-teal" style="border-color:#0d9488; color:#0d9488;" onclick="alert('عرض سجل الجرد الدوري للأصول');">
+                                            <i class="fa-solid fa-barcode me-1"></i> سجل الجرد
+                                        </button>
+                                    </div>
+                                    <p class="text-muted fs-6">حصر وتتبع الأصول الثابتة، العُقد والممتلكات، وتقارير الإهلاك والجرد الدوري.</p>
+                                </div>
+                            </div>
+
+                            <!-- MODULE 9 TAB: HELPDESK & TICKETS (الدعم الفني وتذاكر الصيانة) -->
+                            <div id="tab_helpdesk" class="ess-tab-pane" style="display: none;">
+                                <div class="ess-section-card">
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <h2 class="ess-section-title m-0 text-danger">
+                                            <i class="fa-solid fa-headset me-2"></i> الدعم الفني وتذاكر الصيانة والتقنية
+                                        </h2>
+                                        <button class="btn btn-danger" onclick="alert('فتح تذكرة دعم فني جديدة');">
+                                            <i class="fa-solid fa-plus me-1"></i> فتح تذكرة جديدة
+                                        </button>
+                                    </div>
+                                    <p class="text-muted fs-6">فتح ومتابعة تذاكر الدعم الفني، الأعطال التقنية والاستفسارات البرمجية وبلاغات الصيانة.</p>
+                                </div>
+                            </div>
+                        </main>
+                    </t>
+                </div>
+
+                <!-- MODALS -->
+                <!-- Leave Modal -->
+                <div id="ess_modal_leave" class="ess-modal">
+                    <div class="ess-modal-content">
+                        <div class="ess-modal-header">
+                            <h3 class="ess-modal-title"><i class="fa-solid fa-calendar-plus text-teal me-2"></i> تقديم طلب إجازة</h3>
+                            <button type="button" class="ess-modal-close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="ess_form_leave">
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">نوع الإجازة</label>
+                                <select id="ess_leave_type" class="form-select" required="required">
+                                    <t t-foreach="leave_types" t-as="lt">
+                                        <option t-att-value="lt['id']" t-esc="lt['name']"/>
+                                    </t>
+                                </select>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6 ess-form-group">
+                                    <label class="ess-form-label">تاريخ البداية</label>
+                                    <input type="date" id="ess_leave_from" class="form-control" required="required"/>
+                                </div>
+                                <div class="col-6 ess-form-group">
+                                    <label class="ess-form-label">تاريخ النهاية</label>
+                                    <input type="date" id="ess_leave_to" class="form-control" required="required"/>
+                                </div>
+                            </div>
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">السبب / الملاحظات</label>
+                                <textarea id="ess_leave_desc" class="form-control" rows="3" placeholder="اكتب تفاصيل الطلب إن وجدت..."></textarea>
+                            </div>
+                            <button type="submit" class="ess-btn-submit">تقديم الطلب الان</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Generic Request Modal -->
+                <div id="ess_modal_generic" class="ess-modal">
+                    <div class="ess-modal-content">
+                        <div class="ess-modal-header">
+                            <h3 id="ess_generic_modal_title" class="ess-modal-title">تقديم طلب خدمة</h3>
+                            <button type="button" class="ess-modal-close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="ess_form_generic">
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">تفاصيل وشرح الطلب</label>
+                                <textarea id="ess_generic_desc" class="form-control" rows="4" required="required" placeholder="يرجى كتابة تفاصيل الخدمة المطلوبة..."></textarea>
+                            </div>
+                            <button type="button" class="ess-btn-submit ess-modal-close" onclick="alert('تم استلام طلبك بنجاح وسيتم التواصل معك قريباً!');">إرسال الطلب</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- New Task Modal -->
+                <div id="ess_modal_task" class="ess-modal">
+                    <div class="ess-modal-content">
+                        <div class="ess-modal-header">
+                            <h3 class="ess-modal-title"><i class="fa-solid fa-list-check text-teal me-2"></i> إضافة مهمة جديدة</h3>
+                            <button type="button" class="ess-modal-close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="ess_form_task">
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">عنوان المهمة</label>
+                                <input type="text" id="ess_task_name" class="form-control" required="required" placeholder="مراجعة التقارير الشهرية، إلخ..."/>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6 ess-form-group">
+                                    <label class="ess-form-label">نوع المهمة</label>
+                                    <select id="ess_task_type" class="form-select">
+                                        <option value="personal">مهمة شخصية لي</option>
+                                        <t t-if="portal_data.get('is_manager')">
+                                            <option value="team">مهمة لفريق العمل</option>
+                                        </t>
+                                    </select>
+                                </div>
+                                <div class="col-6 ess-form-group">
+                                    <label class="ess-form-label">الأولوية</label>
+                                    <select id="ess_task_priority" class="form-select">
+                                        <option value="0">منخفضة</option>
+                                        <option value="1" selected="selected">متوسطة</option>
+                                        <option value="2">عالية</option>
+                                        <option value="3">عاجلة جداً</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <t t-if="portal_data.get('is_manager')">
+                                <div class="ess-form-group mb-3">
+                                    <label class="ess-form-label">إسناد إلى عضو في الفريق</label>
+                                    <select id="ess_task_assignee" class="form-select">
+                                        <t t-foreach="portal_data.get('team_members', [])" t-as="tm">
+                                            <option t-att-value="tm['id']" t-esc="tm['name']"/>
+                                        </t>
+                                    </select>
+                                </div>
+                            </t>
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">تاريخ الاستحقاق / النهاية</label>
+                                <input type="date" id="ess_task_deadline" class="form-control"/>
+                            </div>
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">التفاصيل / الملاحظات</label>
+                                <textarea id="ess_task_desc" class="form-control" rows="3" placeholder="تفاصيل شرح المهمة..."></textarea>
+                            </div>
+                            <button type="submit" class="ess-btn-submit">إضافة المهمة الان</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- CTS Transaction Modal -->
+                <div id="ess_modal_cts" class="ess-modal">
+                    <div class="ess-modal-content">
+                        <div class="ess-modal-header">
+                            <h3 id="ess_cts_modal_title" class="ess-modal-title">معاملة جديدة</h3>
+                            <button type="button" class="ess-modal-close"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                        <form id="ess_form_cts" onsubmit="essSubmitCtsForm(event)">
+                            <input type="hidden" id="ess_cts_id" value="" />
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">موضوع المعاملة</label>
+                                <input type="text" id="ess_cts_topic" class="form-control" required="required" placeholder="اكتب موضوع المعاملة..."/>
+                            </div>
+                            <div class="row mb-3">
+                                <div class="col-6 ess-form-group">
+                                    <label class="ess-form-label">الاتجاه</label>
+                                    <select id="ess_cts_mode" class="form-select">
+                                        <option value="internal">داخلي</option>
+                                        <option value="incoming">وارد</option>
+                                        <option value="outgoing">صادر</option>
+                                    </select>
+                                </div>
+                                <div class="col-6 ess-form-group">
+                                    <label class="ess-form-label">الأولوية</label>
+                                    <select id="ess_cts_priority" class="form-select">
+                                        <option value="low">منخفضة</option>
+                                        <option value="medium" selected="selected">متوسطة</option>
+                                        <option value="high">عالية</option>
+                                        <option value="urgent">عاجل جداً</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">تاريخ الاستحقاق (اختياري)</label>
+                                <input type="date" id="ess_cts_date_end" class="form-control"/>
+                            </div>
+                            <div class="ess-form-group mb-3">
+                                <label class="ess-form-label">التفاصيل / البيان</label>
+                                <textarea id="ess_cts_description" class="form-control" rows="4" placeholder="تفاصيل المعاملة والبيان..."></textarea>
+                            </div>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <button type="button" class="btn btn-outline-danger" id="ess_cts_btn_delete" style="display:none;" onclick="essDeleteCts()">حذف مسودة</button>
+                                <button type="submit" class="ess-btn-submit">حفظ وإرسال</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </body>
+        </html>
+    </template>
+
+    <!-- Portal Home Entry Extension -->
+    <template id="portal_my_home_employee_self_service" name="Show Employee Self-Service Entry" inherit_id="portal.portal_my_home" priority="1">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="icon" t-value="'/hr/static/description/icon.png'"/>
+                <t t-set="title">البوابة الإلكترونية</t>
+                <t t-set="text">منظومة خدمات الموظفين الموحدة، الخدمة الذاتية، الحضور والانصراف وإدارة المهام والطلبات</t>
+                <t t-set="url" t-value="'/portal/self-service'"/>
+                <t t-set="config_card" t-value="True"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_employee_request_page" name="Employee Request" inherit_id="portal.portal_sidebar" primary="True">
+        <xpath expr="//div[hasclass('o_portal_sidebar')]" position="replace">
+            <t t-set="no_footer" t-value="True"/>
+            <div class="wrap o_portal_wrap" style="background-color: #f8fafc; min-height: 100vh; padding-bottom: 3rem;">
+                <div class="container py-5">
+                    
+                    <!-- Top Navigation Bar -->
+                    <div class="d-flex justify-content-between align-items-center mb-4">
+                        <div>
+                            <a href="/portal/self-service#tab_communications" class="btn btn-outline-secondary rounded-pill bg-white shadow-sm border-0 px-4 py-2 fw-bold text-dark">
+                                <i class="fa-solid fa-arrow-right me-2"></i> العودة للمعاملات
+                            </a>
+                        </div>
+                        <h4 class="mb-0 fw-bold text-dark">
+                            تفاصيل المعاملة: <span class="text-primary" t-field="req.serial_number"/>
+                        </h4>
+                        <div>
+                            <!-- Action buttons -->
+                            <form action="/my/cts/request/action" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="request_id" t-att-value="req.id"/>
+                                <button type="submit" name="action" value="start" class="btn btn-primary rounded-pill shadow-sm px-4" t-att-disabled="req.status != 'new' and req.status != 'draft'">
+                                    <i class="fa-solid fa-play me-1"></i> بدء
+                                </button>
+                            </form>
+                            <form action="/my/cts/request/action" method="post" class="d-inline-block me-2">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="request_id" t-att-value="req.id"/>
+                                <button type="submit" name="action" value="in_progress" class="btn btn-warning text-dark rounded-pill shadow-sm px-4" t-att-disabled="req.status != 'new' and req.status != 'draft' and req.status != 'routed'">
+                                    <i class="fa-solid fa-spinner me-1"></i> قيد الإجراء
+                                </button>
+                            </form>
+                            <form action="/my/cts/request/action" method="post" class="d-inline-block">
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="request_id" t-att-value="req.id"/>
+                                <button type="submit" name="action" value="done" class="btn btn-success rounded-pill shadow-sm px-4" t-att-disabled="req.status not in ('in_progress', 'overdue')">
+                                    <i class="fa-solid fa-check-double me-1"></i> إنجاز
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row g-4">
+                        <!-- Main Content (Right Side) -->
+                        <div class="col-lg-8">
+                            <!-- Details Card -->
+                            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <h5 class="fw-bold text-dark m-0"><i class="fa-solid fa-file-lines text-primary me-2"></i> معلومات المعاملة الأساسية</h5>
+                                        <span class="badge rounded-pill bg-primary px-3 py-2 fs-6 shadow-sm"><t t-esc="status_dict.get(req.status, req.status)"/></span>
+                                    </div>
+                                    <h4 class="text-muted mt-3 mb-0" t-field="req.request_topic"/>
+                                </div>
+                                <div class="card-body px-4 pt-4 pb-4">
+                                    <div class="row g-4">
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3">
+                                                <small class="text-muted fw-bold d-block mb-1">اتجاه المعاملة</small>
+                                                <div class="fw-bold text-dark fs-6" t-field="req.request_mode"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3">
+                                                <small class="text-muted fw-bold d-block mb-1">نطاق المعاملة</small>
+                                                <div class="fw-bold text-dark fs-6" t-field="req.request_scope"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3">
+                                                <small class="text-muted fw-bold d-block mb-1">الأولوية</small>
+                                                <div class="fw-bold text-dark fs-6">
+                                                    <t t-if="req.priority == 'normal'"><span class="text-secondary"><i class="fa-solid fa-circle text-secondary me-1" style="font-size:8px;"></i> عادي</span></t>
+                                                    <t t-if="req.priority == 'urgent'"><span class="text-warning text-dark"><i class="fa-solid fa-circle text-warning me-1" style="font-size:8px;"></i> عاجل</span></t>
+                                                    <t t-if="req.priority == 'very_urgent'"><span class="text-danger"><i class="fa-solid fa-circle text-danger me-1" style="font-size:8px;"></i> عاجل جداً</span></t>
+                                                    <t t-if="req.priority == 'instant'"><span class="text-danger fw-bolder"><i class="fa-solid fa-bolt text-danger me-1"></i> فوري / سري للغاية</span></t>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3">
+                                                <small class="text-muted fw-bold d-block mb-1">الجهة / العميل</small>
+                                                <div class="fw-bold text-dark fs-6" t-field="req.partner_id.name"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3">
+                                                <small class="text-muted fw-bold d-block mb-1">تاريخ البدء</small>
+                                                <div class="fw-bold text-dark fs-6" t-field="req.start_date"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="p-3 bg-light rounded-3 border border-danger-subtle bg-danger-subtle">
+                                                <small class="text-danger fw-bold d-block mb-1">تاريخ الاستحقاق (SLA)</small>
+                                                <div class="fw-bold text-danger fs-6" t-field="req.end_date"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 pt-4 border-top">
+                                        <h6 class="fw-bold text-dark mb-3">تفاصيل ووصف المعاملة</h6>
+                                        <div class="p-4 bg-light rounded-3">
+                                            <div t-field="req.description"/>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Attachments -->
+                            <t t-if="attachments">
+                                <div class="card border-0 shadow-sm rounded-4 mb-4">
+                                    <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                                        <h5 class="fw-bold text-dark m-0"><i class="fa-solid fa-paperclip text-secondary me-2"></i> المرفقات</h5>
+                                    </div>
+                                    <div class="card-body px-4">
+                                        <div class="row g-3">
+                                            <t t-foreach="attachments" t-as="attach">
+                                                <div class="col-md-6 col-lg-4">
+                                                    <div class="p-3 border rounded-3 d-flex align-items-center">
+                                                        <div class="bg-light rounded p-2 me-3">
+                                                            <i class="fa-solid fa-file-lines text-muted fs-4"></i>
+                                                        </div>
+                                                        <div class="overflow-hidden">
+                                                            <a t-attf-href="/web/content/#{attach.id}?download=true" class="fw-bold text-truncate d-block text-decoration-none" title="تحميل">
+                                                                <t t-esc="attach.name"/>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+
+                            <!-- Chatter -->
+                            <div class="card border-0 shadow-sm rounded-4">
+                                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                                    <h5 class="fw-bold text-dark m-0"><i class="fa-solid fa-comments text-primary me-2"></i> المحادثات والمرفقات</h5>
+                                </div>
+                                <div class="card-body px-4">
+                                    <t t-call="portal.message_thread">
+                                        <t t-set="object" t-value="req"/>
+                                    </t>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Sidebar (Left Side) -->
+                        <div class="col-lg-4">
+                            <!-- Team & Users Card -->
+                            <div class="card border-0 shadow-sm rounded-4 mb-4">
+                                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                                    <h6 class="fw-bold text-dark m-0"><i class="fa-solid fa-users-gear text-info me-2"></i> فريق العمل</h6>
+                                </div>
+                                <div class="card-body px-4">
+                                    <div class="mb-4">
+                                        <small class="text-muted fw-bold d-block mb-2">منشئ المعاملة</small>
+                                        <div class="d-flex align-items-center p-3 bg-light rounded-3">
+                                            <img class="rounded-circle me-3 border border-2 border-white shadow-sm" style="width: 45px; height: 45px; object-fit: cover;" t-if="req.create_uid.image_1024" t-att-src="image_data_uri(req.create_uid.image_1024)" alt="Creator"/>
+                                            <img class="rounded-circle me-3 border border-2 border-white shadow-sm" style="width: 45px; height: 45px; object-fit: cover;" t-if="not req.create_uid.image_1024" src="/web/static/src/img/user_menu_avatar.png" alt="Creator"/>
+                                            <div>
+                                                <div class="fw-bold text-dark" t-esc="req.create_uid.name"/>
+                                                <small class="text-muted" t-esc="req.create_uid.phone or 'لا يوجد هاتف'"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div>
+                                        <small class="text-muted fw-bold d-block mb-2">الموظفون المسند إليهم المعاملة</small>
+                                        <t t-if="not req.employee_ids">
+                                            <div class="text-muted small p-3 bg-light rounded-3 text-center">لم يتم إسناد أي موظف حتى الآن</div>
+                                        </t>
+                                        <t t-foreach="req.employee_ids" t-as="emp">
+                                            <div class="d-flex align-items-center p-2 mb-2 bg-light rounded-3">
+                                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 35px; height: 35px;">
+                                                    <i class="fa-solid fa-user"></i>
+                                                </div>
+                                                <div class="fw-bold text-dark" t-esc="emp.name"/>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Assign Sub-Task Form -->
+                            <div class="card border-0 shadow-sm rounded-4 border-top border-4 border-info">
+                                <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
+                                    <h6 class="fw-bold text-dark m-0"><i class="fa-solid fa-user-plus text-info me-2"></i> إسناد المعاملة لموظف جديد</h6>
+                                </div>
+                                <div class="card-body px-4 pb-4">
+                                    <form action="/my/cts/request/action" method="post">
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                        <input type="hidden" name="request_id" t-att-value="req.id"/>
+                                        <input type="hidden" name="action" value="assign"/>
+                                        
+                                        <div class="mb-3">
+                                            <label class="form-label text-muted fw-bold small">اختر الموظف لإسناد المعاملة كمهام فرعية</label>
+                                            <select name="employee_id" class="form-select border-0 bg-light py-2 px-3 shadow-none" required="1">
+                                                <option value="">-- يرجى الاختيار --</option>
+                                                <t t-foreach="request.env['hr.employee'].sudo().search([])" t-as="e">
+                                                    <option t-att-value="e.id"><t t-esc="e.name"/></option>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-info text-white w-100 rounded-pill py-2 fw-bold">
+                                            <i class="fa-solid fa-paper-plane me-1"></i> إسناد للموظف
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                            <!-- Print -->
+                            <div class="mt-3">
+                                <a class="btn btn-outline-secondary w-100 rounded-pill py-2 fw-bold shadow-sm bg-white" title="طباعة" href="#" target="_blank">
+                                    <i class="fa fa-print me-1"></i> طباعة تفاصيل المعاملة
+                                </a>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>

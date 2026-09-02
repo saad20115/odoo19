@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form_ao_user_login_defaults" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.ao.user.login.defaults</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Login Defaults"
+                     string="Login Defaults"
+                     name="ao_user_login_defaults"
+                     groups="base.group_system">
+                    <block title="Home Action" name="ao_user_login_home_action">
+                        <setting string="Fix inaccessible Home Actions"
+                                 help="Users whose Home Action they cannot open will be switched to Discuss (Inbox). This avoids Access Error right after login.">
+                            <div class="content-group">
+                                <button name="action_ao_fix_inaccessible_home_actions"
+                                        type="object"
+                                        string="Fix Home Actions"
+                                        class="btn-primary"
+                                        icon="fa-wrench"/>
+                            </div>
+                        </setting>
+                    </block>
+                    <block title="Default Company" name="ao_user_login_company">
+                        <setting string="Company on login"
+                                 help="On each login, company is taken from the related Employee form (Employees → Company). If none, user Default Company is used. Dropdown stays available when user has 2+ Allowed Companies.">
+                            <div class="text-muted">
+                                Active automatically. Set the company on the Employee form (e.g. شركة م جمال).
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,573 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* samir_electrical_project
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 17.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-08-11 12:30+0000\n"
+"PO-Revision-Date: 2024-08-11 12:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__implementation_status__option1
+msgid "   تم الانتهاء"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__implementation_status__option4
+msgid "  تمت الفوترة"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__procedure203__option2
+msgid "  غير جاهز"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__procedure203__option3
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__repositioning__option3
+msgid "  لا يتطلب"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__implementation_status__option3
+msgid "  لم يتم البدء"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__procedure155
+msgid " إجراء 155"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__procedure203
+msgid " إجراء 203"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option9
+msgid " إعادة الادخال"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__final_planning_approval
+msgid " اعتماد التخطيط النهائي"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__extract
+msgid " المستخلص "
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__area__option3
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__sectors__option3
+msgid " المشاعر"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option6
+msgid " باقي السداد"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option3
+msgid " تم الاصدار"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__implementation_status__option2
+msgid " جاري "
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__sectors__option2
+msgid " جنوب غرب"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__sectors__option4
+msgid " خليص"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option8
+msgid " رفض التصريح"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option5
+msgid " طلب ملغي"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option4
+msgid " قيد التنسيق"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option2
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__entering_a_note_into_the_system__option3
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__final_closure__option3
+msgid " لا يتطلب"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__approval_of_final_quantities__option2
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__final_planning_approval__option2
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__scouting_the_site__option2
+msgid " لم يتم"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__repositioning__option2
+msgid " لم يتم "
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option1
+msgid " لم يتم الادخال"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__declaration__option7
+msgid " مسودة"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__area__option2
+msgid " مكة"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.ui.menu,name:samir_electrical_project.menu_root_arcgis
+msgid "Arcgis"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.project_task_new_inherit_ao
+msgid "Assignment Team"
+msgstr "مرحلة الاسناد"
+
+#. module: samir_electrical_project
+#: model:res.groups,name:samir_electrical_project.group_samir_assignment_team
+msgid "Assignment.Team"
+msgstr "مرحلة الاسناد"
+
+#. module: samir_electrical_project
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.project_task_new_inherit_ao
+msgid "Closing Team"
+msgstr "مرحلة الاغلاق"
+
+#. module: samir_electrical_project
+#: model:res.groups,name:samir_electrical_project.group_samir_closing_team
+msgid "Closing.Team"
+msgstr "مرحلة الاغلاق"
+
+#. module: samir_electrical_project
+#: model:ir.actions.act_window,name:samir_electrical_project.arcgis_consultant_action_overview
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.arcgis_consultant_tree
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.arcgis_job_description_tree
+msgid "Consultant"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.ui.menu,name:samir_electrical_project.menu_consultant_code
+msgid "Consultant Code"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_arcgis_consultant
+msgid "Consultant Code Model"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.ui.menu,name:samir_electrical_project.menu_contractor
+msgid "Contractor"
+msgstr "المقاول"
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_arcgis_contractor
+msgid "Contractor Field Model"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.actions.act_window,name:samir_electrical_project.arcgis_contractor_action_overview
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.x_arcgis_contractor_tree
+msgid "Contractors"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__create_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__create_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__create_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__create_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__create_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__create_uid
+msgid "Created by"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__create_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__create_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__create_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__create_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__create_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__create_date
+msgid "Created on"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__display_name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__display_name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__display_name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__display_name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__display_name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__display_name
+msgid "Display Name"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.project_task_new_inherit_ao
+msgid "Excution Team"
+msgstr "مرحلة التنفيذ"
+
+#. module: samir_electrical_project
+#: model:res.groups,name:samir_electrical_project.group_samir_excution_team
+msgid "Excution.Team"
+msgstr "مرحلة التنفيذ"
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__id
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__id
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__id
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__id
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__id
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__id
+msgid "ID"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.project_task_new_inherit_ao
+msgid "Invoicing Team"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:res.groups,name:samir_electrical_project.group_samir_invoicing_team
+msgid "Invoicing.Team"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.actions.act_window,name:samir_electrical_project.arcgis_job_description_action_overview
+#: model:ir.model,name:samir_electrical_project.model_arcgis_job_description
+#: model:ir.ui.menu,name:samir_electrical_project.menu_job_description
+msgid "Job Description"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__write_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__write_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__write_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__write_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__write_uid
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__write_uid
+msgid "Last Updated by"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__write_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__write_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__write_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__write_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__write_date
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__write_date
+msgid "Last Updated on"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__area
+msgid "My Selection Field"
+msgstr "المنطقه"
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_consultant__name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_contractor__name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_job_description__name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_project_type__name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_region__name
+#: model:ir.model.fields,field_description:samir_electrical_project.field_arcgis_work_type__name
+msgid "Name"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_consultant_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_contractor_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_job_description_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_region_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_work_type_action_overview
+msgid "No records to display"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_project_project
+msgid "Project"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_project__project_type
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.project_project_new_inherit_ao
+msgid "Project Type"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.actions.act_window,name:samir_electrical_project.arcgis_region_action_overview
+#: model:ir.ui.menu,name:samir_electrical_project.arcgis_region
+msgid "Region"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_arcgis_region
+msgid "Region Field Model"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_project_task
+msgid "Task"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_project__task_stages
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.project_project_new_inherit_ao
+msgid "Task Stages"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_arcgis_work_type
+msgid "Work Type Field Model"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.actions.act_window,name:samir_electrical_project.arcgis_work_type_action_overview
+msgid "Work Types"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.ui.menu,name:samir_electrical_project.menu_work_type
+msgid "Work type"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__x_consultant_code
+msgid "X Consultant Code"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__x_contractor
+msgid "X Contractor"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__x_job_description
+msgid "X Job Description"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__x_region
+msgid "X Region"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__x_work_type
+msgid "X Work Type"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_consultant_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_contractor_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_job_description_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_region_action_overview
+#: model_terms:ir.actions.act_window,help:samir_electrical_project.arcgis_work_type_action_overview
+msgid "Your records will be displayed here."
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model,name:samir_electrical_project.model_arcgis_project_type
+msgid "arcgis.project.type"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.module.category,name:samir_electrical_project.module_category_samir_projects
+msgid "permissions"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model_terms:ir.ui.view,arch_db:samir_electrical_project.x_arcgis_work_type_tree
+msgid "work_types"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__repositioning
+msgid "إعادة الوضع"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__entering_a_note_into_the_system
+msgid "ادخال ملاحظة على النظام"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__issuing_a_certificate_of_completion
+msgid "اصدار شهادة الانجاز"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__approval_of_final_quantities
+msgid "اعتماد الكميات النهائية"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__declaration
+msgid "التصريح"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__supervising_engineer
+msgid "المهندس المشرف"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__work_order_assignment_date
+msgid "تاريخ إسناد أمر العمل"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__x_procedure155_date
+msgid "تاريخ اجراء 155 علي النظام"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__procedure155_date
+msgid "تاريخ الاجراء 155"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__excution_start_date
+msgid "تاريخ بداية التنفيذ"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__excution_end_date
+msgid "تاريخ نهاية التنفيذ"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__download_files
+msgid "تحميل الملفات و التقارير"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__approval_of_final_quantities__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__entering_a_note_into_the_system__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__final_closure__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__final_planning_approval__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__issuing_a_certificate_of_completion__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__procedure155__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__repositioning__option1
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__scouting_the_site__option1
+msgid "تم"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__procedure203__option1
+msgid "جاهز"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__implementation_status
+msgid "حالة التنفيذ"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__area__option1
+msgid "خليص"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__station_number
+msgid "رقم المحطة"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__work_order_number
+msgid "رقم امر العمل"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__sectors__option1
+msgid "شمال شرق"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__site_photos
+msgid "صور الموقع"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__final_closure
+msgid "عمل محضر اثبات حالة"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__sectors
+msgid "قطاعات"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__scouting_the_site
+msgid "كشفية الموقع"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__presence_of_barriers__option1
+msgid "لايوجد"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__entering_a_note_into_the_system__option2
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__final_closure__option2
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__issuing_a_certificate_of_completion__option2
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__procedure155__option2
+msgid "لم يتم"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__work_order_duration_date
+msgid "مدة امر العمل/يوم"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__notes
+msgid "ملاحظات "
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__rent_rate
+msgid "نسبة الإنجاز"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields,field_description:samir_electrical_project.field_project_task__presence_of_barriers
+msgid "وجود عوائق"
+msgstr ""
+
+#. module: samir_electrical_project
+#: model:ir.model.fields.selection,name:samir_electrical_project.selection__project_task__presence_of_barriers__option2
+msgid "يوجد"
+msgstr ""

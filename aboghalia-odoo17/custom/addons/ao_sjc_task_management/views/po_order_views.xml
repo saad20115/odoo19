@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_po_order_tree_sjc" model="ir.ui.view">
+        <field name="name">po.order.tree.sjc</field>
+        <field name="model">po.order</field>
+        <field name="inherit_id" ref="ao_po_followup.view_po_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="sjc_assigned_by_id" string="Assigned By" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_makka_po_order_tree_sjc" model="ir.ui.view">
+        <field name="name">makka.po.order.tree.sjc</field>
+        <field name="model">makka.po.order</field>
+        <field name="inherit_id" ref="ao_makka_po_followup.view_po_order_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="sjc_assigned_by_id" string="Assigned By" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

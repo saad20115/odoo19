@@ -1,0 +1,13 @@
+<odoo>
+    <record id="view_company_form_inherit_employee_request" model="ir.ui.view">
+        <field name="name">res.company.form.inherit.employee.request</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="base.view_company_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="employee_request_prefix"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
+

@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cancellation Wizard Form -->
+    <record id="view_sec_work_order_cancel_wizard" model="ir.ui.view">
+        <field name="name">sec.work.order.cancel.wizard</field>
+        <field name="model">sec.work.order</field>
+        <field name="arch" type="xml">
+            <form string="إلغاء أمر العمل">
+                <div class="alert alert-warning" role="alert">
+                    <strong>تنبيه:</strong> سيتم تحويل حالة أمر العمل إلى (ملغي) ولن يتم حذفه من قاعدة البيانات لحفظ سجلات الأرشيف والامتثال.
+                </div>
+                <group>
+                    <field name="cancellation_reason" required="1" placeholder="يرجى كتابة سبب الإلغاء بالتفصيل..."/>
+                </group>
+                <footer>
+                    <button name="action_confirm_cancel" string="تأكيد الإلغاء" type="object" class="btn-danger"/>
+                    <button string="تراجع" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Work Order Form View -->
+    <record id="view_sec_work_order_form" model="ir.ui.view">
+        <field name="name">sec.work.order.form</field>
+        <field name="model">sec.work.order</field>
+        <field name="arch" type="xml">
+            <form string="أمر عمل العقد الموحد (شركة الكهرباء)">
+                <header>
+                    <!-- 1️⃣ ➔ 2️⃣: إنهاء الإسناد وتنبيه فريق الكشفية والتصاريح -->
+                    <button name="action_to_survey" string="➔ 1️⃣ إنهاء الإسناد وتنبيه فريق الكشفية والتصاريح" type="object" class="oe_highlight btn-primary" invisible="state != 'draft'"/>
+                    
+                    <!-- 2️⃣ ➔ 3️⃣: اعتماد التصريح وتنبيه مهندس وفريق التنفيذ -->
+                    <button name="action_to_execution" string="➔ 2️⃣ اعتماد التصريح وتنبيه مهندس وفريق التنفيذ" type="object" class="oe_highlight btn-primary" invisible="state != 'survey'"/>
+                    
+                    <!-- 3️⃣ ➔ 4️⃣: اكتمال التنفيذ وتنبيه مهندس الجودة والاستشاري -->
+                    <button name="action_to_closing" string="➔ 3️⃣ اكتمال التنفيذ وتنبيه مهندس الجودة والاستشاري" type="object" class="oe_highlight btn-primary" invisible="state != 'execution'"/>
+                    
+                    <!-- 4️⃣ ➔ 5️⃣: اعتماد الإغلاق وتنبيه المحاسب ومنسق العقود -->
+                    <button name="action_to_invoicing" string="➔ 4️⃣ اعتماد الإغلاق وتنبيه المحاسب ومنسق العقود" type="object" class="oe_highlight btn-primary" invisible="state != 'closing'"/>
+                    
+                    <!-- 5️⃣ ➔ 6️⃣: اعتماد المستخلص وتنبيه الإدارة المالية والتحصيل -->
+                    <button name="action_to_collection" string="➔ 5️⃣ اعتماد المستخلص وتنبيه الإدارة المالية والتحصيل" type="object" class="oe_highlight btn-primary" invisible="state != 'invoicing'"/>
+                    
+                    <!-- 6️⃣ ➔ 7️⃣: اكتمال التحصيل وتنبيه مدير المشروع للإغلاق النهائي -->
+                    <button name="action_mark_done" string="✔ 6️⃣ اكتمال التحصيل وتنبيه مدير المشروع للأرشفة" type="object" class="oe_highlight btn-success" invisible="state != 'collection'"/>
+                    
+                    <!-- إلغاء واسترجاع -->
+                    <button name="action_cancel_dialog" string="✖ إلغاء أمر العمل" type="object" class="btn-outline-danger" invisible="state in ('done', 'cancelled')"/>
+                    <button name="action_reset_to_draft" string="إعادة تعيين لمسودة" type="object" class="btn-secondary" invisible="state != 'cancelled'"/>
+
+                    <!-- Statusbar -->
+                    <field name="state" widget="statusbar" statusbar_visible="draft,survey,execution,closing,invoicing,collection,done"/>
+                </header>
+                <sheet>
+                    <widget name="web_ribbon" title="ملغي" bg_color="bg-danger" invisible="state != 'cancelled'"/>
+                    <widget name="web_ribbon" title="مكتمل ومؤرشف" bg_color="bg-success" invisible="state != 'done'"/>
+
+                    <div class="oe_title">
+                        <label for="order_title" string="مسمى / عنوان أمر العمل"/>
+                        <h1>
+                            <field name="order_title" placeholder="مثال: تمديد شبكة جهد منخفض - حي العوالي"/>
+                        </h1>
+                        <h3>
+                            <field name="name" readonly="1" class="text-primary"/>
+                        </h3>
+                    </div>
+
+                    <group>
+                        <group string="البيانات الأساسية">
+                            <field name="project_id" options="{'no_create': True}"/>
+                            <field name="region"/>
+                            <field name="sec_work_order_no"/>
+                            <field name="sec_notification_no"/>
+                            <field name="contractor_id"/>
+                        </group>
+                        <group string="الموقع والتصنيف">
+                            <field name="site_location"/>
+                            <field name="substation_no"/>
+                            <field name="work_type"/>
+                            <field name="work_order_category"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+
+                    <!-- The 6 Sequential Tabs -->
+                    <notebook>
+                        <!-- Tab 1: Assignment -->
+                        <page string="(1) الإسناد" name="tab_assignment">
+                            <group>
+                                <group string="بيانات المدة والقيمة">
+                                    <field name="assigned_date"/>
+                                    <field name="target_completion_date"/>
+                                    <field name="elapsed_days" readonly="1"/>
+                                    <field name="estimated_value" widget="monetary"/>
+                                </group>
+                                <group string="الموقع ومسؤول الكشفية">
+                                    <field name="gps_coordinates" placeholder="21.4225, 39.8262"/>
+                                    <field name="user_stage_survey" widget="many2one_avatar_user" string="مسؤول الكشفية والتصاريح (المستلم التالي)"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 2: Survey & Permits -->
+                        <page string="(2) الكشفية والتصاريح" name="tab_survey">
+                            <group>
+                                <group string="بيانات الكشف الميداني">
+                                    <field name="survey_date"/>
+                                    <field name="surveyor_name"/>
+                                    <field name="route_length_meter"/>
+                                    <field name="soil_type"/>
+                                    <field name="has_obstacles" widget="boolean_toggle"/>
+                                    <field name="obstacles_description" invisible="not has_obstacles" placeholder="شرح العوائق الميدانية..."/>
+                                </group>
+                                <group string="التصاريح والتراخيص الحكومية">
+                                    <field name="permit_municipality_no" placeholder="رقم تصريح البلدية (إلزامي)"/>
+                                    <field name="permit_municipality_expiry"/>
+                                    <field name="permit_file" filename="permit_filename" widget="binary"/>
+                                    <field name="permit_filename" invisible="1"/>
+                                    <field name="permit_traffic_no"/>
+                                    <field name="permit_traffic_expiry"/>
+                                    <field name="permit_services_cleared" widget="boolean_toggle"/>
+                                    <field name="user_stage_execution" widget="many2one_avatar_user" string="مهندس التنفيذ (المستلم التالي)"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 3: Execution -->
+                        <page string="(3) التنفيذ الميداني" name="tab_execution">
+                            <group>
+                                <group string="معلومات التنفيذ الميداني">
+                                    <field name="execution_start_date"/>
+                                    <field name="execution_end_date"/>
+                                    <field name="execution_team_leader"/>
+                                    <field name="progress_percentage" widget="progressbar"/>
+                                </group>
+                                <group string="فكرة الإنجاز (مرحلتين)">
+                                    <div class="card p-3 mb-2 bg-light border">
+                                        <strong>1. استلام 15%</strong>
+                                        <field name="milestone_15_received" widget="boolean_toggle"/>
+                                        <field name="milestone_15_date" invisible="not milestone_15_received"/>
+                                    </div>
+                                    <div class="card p-3 bg-light border">
+                                        <strong>2. إنجاز الأعمال بالكامل</strong>
+                                        <field name="milestone_full_achieved" widget="boolean_toggle"/>
+                                        <field name="milestone_full_date" invisible="not milestone_full_achieved"/>
+                                    </div>
+                                    <field name="user_stage_closing" widget="many2one_avatar_user" string="مهندس الجودة والاستشاري (المستلم التالي)" class="mt-3"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 4: Closing & Handover -->
+                        <page string="(4) الإغلاق والتسليم" name="tab_closing">
+                            <group>
+                                <group string="محضر الفحص والاستشاري">
+                                    <field name="inspection_date"/>
+                                    <field name="inspector_sec_name"/>
+                                    <field name="inspector_contractor_name"/>
+                                    <field name="as_built_approved" widget="boolean_toggle"/>
+                                    <field name="megger_test_approved" widget="boolean_toggle"/>
+                                </group>
+                                <group string="المرفقات والورقيات المعتمدة">
+                                    <field name="boq_file" filename="boq_filename" widget="binary"/>
+                                    <field name="boq_filename" invisible="1"/>
+                                    <field name="inspection_report_file" filename="inspection_report_filename" widget="binary"/>
+                                    <field name="inspection_report_filename" invisible="1"/>
+                                    <field name="as_built_file" filename="as_built_filename" widget="binary"/>
+                                    <field name="as_built_filename" invisible="1"/>
+                                    <field name="user_stage_invoicing" widget="many2one_avatar_user" string="المحاسب ومنسق العقود (المستلم التالي)"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 5: Invoicing -->
+                        <page string="(5) الفوترة والمستخلصات" name="tab_invoicing">
+                            <group>
+                                <group string="بيانات المستخلص والمطالبة">
+                                    <field name="claim_date"/>
+                                    <field name="invoice_number"/>
+                                    <field name="invoice_status" widget="badge" decoration-success="invoice_status == 'approved'" decoration-warning="invoice_status == 'submitted'" decoration-danger="invoice_status == 'rejected'"/>
+                                </group>
+                                <group string="القيم المالية والضريبة">
+                                    <field name="original_value" widget="monetary"/>
+                                    <field name="tax_amount" widget="monetary" readonly="1"/>
+                                    <field name="total_invoiced_value" widget="monetary" readonly="1" class="fw-bold fs-5 text-success"/>
+                                    <field name="user_stage_collection" widget="many2one_avatar_user" string="مسؤول التحصيل المالي (المستلم التالي)"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 6: Collection & Assets -->
+                        <page string="(6) التحصيل المالي والأصول" name="tab_collection">
+                            <group>
+                                <group string="بيانات التحصيل والدفعات">
+                                    <field name="payment_reference"/>
+                                    <field name="payment_date"/>
+                                    <field name="collected_amount" widget="monetary"/>
+                                    <field name="deductions_amount" widget="monetary"/>
+                                    <field name="remaining_amount" widget="monetary" readonly="1" class="fw-bold fs-5 text-danger"/>
+                                    <field name="collection_status" widget="badge" decoration-success="collection_status == 'fully_collected'" decoration-warning="collection_status == 'partial'" decoration-danger="collection_status == 'pending'"/>
+                                </group>
+                                <group string="الخدمي والمبنى والأصول">
+                                    <field name="building_reference"/>
+                                    <field name="asset_equipment_ids" placeholder="الأصول والمعدات..."/>
+                                    <field name="software_system_link" placeholder="كود/رابط النظام البرمجي..."/>
+                                    <field name="user_stage_manager" widget="many2one_avatar_user" string="مدير المشروع (للاعتماد النهائي والأرشفة)"/>
+                                </group>
+                            </group>
+                        </page>
+
+                        <!-- Tab 7: Cancellation Details -->
+                        <page string="❌ تفاصيل الإلغاء" name="tab_cancellation" invisible="state != 'cancelled'">
+                            <group>
+                                <group>
+                                    <field name="cancellation_date" readonly="1"/>
+                                    <field name="cancelled_by_id" readonly="1"/>
+                                </group>
+                                <group>
+                                    <field name="cancellation_reason" readonly="1"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <!-- Work Order Tree View -->
+    <record id="view_sec_work_order_tree" model="ir.ui.view">
+        <field name="name">sec.work.order.tree</field>
+        <field name="model">sec.work.order</field>
+        <field name="arch" type="xml">
+            <tree string="أوامر العمل" decoration-info="state in ('draft', 'survey')" decoration-warning="state in ('execution', 'closing')" decoration-success="state in ('invoicing', 'collection', 'done')" decoration-danger="state == 'cancelled'">
+                <field name="name"/>
+                <field name="sec_work_order_no"/>
+                <field name="sec_notification_no"/>
+                <field name="order_title"/>
+                <field name="project_id"/>
+                <field name="region"/>
+                <field name="contractor_id"/>
+                <field name="assigned_date"/>
+                <field name="elapsed_days"/>
+                <field name="progress_percentage" widget="progressbar"/>
+                <field name="total_invoiced_value" widget="monetary"/>
+                <field name="state" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Work Order Kanban View -->
+    <record id="view_sec_work_order_kanban" model="ir.ui.view">
+        <field name="name">sec.work.order.kanban</field>
+        <field name="model">sec.work.order</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="name"/>
+                <field name="sec_work_order_no"/>
+                <field name="order_title"/>
+                <field name="project_id"/>
+                <field name="region"/>
+                <field name="state"/>
+                <field name="progress_percentage"/>
+                <templates>
+                    <t t-name="kanban-box">
+                        <div t-attf-class="oe_kanban_global_click p-2 shadow-sm rounded border">
+                            <div class="o_kanban_record_top">
+                                <div class="o_kanban_record_headings">
+                                    <strong class="o_kanban_record_title text-primary"><field name="order_title"/></strong>
+                                    <div class="text-muted"><field name="sec_work_order_no"/> | <field name="name"/></div>
+                                </div>
+                            </div>
+                            <div class="o_kanban_record_body my-2">
+                                <div><i class="fa fa-folder text-warning me-1"></i> <field name="project_id"/></div>
+                                <div><i class="fa fa-map-marker text-danger me-1"></i> <field name="region"/></div>
+                                <div class="mt-2"><field name="progress_percentage" widget="progressbar"/></div>
+                            </div>
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_left">
+                                    <field name="activity_ids" widget="kanban_activity"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Work Order Search View -->
+    <record id="view_sec_work_order_search" model="ir.ui.view">
+        <field name="name">sec.work.order.search</field>
+        <field name="model">sec.work.order</field>
+        <field name="arch" type="xml">
+            <search string="بحث أوامر العمل">
+                <field name="name" string="رقم أمر العمل الداخلي"/>
+                <field name="sec_work_order_no" string="رقم أمر عمل SEC"/>
+                <field name="sec_notification_no" string="رقم الإشعار"/>
+                <field name="order_title" string="اسم أمر العمل"/>
+                <field name="project_id" string="المشروع"/>
+                <field name="contractor_id" string="المقاول"/>
+                <field name="substation_no" string="المحطة"/>
+                
+                <separator/>
+                <filter string="1. الإسناد" name="filter_draft" domain="[('state', '=', 'draft')]"/>
+                <filter string="2. الكشفية والتصاريح" name="filter_survey" domain="[('state', '=', 'survey')]"/>
+                <filter string="3. التنفيذ الميداني" name="filter_execution" domain="[('state', '=', 'execution')]"/>
+                <filter string="4. الإغلاق والتسليم" name="filter_closing" domain="[('state', '=', 'closing')]"/>
+                <filter string="5. الفوترة والمستخلصات" name="filter_invoicing" domain="[('state', '=', 'invoicing')]"/>
+                <filter string="6. التحصيل المالي" name="filter_collection" domain="[('state', '=', 'collection')]"/>
+                <filter string="7. المكتمل والمؤرشف" name="filter_done" domain="[('state', '=', 'done')]"/>
+                <filter string="أوامر العمل الملغية" name="filter_cancelled" domain="[('state', '=', 'cancelled')]"/>
+                
+                <group expand="0" string="تجميع حسب">
+                    <filter string="المشروع الرئيسي" name="group_project" context="{'group_by': 'project_id'}"/>
+                    <filter string="المنطقة" name="group_region" context="{'group_by': 'region'}"/>
+                    <filter string="نوع أمر العمل" name="group_type" context="{'group_by': 'work_type'}"/>
+                    <filter string="المرحلة" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="المقاول" name="group_contractor" context="{'group_by': 'contractor_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+</odoo>

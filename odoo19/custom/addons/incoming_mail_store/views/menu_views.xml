@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_incoming_mail_root"
+        name="Incoming Mails"
+        sequence="25"
+        groups="incoming_mail_store.group_incoming_mail_user,base.group_system"/>
+
+    <menuitem id="menu_incoming_mail_inbox"
+        name="Inbox"
+        parent="menu_incoming_mail_root"
+        action="action_incoming_mail"
+        sequence="10"/>
+
+</odoo>

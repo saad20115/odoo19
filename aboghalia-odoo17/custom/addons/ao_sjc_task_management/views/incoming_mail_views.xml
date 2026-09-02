@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_incoming_mail_form_sjc" model="ir.ui.view">
+        <field name="name">incoming.mail.form.sjc</field>
+        <field name="model">incoming.mail</field>
+        <field name="inherit_id" ref="incoming_mail_store.view_incoming_mail_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <group string="SJC+">
+                    <field name="sjc_due_date"/>
+                    <field name="sjc_assigned_by_id" readonly="1"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+</odoo>

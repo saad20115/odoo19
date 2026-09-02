@@ -1,0 +1,1219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    
+    <!-- Main Attendance Grid Template -->
+    <t t-name="hr_attendance_grid_template" owl="1">
+        <div class="o_attendance_grid_container">
+            
+            <!-- Header Section -->
+            <div class="o_attendance_header">
+                <div class="o_attendance_title">
+                    <h2>Employee Attendance - <t t-esc="state.currentMonthName"/> <t t-esc="state.currentYear"/></h2>
+                </div>
+                <div class="o_attendance_controls">
+                    <button class="btn btn-primary me-2" 
+                            t-on-click="onPreviousMonth"
+                            t-att-disabled="state.isLoading">
+                        <i class="fa fa-chevron-left"/> Previous
+                    </button>
+                    <button class="btn btn-primary me-2" 
+                            t-on-click="onNextMonth"
+                            t-att-disabled="state.isLoading">
+                        Next <i class="fa fa-chevron-right"/>
+                    </button>
+                    <button class="btn btn-secondary me-2" 
+                            t-on-click="onToday"
+                            t-att-disabled="state.isLoading">
+                        Today
+                    </button>
+                    <!-- NEW: Calculate Metrics Button -->
+                    <button class="btn btn-warning me-2" 
+                            t-on-click="calculateAllMetrics"
+                            t-att-disabled="state.isLoading">
+                        <i class="fa fa-calculator"/> Calculate Metrics
+                    </button>
+                    <button class="btn btn-secondary me-2"
+                            t-on-click="openEditAbsenceDaysWizard"
+                            t-att-disabled="state.isLoading"
+                            t-att-title="editAbsenceDaysTitle">
+                        <i class="fa fa-edit"/> <t t-esc="editAbsenceDaysLabel"/>
+                    </button>
+                    <button class="btn btn-success me-2" 
+                            t-on-click="createPayslips"
+                            t-att-disabled="state.isLoading">
+                        <i class="fa fa-money-bill"/> Create Payslips
+                    </button>
+                    <button class="btn btn-excel-report me-2"
+                            t-on-click="openAttendanceReportWizard"
+                            t-att-disabled="state.isLoading"
+                            title="Generate attendance summary Excel report">
+                        <i class="fa fa-file-excel-o"/> <t t-esc="attendanceReportLabel"/>
+                    </button>
+                    <button class="btn btn-info me-2" 
+                            t-on-click="() => this.exportData('xlsx')"
+                            t-att-disabled="state.isLoading">
+                        <i class="fa fa-download"/> Export
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error Display -->
+            <div t-if="state.error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-triangle me-2"/>
+                <strong>Error:</strong> <t t-esc="state.error"/>
+                <button type="button" class="btn-close" t-on-click="() => { this.state.error = null; }"/>
+            </div>
+
+            <!-- Loading State -->
+            <div t-if="state.isLoading" class="o_attendance_loading">
+                <div class="text-center">
+                    <i class="fa fa-spinner fa-spin fa-2x"/>
+                    <p class="mt-2">Loading attendance data...</p>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div t-else="" class="o_attendance_main">
+                
+                <!-- Tab Navigation -->
+                <div class="o_attendance_tabs">
+                    <ul class="nav nav-tabs" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <button 
+                                class="nav-link" 
+                                t-att-class="state.activeTab === 'grid' ? 'active' : ''"
+                                t-on-click="() => this.setActiveTab('grid')"
+                                type="button">
+                                <i class="fa fa-table me-1"/> Attendance Grid
+                                <span class="badge bg-primary ms-2" t-esc="state.employees.length"/>
+                            </button>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <button 
+                                class="nav-link" 
+                                t-att-class="state.activeTab === 'statistics' ? 'active' : ''"
+                                t-on-click="() => this.setActiveTab('statistics')"
+                                type="button">
+                                <i class="fa fa-chart-bar me-1"/> Statistics
+                                <span class="badge bg-info ms-2" t-esc="state.stats.avg_attendance + '%'"/>
+                            </button>
+                        </li>
+                    </ul>
+
+                    <!-- Tab Content -->
+                    <div class="tab-content mt-3">
+                        
+                        <!-- Grid Tab Content -->
+                        <div t-if="state.activeTab === 'grid'" class="tab-pane fade show active">
+                            
+                            <!-- Pagination Controls -->
+                            <div class="o_attendance_pagination_controls mb-3">
+                                <div class="row align-items-center">
+                                    <div class="col-md-6">
+                                        <div class="d-flex align-items-center">
+                                            <label class="form-label me-2 mb-0">Show:</label>
+                                            <select class="form-select form-select-sm me-3" 
+                                                    style="width: auto;" 
+                                                    t-att-value="state.pagination.pageSize"
+                                                    t-on-change="onPageSizeChange"
+                                                    t-att-disabled="state.isLoading">
+                                                <option value="25">25 per page</option>
+                                                <option value="50">50 per page</option>
+                                                <option value="100">100 per page</option>
+                                                <option value="all">All employees</option>
+                                            </select>
+                                            <span class="text-muted">
+                                                Showing <strong t-esc="getPaginationInfo().start"/> to <strong t-esc="getPaginationInfo().end"/> 
+                                                of <strong t-esc="getPaginationInfo().total"/> employees
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="d-flex justify-content-end">
+                                            <nav aria-label="Employee pagination" t-if="state.pagination.totalPages > 1">
+                                                <ul class="pagination pagination-sm mb-0">
+                                                    <li class="page-item" t-att-class="!canGoPrevious() || state.isLoading ? 'disabled' : ''">
+                                                        <button class="page-link" 
+                                                                t-on-click="onPreviousPage" 
+                                                                t-att-disabled="!canGoPrevious() || state.isLoading">
+                                                            <i class="fa fa-chevron-left"/>
+                                                        </button>
+                                                    </li>
+                                                    <t t-foreach="getPageNumbers()" t-as="pageNum" t-key="'page_' + pageNum">
+                                                        <li class="page-item" 
+                                                            t-att-class="pageNum === state.pagination.currentPage ? 'active' : (pageNum === '...' ? 'disabled' : '')">
+                                                            <button class="page-link" 
+                                                                    t-if="pageNum !== '...'"
+                                                                    t-on-click="() => this.goToPage(pageNum)" 
+                                                                    t-esc="pageNum"
+                                                                    t-att-disabled="state.isLoading"/>
+                                                            <span class="page-link" t-if="pageNum === '...'" t-esc="pageNum"/>
+                                                        </li>
+                                                    </t>
+                                                    <li class="page-item" t-att-class="!canGoNext() || state.isLoading ? 'disabled' : ''">
+                                                        <button class="page-link" 
+                                                                t-on-click="onNextPage" 
+                                                                t-att-disabled="!canGoNext() || state.isLoading">
+                                                            <i class="fa fa-chevron-right"/>
+                                                        </button>
+                                                    </li>
+                                                </ul>
+                                            </nav>
+                                            <div t-else="" class="text-muted small">
+                                                <span t-if="state.pagination.totalCount === 0">No employees found</span>
+                                                <span t-else="">All employees on one page</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Attendance Grid -->
+                            <div class="o_attendance_grid">
+                                
+                                <!-- Filters Section -->
+                                <div class="o_attendance_filters mb-3">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4">
+                                            <label class="form-label mb-1">Filter by Department:</label>
+                                            <select class="form-select form-select-sm" 
+                                                    t-att-value="state.selectedDepartmentId"
+                                                    t-on-change="onDepartmentFilterChange"
+                                                    t-att-disabled="state.isLoading">
+                                                <option value="">All Departments</option>
+                                                <t t-foreach="state.departments" t-as="dept" t-key="dept.id">
+                                                    <option t-att-value="dept.id" 
+                                                            t-att-selected="state.selectedDepartmentId == dept.id ? 'selected' : false"
+                                                            t-esc="dept.name"/>
+                                                </t>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label mb-1">Search Employee:</label>
+                                            <input type="text" class="form-control form-control-sm" 
+                                                   placeholder="Type employee name..."
+                                                   t-att-value="state.searchEmployeeName"
+                                                   t-on-input="onEmployeeSearchChange"
+                                                   t-att-disabled="state.isLoading"/>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <!-- <label class="form-label mb-1">Quick Filters:</label>
+                                            <div class="btn-group btn-group-sm" role="group">
+                                                <button type="button" class="btn btn-outline-success" 
+                                                        t-att-class="state.selectedStatusFilter === 'present' ? 'active' : ''"
+                                                        t-on-click="() => this.onStatusFilterChange('present')"
+                                                        t-att-disabled="state.isLoading">
+                                                    Present Only
+                                                </button>
+                                                <button type="button" class="btn btn-outline-danger" 
+                                                        t-att-class="state.selectedStatusFilter === 'absent' ? 'active' : ''"
+                                                        t-on-click="() => this.onStatusFilterChange('absent')"
+                                                        t-att-disabled="state.isLoading">
+                                                    Absent Only
+                                                </button>
+                                                <button type="button" class="btn btn-outline-secondary" 
+                                                        t-att-class="state.selectedStatusFilter === '' ? 'active' : ''"
+                                                        t-on-click="() => this.onStatusFilterChange('')"
+                                                        t-att-disabled="state.isLoading">
+                                                    All
+                                                </button>
+                                            </div> -->
+                                            <div class="mt-2">
+                                                <button type="button" class="btn btn-outline-warning btn-sm" 
+                                                        t-on-click="clearFilters"
+                                                        t-att-disabled="state.isLoading">
+                                                    <i class="fa fa-times me-1"/> Clear Filters
+                                                </button>
+                                                <!-- <button type="button" class="btn btn-outline-info btn-sm ms-2" 
+                                                        t-on-click="debugFilters">
+                                                    <i class="fa fa-bug me-1"/> Debug
+                                                </button> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Grid Header -->
+                                <div class="o_attendance_grid_header">
+                                    <div class="o_employee_header_cell">
+                                        <span>Employee</span>
+                                    </div>
+                                    
+                                    <!-- NEW: Summary columns -->
+                                    <div class="o_summary_header_cell">
+                                        <span>Absence Days</span>
+                                        <small class="d-block text-muted">Total</small>
+                                    </div>
+                                    <div class="o_summary_header_cell">
+                                        <span>Late Hours</span>
+                                        <small class="d-block text-muted">Total</small>
+                                    </div>
+                                    <div class="o_summary_header_cell">
+                                        <span>Overtime Hours</span>
+                                        <small class="d-block text-muted">Total</small>
+                                    </div>
+                                    <div class="o_summary_header_cell">
+                                        <span t-esc="remainingLeaveDaysLabel"/>
+                                    </div>
+                                    
+                                    <!-- Existing day columns -->
+                                    <t t-foreach="state.daysInMonth" t-as="day" t-key="'day_' + day">
+                                        <div class="o_day_header_cell" 
+                                            t-att-class="getDayHeaderClass(day)"
+                                            t-att-title="getDayTooltip(day)">
+                                            <span t-esc="day"/>
+                                            <small t-if="isWeekend(day)" class="d-block text-muted">
+                                                <t t-esc="getWeekdayName(day)"/>
+                                            </small>
+                                        </div>
+                                    </t>
+                                </div>
+                                <!-- Employee Rows -->
+                                <div class="o_attendance_grid_body">
+                                    <div t-if="state.employees.length === 0 and !state.isLoading" class="text-center py-5 text-muted">
+                                        <i class="fa fa-users fa-3x mb-3"/>
+                                        <h5>No employees found</h5>
+                                        <p>Try adjusting your filters or check if employees are properly configured.</p>
+                                    </div>
+                                    <t t-else="">
+                                        <t t-foreach="state.employees" t-as="employee" t-key="'emp_' + employee.id">
+                                            <div class="o_employee_row" t-att-data-employee-id="employee.id">
+                                                
+                                                <!-- Employee Name Cell -->
+                                                <div class="o_employee_name_cell">
+                                                    <div class="o_employee_info">
+                                                        <div class="o_employee_avatar_wrapper">
+                                                            <img class="o_employee_avatar" 
+                                                                t-att-src="getEmployeeAvatar(employee.id)"
+                                                                t-att-alt="employee.name"
+                                                                onerror="this.src='/web/static/img/placeholder.png'"/>
+                                                            <button type="button"
+                                                                    class="o_employee_archive_btn"
+                                                                    t-att-title="archiveEmployeeTitle"
+                                                                    t-on-click.stop="(ev) => this.archiveEmployee(employee.id, employee.name, ev)">
+                                                                <i class="fa fa-archive"/>
+                                                            </button>
+                                                        </div>
+                                                        <div class="o_employee_details">
+                                                            <span class="o_employee_name" t-esc="employee.name"/>
+                                                            <small class="o_employee_department text-muted" 
+                                                                t-if="employee.department_name" 
+                                                                t-esc="employee.department_name"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <!-- NEW: Summary Cells -->
+                                                <div class="o_summary_cell o_summary_absence"
+                                                    t-att-title="'Total absence days for ' + employee.name"
+                                                    t-on-click="(ev) => this.onEditSummaryField(employee.id, 'total_absence_days', this.getSummaryValue(employee.id, 'total_absence_days'))">
+                                                    <div class="o_summary_value">
+                                                        <span t-esc="this.formatSummaryValue(this.getSummaryValue(employee.id, 'total_absence_days'), 'total_absence_days')"/>
+                                                    </div>
+                                                    <div class="o_summary_edit_icon">
+                                                        <i class="fa fa-edit"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="o_summary_cell o_summary_late"
+                                                    t-att-title="'Total late hours for ' + employee.name"
+                                                    t-on-click="(ev) => this.onEditSummaryField(employee.id, 'total_late_hours', this.getSummaryValue(employee.id, 'total_late_hours'))">
+                                                    <div class="o_summary_value">
+                                                        <span t-esc="this.formatSummaryValue(this.getSummaryValue(employee.id, 'total_late_hours'), 'total_late_hours')"/>
+                                                    </div>
+                                                    <div class="o_summary_edit_icon">
+                                                        <i class="fa fa-edit"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="o_summary_cell o_summary_overtime"
+                                                    t-att-title="'Total overtime hours for ' + employee.name"
+                                                    t-on-click="(ev) => this.onEditSummaryField(employee.id, 'total_overtime_hours', this.getSummaryValue(employee.id, 'total_overtime_hours'))">
+                                                    <div class="o_summary_value">
+                                                        <span t-esc="this.formatSummaryValue(this.getSummaryValue(employee.id, 'total_overtime_hours'), 'total_overtime_hours')"/>
+                                                    </div>
+                                                    <div class="o_summary_edit_icon">
+                                                        <i class="fa fa-edit"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="o_summary_cell o_summary_leaves"
+                                                    t-att-title="'Remaining leave days for ' + employee.name"
+                                                    t-on-click="(ev) => this.onEditSummaryField(employee.id, 'remaining_leave_days', this.getSummaryValue(employee.id, 'remaining_leave_days'))">
+                                                    <div class="o_summary_value">
+                                                        <span t-esc="this.formatSummaryValue(this.getSummaryValue(employee.id, 'remaining_leave_days'), 'remaining_leave_days')"/>
+                                                    </div>
+                                                    <div class="o_summary_edit_icon">
+                                                        <i class="fa fa-edit"/>
+                                                    </div>
+                                                </div>
+
+                                                <!-- Existing Attendance Cells -->
+                                                <t t-foreach="state.daysInMonth" t-as="day" t-key="'cell_' + employee.id + '_' + day">
+                                                    <div class="o_attendance_cell"
+                                                        t-att-class="getAttendanceCellClass(employee.id, day)"
+                                                        t-att-data-employee-id="employee.id"
+                                                        t-att-data-day="day"
+                                                        t-att-title="getAttendanceCellTooltip(employee.id, day)"
+                                                        t-on-click="(ev) => this.onAttendanceCellClick(ev, employee.id, day)">
+                                                        
+                                                        <!-- Status Icon -->
+                                                        <div class="o_attendance_status_icon">
+                                                            <i t-att-class="getStatusIcon(employee.id, day)"/>
+                                                        </div>
+
+                                                        <!-- Hours Display -->
+                                                        <div t-if="getWorkedHours(employee.id, day)" 
+                                                            class="o_attendance_hours">
+                                                            <small t-esc="getWorkedHours(employee.id, day)"/>
+                                                        </div>
+
+                                                        <div class="o_special_indicators">
+                                                            <t t-foreach="getSpecialIndicators(employee.id, day)" t-as="indicator" t-key="'indicator_' + indicator_index">
+                                                                <t t-esc="indicator.title"/>
+                                                            </t>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                            <div class="o_department_summary_row" 
+     t-if="state.departmentSummaries[employee.id] &amp;&amp; Object.keys(state.departmentSummaries[employee.id]).length > 0"
+     t-att-data-employee-id="employee.id">
+    
+                                                <!-- Header section -->
+                                                <div class="o_department_summary_header">
+                                                    <small class="text-muted"><strong>Department Breakdown:</strong></small>
+                                                </div>
+                                                
+                                                <!-- Departments container -->
+                                                <div class="o_dept_columns_container">
+                                                    <t t-foreach="Object.values(state.departmentSummaries[employee.id] || {})" t-as="deptSum" t-key="'dept_col_' + employee.id + '_' + deptSum_index">
+                                                        <div class="o_dept_column">
+                                                            <!-- Department Name -->
+                                                            <div class="o_dept_name_header" t-esc="deptSum.department_name" t-att-title="deptSum.department_name"/>
+                                                            
+                                                            <!-- Metrics -->
+                                                            <div class="o_dept_metrics">
+                                                                <!-- Absence Days -->
+                                                                <div class="o_dept_metric_item">
+                                                                    <span class="o_dept_metric_label">Absences:</span>
+                                                                    <span class="badge badge-dept bg-danger" t-esc="deptSum.absence_days"/>
+                                                                </div>
+                                                                
+                                                                <!-- Late Hours -->
+                                                                <div class="o_dept_metric_item">
+                                                                    <span class="o_dept_metric_label">Late Hrs:</span>
+                                                                    <span class="badge badge-dept bg-warning" t-esc="deptSum.late_hours.toFixed(1)"/>
+                                                                </div>
+                                                                
+                                                                <!-- Overtime Hours -->
+                                                                <div class="o_dept_metric_item">
+                                                                    <span class="o_dept_metric_label">Overtime:</span>
+                                                                    <span class="badge badge-dept bg-info" t-esc="deptSum.overtime_hours.toFixed(1)"/>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                                
+                                                <!-- Days section -->
+                                                <div class="o_dept_days_section">
+                                                    <t t-foreach="state.daysInMonth" t-as="day" t-key="'dept_day_' + employee.id + '_' + day">
+                                                        <div class="o_dept_day_cell"/>
+                                                    </t>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </t>
+                                </div>
+                            </div>
+
+                            <!-- Legend -->
+                            <div class="o_attendance_legend">
+                                <div class="o_legend_title">
+                                    <strong>Legend:</strong>
+                                </div>
+                                <div class="o_legend_items">
+                                    <div class="o_legend_item">
+                                        <div class="o_legend_color o_status_present"/>
+                                        <span>Present</span>
+                                    </div>
+                                    <div class="o_legend_item">
+                                        <div class="o_legend_color o_status_absent"/>
+                                        <span>Absent</span>
+                                    </div>
+                                    <div class="o_legend_item">
+                                        <div class="o_legend_color o_status_holiday"/>
+                                        <span>Holiday</span>
+                                    </div>
+                                    <div class="o_legend_item">
+                                        <div class="o_legend_color o_status_leave"/>
+                                        <span>Leave</span>
+                                    </div>
+                                    <div class="o_legend_item">
+                                        <div class="o_legend_color o_status_weekend"/>
+                                        <span>Weekend</span>
+                                    </div>
+                                    <div class="o_legend_item">
+                                        <div class="o_legend_color o_status_present" style="border: 2px solid #ffc107; position: relative;">
+                                            <span style="position: absolute; top: -4px; right: -4px; background: rgba(255, 193, 7, 0.9); border-radius: 50%; width: 12px; height: 12px; display: flex; align-items: center; justify-content: center; font-size: 8px; font-weight: bold;">!</span>
+                                        </div>
+                                        <span>Checked in during Leave/Holiday</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics Tab Content -->
+                        <div t-if="state.activeTab === 'statistics'" class="tab-pane fade show active">
+                            <div class="o_attendance_statistics">
+                                
+                                <!-- Overview Cards -->
+                                <div class="row mb-4">
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <div class="o_stat_card bg-primary text-white">
+                                            <div class="o_stat_icon">
+                                                <i class="fa fa-users fa-2x"/>
+                                            </div>
+                                            <div class="o_stat_content">
+                                                <div class="o_stat_number" t-esc="state.stats.total_employees || 0"/>
+                                                <div class="o_stat_label">Total Employees</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <div class="o_stat_card bg-success text-white">
+                                            <div class="o_stat_icon">
+                                                <i class="fa fa-calendar fa-2x"/>
+                                            </div>
+                                            <div class="o_stat_content">
+                                                <div class="o_stat_number" t-esc="state.stats.working_days || 0"/>
+                                                <div class="o_stat_label">Working Days</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <div class="o_stat_card bg-info text-white">
+                                            <div class="o_stat_icon">
+                                                <i class="fa fa-check-circle fa-2x"/>
+                                            </div>
+                                            <div class="o_stat_content">
+                                                <div class="o_stat_number" t-esc="(state.stats.avg_attendance || 0) + '%'"/>
+                                                <div class="o_stat_label">Avg Attendance</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 mb-3">
+                                        <div class="o_stat_card bg-danger text-white">
+                                            <div class="o_stat_icon">
+                                                <i class="fa fa-times-circle fa-2x"/>
+                                            </div>
+                                            <div class="o_stat_content">
+                                                <div class="o_stat_number" t-esc="state.stats.total_absent || 0"/>
+                                                <div class="o_stat_label">Total Absences</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Statistics Tables -->
+                                <div class="row">
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fa fa-chart-pie me-2"/>
+                                                    Attendance Summary
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><span class="badge bg-success me-2"/> Present Days</td>
+                                                                <td class="text-end"><strong t-esc="state.stats.total_present || 0"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><span class="badge bg-danger me-2"/> Absent Days</td>
+                                                                <td class="text-end"><strong t-esc="state.stats.total_absent || 0"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><span class="badge bg-warning me-2"/> Holiday Days</td>
+                                                                <td class="text-end"><strong t-esc="state.stats.total_holidays || 0"/></td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><span class="badge bg-info me-2"/> Leave Days</td>
+                                                                <td class="text-end"><strong t-esc="state.stats.total_leaves || 0"/></td>
+                                                            </tr>
+                                                            <tr class="table-active">
+                                                                <td><strong>Total Working Days</strong></td>
+                                                                <td class="text-end"><strong t-esc="(state.stats.working_days || 0) * (state.stats.total_employees || 0)"/></td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- NEW: Monthly Summary Statistics -->
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fa fa-clock me-2"/>
+                                                    Monthly Summary
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td><span class="badge bg-danger me-2"/> Total Absence Days</td>
+                                                                <td class="text-end">
+                                                                    <strong t-esc="Object.values(state.monthlySummaries).reduce((sum, s) => sum + (s.total_absence_days || 0), 0)"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><span class="badge bg-warning me-2"/> Total Late Hours</td>
+                                                                <td class="text-end">
+                                                                    <strong t-esc="Object.values(state.monthlySummaries).reduce((sum, s) => sum + (s.total_late_hours || 0), 0).toFixed(1)"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td><span class="badge bg-info me-2"/> Total Overtime Hours</td>
+                                                                <td class="text-end">
+                                                                    <strong t-esc="Object.values(state.monthlySummaries).reduce((sum, s) => sum + (s.total_overtime_hours || 0), 0).toFixed(1)"/>
+                                                                </td>
+                                                            </tr>
+                                                            <tr class="table-active">
+                                                                <td><strong>Average Absence/Employee</strong></td>
+                                                                <td class="text-end">
+                                                                    <strong t-esc="state.stats.total_employees ? (Object.values(state.monthlySummaries).reduce((sum, s) => sum + (s.total_absence_days || 0), 0) / state.stats.total_employees).toFixed(1) : '0'"/>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Performance Tables - Only show if we have data -->
+                                <div class="row" t-if="state.employees.length > 0">
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fa fa-trophy me-2 text-warning"/>
+                                                    Top Performers
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Employee</th>
+                                                                <th class="text-end">Attendance Rate</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <t t-set="topPerformers" t-value="getTopPerformers()"/>
+                                                            <t t-if="topPerformers.length === 0">
+                                                                <tr>
+                                                                    <td colspan="2" class="text-center text-muted">
+                                                                        No performance data available
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <t t-foreach="topPerformers" t-as="performer" t-key="performer.id">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img class="o_employee_avatar_small me-2" 
+                                                                                 t-att-src="getEmployeeAvatar(performer.id)"
+                                                                                 t-att-alt="performer.name"
+                                                                                 onerror="this.src='/web/static/img/placeholder.png'"/>
+                                                                            <t t-esc="performer.name"/>
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <span class="badge bg-success" t-esc="performer.attendance_rate + '%'"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </t>
+                                                            </t>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-6 mb-4">
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5 class="card-title mb-0">
+                                                    <i class="fa fa-exclamation-triangle me-2 text-warning"/>
+                                                    Needs Attention
+                                                </h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Employee</th>
+                                                                <th class="text-end">Attendance Rate</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <t t-set="lowPerformers" t-value="getLowPerformers()"/>
+                                                            <t t-if="lowPerformers.length === 0">
+                                                                <tr>
+                                                                    <td colspan="2" class="text-center text-muted">
+                                                                        All employees performing well!
+                                                                    </td>
+                                                                </tr>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <t t-foreach="lowPerformers" t-as="performer" t-key="performer.id">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <img class="o_employee_avatar_small me-2" 
+                                                                                 t-att-src="getEmployeeAvatar(performer.id)"
+                                                                                 t-att-alt="performer.name"
+                                                                                 onerror="this.src='/web/static/img/placeholder.png'"/>
+                                                                            <t t-esc="performer.name"/>
+                                                                        </td>
+                                                                        <td class="text-end">
+                                                                            <span class="badge bg-danger" t-esc="performer.attendance_rate + '%'"/>
+                                                                        </td>
+                                                                    </tr>
+                                                                </t>
+                                                            </t>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Quick Edit Hours Modal -->
+    <t t-name="hr_attendance_grid.QuickEditHours" owl="1">
+        <div class="modal fade show" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit Working Hours</h5>
+                        <button type="button" class="btn-close" t-on-click="onClose"/>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Employee:</label>
+                            <strong t-esc="props.employeeName"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date:</label>
+                            <strong t-esc="props.date"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Check In:</label>
+                            <input type="time" class="form-control" 
+                                   t-model="state.checkIn" 
+                                   t-on-change="onTimeChange"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Check Out:</label>
+                            <input type="time" class="form-control" 
+                                   t-model="state.checkOut"
+                                   t-on-change="onTimeChange"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Total Hours:</label>
+                            <input type="number" class="form-control" 
+                                   t-model="state.totalHours"
+                                   step="0.5" min="0" max="24"/>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" t-on-click="onClose">
+                            Cancel
+                        </button>
+                        <button type="button" class="btn btn-primary" t-on-click="onSave">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"/>
+    </t>
+
+    <!-- Employee Details Modal -->
+    <t t-name="hr_attendance_grid.EmployeeDetailsDialog" owl="1">
+        <div class="modal fade show" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Employee Details</h5>
+                        <button type="button" class="btn-close" t-on-click="onClose"/>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Employee Information</h6>
+                                <table class="table table-sm">
+                                    <tr>
+                                        <td><strong>Name:</strong></td>
+                                        <td t-esc="state.employee.name"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Department:</strong></td>
+                                        <td t-esc="state.employee.department"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Job Title:</strong></td>
+                                        <td t-esc="state.employee.job_title"/>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Email:</strong></td>
+                                        <td t-esc="state.employee.work_email"/>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-md-6">
+                                <h6>Attendance Records for <t t-esc="state.date"/></h6>
+                                <div t-if="state.attendanceRecords.length === 0" class="text-muted">
+                                    No attendance records found for this date.
+                                </div>
+                                <div t-else="">
+                                    <t t-foreach="state.attendanceRecords" t-as="record" t-key="record.id">
+                                        <div class="card mb-2">
+                                            <div class="card-body p-2">
+                                                <div class="row">
+                                                    <div class="col-4">
+                                                        <small class="text-muted">Check In:</small><br/>
+                                                        <strong t-esc="formatTime(record.check_in)"/>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted">Check Out:</small><br/>
+                                                        <strong t-esc="formatTime(record.check_out)"/>
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <small class="text-muted">Hours:</small><br/>
+                                                        <strong t-esc="record.worked_hours + 'h'"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" t-on-click="onClose">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"/>
+    </t>
+
+    <!-- Day Details Modal -->
+    <t t-name="hr_attendance_grid.DayDetailsModal" owl="1">
+        <div class="modal fade show" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header bg-primary text-white">
+                        <h5 class="modal-title">
+                            <i class="fa fa-calendar-day me-2"/>
+                            <t t-esc="props.employeeName"/> - <t t-esc="props.dayName"/>, <t t-esc="props.fullDate"/>
+                        </h5>
+                        <button type="button" class="btn-close btn-close-white" t-on-click="onClose"/>
+                    </div>
+                    <div class="modal-body">
+                        
+                        <!-- Loading State -->
+                        <div t-if="state.isLoading" class="text-center py-4">
+                            <i class="fa fa-spinner fa-spin fa-2x"/>
+                            <p class="mt-2">Loading day details...</p>
+                        </div>
+
+                        <div t-else="">
+                            <!-- Employee Info Section -->
+                            <div class="row mb-4">
+                                <div class="col-md-4">
+                                    <div class="card border-0 bg-light">
+                                        <div class="card-body text-center">
+                                            <img class="o_employee_avatar_large mb-3" 
+                                                t-att-src="getEmployeeAvatar(props.employeeId)"
+                                                t-att-alt="props.employeeName"
+                                                onerror="this.src='/web/static/img/placeholder.png'"/>
+                                            <h6 class="card-title mb-1" t-esc="props.employeeName"/>
+                                            <p class="text-muted small mb-2" t-esc="props.employeeDepartment"/>
+                                            <span class="badge" t-att-class="getStatusBadgeClass()" t-esc="getStatusLabel()"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-8">
+                                    <!-- Day Statistics -->
+                                    <div class="row">
+                                        <div class="col-6 col-lg-3 mb-3">
+                                            <div class="text-center">
+                                                <div class="h4 mb-1 text-primary" t-esc="state.dayDetails.checkInTime || 'N/A'"/>
+                                                <small class="text-muted">Check In</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3 mb-3">
+                                            <div class="text-center">
+                                                <div class="h4 mb-1 text-danger" t-esc="state.dayDetails.checkOutTime || 'N/A'"/>
+                                                <small class="text-muted">Check Out</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3 mb-3">
+                                            <div class="text-center">
+                                                <div class="h4 mb-1 text-success" t-esc="state.dayDetails.totalHours || '0'"/>
+                                                <small class="text-muted">Total Hours</small>
+                                            </div>
+                                        </div>
+                                        <div class="col-6 col-lg-3 mb-3">
+                                            <div class="text-center">
+                                                <div class="h4 mb-1 text-info" t-esc="state.dayDetails.breakTime || '0'"/>
+                                                <small class="text-muted">Break Time</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row mb-3" t-if="props.currentData?.has_edit_request">
+                                <div class="col-12">
+                                    <div class="alert alert-warning d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <i class="fa fa-edit me-2"/>
+                                            <strong>Pending Edit Request</strong>
+                                            <br/>
+                                            <small>This attendance record has a pending edit request.</small>
+                                        </div>
+                                        <button class="btn btn-outline-primary btn-sm" 
+                                                t-on-click="() => this.navigateToEditRequest(props.currentData.edit_request_id)">
+                                            <i class="fa fa-external-link-alt me-1"/>
+                                            View Request
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- ORIGINAL: Status Change Section -->
+                            <!-- <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="card-title mb-0">
+                                                <i class="fa fa-edit me-2"/>
+                                                Change Attendance Status
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-3 mb-3">
+                                                    <button class="btn btn-success w-100" 
+                                                            t-att-class="state.dayDetails.status === 'present' ? 'active' : ''"
+                                                            t-on-click="() => this.changeStatus('present')">
+                                                        <i class="fa fa-check-circle me-2"/>
+                                                        Mark as Present
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <button class="btn btn-danger w-100" 
+                                                            t-att-class="state.dayDetails.status === 'absent' ? 'active' : ''"
+                                                            t-on-click="() => this.changeStatus('absent')">
+                                                        <i class="fa fa-times-circle me-2"/>
+                                                        Mark as Absent
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <button class="btn btn-warning w-100" 
+                                                            t-att-class="state.dayDetails.status === 'holiday' ? 'active' : ''"
+                                                            t-on-click="() => this.changeStatus('holiday')">
+                                                        <i class="fa fa-calendar me-2"/>
+                                                        Mark as Holiday
+                                                    </button>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <button class="btn btn-info w-100" 
+                                                            t-att-class="state.dayDetails.status === 'leave' ? 'active' : ''"
+                                                            t-on-click="() => this.changeStatus('leave')">
+                                                        <i class="fa fa-plane me-2"/>
+                                                        Mark as Leave
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+                            <!-- ORIGINAL: Time Details Section for Present Status -->
+                            <div class="row mb-4" t-if="state.dayDetails.status === 'present'">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="card-title mb-0">
+                                                <i class="fa fa-clock me-2"/>
+                                                Edit Time Details
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Check In Time:</label>
+                                                    <input type="time" class="form-control" 
+                                                        t-model="state.dayDetails.checkInTime"
+                                                        t-on-change="onTimeChange"/>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Check Out Time:</label>
+                                                    <input type="time" class="form-control" 
+                                                        t-model="state.dayDetails.checkOutTime"
+                                                        t-on-change="onTimeChange"/>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">Break Duration (hours):</label>
+                                                    <input type="number" class="form-control" 
+                                                        t-model="state.dayDetails.breakTime"
+                                                        step="0.5" min="0" max="4"
+                                                        t-on-change="onTimeChange"/>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <label class="form-label">Notes:</label>
+                                                    <textarea class="form-control" rows="3" 
+                                                            placeholder="Add any notes about this day..."
+                                                            t-model="state.dayDetails.notes"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- NEW: Create New Attendance Record Section -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header bg-success text-white">
+                                            <h6 class="card-title mb-0">
+                                                <i class="fa fa-plus me-2"/>
+                                                Create New Attendance Record
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">New Check In Time:</label>
+                                                    <input type="time" class="form-control" 
+                                                        t-model="state.newRecord.checkInTime"
+                                                        placeholder="Enter check-in time"/>
+                                                </div>
+                                                <div class="col-md-4 mb-3">
+                                                    <label class="form-label">New Check Out Time:</label>
+                                                    <input type="time" class="form-control" 
+                                                        t-model="state.newRecord.checkOutTime"
+                                                        placeholder="Enter check-out time"/>
+                                                </div>
+                                                <div class="col-md-3 mb-3">
+                                                    <label class="form-label">Department:</label>
+                                                    <select class="form-control" t-model="state.newRecord.departmentId">
+                                                        <option value="">Select Department</option>
+                                                        <t t-foreach="state.departments" t-as="dept" t-key="dept.id">
+                                                            <option t-att-value="dept.id" t-esc="dept.name"/>
+                                                        </t>
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 mb-3 d-flex align-items-end">
+                                                    <button type="button" class="btn btn-success w-100"
+                                                            t-on-click="createNewRecord"
+                                                            t-att-disabled="!state.newRecord.checkInTime || state.isLoading || state.isCreating">
+                                                        <i t-attf-class="fa {{state.isCreating ? 'fa-spinner fa-spin' : 'fa-plus'}} me-1"/>
+                                                        <t t-if="state.isCreating">Creating...</t>
+                                                        <t t-else="">Create New Record</t>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-12 mb-3">
+                                                    <label class="form-label">Notes for New Record:</label>
+                                                    <textarea class="form-control" rows="2" 
+                                                            placeholder="Add any notes for the new attendance record..."
+                                                            t-model="state.newRecord.notes"/>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-info small mb-0">
+                                                <i class="fa fa-info-circle me-1"/>
+                                                This will create a separate attendance record. Use the form above to edit the overall day status.
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Attendance History for this day -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="card">
+                                        <div class="card-header">
+                                            <h6 class="card-title mb-0">
+                                                <i class="fa fa-history me-2"/>
+                                                Existing Attendance Records
+                                            </h6>
+                                        </div>
+                                        <div class="card-body">
+                                            <div t-if="state.attendanceRecords.length === 0" class="text-center text-muted py-4">
+                                                <i class="fa fa-info-circle fa-2x mb-2"/>
+                                                <p>No attendance records found for this date.</p>
+                                                <small class="text-muted">Use the "Create New Record" form above to add attendance records.</small>
+                                            </div>
+                                            <div t-else="" class="table-responsive">
+                                                <table class="table table-sm table-hover">
+                                                    <thead class="table-light">
+                                                        <tr>
+                                                            <th>Check In</th>
+                                                            <th>Check Out</th>
+                                                            <th>Duration</th>
+                                                            <th>Department</th>
+                                                            <th>Status</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <t t-foreach="state.attendanceRecords" t-as="record" t-key="record.id">
+                                                            <tr>
+                                                                <td>
+                                                                    <span t-esc="formatTime(record.check_in)"/>
+                                                                    <br/>
+                                                                    <small class="text-muted" t-esc="formatDate(record.check_in)"/>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-esc="formatTime(record.check_out)"/>
+                                                                    <br/>
+                                                                    <small class="text-muted" t-esc="formatDate(record.check_out)"/>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge bg-primary" t-esc="(record.worked_hours || 0) + 'h'"/>
+                                                                </td>
+                                                                <td>
+                                                                    <span t-if="record.department_name" 
+                                                                        class="badge bg-secondary" 
+                                                                        t-esc="record.department_name"/>
+                                                                    <small t-else="" class="text-muted">No Dept</small>
+                                                                </td>
+                                                                <td>
+                                                                    <span class="badge" 
+                                                                        t-att-class="getRecordStatusClass(record)"
+                                                                        t-esc="getRecordStatusLabel(record)"/>
+                                                                </td>
+                                                                <td>
+                                                                    <button class="btn btn-sm btn-outline-primary me-1" 
+                                                                            t-on-click="() => this.editRecord(record)"
+                                                                            title="Copy to edit form above">
+                                                                        <i class="fa fa-edit"/>
+                                                                    </button>
+                                                                    <button class="btn btn-sm btn-outline-danger" 
+                                                                            t-on-click="() => this.deleteRecord(record.id)">
+                                                                        <i class="fa fa-trash"/>
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </t>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" t-on-click="onClose">
+                            <i class="fa fa-times me-1"/> Close
+                        </button>
+                        <button type="button" class="btn btn-primary" t-on-click="onSave" t-att-disabled="state.isLoading">
+                            <i class="fa fa-save me-1"/> Save Status Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"/>
+    </t>
+    <t t-name="hr_attendance_grid.SummaryFieldEditDialog" owl="1">
+        <div class="modal fade show" style="display: block;" tabindex="-1">
+            <div class="modal-dialog modal-sm">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="fa fa-edit me-2"/>
+                            Edit <t t-esc="props.fieldLabel"/>
+                        </h5>
+                        <button type="button" class="btn-close" t-on-click="onCancel"/>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label class="form-label">Employee:</label>
+                            <strong t-esc="props.employeeName"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Period:</label>
+                            <strong t-esc="props.currentMonthName + ' ' + props.currentYear"/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label" t-esc="props.fieldLabel + ':'"/>
+                            <input 
+                                t-att-type="getInputType()" 
+                                class="form-control"
+                                t-att-class="state.isValid ? '' : 'is-invalid'"
+                                t-att-step="getInputStep()"
+                                t-att-min="0"
+                                t-model="state.value"
+                                t-on-input="onInputChange"
+                                autofocus="true"/>
+                            <div t-if="!state.isValid" class="invalid-feedback">
+                                <t t-esc="state.errorMessage"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" t-on-click="onCancel">
+                            Cancel
+                        </button>
+                        <button type="button" 
+                                class="btn btn-primary" 
+                                t-on-click="onSave"
+                                t-att-disabled="!state.isValid">
+                            Save Changes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-backdrop fade show"/>
+    </t>
+</templates>

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sjc_dashboard_employee,sjc.dashboard.employee,model_sjc_dashboard,group_sjc_employee,1,0,0,0
+access_sjc_dashboard_pm,sjc.dashboard.pm,model_sjc_dashboard,group_sjc_project_manager,1,0,0,0
+access_sjc_dashboard_management,sjc.dashboard.management,model_sjc_dashboard,group_sjc_management,1,0,0,0
+access_incoming_mail_assignment_employee,incoming.mail.assignment.employee,model_incoming_mail_assignment,group_sjc_employee,1,0,0,0
+access_incoming_mail_assignment_pm,incoming.mail.assignment.pm,model_incoming_mail_assignment,group_sjc_project_manager,1,0,0,0
+access_incoming_mail_assignment_mgmt,incoming.mail.assignment.mgmt,model_incoming_mail_assignment,group_sjc_management,1,1,1,0
+access_incoming_mail_assignment_inbox,incoming.mail.assignment.inbox,model_incoming_mail_assignment,incoming_mail_store.group_incoming_mail_user,1,1,1,0
+access_sjc_po_instruction_wizard_employee,sjc.po.instruction.wizard.employee,model_sjc_po_instruction_wizard,group_sjc_employee,1,1,1,1
+access_sjc_po_instruction_wizard_pm,sjc.po.instruction.wizard.pm,model_sjc_po_instruction_wizard,group_sjc_project_manager,1,1,1,1
+access_sjc_po_instruction_wizard_mgmt,sjc.po.instruction.wizard.mgmt,model_sjc_po_instruction_wizard,group_sjc_management,1,1,1,1
